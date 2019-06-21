@@ -1,0 +1,25 @@
+{
+	"modules": {
+		"Find jQuery SAP calls": {
+			"jQuery.sap.extend": {
+				"replacer": "NOOP",
+				"finder": "JQuerySapCallFinder",
+				"extender": "LeaveImport",
+				"version": "1.58.0"
+			}
+		}
+	},
+	"finders": {
+		"JQuerySapCallFinder": "tasks/helpers/finders/JQuerySapCallFinder.js"
+	},
+	"extenders": {
+		"LeaveImport": "tasks/helpers/extenders/LeaveImport.js"
+	},
+	"replacers": {
+		"NOOP": "tasks/helpers/replacers/NOOP.js"
+	},
+	"comments": {
+		"unhandledReplacementComment": "TODO unhandled replacement"
+	},
+	"excludes": []
+}

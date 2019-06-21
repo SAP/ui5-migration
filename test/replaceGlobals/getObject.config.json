@@ -1,0 +1,14 @@
+{
+  "modules": {
+	"jquery.sap.global": {
+	  "jQuery.sap.getObject": {
+		"newModulePath": "sap/base/util/ObjectPath",
+		"replacer": "GetObject"
+	  }
+	}
+  },
+  "replacers": {
+	"GetObject": "tasks/helpers/replacers/GetObject.js"
+  },
+  "excludes": []
+}

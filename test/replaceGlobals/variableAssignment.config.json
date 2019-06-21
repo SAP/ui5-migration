@@ -1,0 +1,18 @@
+{
+	"modules": {
+		"jquery.sap.global": {
+			"jQuery.sap.log": {
+				"newModulePath": "sap/base/Log",
+				"version": "^1.58.0"
+			}
+		}
+	},
+	"replacers": {
+		"ModuleFunction": "tasks/helpers/replacers/ModuleFunction.js",
+		"Module": "tasks/helpers/replacers/Module.js"
+	},
+	"comments": {
+		"unhandledReplacementComment": "TODO unhandled replacement"
+	},
+	"excludes": []
+}

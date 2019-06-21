@@ -1,0 +1,26 @@
+{
+	"modules": {
+		"jQuery.Event.prototype": {
+			"*.getOffsetX": {
+				"newModulePath": "sap/ui/events/jquery/EventExtension",
+				"replacer": "NOOP",
+				"finder": "JQueryEventExtensionFinder",
+				"finderIncludesName": "event",
+				"extender": "AddUnusedImport"
+			}
+		}
+	},
+	"finders": {
+		"JQueryEventExtensionFinder": "tasks/helpers/finders/JQueryEventExtensionFinder.js"
+	},
+	"extenders": {
+		"AddUnusedImport": "tasks/helpers/extenders/AddUnusedImport.js"
+	},
+	"replacers": {
+		"NOOP": "tasks/helpers/replacers/NOOP.js"
+	},
+	"comments": {
+		"unhandledReplacementComment": "TODO unhandled replacement"
+	},
+	"excludes": []
+}

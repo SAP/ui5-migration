@@ -1,0 +1,15 @@
+{
+  "modules": {
+    "jquery.sap.strings": {
+      "jQuery.sap.padLeft": {
+        "replacer": "ModuleFunctionPadding",
+        "functionName": "padStart",
+        "version": "1.58.0"
+      }
+    }
+  },
+  "replacers": {
+    "ModuleFunctionPadding": "tasks/helpers/replacers/ModuleFunctionPadding.js"
+  },
+  "excludes": []
+}

@@ -1,0 +1,6 @@
+# test files
+test/**/*.js
+# generated files
+js/**/*.js
+
+coverage

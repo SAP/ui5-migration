@@ -1,0 +1,15 @@
+{
+	"modules": {
+		"jquery.sap.storage": {
+			"jQuery.sap.storage": {
+				"newModulePath": "sap/ui/util/Storage",
+				"functionName": "getInstance",
+				"replacer": "ModuleWithWindowScopedInvocation"
+			}
+		}
+	},
+	"replacers": {
+		"ModuleWithWindowScopedInvocation": "tasks/helpers/replacers/ModuleWithWindowScopedInvocation.js"
+	},
+	"excludes": []
+}

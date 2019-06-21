@@ -1,0 +1,19 @@
+{
+	"modules": {
+		"jquery.sap.script": {
+			"jQuery.sap.extend": {
+				"newModulePath": "sap/base/util/merge",
+				"newVariableName": "merge",
+				"replacer": "mergeOrObjectAssign",
+				"version": "1.58.0"
+			}
+		}
+	},
+	"replacers": {
+		"mergeOrObjectAssign": "tasks/helpers/replacers/mergeOrObjectAssign.js"
+	},
+	"comments": {
+		"unhandledReplacementComment": "TODO unhandled replacement"
+	},
+	"excludes": []
+}

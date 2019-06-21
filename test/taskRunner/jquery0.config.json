@@ -1,0 +1,21 @@
+{
+	"modules": {
+		"sap/ui/thirdparty/jquery": {
+			"jQuery": {
+				"newModulePath": "sap/ui/thirdparty/jquery",
+				"newVariableName": "jQuery",
+				"version": "^1.58.0"
+			},
+			"jQuery.isEmptyObject": {
+				"newModulePath": "sap/ui/thirdparty/jquery",
+				"newVariableName": "jQuery",
+				"functionName": "isEmptyObject",
+				"version": "^1.58.0"
+			}
+		}
+	},
+	"replacers": {
+		"ModuleFunction": "tasks/helpers/replacers/ModuleFunction.js",
+		"Module": "tasks/helpers/replacers/Module.js"
+	}
+}

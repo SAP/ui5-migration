@@ -1,0 +1,71 @@
+{
+	"$schema-ref": "http://schemas.sap.com/sapui5/designtime/api.json/1.0",
+	"version": "1.57.0",
+	"library": "sap.ui.core",
+	"symbols": [
+		{
+			"kind": "class",
+			"name": "sap.ui.core.Component",
+			"basename": "Component",
+			"resource": "sap/ui/core/Component.js",
+			"module": "sap/ui/core/Component",
+			"export": "",
+			"abstract": true,
+			"static": true,
+			"visibility": "public",
+			"since": "1.9.2",
+			"extends": "sap.ui.base.ManagedObject",
+			"description": "Base Class for Component.",
+			"ui5-metadata": {
+				"stereotype": "component",
+				"specialSettings": [
+					{
+						"name": "componentData",
+						"type": "any",
+						"visibility": "public"
+					}
+				]
+			},
+			"constructor": {
+				"visibility": "public",
+				"parameters": [
+					{
+						"name": "sId",
+						"type": "string",
+						"optional": true,
+						"description": ""
+					},
+					{
+						"name": "mSettings",
+						"type": "object",
+						"optional": true,
+						"description": "Optional object with initial settings for the new Component instance"
+					}
+				],
+				"description": ""
+			},
+			"properties": [
+				{
+					"name": "_fnOnInstanceCreated",
+					"visibility": "restricted",
+					"static": true,
+					"since": "1.43.0",
+					"type": "undefined",
+					"description": ""
+				}
+			]
+		},
+		{
+			"kind": "class",
+			"name": "sap.ui.base.ManagedObject",
+			"basename": "ManagedObject",
+			"resource": "sap/ui/base/ManagedObject.js",
+			"module": "sap/ui/base/ManagedObject",
+			"export": "",
+			"abstract": true,
+			"static": true,
+			"visibility": "public",
+			"extends": ""
+		}
+	]
+}

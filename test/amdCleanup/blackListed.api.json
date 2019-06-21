@@ -1,0 +1,40 @@
+{
+	"$schema-ref": "http://schemas.sap.com/sapui5/designtime/api.json/1.0",
+	"version": "1.57.0",
+	"library": "sap.ui.core",
+	"symbols": [
+		{
+			"kind": "namespace",
+			"name": "sap.ui",
+			"basename": "ui",
+			"resource": "sap/ui/Global.js",
+			"module": "sap/ui/Global",
+			"static": true,
+			"visibility": "public",
+			"description": "."
+		},
+		{
+			"kind": "namespace",
+			"name": "sap.ui.loader",
+			"basename": "loader",
+			"resource": "ui5loader.js",
+			"module": "ui5loader",
+			"static": true,
+			"visibility": "public",
+			"description": "P",
+			"methods": []
+		},
+		{
+			"kind": "class",
+			"name": "sap.ui.base.ManagedObject",
+			"basename": "ManagedObject",
+			"resource": "sap/ui/base/ManagedObject.js",
+			"module": "sap/ui/base/ManagedObject",
+			"export": "",
+			"abstract": true,
+			"static": true,
+			"visibility": "public",
+			"extends": ""
+		}
+	]
+}

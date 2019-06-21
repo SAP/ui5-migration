@@ -1,0 +1,22 @@
+{
+	"modules": {
+		"jquery.sap.global": {
+			"jQuery.sap.log.Level": {
+				"newModulePath": "sap/base/Log",
+				"newVariableName": "Log",
+				"functionName": "Level",
+				"version": "1.58.0"
+			},
+			"jQuery.sap.log.LogLevel": {
+				"newModulePath": "sap/base/Log",
+				"newVariableName": "Log",
+				"functionName": "Level",
+				"version": "1.58.0"
+			}
+		}
+	},
+	"replacers": {
+		"ModuleFunction": "tasks/helpers/replacers/ModuleFunction.js",
+		"Module": "tasks/helpers/replacers/Module.js"
+	}
+}

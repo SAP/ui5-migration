@@ -1,0 +1,19 @@
+{
+  "modules": {
+    "sap/ui/thirdparty/jquery": {
+      "jQuery.each": {
+        "newModulePath": "sap/base/util/each"
+      }
+    },
+    "jquery.sap.script": {
+      "jQuery.sap.each": {
+        "newModulePath": "sap/base/util/each"
+      }
+    }
+  },
+  "replacers": {
+    "ModuleFunction": "tasks/helpers/replacers/ModuleFunction.js",
+    "Module": "tasks/helpers/replacers/Module.js"
+  },
+  "excludes": []
+}

@@ -1,0 +1,26 @@
+{
+	"modules": {
+		"jquery.sap.script": {
+			"jQuery.sap.extend": {
+				"newModulePath": "sap/base/util/merge",
+				"newVariableName": "merge",
+				"replacer": "mergeOrObjectAssign",
+				"version": "^1.44.0"
+			},
+			"jQuery.sap.uid": {
+				"newModulePath": "sap/base/util/uid",
+				"version": "^1.60.0"
+
+			}
+		}
+	},
+	"replacers": {
+		"mergeOrObjectAssign": "tasks/helpers/replacers/mergeOrObjectAssign.js",
+		"ModuleFunction": "tasks/helpers/replacers/ModuleFunction.js",
+		"Module": "tasks/helpers/replacers/Module.js"
+	},
+	"comments": {
+		"unhandledReplacementComment": "TODO unhandled replacement"
+	},
+	"excludes": []
+}

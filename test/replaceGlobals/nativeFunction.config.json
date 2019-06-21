@@ -1,0 +1,14 @@
+{
+	"modules": {
+		"jquery.sap.global": {
+			"jQuery.sap.eval": {
+				"replacer": "NativeFunction",
+				"functionName": "eval"
+			}
+		}
+	},
+	"replacers": {
+		"NativeFunction": "tasks/helpers/replacers/NativeFunction.js"
+	},
+	"excludes": []
+}

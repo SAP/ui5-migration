@@ -1,0 +1,33 @@
+{
+	"modules": {
+		"jquery.sap.storage": {
+			"jQuery.sap.storage": {
+				"newModulePath": "sap/ui/util/Storage",
+				"replacer": "NewInstance"
+			},
+			"jQuery.sap.storage.Type": {
+				"newModulePath": "sap/ui/util/Storage",
+				"functionName": "Type"
+			},
+			"jQuery.sap.storage.Storage": {
+				"newModulePath": "sap/ui/util/Storage"
+			},
+			"$.sap.storage": {
+				"newModulePath": "sap/ui/util/Storage",
+				"replacer": "NewInstance"
+			},
+			"$.sap.storage.Type": {
+				"newModulePath": "sap/ui/util/Storage",
+				"functionName": "Type"
+			},
+			"$.sap.storage.Storage": {
+				"newModulePath": "sap/ui/util/Storage"
+			}
+		}
+	},
+	"replacers": {
+		"NewInstance": "tasks/helpers/replacers/NewInstance.js",
+		"ModuleFunction": "tasks/helpers/replacers/ModuleFunction.js",
+		"Module": "tasks/helpers/replacers/Module.js"
+	}
+}

@@ -1,0 +1,30 @@
+{
+	"$schema-ref": "http://schemas.sap.com/sapui5/designtime/api.json/1.0",
+	"version": "1.59.0",
+	"library": "sap.ui.table",
+	"symbols": [
+		{
+			"kind": "namespace",
+			"name": "sap.ui.table",
+			"basename": "table",
+			"resource": "sap/ui/table/library.js",
+			"module": "sap/ui/table/library",
+			"export": "",
+			"static": true,
+			"visibility": "public",
+			"description": "Table-like controls, mainly for desktop scenarios."
+		},
+		{
+			"kind": "enum",
+			"name": "sap.ui.table.TreeAutoExpandMode",
+			"basename": "TreeAutoExpandMode",
+			"resource": "sap/ui/table/library.js",
+			"module": "sap/ui/table/library",
+			"export": "TreeAutoExpandMode",
+			"static": true,
+			"visibility": "public",
+			"description": "Different modes for setting the auto expand mode on tree or analytical bindings."
+		}
+
+	]
+}

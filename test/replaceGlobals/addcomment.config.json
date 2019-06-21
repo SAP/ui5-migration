@@ -1,0 +1,13 @@
+{
+	"modules": {
+		"jquery.sap.global": {
+			"jQuery.sap.globalEval": {
+				"replacer": "AddComment",
+				"commentText": "Remove evil eval"
+			}
+		}
+	},
+	"replacers": {
+		"AddComment": "tasks/helpers/replacers/AddComment.js"
+	}
+}

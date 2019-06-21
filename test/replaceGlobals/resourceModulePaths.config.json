@@ -1,0 +1,19 @@
+{
+	"modules": {
+		"jquery.sap.global": {
+			"jQuery.sap.getModulePath": {
+				"functionName": "sap.ui.require.toUrl",
+				"replacer": "resourceModulePaths",
+				"version": "1.58.0"
+			},
+			"jQuery.sap.getResourcePath": {
+				"functionName": "sap.ui.require.toUrl",
+				"replacer": "resourceModulePaths",
+				"version": "1.58.0"
+			}
+		}
+	},
+	"replacers": {
+		"resourceModulePaths": "tasks/helpers/replacers/resourceModulePaths.js"
+	}
+}

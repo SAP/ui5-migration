@@ -1,0 +1,15 @@
+{
+	"modules": {
+		"jquery.sap.global": {
+			"$.noop": {
+				"replacer": "GenNOOP"
+			},
+			"jQuery.noop": {
+				"replacer": "GenNOOP"
+			}
+		}
+	},
+	"replacers": {
+		"GenNOOP": "tasks/helpers/replacers/GenNOOP.js"
+	}
+}

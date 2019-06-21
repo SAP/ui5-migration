@@ -1,0 +1,26 @@
+{
+	"$schema-ref": "http://schemas.sap.com/sapui5/designtime/api.json/1.0",
+	"version": "1.60.0",
+	"library": "sap.ui.core",
+	"symbols": [
+		{
+			"kind": "class",
+			"name": "sap.ui.model.json.JSONModel",
+			"basename": "JSONModel",
+			"resource": "sap/ui/model/json/JSONModel.js",
+			"module": "sap/ui/model/json/JSONModel",
+			"export": "",
+			"static": true,
+			"visibility": "public",
+			"extends": "sap.ui.model.ClientModel",
+			"description": "Model implementation for JSON format",
+			"ui5-metadata": {
+				"stereotype": "object"
+			},
+			"constructor": {
+				"visibility": "public"
+			}
+		}
+
+	]
+}

@@ -1,0 +1,14 @@
+{
+	"_version": "1.1.0",
+	"resources": [
+		{
+			"name": "library.js",
+			"module": "sap/ui/core/library.js",
+			"required": [
+				"sap/ui/base/DataType.js",
+				"sap/ui/core/CalendarType.js",
+				"sap/ui/core/Core.js"
+			]
+		}
+	]
+}

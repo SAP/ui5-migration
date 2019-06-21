@@ -1,0 +1,13 @@
+{
+	"modules": {
+		"jquery.sap.dom": {
+			"jQuery.sap.domById": {
+				"replacer": "domById"
+			}
+		}
+	},
+	"replacers": {
+		"domById": "tasks/helpers/replacers/domById.js"
+	},
+	"excludes": []
+}

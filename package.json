@@ -1,0 +1,121 @@
+{
+  "name": "ui5-migration",
+  "version": "0.0.1",
+  "engines": {
+    "node": ">=8.0.0"
+  },
+  "keywords": [
+    "openui5",
+    "sapui5",
+    "ui5",
+    "migration",
+    "tool"
+  ],
+  "author": "SAP SE (https://www.sap.com)",
+  "license": "Apache-2.0",
+  "scripts": {
+    "build": "tsc -p .",
+    "build-watch": "tsc -w -p .",
+    "prepare": "rimraf js && tsc -p tsconfig-dist.json",
+    "start": "node bin/cli.js",
+    "lint": "tslint -p tsconfig.json -c tslint.json",
+    "lintf": "npm run lint -- --fix",
+    "coverage": "nyc npm run test",
+    "test": "mocha ./js/test/*Test.js ./js/test/**/*Test.js",
+    "test-watch": "npm run test -- -w",
+    "typedoc": "typedoc --options  ./typedoc.json --tsconfig ./tsconfig_typedoc.json",
+    "guides": "node docs/guide/guide.js",
+    "check": "gts check",
+    "clean": "gts clean",
+    "fix": "gts fix"
+  },
+  "main": "index.js",
+  "types": "typings/index.d.ts",
+  "files": [
+    "index.js",
+    "bin/**",
+    "defaultConfig/**",
+    "js/**"
+  ],
+  "nyc": {
+    "reporter": [
+      "lcov",
+      "text",
+      "text-summary"
+    ],
+    "exclude": [
+      "docs/**",
+      "jsdocs/**",
+      "coverage/**",
+      "test/**",
+      "bin/**",
+      "lib/lbt/**",
+      "util/**",
+      "src/cli.ts",
+      "index.js",
+      "js/src/cli.js"
+    ],
+    "check-coverage": true,
+    "lines": 50,
+    "statements": 50,
+    "functions": 50,
+    "branches": 40,
+    "watermarks": {
+      "lines": [
+        70,
+        90
+      ],
+      "functions": [
+        60,
+        90
+      ],
+      "branches": [
+        50,
+        70
+      ],
+      "statements": [
+        70,
+        90
+      ]
+    },
+    "cache": true,
+    "all": true,
+    "report-dir": "./docs/coverage"
+  },
+  "dependencies": {
+    "diff": "^4.0.1",
+    "esprima": "^4.0.1",
+    "graceful-fs": "^4.1.15",
+    "ignore": "^5.1.1",
+    "json5": "^2.1.0",
+    "minimatch": "^3.0.4",
+    "recast": "^0.17.3",
+    "request": "^2.88.0",
+    "semver": "^5.6.0",
+    "yargs": "^13.2.2"
+  },
+  "bin": {
+    "ui5-migration": "./bin/cli.js"
+  },
+  "devDependencies": {
+    "@types/esprima": "^4.0.2",
+    "@types/estree": "0.0.39",
+    "@types/graceful-fs": "^4.1.2",
+    "@types/json5": "^0.0.30",
+    "@types/minimatch": "^3.0.3",
+    "@types/mocha": "^5.2.6",
+    "@types/node": "^11.10.4",
+    "@types/yargs": "^12.0.9",
+    "gts": "^0.9.0",
+    "handlebars": "^4.1.0",
+    "helper-markdown": "^1.0.0",
+    "mocha": "^6.0.2",
+    "nyc": "^13.1.0",
+    "rimraf": "^2.6.3",
+    "sinon": "^7.2.7",
+    "tslint": "^5.11.0",
+    "typedoc": "^0.14.2",
+    "typedoc-default-themes": "0.5.0",
+    "typescript": "^3.3.3333"
+  }
+}

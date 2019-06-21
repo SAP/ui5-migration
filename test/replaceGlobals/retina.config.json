@@ -1,0 +1,12 @@
+{
+  "modules": {
+    "jquery.sap.mobile": {
+      "jQuery.support.retina": {
+        "replacer": "RetinaSupport"
+      }
+    }
+  },
+  "replacers": {
+    "RetinaSupport": "tasks/helpers/replacers/RetinaSupport.js"
+  }
+}

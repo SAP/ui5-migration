@@ -1,0 +1,27 @@
+{
+	"modules": {
+		"jQuery Function Extensions": {
+			"*.zIndex": {
+				"newModulePath": "sap/ui/dom/jquery/zIndex",
+				"replacer": "AddComment",
+				"commentText": " jQuery Plugin \"zIndex\"",
+				"finder": "JQueryFunctionExtensionFinder",
+				"extender": "AddUnusedImportWithComment",
+				"version": "^1.58.0"
+			}
+		}
+	},
+	"finders": {
+		"JQueryFunctionExtensionFinder": "tasks/helpers/finders/JQueryFunctionExtensionFinder.js"
+	},
+	"extenders": {
+		"AddUnusedImportWithComment": "tasks/helpers/extenders/AddUnusedImportWithComment.js"
+	},
+	"replacers": {
+		"AddComment": "tasks/helpers/replacers/AddComment.js"
+	},
+	"comments": {
+		"unhandledReplacementComment": "TODO unhandled replacement"
+	},
+	"excludes": []
+}

@@ -1,0 +1,15 @@
+{
+	"modules": {
+		"jquery.sap.script": {
+			"jQuery.sap.parseJS": {
+				"newModulePath": "sap/base/util/JSTokenizer",
+				"functionName": "parseJS",
+				"replacer": "ModuleWithInvocation"
+			}
+		}
+	},
+	"replacers": {
+		"ModuleWithInvocation": "tasks/helpers/replacers/ModuleWithInvocation.js"
+	},
+	"excludes": []
+}

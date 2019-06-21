@@ -1,0 +1,66 @@
+{
+	"$schema-ref": "http://schemas.sap.com/sapui5/designtime/api.json/1.0",
+	"version": "1.57.0",
+	"library": "sap.ui.core",
+	"symbols": [
+		{
+			"kind": "namespace",
+			"name": "sap.ushell",
+			"basename": "ushell",
+			"resource": "sap/ushell/services/Container.js",
+			"module": "sap/ushell/services/Container",
+			"static": true,
+			"visibility": "public",
+			"since": "1.15.0",
+			"references": [
+				"sap.ushell.adapters",
+				"sap.ushell.renderers",
+				"sap.ushell.services"
+			],
+			"properties": [
+				{
+					"name": "Container",
+					"visibility": "public",
+					"static": true,
+					"since": "1.15.0",
+					"type": "sap.ushell.services.Container",
+					"description": ".",
+					"references": [
+						"sap.ushell.bootstrap"
+					]
+				}
+			],
+			"methods": [
+				{
+					"name": "bootstrap",
+					"visibility": "public",
+					"static": true,
+					"since": "1.15.0",
+					"returnValue": {
+						"type": "jQuery.Promise",
+						"description": "."
+					},
+					"parameters": [
+						{
+							"name": "sPlatform",
+							"type": "string",
+							"optional": false,
+							"description": ""
+						},
+						{
+							"name": "mAdapterPackagesByPlatform",
+							"type": "map.<string, string>",
+							"optional": true,
+							"defaultValue": "{}",
+							"description": "."
+						}
+					],
+					"description": ".",
+					"references": [
+						"sap.ushell.Container"
+					]
+				}
+			]
+		}
+	]
+}

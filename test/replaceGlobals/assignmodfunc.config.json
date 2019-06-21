@@ -1,0 +1,12 @@
+{
+	"modules": {
+		"jquery.sap.global": {
+			"jQuery.sap.func": {
+				"newModulePath": "do/not/import"
+			}
+		}
+	},
+	"replacers": {
+		"ModuleFunction": "tasks/helpers/replacers/ModuleFunction.js"
+	}
+}

@@ -1,0 +1,58 @@
+{
+	"$schema-ref": "http://schemas.sap.com/sapui5/designtime/api.json/1.0",
+	"version": "1.60.0",
+	"library": "sap.ui.core",
+	"symbols": [
+		{
+			"kind": "namespace",
+			"name": "sap.ui.core",
+			"basename": "core",
+			"resource": "sap/ui/core/library.js",
+			"module": "sap/ui/core/library",
+			"export": "",
+			"static": true,
+			"visibility": "public",
+			"description": "The SAPUI5 Cor...",
+			"properties": [
+				{
+					"name": "BlockLayerUtils",
+					"module": "sap/ui/core/BlockLayerUtils",
+					"export": "",
+					"visibility": "restricted",
+					"static": true,
+					"type": "undefined",
+					"resource": "sap/ui/core/BlockLayerUtils.js"
+				}
+			],
+			"methods": [
+				{
+					"name": "CustomStyleClassSupport",
+					"module": "sap/ui/core/CustomStyleClassSupport",
+					"export": "",
+					"visibility": "public",
+					"static": true,
+					"description": "Applies .",
+					"resource": "sap/ui/core/CustomStyleClassSupport.js"
+				}
+			]
+		},
+		{
+			"kind": "namespace",
+			"name": "sap.ui.core.AbsoluteCSSSize",
+			"basename": "AbsoluteCSSSize",
+			"resource": "sap/ui/core/library.js",
+			"module": "sap/ui/core/library",
+			"export": "AbsoluteCSSSize",
+			"final": true,
+			"static": true,
+			"visibility": "public",
+			"description": "asd",
+			"ui5-metamodel": true,
+			"ui5-metadata": {
+				"stereotype": "datatype",
+				"basetype": "string",
+				"pattern": "^asd$"
+			}
+		}
+	]
+}

@@ -1,0 +1,14 @@
+{
+  "modules": {
+    "jquery.sap.xml": {
+      "jQuery.sap.isEqualNode": {
+        "functionName": "isEqualNode",
+        "replacer": "NativeInstanceFunction"
+      }
+    }
+  },
+  "replacers": {
+    "NativeInstanceFunction": "tasks/helpers/replacers/NativeInstanceFunction.js"
+  },
+  "excludes": []
+}

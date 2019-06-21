@@ -1,0 +1,13 @@
+{
+	"modules": {
+		"jquery.sap.script": {
+			"jQuery.sap.intervalCall": {
+				"replacer": "IntervalCall"
+			}
+		}
+	},
+	"replacers": {
+		"IntervalCall": "tasks/helpers/replacers/IntervalCall.js"
+	},
+	"excludes": []
+}

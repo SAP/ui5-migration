@@ -1,0 +1,52 @@
+{
+	"modules": {
+		"jquery.sap.events1": {
+
+		},
+		"jquery.sap.events2": {
+
+		},
+		"jquery.sap.events3": {
+
+		},
+		"jquery.sap.events4": {
+
+		},
+		"jquery.sap.events5": {
+
+		},
+		"jquery.sap.events6": {
+
+		},
+		"jquery.sap.global": {
+			"jQuery.sap.log.Level": {
+				"newModulePath": "sap/base/Log",
+				"newVariableName": "Log",
+				"functionName": "Level"
+			}
+		},
+		"jquery.sap.events": {
+			"jQuery.sap.isMouseEventDelayed": {
+				"newModulePath": "sap/ui/events/isMouseEventDelayed",
+				"replacer": "isMouseEventDelayed"
+			},
+			"$.sap.isMouseEventDelayed": {
+				"newModulePath": "sap/ui/events/isMouseEventDelayed",
+				"replacer": "isMouseEventDelayed"
+			}
+		},
+		"GLOBALS": {
+			"jQuery.extend": {
+				"newModulePath": "sap/ui/thirdparty/jquery",
+				"newVariableName": "jQuery",
+				"functionName": "extend"
+			}
+		}
+	},
+	"replacers": {
+		"isMouseEventDelayed": "tasks/helpers/replacers/isMouseEventDelayed.js",
+		"ModuleFunction": "tasks/helpers/replacers/ModuleFunction.js",
+		"Module": "tasks/helpers/replacers/Module.js"
+	},
+	"excludes": []
+}

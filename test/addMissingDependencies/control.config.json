@@ -1,0 +1,25 @@
+{
+	"modules": {
+		"GLOBALS": {
+			"*.control": {
+				"newModulePath": "sap/ui/dom/jquery/control",
+				"replacer": "NOOP",
+				"finder": "JQueryFunctionExtensionFinder",
+				"extender": "AddUnusedImport"
+			}
+		}
+	},
+	"finders": {
+		"JQueryFunctionExtensionFinder": "tasks/helpers/finders/JQueryFunctionExtensionFinder.js"
+	},
+	"extenders": {
+		"AddUnusedImport": "tasks/helpers/extenders/AddUnusedImport.js"
+	},
+	"replacers": {
+		"NOOP": "tasks/helpers/replacers/NOOP.js"
+	},
+	"comments": {
+		"unhandledReplacementComment": "TODO unhandled replacement"
+	},
+	"excludes": []
+}

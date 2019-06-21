@@ -1,0 +1,16 @@
+{
+	"modules": {
+		"GLOBALS": {
+			"jQuery.inArray": {
+				"replacer": "inArray"
+			},
+		  	"$.inArray": {
+				"replacer": "inArray"
+			}
+		}
+	},
+	"replacers": {
+		"inArray": "tasks/helpers/replacers/inArray.js"
+	},
+	"excludes": []
+}

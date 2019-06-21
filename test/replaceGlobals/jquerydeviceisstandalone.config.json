@@ -1,0 +1,13 @@
+{
+	"modules": {
+		"jquery.sap.mobile": {
+			"jQuery.device.is.standalone": {
+				"functionName": "window.navigator.standalone",
+				"replacer": "NativeObject"
+			}
+		}
+	},
+	"replacers": {
+		"NativeObject": "tasks/helpers/replacers/NativeObject.js"
+	}
+}

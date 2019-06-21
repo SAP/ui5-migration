@@ -1,0 +1,53 @@
+{
+	"$schema-ref": "http://schemas.sap.com/sapui5/designtime/api.json/1.0",
+	"version": "1.60.0",
+	"library": "sap.ui.core",
+	"symbols": [
+		{
+			"kind": "namespace",
+			"name": "sap.ui.core",
+			"basename": "core",
+			"resource": "sap/ui/core/library.js",
+			"module": "sap/ui/core/library",
+			"export": "",
+			"static": true,
+			"visibility": "public",
+			"description": "The SAPUI5 Cor...",
+			"properties": [
+				{
+					"name": "BlockLayerUtils",
+					"module": "sap/ui/core/BlockLayerUtils",
+					"export": "",
+					"visibility": "restricted",
+					"static": true,
+					"type": "undefined",
+					"resource": "sap/ui/core/BlockLayerUtils.js"
+				}
+			],
+			"methods": [
+				{
+					"name": "CustomStyleClassSupport",
+					"module": "sap/ui/core/CustomStyleClassSupport",
+					"export": "",
+					"visibility": "public",
+					"static": true,
+					"description": "Applies .",
+					"resource": "sap/ui/core/CustomStyleClassSupport.js"
+				}
+			]
+		},
+		{
+			"kind": "namespace",
+			"name": "sap.ui.model.odata.AnnotationHelper",
+			"basename": "AnnotationHelper",
+			"resource": "sap/ui/model/odata/AnnotationHelper.js",
+			"module": "sap/ui/model/odata/AnnotationHelper",
+			"export": "",
+			"static": true,
+			"visibility": "public",
+			"since": "1.27.0",
+			"description": "A collection of methods which help to consume <a href=\"http://docs.oasis-open.org/odata/odata/v4.0/odata-v4.0-part3-csdl.html\"> OData V4 annotations</a> in XML template views. Every context argument must belong to a <code>sap.ui.model.odata.ODataMetaModel</code> instance.\n\nFormatter functions like {@link #.format format} and {@link #.simplePath simplePath} can be used in complex bindings to turn OData V4 annotations into texts or data bindings, e.g. <code>&lt;sfi:SmartField value=\"{path : 'meta>Value', formatter : 'sap.ui.model.odata.AnnotationHelper.simplePath'}\"/></code>.\n\nHelper functions like {@link #.resolvePath resolvePath} can be used by template instructions in XML template views, e.g. <code>&lt;template:with path=\"meta>Value\" helper=\"sap.ui.model.odata.AnnotationHelper.resolvePath\" var=\"target\"></code>.\n\nSince 1.31.0, you DO NOT need to {@link jQuery.sap.require} this module before use.",
+			"methods": []
+		}
+	]
+}

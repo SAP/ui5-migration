@@ -1,0 +1,39 @@
+{
+	"modules": {
+		"jQuery Function Extensions": {
+			"*.control": {
+				"newModulePath": "sap/ui/dom/jquery/control",
+				"replacer": "NOOP",
+				"finder": "JQueryFunctionExtensionFinder",
+				"extender": "AddUnusedImport"
+			}
+		},
+		"jQuery.Event.prototype": {
+			"*.getPseudoTypes": {
+				"newModulePath": "sap/ui/events/jquery/EventExtension",
+				"functionName": "getPseudoTypes",
+				"newVariableName": "PseudoTypes",
+				"replacer": "Module",
+				"finder": "JQueryEventExtensionFinder",
+				"finderIncludesName": "event",
+				"extender": "AddImport"
+			}
+		}
+	},
+	"finders": {
+		"JQueryFunctionExtensionFinder": "tasks/helpers/finders/JQueryFunctionExtensionFinder.js",
+		"JQueryEventExtensionFinder": "tasks/helpers/finders/JQueryEventExtensionFinder.js"
+	},
+	"extenders": {
+		"AddUnusedImport": "tasks/helpers/extenders/AddUnusedImport.js",
+		"AddImport": "tasks/helpers/extenders/AddImport.js"
+	},
+	"replacers": {
+		"NOOP": "tasks/helpers/replacers/NOOP.js",
+		"Module": "tasks/helpers/replacers/Module.js"
+	},
+	"comments": {
+		"unhandledReplacementComment": "TODO unhandled replacement"
+	},
+	"excludes": []
+}

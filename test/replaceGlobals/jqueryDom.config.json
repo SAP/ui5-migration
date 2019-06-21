@@ -1,0 +1,13 @@
+{
+	"modules": {
+		"jquery.sap.dom": {
+			"jQuery.sap.byId": {
+				"newModulePath": "sap/ui/thirdparty/jquery",
+				"replacer": "jqueryDomById"
+			}
+		}
+	},
+	"replacers": {
+		"jqueryDomById": "tasks/helpers/replacers/jqueryDomById.js"
+	}
+}

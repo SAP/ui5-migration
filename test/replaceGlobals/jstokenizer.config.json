@@ -1,0 +1,20 @@
+{
+  "modules": {
+    "jquery.sap.script": {
+      "jQuery.sap._createJSTokenizer": {
+        "newModulePath": "sap/base/util/JSTokenizer",
+        "replacer": "NewInstanceNoArgs"
+      },
+      "jQuery.sap.parseJS": {
+        "newModulePath": "sap/base/util/JSTokenizer",
+        "functionName": "parseJS"
+      }
+    }
+  },
+  "replacers": {
+    "ModuleFunction": "tasks/helpers/replacers/ModuleFunction.js",
+    "Module": "tasks/helpers/replacers/Module.js",
+    "ModuleWithInvocation": "tasks/helpers/replacers/ModuleWithInvocation.js",
+    "NewInstanceNoArgs": "tasks/helpers/replacers/NewInstanceNoArgs.js"
+  }
+}

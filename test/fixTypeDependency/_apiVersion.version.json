@@ -1,0 +1,589 @@
+{
+	"name": "SAPUI5 Distribution",
+	"version": "1.59.0-SNAPSHOT",
+	"buildTimestamp": "201809130933",
+	"scmRevision": "487f6229c65a674df2d981a5174ebb1a067825ce",
+	"gav": "com.sap.ui5.dist:sapui5-sdk-dist:1.59.0-SNAPSHOT:war",
+	"libraries": [
+		{
+			"name": "sap.ui.core",
+			"version": "1.59.0-SNAPSHOT",
+			"buildTimestamp": "201809130028",
+			"scmRevision": "b8c6ff105ab490b380a8dc21901e355a9a0e4a71",
+			"gav": "com.sap.ui5:core:1.59.0-SNAPSHOT:jar",
+			"patchHistory": [
+				"1.59.0-SNAPSHOT"
+			]
+		},
+		{
+			"name": "sap.apf",
+			"version": "1.59.0-SNAPSHOT",
+			"buildTimestamp": "201809130153",
+			"scmRevision": "",
+			"gav": "com.sap.apf:apf-lib:1.59.0-SNAPSHOT:jar",
+			"patchHistory": [
+				"1.59.0-SNAPSHOT"
+			]
+		},
+		{
+			"name": "sap.ca.scfld.md",
+			"version": "1.59.0-SNAPSHOT",
+			"buildTimestamp": "201809121136",
+			"scmRevision": "",
+			"gav": "com.sap.ca:scfld.md:1.59.0-SNAPSHOT:jar",
+			"patchHistory": [
+				"1.59.0-SNAPSHOT"
+			]
+		},
+		{
+			"name": "sap.ca.ui",
+			"version": "1.59.0-SNAPSHOT",
+			"buildTimestamp": "201809121136",
+			"scmRevision": "",
+			"gav": "com.sap.ca:ui:1.59.0-SNAPSHOT:jar",
+			"patchHistory": [
+				"1.59.0-SNAPSHOT"
+			]
+		},
+		{
+			"name": "sap.chart",
+			"version": "1.59.0-SNAPSHOT",
+			"buildTimestamp": "201809130028",
+			"scmRevision": "b8c6ff105ab490b380a8dc21901e355a9a0e4a71",
+			"gav": "com.sap.ui5:chart:1.59.0-SNAPSHOT:jar",
+			"patchHistory": [
+				"1.59.0-SNAPSHOT"
+			]
+		},
+		{
+			"name": "sap.collaboration",
+			"version": "1.59.0-SNAPSHOT",
+			"buildTimestamp": "201809130211",
+			"scmRevision": "b69421ddfbf88aecf508c75a68cf654d719eff72",
+			"gav": "com.sap.collaboration:collaboration-commons:1.59.0-SNAPSHOT:jar",
+			"patchHistory": [
+				"1.59.0-SNAPSHOT"
+			]
+		},
+		{
+			"name": "sap.f",
+			"version": "1.59.0-SNAPSHOT",
+			"buildTimestamp": "201809130028",
+			"scmRevision": "b8c6ff105ab490b380a8dc21901e355a9a0e4a71",
+			"gav": "com.sap.ui5:fiori:1.59.0-SNAPSHOT:jar",
+			"patchHistory": [
+				"1.59.0-SNAPSHOT"
+			]
+		},
+		{
+			"name": "sap.fe",
+			"version": "1.59.0-SNAPSHOT",
+			"buildTimestamp": "201809130220",
+			"scmRevision": "e55510d0ab94ffafb95c05ffe9af275e626ae5f2",
+			"gav": "com.sap.uxd:sap.fe:1.59.0-SNAPSHOT:jar",
+			"patchHistory": [
+				"1.59.0-SNAPSHOT"
+			]
+		},
+		{
+			"name": "sap.fileviewer",
+			"version": "1.59.0-SNAPSHOT",
+			"buildTimestamp": "201809122347",
+			"scmRevision": "",
+			"gav": "com.sap.hana.fileprocessing:sap.fileviewer:1.59.0-SNAPSHOT:jar",
+			"patchHistory": [
+				"1.59.0-SNAPSHOT"
+			]
+		},
+		{
+			"name": "sap.fiori",
+			"version": "1.59.0-SNAPSHOT",
+			"buildTimestamp": "201809130933",
+			"scmRevision": "487f6229c65a674df2d981a5174ebb1a067825ce",
+			"gav": "com.sap.ui5.dist:fiori-lib:1.59.0-SNAPSHOT:jar",
+			"patchHistory": [
+				"1.59.0-SNAPSHOT"
+			]
+		},
+		{
+			"name": "sap.gantt",
+			"version": "1.59.0-SNAPSHOT",
+			"buildTimestamp": "201809130200",
+			"scmRevision": "44faeb5f118c4188b7fb1f9fb35eb74ed223f413",
+			"gav": "com.sap.gantt:gantt.lib:1.59.0-SNAPSHOT:jar",
+			"patchHistory": [
+				"1.59.0-SNAPSHOT"
+			]
+		},
+		{
+			"name": "sap.landvisz",
+			"version": "1.59.0-SNAPSHOT",
+			"buildTimestamp": "201809130205",
+			"scmRevision": "e227836558497a9436db8271f9648336a6f64c4f",
+			"gav": "com.sap.lm.uiext.landvisz:sap.landvisz:1.59.0-SNAPSHOT:jar",
+			"patchHistory": [
+				"1.59.0-SNAPSHOT"
+			]
+		},
+		{
+			"name": "sap.m",
+			"version": "1.59.0-SNAPSHOT",
+			"buildTimestamp": "201809130028",
+			"scmRevision": "b8c6ff105ab490b380a8dc21901e355a9a0e4a71",
+			"gav": "com.sap.ui5:mobile:1.59.0-SNAPSHOT:jar",
+			"patchHistory": [
+				"1.59.0-SNAPSHOT"
+			]
+		},
+		{
+			"name": "sap.makit",
+			"version": "1.59.0-SNAPSHOT",
+			"buildTimestamp": "201809130028",
+			"scmRevision": "b8c6ff105ab490b380a8dc21901e355a9a0e4a71",
+			"gav": "com.sap.ui5:makit:1.59.0-SNAPSHOT:jar",
+			"patchHistory": [
+				"1.59.0-SNAPSHOT"
+			]
+		},
+		{
+			"name": "sap.me",
+			"version": "1.59.0-SNAPSHOT",
+			"buildTimestamp": "201809130028",
+			"scmRevision": "b8c6ff105ab490b380a8dc21901e355a9a0e4a71",
+			"gav": "com.sap.ui5:mobile-ext:1.59.0-SNAPSHOT:jar",
+			"patchHistory": [
+				"1.59.0-SNAPSHOT"
+			]
+		},
+		{
+			"name": "sap.ndc",
+			"version": "1.59.0-SNAPSHOT",
+			"buildTimestamp": "201809130028",
+			"scmRevision": "b8c6ff105ab490b380a8dc21901e355a9a0e4a71",
+			"gav": "com.sap.ui5:ndc:1.59.0-SNAPSHOT:jar",
+			"patchHistory": [
+				"1.59.0-SNAPSHOT"
+			]
+		},
+		{
+			"name": "sap.ovp",
+			"version": "1.59.0-SNAPSHOT",
+			"buildTimestamp": "201809121549",
+			"scmRevision": "",
+			"gav": "com.sap.ovp:ovp-lib:1.59.0-SNAPSHOT:jar",
+			"patchHistory": [
+				"1.59.0-SNAPSHOT"
+			]
+		},
+		{
+			"name": "sap.portal.ui5",
+			"version": "1.59.0-SNAPSHOT",
+			"buildTimestamp": "201809130708",
+			"scmRevision": "",
+			"gav": "com.sap.portal.ui5:portal-ui5-ext:1.59.0-SNAPSHOT:jar",
+			"patchHistory": [
+				"1.59.0-SNAPSHOT"
+			]
+		},
+		{
+			"name": "sap.rules.ui",
+			"version": "1.59.0-SNAPSHOT",
+			"buildTimestamp": "201809030153",
+			"scmRevision": "",
+			"gav": "com.sap.rules:sap.rules.ui:1.59.0-SNAPSHOT:jar",
+			"patchHistory": [
+				"1.59.0-SNAPSHOT"
+			]
+		},
+		{
+			"name": "sap.suite.ui.commons",
+			"version": "1.59.0-SNAPSHOT",
+			"buildTimestamp": "201809130150",
+			"scmRevision": "59efdb06af5d60e36fb917404bbccf8d0c3e5d65",
+			"gav": "com.sap.suite:suite-ui-commons:1.59.0-SNAPSHOT:jar",
+			"patchHistory": [
+				"1.59.0-SNAPSHOT"
+			]
+		},
+		{
+			"name": "sap.suite.ui.generic.template",
+			"version": "1.59.0-SNAPSHOT",
+			"buildTimestamp": "201809130215",
+			"scmRevision": "066c596149e59bfe6970943a02996d362a9461a1",
+			"gav": "com.sap.suite.ui.generic.template:sap.suite.ui.generic.template:1.59.0-SNAPSHOT:jar",
+			"patchHistory": [
+				"1.59.0-SNAPSHOT"
+			]
+		},
+		{
+			"name": "sap.suite.ui.microchart",
+			"version": "1.59.0-SNAPSHOT",
+			"buildTimestamp": "201809130028",
+			"scmRevision": "b8c6ff105ab490b380a8dc21901e355a9a0e4a71",
+			"gav": "com.sap.suite:suite-ui-microchart:1.59.0-SNAPSHOT:jar",
+			"patchHistory": [
+				"1.59.0-SNAPSHOT"
+			]
+		},
+		{
+			"name": "sap.tnt",
+			"version": "1.59.0-SNAPSHOT",
+			"buildTimestamp": "201809130028",
+			"scmRevision": "b8c6ff105ab490b380a8dc21901e355a9a0e4a71",
+			"gav": "com.sap.ui5:tnt:1.59.0-SNAPSHOT:jar",
+			"patchHistory": [
+				"1.59.0-SNAPSHOT"
+			]
+		},
+		{
+			"name": "sap.ui.codeeditor",
+			"version": "1.59.0-SNAPSHOT",
+			"buildTimestamp": "201809130028",
+			"scmRevision": "b8c6ff105ab490b380a8dc21901e355a9a0e4a71",
+			"gav": "com.sap.ui5:codeeditor:1.59.0-SNAPSHOT:jar",
+			"patchHistory": [
+				"1.59.0-SNAPSHOT"
+			]
+		},
+		{
+			"name": "sap.ui.commons",
+			"version": "1.59.0-SNAPSHOT",
+			"buildTimestamp": "201809130028",
+			"scmRevision": "b8c6ff105ab490b380a8dc21901e355a9a0e4a71",
+			"gav": "com.sap.ui5:commons:1.59.0-SNAPSHOT:jar",
+			"patchHistory": [
+				"1.59.0-SNAPSHOT"
+			]
+		},
+		{
+			"name": "sap.ui.comp",
+			"version": "1.59.0-SNAPSHOT",
+			"buildTimestamp": "201809130028",
+			"scmRevision": "b8c6ff105ab490b380a8dc21901e355a9a0e4a71",
+			"gav": "com.sap.ui5:comp:1.59.0-SNAPSHOT:jar",
+			"patchHistory": [
+				"1.59.0-SNAPSHOT"
+			]
+		},
+		{
+			"name": "sap.ui.demoapps",
+			"version": "1.59.0-SNAPSHOT",
+			"buildTimestamp": "201809130933",
+			"scmRevision": "487f6229c65a674df2d981a5174ebb1a067825ce",
+			"gav": "com.sap.ui5.dist:sap.ui.demoapps:1.59.0-SNAPSHOT:jar",
+			"patchHistory": [
+				"1.59.0-SNAPSHOT"
+			]
+		},
+		{
+			"name": "sap.ui.demokit",
+			"version": "1.59.0-SNAPSHOT",
+			"buildTimestamp": "201809130028",
+			"scmRevision": "b8c6ff105ab490b380a8dc21901e355a9a0e4a71",
+			"gav": "com.sap.ui5:demokit-uilib:1.59.0-SNAPSHOT:jar",
+			"patchHistory": [
+				"1.59.0-SNAPSHOT"
+			]
+		},
+		{
+			"name": "sap.ui.documentation",
+			"version": "1.59.0-SNAPSHOT",
+			"buildTimestamp": "201809130028",
+			"scmRevision": "b8c6ff105ab490b380a8dc21901e355a9a0e4a71",
+			"gav": "com.sap.ui5:documentation-uilib:1.59.0-SNAPSHOT:jar",
+			"patchHistory": [
+				"1.59.0-SNAPSHOT"
+			]
+		},
+		{
+			"name": "sap.ui.dt",
+			"version": "1.59.0-SNAPSHOT",
+			"buildTimestamp": "201809130028",
+			"scmRevision": "b8c6ff105ab490b380a8dc21901e355a9a0e4a71",
+			"gav": "com.sap.ui5:dt:1.59.0-SNAPSHOT:jar",
+			"patchHistory": [
+				"1.59.0-SNAPSHOT"
+			]
+		},
+		{
+			"name": "sap.ui.export",
+			"version": "1.59.0-SNAPSHOT",
+			"buildTimestamp": "201809130028",
+			"scmRevision": "b8c6ff105ab490b380a8dc21901e355a9a0e4a71",
+			"gav": "com.sap.ui5:export:1.59.0-SNAPSHOT:jar",
+			"patchHistory": [
+				"1.59.0-SNAPSHOT"
+			]
+		},
+		{
+			"name": "sap.ui.fl",
+			"version": "1.59.0-SNAPSHOT",
+			"buildTimestamp": "201809130028",
+			"scmRevision": "b8c6ff105ab490b380a8dc21901e355a9a0e4a71",
+			"gav": "com.sap.ui5:fl:1.59.0-SNAPSHOT:jar",
+			"patchHistory": [
+				"1.59.0-SNAPSHOT"
+			]
+		},
+		{
+			"name": "sap.ui.generic.app",
+			"version": "1.59.0-SNAPSHOT",
+			"buildTimestamp": "201809130028",
+			"scmRevision": "b8c6ff105ab490b380a8dc21901e355a9a0e4a71",
+			"gav": "com.sap.ui5:generic-app:1.59.0-SNAPSHOT:jar",
+			"patchHistory": [
+				"1.59.0-SNAPSHOT"
+			]
+		},
+		{
+			"name": "sap.ui.generic.template",
+			"version": "1.59.0-SNAPSHOT",
+			"buildTimestamp": "201809130028",
+			"scmRevision": "b8c6ff105ab490b380a8dc21901e355a9a0e4a71",
+			"gav": "com.sap.ui5:generic-template:1.59.0-SNAPSHOT:jar",
+			"patchHistory": [
+				"1.59.0-SNAPSHOT"
+			]
+		},
+		{
+			"name": "sap.ui.layout",
+			"version": "1.59.0-SNAPSHOT",
+			"buildTimestamp": "201809130028",
+			"scmRevision": "b8c6ff105ab490b380a8dc21901e355a9a0e4a71",
+			"gav": "com.sap.ui5:layout:1.59.0-SNAPSHOT:jar",
+			"patchHistory": [
+				"1.59.0-SNAPSHOT"
+			]
+		},
+		{
+			"name": "sap.ui.mdc",
+			"version": "1.59.0-SNAPSHOT",
+			"buildTimestamp": "201809130028",
+			"scmRevision": "b8c6ff105ab490b380a8dc21901e355a9a0e4a71",
+			"gav": "com.sap.ui5:mdc:1.59.0-SNAPSHOT:jar",
+			"patchHistory": [
+				"1.59.0-SNAPSHOT"
+			]
+		},
+		{
+			"name": "sap.ui.richtexteditor",
+			"version": "1.59.0-SNAPSHOT",
+			"buildTimestamp": "201809130028",
+			"scmRevision": "b8c6ff105ab490b380a8dc21901e355a9a0e4a71",
+			"gav": "com.sap.ui5:richtexteditor:1.59.0-SNAPSHOT:jar",
+			"patchHistory": [
+				"1.59.0-SNAPSHOT"
+			]
+		},
+		{
+			"name": "sap.ui.rta",
+			"version": "1.59.0-SNAPSHOT",
+			"buildTimestamp": "201809130028",
+			"scmRevision": "b8c6ff105ab490b380a8dc21901e355a9a0e4a71",
+			"gav": "com.sap.ui5:rta:1.59.0-SNAPSHOT:jar",
+			"patchHistory": [
+				"1.59.0-SNAPSHOT"
+			]
+		},
+		{
+			"name": "sap.ui.server.abap",
+			"version": "1.59.0-SNAPSHOT",
+			"buildTimestamp": "201809130933",
+			"scmRevision": "487f6229c65a674df2d981a5174ebb1a067825ce",
+			"gav": "com.sap.ui5.dist:sap.ui.server.abap:1.59.0-SNAPSHOT:jar",
+			"patchHistory": [
+				"1.59.0-SNAPSHOT"
+			]
+		},
+		{
+			"name": "sap.ui.server.java",
+			"version": "1.59.0-SNAPSHOT",
+			"buildTimestamp": "201809130028",
+			"scmRevision": "b8c6ff105ab490b380a8dc21901e355a9a0e4a71",
+			"gav": "com.sap.ui5:resource:1.59.0-SNAPSHOT:jar",
+			"patchHistory": [
+				"1.59.0-SNAPSHOT"
+			]
+		},
+		{
+			"name": "sap.ui.suite",
+			"version": "1.59.0-SNAPSHOT",
+			"buildTimestamp": "201809130028",
+			"scmRevision": "b8c6ff105ab490b380a8dc21901e355a9a0e4a71",
+			"gav": "com.sap.ui5:suite:1.59.0-SNAPSHOT:jar",
+			"patchHistory": [
+				"1.59.0-SNAPSHOT"
+			]
+		},
+		{
+			"name": "sap.ui.support",
+			"version": "1.59.0-SNAPSHOT",
+			"buildTimestamp": "201809130028",
+			"scmRevision": "b8c6ff105ab490b380a8dc21901e355a9a0e4a71",
+			"gav": "com.sap.ui5:support:1.59.0-SNAPSHOT:jar",
+			"patchHistory": [
+				"1.59.0-SNAPSHOT"
+			]
+		},
+		{
+			"name": "sap.ui.table",
+			"version": "1.59.0-SNAPSHOT",
+			"buildTimestamp": "201809130028",
+			"scmRevision": "b8c6ff105ab490b380a8dc21901e355a9a0e4a71",
+			"gav": "com.sap.ui5:table:1.59.0-SNAPSHOT:jar",
+			"patchHistory": [
+				"1.59.0-SNAPSHOT"
+			]
+		},
+		{
+			"name": "sap.ui.unified",
+			"version": "1.59.0-SNAPSHOT",
+			"buildTimestamp": "201809130028",
+			"scmRevision": "b8c6ff105ab490b380a8dc21901e355a9a0e4a71",
+			"gav": "com.sap.ui5:unified:1.59.0-SNAPSHOT:jar",
+			"patchHistory": [
+				"1.59.0-SNAPSHOT"
+			]
+		},
+		{
+			"name": "sap.ui.ux3",
+			"version": "1.59.0-SNAPSHOT",
+			"buildTimestamp": "201809130028",
+			"scmRevision": "b8c6ff105ab490b380a8dc21901e355a9a0e4a71",
+			"gav": "com.sap.ui5:ux3:1.59.0-SNAPSHOT:jar",
+			"patchHistory": [
+				"1.59.0-SNAPSHOT"
+			]
+		},
+		{
+			"name": "sap.ui.vbm",
+			"version": "1.59.0-SNAPSHOT",
+			"buildTimestamp": "201809130211",
+			"scmRevision": "a4efa5940f3aa829c6fa2059778bfdc3352b42b6",
+			"gav": "com.sap.ui5:vbm:1.59.0-SNAPSHOT:jar",
+			"patchHistory": [
+				"1.59.0-SNAPSHOT"
+			]
+		},
+		{
+			"name": "sap.ui.vk",
+			"version": "1.59.0-SNAPSHOT",
+			"buildTimestamp": "201809130155",
+			"scmRevision": "5ba79d46f6c2dfe40cc6d59214e9cda5e2085855",
+			"gav": "com.sap.ui5.vizkit:sap.ui.vk:1.59.0-SNAPSHOT:jar",
+			"patchHistory": [
+				"1.59.0-SNAPSHOT"
+			]
+		},
+		{
+			"name": "sap.ui.vtm",
+			"version": "1.59.0-SNAPSHOT",
+			"buildTimestamp": "201809130201",
+			"scmRevision": "746013fd7e9776760e5e7cc9421181d6c1d4ef25",
+			"gav": "com.sap.ui5.vtm:sap.ui.vtm:1.59.0-SNAPSHOT:jar",
+			"patchHistory": [
+				"1.59.0-SNAPSHOT"
+			]
+		},
+		{
+			"name": "sap.uiext.inbox",
+			"version": "1.59.0-SNAPSHOT",
+			"buildTimestamp": "201809130028",
+			"scmRevision": "b8c6ff105ab490b380a8dc21901e355a9a0e4a71",
+			"gav": "com.sap.ui5:inbox:1.59.0-SNAPSHOT:jar",
+			"patchHistory": [
+				"1.59.0-SNAPSHOT"
+			]
+		},
+		{
+			"name": "sap.ushell",
+			"version": "1.59.0-SNAPSHOT",
+			"buildTimestamp": "201809130430",
+			"scmRevision": "",
+			"gav": "com.sap.ushell:ushell-lib:1.59.0-SNAPSHOT:jar",
+			"patchHistory": [
+				"1.59.0-SNAPSHOT"
+			]
+		},
+		{
+			"name": "sap.ushell_abap",
+			"version": "1.59.0-SNAPSHOT",
+			"buildTimestamp": "201809130430",
+			"scmRevision": "",
+			"gav": "com.sap.ushell:ushell_abap:1.59.0-SNAPSHOT:jar",
+			"patchHistory": [
+				"1.59.0-SNAPSHOT"
+			]
+		},
+		{
+			"name": "sap.uxap",
+			"version": "1.59.0-SNAPSHOT",
+			"buildTimestamp": "201809130028",
+			"scmRevision": "b8c6ff105ab490b380a8dc21901e355a9a0e4a71",
+			"gav": "com.sap.uxap:uxap-uilib:1.59.0-SNAPSHOT:jar",
+			"patchHistory": [
+				"1.59.0-SNAPSHOT"
+			]
+		},
+		{
+			"name": "sap.viz",
+			"version": "1.59.0-SNAPSHOT",
+			"buildTimestamp": "201809130028",
+			"scmRevision": "b8c6ff105ab490b380a8dc21901e355a9a0e4a71",
+			"gav": "com.sap.ui5:viz:1.59.0-SNAPSHOT:jar",
+			"patchHistory": [
+				"1.59.0-SNAPSHOT"
+			]
+		},
+		{
+			"name": "sap.zen.commons",
+			"version": "1.59.0-SNAPSHOT",
+			"buildTimestamp": "201809130409",
+			"scmRevision": "",
+			"gav": "com.sap.ip.bi.zen.rt.phx:com.sap.ip.bi.zen.rt.zencopy.phx:1.59.0-SNAPSHOT:jar",
+			"patchHistory": [
+				"1.59.0-SNAPSHOT"
+			]
+		},
+		{
+			"name": "sap.zen.crosstab",
+			"version": "1.59.0-SNAPSHOT",
+			"buildTimestamp": "201809130409",
+			"scmRevision": "",
+			"gav": "com.sap.ip.bi.zen.rt.phx:com.sap.ip.bi.zen.rt.components.crosstab.phx:1.59.0-SNAPSHOT:jar",
+			"patchHistory": [
+				"1.59.0-SNAPSHOT"
+			]
+		},
+		{
+			"name": "sap.zen.dsh",
+			"version": "1.59.0-SNAPSHOT",
+			"buildTimestamp": "201808311338",
+			"scmRevision": "",
+			"gav": "com.sap.ip.bi.zen.rt:com.sap.ip.bi.zen.rt.dsh.phx:1.59.0-SNAPSHOT:jar",
+			"patchHistory": [
+				"1.59.0-SNAPSHOT"
+			]
+		},
+		{
+			"name": "themelib_sap_belize",
+			"version": "1.59.0-SNAPSHOT",
+			"buildTimestamp": "201809130028",
+			"scmRevision": "b8c6ff105ab490b380a8dc21901e355a9a0e4a71",
+			"gav": "com.sap.ui5:themelib_sap_belize:1.59.0-SNAPSHOT:jar",
+			"patchHistory": [
+				"1.59.0-SNAPSHOT"
+			]
+		},
+		{
+			"name": "themelib_sap_bluecrystal",
+			"version": "1.59.0-SNAPSHOT",
+			"buildTimestamp": "201809130028",
+			"scmRevision": "b8c6ff105ab490b380a8dc21901e355a9a0e4a71",
+			"gav": "com.sap.ui5:themelib_sap_bluecrystal:1.59.0-SNAPSHOT:jar",
+			"patchHistory": [
+				"1.59.0-SNAPSHOT"
+			]
+		}
+	]
+}

@@ -1,0 +1,13 @@
+{
+  "modules": {
+    "sap/ui/thirdparty/jquery": {
+      "jQuery.trim": {
+        "replacer": "jQueryTrim",
+        "version": "^1.58.0"
+      }
+    }
+  },
+  "replacers": {
+    "jQueryTrim": "tasks/helpers/replacers/jQueryTrim.js"
+  }
+}

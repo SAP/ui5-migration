@@ -1,0 +1,26 @@
+{
+	"modules": {
+		"jquery.sap.global": {
+			"jQuery.sap.require": {
+				"newModulePath": "LEAVE",
+				"replacer": "LEAVE"
+			},
+			"jQuery.sap.log.Level": {
+				"newModulePath": "sap/base/log",
+				"newVariableName": "Log",
+				"functionName": "Level"
+			}
+		},
+		"GLOBALS": {
+			"jQuery": {
+				"newModulePath": "sap/ui/thirdparty/jquery",
+				"newVariableName": "jQuery"
+			}
+		}
+	},
+	"replacers": {
+		"LEAVE": "tasks/helpers/replacers/LEAVE.js",
+		"ModuleFunction": "tasks/helpers/replacers/ModuleFunction.js",
+		"Module": "tasks/helpers/replacers/Module.js"
+	}
+}

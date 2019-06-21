@@ -1,0 +1,15 @@
+{
+	"modules": {
+		"jquery.sap.global": {
+			"jQuery.unhandled": {
+				"replacer": "LEAVE"
+			}
+		}
+	},
+	"replacers": {
+		"LEAVE": "tasks/helpers/replacers/LEAVE.js"
+	},
+	"comments": {
+		"failedReplacementComment": " Hallo, I bims eins Kommentar"
+	}
+}

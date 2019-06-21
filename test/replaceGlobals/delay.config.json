@@ -1,0 +1,13 @@
+{
+  "modules": {
+    "jquery.sap.script": {
+      "jQuery.sap.delayedCall": {
+        "replacer": "DelayedCall"
+      }
+    }
+  },
+  "replacers": {
+    "DelayedCall": "tasks/helpers/replacers/DelayedCall.js"
+  },
+  "excludes": []
+}

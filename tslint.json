@@ -1,0 +1,27 @@
+{
+	"defaultSeverity": "error",
+	"extends": "./node_modules/gts/tslint.json",
+	"rules": {
+		"only-arrow-functions": false,
+		"jsdoc-format": false,
+		"no-debugger": true,
+		"no-irregular-whitespace": {},
+		"no-trailing-whitespace": {},
+		"whitespace": {
+			"options": [
+				"check-separator",
+				"check-branch",
+				"check-decl",
+				"check-operator"
+			]
+		},
+		"linebreak-style": [true, "LF"],
+		"indent": [true, "tabs", 4],
+		"no-console": {},
+		"semicolon": {},
+		"object-literal-key-quotes": {
+			"options": ["consistent-as-needed"]
+		},
+		"curly": {}
+	}
+}

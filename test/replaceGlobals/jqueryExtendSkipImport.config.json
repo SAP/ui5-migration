@@ -1,0 +1,15 @@
+{
+  "modules": {
+    "sap/ui/thirdparty/jquery": {
+      "jQuery.extend": {
+        "newModulePath": "sap/ui/thirdparty/jquery",
+        "newVariableName": "jQuery",
+        "functionName": "extend",
+        "replacer": "jQueryExtend"
+      }
+    }
+  },
+  "replacers": {
+    "jQueryExtend": "tasks/helpers/replacers/jQueryExtend.js"
+  }
+}

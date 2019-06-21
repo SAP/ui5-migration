@@ -1,0 +1,13 @@
+{
+	"modules": {
+		"jquery.sap.global": {
+			"jQuery.isArray": {
+				"functionName": "Array.isArray",
+				"replacer": "NativeObject"
+			}
+		}
+	},
+	"replacers": {
+		"NativeObject": "tasks/helpers/replacers/NativeObject.js"
+	}
+}

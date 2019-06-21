@@ -1,0 +1,13 @@
+{
+  "modules": {
+    "jquery.sap.resources": {
+      "jQuery.sap.resources.*": {
+        "newModulePath": "sap/base/i18n/ResourceBundle"
+      }
+    }
+  },
+  "replacers": {
+    "ModuleFunction": "tasks/helpers/replacers/ModuleFunction.js"
+  },
+  "excludes": []
+}

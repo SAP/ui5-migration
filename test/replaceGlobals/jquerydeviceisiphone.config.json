@@ -1,0 +1,17 @@
+{
+	"modules": {
+		"jquery.sap.mobile": {
+			"jQuery.device.is.iphone": {
+				"newModulePath": "sap/ui/Device",
+				"newVariableName": "Device",
+				"objectProperty": ["os","system"],
+				"functionNames": ["ios", "phone"],
+				"replacer": "ModuleFunctionWithObjectProperty",
+				"conjunctionOperator": "&&"
+			}
+		}
+	},
+	"replacers": {
+		"ModuleFunctionWithObjectProperty": "tasks/helpers/replacers/ModuleFunctionWithObjectProperty.js"
+	}
+}

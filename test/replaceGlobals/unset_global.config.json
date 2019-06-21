@@ -1,0 +1,24 @@
+{
+	"modules": {
+		"a": {
+			"a.fnct": {
+				"newModulePath": "newA"
+			}
+		},
+		"b": {
+			"b.fnct": {
+				"newModulePath": "newB"
+			}
+		},
+		"GLOBALS": {
+			"jQuery": {
+				"newModulePath": "sap/ui/thirdparty/jquery",
+				"newVariableName": "jQuery"
+			}
+		}
+	},
+	"replacers": {
+		"ModuleFunction": "tasks/helpers/replacers/ModuleFunction.js",
+		"Module": "tasks/helpers/replacers/Module.js"
+	}
+}

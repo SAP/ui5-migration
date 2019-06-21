@@ -1,0 +1,27 @@
+{
+  "modules": {
+    "jquery.sap.global": {
+      "jQuery.sap.assert": {
+        "newModulePath": "sap/base/assert",
+        "version": "1.58.9"
+      }
+    },
+    "GLOBALS": {
+      "jQuery": {
+        "newModulePath": "thirdparty/jQuery",
+        "version": "1.58.9"
+      },
+      "jQuery.extend": {
+        "newModulePath": "thirdparty/jQuery",
+        "functionName": "extend",
+        "version": "1.58.9"
+		}
+	}
+  },
+  "replacers": {
+    "ModuleFunction": "tasks/helpers/replacers/ModuleFunction.js",
+    "Module": "tasks/helpers/replacers/Module.js",
+    "LEAVE": "tasks/helpers/replacers/LEAVE.js"
+  },
+  "excludes": []
+}

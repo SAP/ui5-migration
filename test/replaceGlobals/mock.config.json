@@ -1,0 +1,14 @@
+{
+	"modules": {
+		"jquery.sap.global": {
+			"jQuery.sap.log": {
+				"newModulePath": "sap/base/Log",
+				"newVariableName": "Log"
+			}
+		}
+	},
+	"replacers": {
+		"ModuleFunction": "tasks/helpers/replacers/ModuleFunction.js",
+		"Module": "tasks/helpers/replacers/Module.js"
+	}
+}

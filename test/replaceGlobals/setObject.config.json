@@ -1,0 +1,14 @@
+{
+  "modules": {
+	"jquery.sap.global": {
+	  "jQuery.sap.setObject": {
+		"newModulePath": "sap/base/util/getObject",
+		"replacer": "SetObject"
+	  }
+	}
+  },
+  "replacers": {
+	"SetObject": "tasks/helpers/replacers/SetObject.js"
+  },
+  "excludes": []
+}

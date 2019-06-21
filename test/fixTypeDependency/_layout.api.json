@@ -1,0 +1,84 @@
+{
+	"$schema-ref": "http://schemas.sap.com/sapui5/designtime/api.json/1.0",
+	"version": "1.59.0",
+	"library": "sap.ui.layout",
+	"symbols": [
+		{
+			"kind": "namespace",
+			"name": "sap.ui.layout",
+			"basename": "layout",
+			"resource": "sap/ui/layout/library.js",
+			"module": "sap/ui/layout/library",
+			"export": "",
+			"static": true,
+			"visibility": "public",
+			"description": "SAPUI5 library with layout controls."
+		},
+		{
+			"kind": "enum",
+			"name": "sap.ui.layout.form.SimpleFormLayout",
+			"basename": "SimpleFormLayout",
+			"resource": "sap/ui/layout/library.js",
+			"module": "sap/ui/layout/library",
+			"export": "form.SimpleFormLayout",
+			"static": true,
+			"visibility": "public",
+			"since": "1.16.0",
+			"description": "Available <code>FormLayouts</code> used to render a <code>SimpleForm</code>.",
+			"ui5-metamodel": true,
+			"properties": [
+				{
+					"name": "ColumnLayout",
+					"visibility": "public",
+					"static": true,
+					"since": "1.56.0",
+					"type": "string",
+					"description": "Uses the <code>ColumnLayout</code> layout to render the <code>SimpleForm</code> control"
+				},
+				{
+					"name": "GridLayout",
+					"visibility": "public",
+					"static": true,
+					"type": "string",
+					"description": "Uses the <code>GridLayout</code> layout to render the <code>SimpleForm</code> control"
+				},
+				{
+					"name": "ResponsiveGridLayout",
+					"visibility": "public",
+					"static": true,
+					"since": "1.16.0",
+					"type": "string",
+					"description": "Uses the <code>ResponsiveGridLayout</code> layout to render the <code>SimpleForm</code> control"
+				},
+				{
+					"name": "ResponsiveLayout",
+					"visibility": "public",
+					"static": true,
+					"type": "string",
+					"description": "Uses the <code>ResponsiveLayout</code> layout to render the <code>SimpleForm</code> control"
+				}
+			]
+		},
+		{
+			"kind": "namespace",
+			"name": "sap.ui.layout.GridSpan",
+			"basename": "GridSpan",
+			"resource": "sap/ui/layout/library.js",
+			"module": "sap/ui/layout/library",
+			"export": "GridSpan",
+			"final": true,
+			"static": true,
+			"visibility": "public",
+			"description": "<p>A string type that represents Grid's span values for large, medium and...</p>",
+			"ui5-metamodel": true,
+			"ui5-metadata": {
+				"stereotype": "datatype",
+				"basetype": "string",
+				"pattern": "^(([Xx][Ll](?:[1-9]|1[0-2]))? ?([Ll](?:[1-9]|1[0-2]))? ?([Mm](?:[1-9]|1[0-2]))? ?([Ss](?:[1-9]|1[0-2]))?)$"
+			},
+			"title": "namespace sap.ui.layout.GridSpan",
+			"subTitle": ""
+		}
+
+	]
+}

@@ -1,0 +1,14 @@
+{
+  "modules": {
+    "jquery.sap.mod1": {
+
+    },
+    "jquery.sap.mod3": {
+
+    }
+  },
+  "replacers": {
+    "ModuleFunction": "tasks/helpers/replacers/ModuleFunction.js"
+  },
+  "excludes": []
+}

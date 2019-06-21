@@ -1,0 +1,12 @@
+{
+	"modules": {
+		"jquery.sap.global": {
+			"jQuery.sap.getter": {
+				"replacer": "Getter"
+			}
+		}
+	},
+	"replacers": {
+		"Getter": "tasks/helpers/replacers/Getter.js"
+	}
+}

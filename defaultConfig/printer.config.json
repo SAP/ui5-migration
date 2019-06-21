@@ -1,0 +1,11 @@
+{
+	"tabWidth": 4,
+	"useTabs": true,
+	"reuseWhitespace": true,
+	"lineTerminator": "\n",
+	"wrapColumn": 120,
+	"quote": "double",
+	"auto.lineTerminator": true,
+	"auto.useTabs": true,
+	"auto.diffOptimization": "DiffAndAstStringOptimizeStrategy"
+}

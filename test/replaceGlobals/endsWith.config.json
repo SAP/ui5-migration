@@ -1,0 +1,20 @@
+{
+  "modules": {
+    "jquery.sap.strings": {
+      "jQuery.sap.endsWith": {
+        "functionName": "endsWith",
+        "replacer": "NativeStringFunction",
+        "version": "1.58.0"
+      },
+      "jQuery.sap.startsWith": {
+        "functionName": "startsWith",
+        "replacer": "NativeStringFunction",
+        "version": "1.58.0"
+      }
+    }
+  },
+  "replacers": {
+    "NativeStringFunction": "tasks/helpers/replacers/NativeStringFunction.js"
+  },
+  "excludes": []
+}

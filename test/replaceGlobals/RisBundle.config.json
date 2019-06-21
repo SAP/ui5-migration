@@ -1,0 +1,31 @@
+{
+	"modules": {
+		"jquery.sap.resources": {
+			"jQuery.sap.resources.isBundle": {
+				"newModulePath": "sap/base/i18n/ResourceBundle",
+				"replacer": "instanceOf",
+				"version": "1.58.0"
+			},
+			"$.sap.resources.isBundle": {
+				"newModulePath": "sap/base/i18n/ResourceBundle",
+				"replacer": "instanceOf",
+				"version": "1.58.0"
+			},
+			"jQuery.sap.resources.*": {
+				"newModulePath": "sap/base/i18n/ResourceBundle",
+				"functionName": "create",
+				"version": "1.58.0"
+			},
+			"$.sap.resources.*": {
+				"newModulePath": "sap/base/i18n/ResourceBundle",
+				"functionName": "create",
+				"version": "1.58.0"
+			}
+		}
+	},
+	"replacers": {
+		"ModuleFunction": "tasks/helpers/replacers/ModuleFunction.js",
+		"Module": "tasks/helpers/replacers/Module.js",
+		"instanceOf": "tasks/helpers/replacers/instanceOf.js"
+	}
+}

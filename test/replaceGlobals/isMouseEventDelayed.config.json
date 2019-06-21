@@ -1,0 +1,18 @@
+{
+	"modules": {
+		"jquery.sap.events": {
+			"jQuery.sap.isMouseEventDelayed": {
+				"newModulePath": "sap/ui/events/isMouseEventDelayed",
+				"replacer": "isMouseEventDelayed"
+			},
+			"$.sap.isMouseEventDelayed": {
+				"newModulePath": "sap/ui/events/isMouseEventDelayed",
+				"replacer": "isMouseEventDelayed"
+			}
+		}
+	},
+	"replacers": {
+		"isMouseEventDelayed": "tasks/helpers/replacers/isMouseEventDelayed.js"
+	},
+	"excludes": []
+}

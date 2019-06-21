@@ -1,0 +1,17 @@
+{
+	"modules": {
+		"jquery.sap.strings": {
+			"$.endsWithIgnoreCase": {
+				"replacer": "startsOrEndsWithIgnoreCase",
+				"startsOrEndsWithFunction": "endsWith"
+			},
+			"jQuery.sap.endsWithIgnoreCase": {
+				"replacer": "startsOrEndsWithIgnoreCase",
+				"startsOrEndsWithFunction": "endsWith"
+			}
+		}
+	},
+	"replacers": {
+		"startsOrEndsWithIgnoreCase": "tasks/helpers/replacers/startsOrEndsWithIgnoreCase.js"
+	}
+}

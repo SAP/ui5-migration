@@ -1,0 +1,14 @@
+{
+	"modules": {
+		"jquery.sap.encoder": {
+			"jQuery.sap.removeUrlWhitelist": {
+				"newModulePath": "sap/base/security/URLWhitelist",
+				"replacer": "RemoveUrlWhitelist"
+			}
+		}
+	},
+	"replacers": {
+		"RemoveUrlWhitelist": "tasks/helpers/replacers/RemoveUrlWhitelist.js"
+	},
+	"excludes": []
+}

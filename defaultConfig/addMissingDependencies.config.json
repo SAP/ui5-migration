@@ -1,0 +1,210 @@
+{
+	"modules": {
+		"jQuery Function Extensions": {
+			"*.cursorPos": {
+				"newModulePath": "sap/ui/dom/jquery/cursorPos",
+				"replacer": "AddComment",
+				"commentText": " jQuery Plugin \"cursorPos\"",
+				"finder": "FunctionExtensionFinder",
+				"extender": "AddUnusedImportWithComment",
+				"version": "^1.58.0"
+			},
+			"*.control": {
+				"newModulePath": "sap/ui/dom/jquery/control",
+				"replacer": "AddComment",
+				"commentText": " jQuery Plugin \"control\"",
+				"finder": "JQueryFunctionExtensionFinder",
+				"extender": "AddUnusedImportWithComment",
+				"version": "^1.58.0"
+			},
+			"*.firstFocusableDomRef": {
+				"newModulePath": "sap/ui/dom/jquery/Focusable",
+				"replacer": "AddComment",
+				"commentText": " jQuery Plugin \"firstFocusableDomRef\"",
+				"finder": "FunctionExtensionFinder",
+				"extender": "AddUnusedImportWithComment",
+				"version": "^1.58.0"
+			},
+			"*.lastFocusableDomRef": {
+				"newModulePath": "sap/ui/dom/jquery/Focusable",
+				"replacer": "AddComment",
+				"commentText": " jQuery Plugin \"lastFocusableDomRef\"",
+				"finder": "FunctionExtensionFinder",
+				"extender": "AddUnusedImportWithComment",
+				"version": "^1.58.0"
+			},
+			"*.getSelectedText": {
+				"newModulePath": "sap/ui/dom/jquery/getSelectedText",
+				"replacer": "AddComment",
+				"commentText": " jQuery Plugin \"getSelectedText\"",
+				"finder": "JQueryFunctionExtensionFinder",
+				"extender": "AddUnusedImportWithComment",
+				"version": "^1.58.0"
+			},
+			"*.hasTabIndex": {
+				"newModulePath": "sap/ui/dom/jquery/hasTabIndex",
+				"replacer": "AddComment",
+				"commentText": " jQuery Plugin \"hasTabIndex\"",
+				"finder": "FunctionExtensionFinder",
+				"extender": "AddUnusedImportWithComment",
+				"version": "^1.58.0"
+			},
+			"*.parentByAttribute": {
+				"newModulePath": "sap/ui/dom/jquery/parentByAttribute",
+				"replacer": "AddComment",
+				"commentText": " jQuery Plugin \"parentByAttribute\"",
+				"finder": "FunctionExtensionFinder",
+				"extender": "AddUnusedImportWithComment",
+				"version": "^1.58.0"
+			},
+			"*.rect": {
+				"newModulePath": "sap/ui/dom/jquery/rect",
+				"replacer": "AddComment",
+				"commentText": " jQuery Plugin \"rect\"",
+				"finder": "FunctionExtensionFinder",
+				"extender": "AddUnusedImportWithComment",
+				"version": "^1.58.0"
+			},
+			"*.rectContains": {
+				"newModulePath": "sap/ui/dom/jquery/rectContains",
+				"replacer": "AddComment",
+				"commentText": " jQuery Plugin \"rectContains\"",
+				"finder": "FunctionExtensionFinder",
+				"extender": "AddUnusedImportWithComment",
+				"version": "^1.58.0"
+			},
+			"*.scrollLeftRTL": {
+				"newModulePath": "sap/ui/dom/jquery/scrollLeftRTL",
+				"replacer": "AddComment",
+				"commentText": " jQuery Plugin \"scrollLeftRTL\"",
+				"finder": "FunctionExtensionFinder",
+				"extender": "AddUnusedImportWithComment",
+				"version": "^1.58.0"
+			},
+			"*.scrollRightRTL": {
+				"newModulePath": "sap/ui/dom/jquery/scrollRightRTL",
+				"replacer": "AddComment",
+				"commentText": " jQuery Plugin \"scrollRightRTL\"",
+				"finder": "FunctionExtensionFinder",
+				"extender": "AddUnusedImportWithComment",
+				"version": "^1.58.0"
+			},
+			"*.disableSelection": {
+				"newModulePath": "sap/ui/dom/jquery/Selection",
+				"replacer": "AddComment",
+				"commentText": " jQuery Plugin \"disableSelection\"",
+				"finder": "FunctionExtensionFinder",
+				"extender": "AddUnusedImportWithComment",
+				"version": "^1.58.0"
+			},
+			"*.enableSelection": {
+				"newModulePath": "sap/ui/dom/jquery/Selection",
+				"replacer": "AddComment",
+				"commentText": " jQuery Plugin \"enableSelection\"",
+				"finder": "FunctionExtensionFinder",
+				"extender": "AddUnusedImportWithComment",
+				"version": "^1.58.0"
+			},
+			"*.selectText": {
+				"newModulePath": "sap/ui/dom/jquery/selectText",
+				"replacer": "AddComment",
+				"commentText": " jQuery Plugin \"selectText\"",
+				"finder": "JQueryFunctionExtensionFinder",
+				"extender": "AddUnusedImportWithComment",
+				"version": "^1.58.0"
+			},
+			"*.zIndex": {
+				"newModulePath": "sap/ui/dom/jquery/zIndex",
+				"replacer": "AddComment",
+				"commentText": " jQuery Plugin \"zIndex\"",
+				"finder": "JQueryFunctionExtensionFinder",
+				"extender": "AddUnusedImportWithComment",
+				"version": "^1.58.0"
+			},
+			"*.addAriaLabelledBy": {
+				"newModulePath": "sap/ui/dom/jquery/Aria",
+				"replacer": "AddComment",
+				"commentText": " jQuery Plugin \"addAriaLabelledBy\"",
+				"finder": "JQueryFunctionExtensionFinder",
+				"extender": "AddUnusedImportWithComment",
+				"version": "^1.58.0"
+			},
+			"*.removeAriaLabelledBy": {
+				"newModulePath": "sap/ui/dom/jquery/Aria",
+				"replacer": "AddComment",
+				"commentText": " jQuery Plugin \"removeAriaLabelledBy\"",
+				"finder": "JQueryFunctionExtensionFinder",
+				"extender": "AddUnusedImportWithComment",
+				"version": "^1.58.0"
+			},
+			"*.addAriaDescribedBy": {
+				"newModulePath": "sap/ui/dom/jquery/Aria",
+				"replacer": "AddComment",
+				"commentText": " jQuery Plugin \"addAriaDescribedBy\"",
+				"finder": "JQueryFunctionExtensionFinder",
+				"extender": "AddUnusedImportWithComment",
+				"version": "^1.58.0"
+			},
+			"*.removeAriaDescribedBy": {
+				"newModulePath": "sap/ui/dom/jquery/Aria",
+				"replacer": "AddComment",
+				"commentText": " jQuery Plugin \"removeAriaDescribedBy\"",
+				"finder": "JQueryFunctionExtensionFinder",
+				"extender": "AddUnusedImportWithComment",
+				"version": "^1.58.0"
+			}
+		},
+		"jQuery Selectors": {
+			":sapTabbable": {
+				"newModulePath": "sap/ui/dom/jquery/Selectors",
+				"replacer": "AddComment",
+				"commentText": " jQuery custom selectors \":sapTabbable\"",
+				"finder": "CallWithArgumentFinder",
+				"finderIncludesName": ":sapTabbable",
+				"extender": "AddUnusedImportWithComment",
+				"version": "^1.58.0"
+			},
+			":focusable": {
+				"newModulePath": "sap/ui/dom/jquery/Selectors",
+				"replacer": "AddComment",
+				"commentText": " jQuery custom selectors \":focusable\"",
+				"finder": "CallWithArgumentFinder",
+				"finderIncludesName": ":focusable",
+				"extender": "AddUnusedImportWithComment",
+				"version": "^1.58.0"
+			},
+			":sapFocusable": {
+				"newModulePath": "sap/ui/dom/jquery/Selectors",
+				"replacer": "AddComment",
+				"commentText": " jQuery custom selectors \":sapFocusable\"",
+				"finder": "CallWithArgumentFinder",
+				"finderIncludesName": ":sapFocusable",
+				"extender": "AddUnusedImportWithComment",
+				"version": "^1.58.0"
+			}
+		}
+	},
+	"finders": {
+		"FunctionExtensionFinder": "tasks/helpers/finders/FunctionExtensionFinder.js",
+		"JQueryFunctionExtensionFinder": "tasks/helpers/finders/JQueryFunctionExtensionFinder.js",
+		"CallWithArgumentFinder": "tasks/helpers/finders/CallWithArgumentFinder.js",
+		"JQuerySapExtendFinder": "tasks/helpers/finders/JQuerySapExtendFinder.js",
+		"AssignReplacementFinder": "tasks/helpers/finders/AssignReplacementFinder.js"
+	},
+	"extenders": {
+		"AddUnusedImport": "tasks/helpers/extenders/AddUnusedImport.js",
+		"AddUnusedImportWithComment": "tasks/helpers/extenders/AddUnusedImportWithComment.js",
+		"AddImport": "tasks/helpers/extenders/AddImport.js",
+		"LeaveImport": "tasks/helpers/extenders/LeaveImport.js"
+	},
+	"replacers": {
+		"Module": "tasks/helpers/replacers/Module.js",
+		"ModuleFunction": "tasks/helpers/replacers/ModuleFunction.js",
+		"NOOP": "tasks/helpers/replacers/NOOP.js",
+		"AddComment": "tasks/helpers/replacers/AddComment.js"
+	},
+	"comments": {
+		"unhandledReplacementComment": "TODO unhandled replacement"
+	},
+	"excludes": []
+}

@@ -1,0 +1,18 @@
+{
+	"$schema-ref": "http://schemas.sap.com/sapui5/designtime/api.json/1.0",
+	"version": "1.61.2",
+	"library": "sap.ui.generic.app",
+	"symbols": [
+		{
+			"kind": "namespace",
+			"name": "sap.ui.generic.app",
+			"basename": "app",
+			"resource": "sap/ui/generic/app/library.js",
+			"module": "sap/ui/generic/app/library",
+			"export": "",
+			"static": true,
+			"visibility": "public",
+			"description": "SAPUI5 library that provides generic reuse functionality which can be used by Applications."
+		}
+	]
+}

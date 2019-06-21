@@ -1,0 +1,92 @@
+{
+	"$schema-ref": "http://schemas.sap.com/sapui5/designtime/api.json/1.0",
+	"version": "1.59.0",
+	"library": "sap.ui.core",
+	"symbols": [
+		{
+			"kind": "namespace",
+			"name": "jQuery",
+			"basename": "jQuery",
+			"resource": "jquery.sap.global.js",
+			"module": "jquery.sap.global",
+			"export": "",
+			"visibility": "public",
+			"description": "Provides base functionality..."
+		},
+		{
+			"kind": "namespace",
+			"name": "sap.ui.core",
+			"basename": "core",
+			"resource": "sap/ui/core/library.js",
+			"module": "sap/ui/core/library",
+			"export": "",
+			"static": true,
+			"visibility": "public",
+			"description": "SAPUI5 Core library"
+		},
+		{
+			"kind": "enum",
+			"name": "sap.ui.core.TitleLevel",
+			"basename": "TitleLevel",
+			"resource": "sap/ui/core/library.js",
+			"module": "sap/ui/core/library",
+			"export": "TitleLevel",
+			"static": true,
+			"visibility": "public",
+			"since": "1.9.1",
+			"description": "Level of a title.",
+			"ui5-metamodel": true,
+			"properties": [
+				{
+					"name": "Auto",
+					"visibility": "public",
+					"static": true,
+					"type": "string",
+					"description": "The level of the title is choosen by the control rendering the title."
+				},
+				{
+					"name": "H1",
+					"visibility": "public",
+					"static": true,
+					"type": "string",
+					"description": "The Title is of level 1."
+				},
+				{
+					"name": "H2",
+					"visibility": "public",
+					"static": true,
+					"type": "string",
+					"description": "The Title is of level 2"
+				},
+				{
+					"name": "H3",
+					"visibility": "public",
+					"static": true,
+					"type": "string",
+					"description": "The Title is of level 3"
+				},
+				{
+					"name": "H4",
+					"visibility": "public",
+					"static": true,
+					"type": "string",
+					"description": "The Title is of level 4"
+				},
+				{
+					"name": "H5",
+					"visibility": "public",
+					"static": true,
+					"type": "string",
+					"description": "The Title is of level 5"
+				},
+				{
+					"name": "H6",
+					"visibility": "public",
+					"static": true,
+					"type": "string",
+					"description": "The Title is of level 6"
+				}
+			]
+		}
+	]
+}

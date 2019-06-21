@@ -1,0 +1,15 @@
+{
+	"modules": {
+		"jquery.sap.global": {
+			"jQuery.sap.newObject": {
+				"replacer": "NativeFunctionWithArgumentCheck",
+				"newVariableName": "Object",
+				"functionName": "create"
+			}
+		}
+	},
+	"replacers": {
+		"NativeFunctionWithArgumentCheck": "tasks/helpers/replacers/NativeFunctionWithArgumentCheck.js"
+	},
+	"excludes": []
+}

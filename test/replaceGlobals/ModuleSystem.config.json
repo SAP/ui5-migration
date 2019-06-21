@@ -1,0 +1,19 @@
+{
+  "modules": {
+		"jquery.sap.global": {
+			"jQuery.sap.registerResourcePath": {
+        "functionName": "sap.ui.loader.config",
+        "replacer": "ModuleSystem",
+        "version": "1.58.0"
+			},
+			"jQuery.sap.registerModulePath": {
+        "functionName": "sap.ui.loader.config",
+				"replacer": "ModuleSystem",
+        "version": "1.58.0"
+      }
+    }
+  },
+  "replacers": {
+    "ModuleSystem": "tasks/helpers/replacers/ModuleSystem.js"
+  }
+}

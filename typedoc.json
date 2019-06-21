@@ -1,0 +1,11 @@
+{
+	"name": "ui5-migration",
+	"mode": "file",
+	"includeDeclarations": "true",
+	"exclude": ["**/node_modules/**/*", "node_modules/**/*"],
+	"out": "docs/typedoc",
+	"entryPoint": ["\"ui5-migration\""],
+	"externalPattern": "node_modules",
+	"excludeExternals": "true",
+	"readme": "none"
+}

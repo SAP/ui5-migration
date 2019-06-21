@@ -1,0 +1,15 @@
+{
+  "modules": {
+    "jquery.sap.history": {
+      "jQuery.sap.history": {
+        "newModulePath": "LEAVE",
+        "replacer": "LEAVE",
+        "version": "^1.58.0",
+        "errorComment": " TODO: migration not possible. jQuery.sap.history is deprecated. Please use <code>sap.ui.core.routing.Route</code>"
+      }
+    }
+  },
+  "replacers": {
+    "LEAVE": "tasks/helpers/replacers/LEAVE.js"
+  }
+}

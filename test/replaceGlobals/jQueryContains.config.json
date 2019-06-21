@@ -1,0 +1,17 @@
+{
+	"modules": {
+		"sap/ui/thirdparty/jquery": {
+			"jQuery.contains": {
+				"replacer": "jQueryContains",
+				"version": "^1.58.0"
+			}
+		}
+	},
+	"replacers": {
+		"jQueryContains": "tasks/helpers/replacers/jQueryContains.js"
+	},
+	"comments": {
+		"unhandledReplacementComment": "TODO unhandled replacement"
+	},
+	"excludes": []
+}

@@ -1,0 +1,20 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "allowUnreachableCode": false,
+		"outDir": "js",
+		"sourceMap": true,
+		"mapRoot": "js",
+		"target": "es2015"
+    },
+    "include": [
+        "src/**/*.ts",
+		"test/**/*.ts",
+		"typings/**/*.ts"
+	],
+    "exclude": [
+        "node_modules",
+        "replaceGlobals",
+        "util"
+    ]
+}

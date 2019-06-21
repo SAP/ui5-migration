@@ -1,0 +1,23 @@
+{
+	"_version": "1.1.0",
+	"resources": [
+		{
+			"name": ".library"
+		},
+		{
+			"name": "AppComponent-dbg.js",
+			"module": "sap/ui/generic/app/AppComponent.js",
+			"isDebug": true,
+			"required": [
+				"sap/suite/ui/generic/template/lib/AppComponent.js"
+			]
+		},
+		{
+			"name": "AppComponent.js",
+			"module": "sap/ui/generic/app/AppComponent.js",
+			"required": [
+				"sap/suite/ui/generic/template/lib/AppComponent.js"
+			]
+		}
+	]
+}

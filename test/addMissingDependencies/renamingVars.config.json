@@ -1,0 +1,26 @@
+{
+	"modules": {
+		"Renaming jQueryDOM to jQuery": {
+			"jQuery": {
+				"finder": "JQueryDOMVariableNameFinder",
+				"variableNameToFind":"jQueryDOM",
+				"replacer": "VariableNameReplacer",
+				"newVariableName": "jQuery",
+				"extender": "JQueryDependencyCleanupExtender"
+			}
+		}
+	},
+	"finders": {
+		"JQueryDOMVariableNameFinder": "tasks/helpers/finders/JQueryDOMVariableNameFinder.js"
+	},
+	"extenders": {
+		"JQueryDependencyCleanupExtender": "tasks/helpers/extenders/JQueryDependencyCleanupExtender.js"
+	},
+	"replacers": {
+		"VariableNameReplacer": "tasks/helpers/replacers/VariableNameReplacer.js"
+	},
+	"comments": {
+		"unhandledReplacementComment": "TODO unhandled replacement"
+	},
+	"excludes": []
+}

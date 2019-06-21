@@ -1,0 +1,49 @@
+{
+	"$schema-ref": "http://schemas.sap.com/sapui5/designtime/api.json/1.0",
+	"version": "1.57.0",
+	"library": "sap.ui.core",
+	"symbols": [
+		{
+			"kind": "enum",
+			"name": "sap.ui.core.ValueState",
+			"basename": "ValueState",
+			"resource": "sap/ui/core/library.js",
+			"module": "sap/ui/core/library",
+			"export": "ValueState",
+			"static": true,
+			"visibility": "public",
+			"description": "Marker for the correctness of the current value.",
+			"ui5-metamodel": true,
+			"properties": [
+				{
+					"name": "Error",
+					"visibility": "public",
+					"static": true,
+					"type": "string",
+					"description": "State is not valid."
+				},
+				{
+					"name": "None",
+					"visibility": "public",
+					"static": true,
+					"type": "string",
+					"description": "State is not specified."
+				},
+				{
+					"name": "Success",
+					"visibility": "public",
+					"static": true,
+					"type": "string",
+					"description": "State is valid."
+				},
+				{
+					"name": "Warning",
+					"visibility": "public",
+					"static": true,
+					"type": "string",
+					"description": "State is valid but with a warning."
+				}
+			]
+		}
+	]
+}

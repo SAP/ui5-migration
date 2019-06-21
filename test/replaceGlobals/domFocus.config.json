@@ -1,0 +1,12 @@
+{
+	"modules": {
+		"jquery.sap.global": {
+			"jQuery.sap.focus": {
+				"replacer": "domFocus"
+			}
+		}
+	},
+	"replacers": {
+		"domFocus": "tasks/helpers/replacers/domFocus.js"
+	}
+}

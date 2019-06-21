@@ -1,0 +1,12 @@
+language: node_js # don't install any environment
+
+node_js:
+- "8"
+
+before_script:
+  - tsc -p .
+
+script:
+  - npm run lint
+  - npm run check
+  - npm run coverage

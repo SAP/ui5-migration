@@ -1,0 +1,17 @@
+{
+  "modules": {
+    "jquery.sap.mobile": {
+      "jQuery.os.win": {
+        "newModulePath": "sap/ui/Device",
+        "newVariableName": "Device",
+        "objectProperty": "os",
+        "functionName": "name",
+        "comparisonValue": "win",
+        "replacer": "ModuleFunctionWithObjectPropertyComparison"
+      }
+    }
+  },
+  "replacers": {
+    "ModuleFunctionWithObjectPropertyComparison": "tasks/helpers/replacers/ModuleFunctionWithObjectPropertyComparison.js"
+  }
+}
