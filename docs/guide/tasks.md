@@ -1,5 +1,7 @@
 # Available migration tasks
 
+The following tasks can be specified when running the migration. If omitted all tasks are run.
+
 | Name | Description |
 |:----:|-------------|
 | `fix-jquery-plugin-imports` | Checks usage of jQuery function extensions and ensures module imports are correct. By doing so, it might add unused dependencies, as the jquery modules might extend prototypes and/or introduce globals as a sideeffect.|

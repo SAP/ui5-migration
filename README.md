@@ -3,11 +3,14 @@
 # ui5-migration
 Tooling to support the migration of UI5 applications to adopt your code to the new UI5 framework versions.
 
-The UI5 migration tool is a collection of migration scripts used to improve the UI5 codebase.
-These scripts use AST-parsing (recast, esprima) of javascript sources and perform code replacements based on the configured migration tasks.
+The UI5 migration tool performs source code replacements and optimizations to improve the UI5 codebase.
+The source code modification aims to reduce deprecated API and use best practices.
+It uses AST-parsing (recast, esprima) of javascript sources to perform the code replacements.
 The migration consists of an analysis part and a code modification part.
-The code modification is optional.
+
 An API is provided which simplifies integration into other tools (e.g. custom node scripts, grunt) next to the standalone CLI.
+
+Note: The modified source code needs to be manually reviewed. There is no 100% guarantee that the modified code works.
 
 **If you want to migrate your codebase, please see the [migration guide](./docs/guide/migrationguide.md)**
 
@@ -34,10 +37,17 @@ ui5-migration migrate
 Currently the CLI is the most easiest way to use the ui5-migration tool. Please see [command line interface](./docs/guide/cli.md) for more information.
 
 ### API
-The migration tool can be imported as npm package (although currently not uploaded to the npm registry), a complete reference of the API can be found [on this site](../typedoc/index.html).
-That being said, to use the API you would most likely have to implement a few interfaces, as this tool is supposed to work with every environment.
+The ui5-migration API can be consumed:
 
-If you want to throw a lot of files against the migration tasks, it might be useful to use a single [ASTVisitor](../typedoc/classes/_ui5_evo_migration_.astvisitor.html) instance, which you can give as parameter to the task module.
+```js
+var ui5Migration = require('ui5-migration');
+var mySourceCode = "mysourceCodeString";
+var aTasks = undefined;
+var migrationResult = await ui5Migration.migrateString(aTasks, mySourceCode);
+var log = migrationResult.log;
+var myModifiedSourceCode = migrationResult.output;
+```
+
 
 ### Available migration tasks
 A list of the current migration tasks can be found [here](./docs/guide/tasks.md)
