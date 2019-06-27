@@ -1,5 +1,5 @@
 {
-  "name": "ui5-migration",
+  "name": "@ui5/migration",
   "version": "0.1.0",
   "engines": {
     "node": ">=8.0.0"
