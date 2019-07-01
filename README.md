@@ -10,25 +10,26 @@ Migration consists of an analysis part and a code modification part.
 
 Next to the standalone CLI command an add'tl API is provided, which simplifies integration into other tools (e.g. into custom node.js scripts, grunt).
 
-IMNPORTANT: The modified source code needs to be manually reviewed and tested. There is no 100% guarantee that the modified code works as expected.
+**IMNPORTANT**: The modified source code needs to be manually reviewed and tested. There is no 100% guarantee that the modified code works as expected.
 
 **If you want to migrate your codebase, please see the [migration guide](./docs/guide/migrationguide.md)**
 
 
 ## Installation
 
-Run the following command to delete the previous installation to avoid conflicts
-```cli
-npm uninstall ui5-migration --global
-```
-
 The migration tool is currently available for experimental usage. It can be installed with npm.
 ```cli
-npm install ui5-migration --global
+npm install --global @ui5/migration
 ```
 
 ## Usage
 ### CLI
+
+To verify that the installation worked run:
+```cli
+ui5-migration --help
+```
+
 Execute migration for the current folder:
 ```cli
 ui5-migration migrate
