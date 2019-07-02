@@ -17,6 +17,9 @@ Next to the standalone CLI command an add'tl API is provided, which simplifies i
 
 ## Installation
 
+### Requirements
+- [Node.js](https://nodejs.org/) (**version 8.5 or higher** ⚠️)
+
 The migration tool is currently available for experimental usage. It can be installed with npm.
 ```cli
 npm install --global @ui5/migration
