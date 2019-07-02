@@ -6,6 +6,8 @@ const assert = require("assert");
 const fs = require("fs");
 const rootDir = "./test/util/whitespace/diffandastresources/";
 
+const EOL_REGEXP = /\r?\n/g;
+
 describe("DiffAndAstStringOptimizeStrategy", function() {
 	const aCommonLogs = [
 		"trace: DIFF: Found 123 diffs",
@@ -51,12 +53,15 @@ describe("DiffAndAstStringOptimizeStrategy", function() {
 	];
 
 	const commonLogs = (begin, end) => {
-		return [`trace: Performing DiffStringOptimizeStrategy ${begin} and ${end}`].concat(aCommonLogs);
+		return [
+			`trace: Performing DiffStringOptimizeStrategy ${begin} and ${end}`
+		].concat(aCommonLogs);
 	};
 
 
 	[{
 		baseName : "batch",
+		fileEOL : "\r\n",
 		logs : [
 			...commonLogs(76171, 76259),
 			"trace: DIFF Skipped 653:  '[\\r][\\n][\\t]'",
@@ -113,6 +118,7 @@ describe("DiffAndAstStringOptimizeStrategy", function() {
 	},
 	 {
 		 baseName : "list",
+		 fileEOL : "\r\n",
 		 logs : [
 			 ...commonLogs(1363, 1476),
 			 "trace: DIFF Skipped 653:  '[\\r][\\n][ ][ ][ ][ ]'",
@@ -169,6 +175,7 @@ describe("DiffAndAstStringOptimizeStrategy", function() {
 	 },
 	 {
 		 baseName : "actions",
+		 fileEOL : "\r\n",
 		 logs : [
 			 "trace: Performing DiffStringOptimizeStrategy 496 and 576",
 			 "trace: DIFF: Found 33 diffs",
@@ -178,6 +185,7 @@ describe("DiffAndAstStringOptimizeStrategy", function() {
 	 },
 	 {
 		 baseName : "abap",
+		 fileEOL : "\r\n",
 		 logs : [
 			 "trace: Performing DiffStringOptimizeStrategy 408 and 428",
 			 "trace: DIFF: Found 14 diffs",
@@ -204,6 +212,7 @@ describe("DiffAndAstStringOptimizeStrategy", function() {
 	 },
 	 {
 		 baseName : "endless",
+		 fileEOL : "\r\n",
 		 logs : [
 			 "trace: Performing DiffStringOptimizeStrategy 189 and 93",
 			 "trace: DIFF: Found 21 diffs", "trace: DIFF Added 48:  '[ ]'",
@@ -215,6 +224,7 @@ describe("DiffAndAstStringOptimizeStrategy", function() {
 	 },
 	 {
 		 baseName : "structure",
+		 fileEOL : "\r\n",
 		 description :
 			 "structural change by wrapping everything inside a sap.ui.define",
 		 logs : [
@@ -226,6 +236,7 @@ describe("DiffAndAstStringOptimizeStrategy", function() {
 	 },
 	 {
 		 baseName : "structure2",
+		 fileEOL : "\r\n",
 		 description :
 			 "structural change by wrapping everything inside a sap.ui.define",
 		 logs : [
@@ -240,6 +251,7 @@ describe("DiffAndAstStringOptimizeStrategy", function() {
 	 },
 	 {
 		 baseName : "newlines",
+		 fileEOL : "\r\n",
 		 description : "new lines",
 		 logs : [
 			 "trace: Performing DiffStringOptimizeStrategy 2226 and 2407",
@@ -264,6 +276,7 @@ describe("DiffAndAstStringOptimizeStrategy", function() {
 	 },
 	 {
 		 baseName : "multiline",
+		 fileEOL : "\r\n",
 		 description : "multiple lines",
 		 logs : [
 			 "trace: Performing DiffStringOptimizeStrategy 13025 and 13082",
@@ -295,6 +308,7 @@ describe("DiffAndAstStringOptimizeStrategy", function() {
 	 },
 	 {
 		 baseName : "multilineprop",
+		 fileEOL : "\r\n",
 		 description : "multiple lines in property",
 		 logs : [
 			 "trace: Performing DiffStringOptimizeStrategy 10125 and 10441",
@@ -405,12 +419,19 @@ describe("DiffAndAstStringOptimizeStrategy", function() {
 			   (oTestConfig.description ? " (" + oTestConfig.description + ")" :
 										  ""),
 		   async function() {
-			   const source = fs.readFileSync(
+			   let source = fs.readFileSync(
 				   rootDir + oTestConfig.baseName + ".source.js", "UTF-8");
-			   const modified = fs.readFileSync(
+			   let modified = fs.readFileSync(
 				   rootDir + oTestConfig.baseName + ".modified.js", "UTF-8");
-			   const expected = fs.readFileSync(
+			   let expected = fs.readFileSync(
 				   rootDir + oTestConfig.baseName + ".expected.js", "UTF-8");
+
+			   if (oTestConfig.fileEOL) {
+				   source = source.replace(EOL_REGEXP, oTestConfig.fileEOL);
+				   modified = modified.replace(EOL_REGEXP, oTestConfig.fileEOL);
+				   expected = expected.replace(EOL_REGEXP, oTestConfig.fileEOL);
+			   }
+
 			   const reports = [];
 			   const diffAndAstStringOptimizeStrategy =
 				   new DiffAndAstStringOptimizeStrategy(

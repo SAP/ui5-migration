@@ -6,6 +6,8 @@ const assert = require("assert");
 const fs = require("fs");
 const rootDir = "./test/util/whitespace/astresources/";
 
+const EOL_REGEXP = /\r?\n/g;
+
 describe("AstStringOptimizeStrategy", function() {
 	it("Should optimize batch", async function() {
 		const source = fs.readFileSync(rootDir + "batch.source.js", "UTF-8");
@@ -53,9 +55,15 @@ describe("AstStringOptimizeStrategy", function() {
 	});
 
 	it("Should optimize abap", async function() {
-		const source = fs.readFileSync(rootDir + "abap.source.js", "UTF-8");
-		const modified = fs.readFileSync(rootDir + "abap.modified.js", "UTF-8");
-		const expected = fs.readFileSync(rootDir + "abap.expected.js", "UTF-8");
+		let source = fs.readFileSync(rootDir + "abap.source.js", "UTF-8");
+		let modified = fs.readFileSync(rootDir + "abap.modified.js", "UTF-8");
+		let expected = fs.readFileSync(rootDir + "abap.expected.js", "UTF-8");
+
+
+		source = source.replace(EOL_REGEXP, "\r\n");
+		modified = modified.replace(EOL_REGEXP, "\r\n");
+		expected = expected.replace(EOL_REGEXP, "\r\n");
+
 		const reports = [];
 		const astStringOptimizeStrategy =
 			new AstStringOptimizeStrategy(new CustomReporter(reports, "trace"));
@@ -83,11 +91,15 @@ describe("AstStringOptimizeStrategy", function() {
 	});
 
 	it("Should optimize custom", async function() {
-		const source = fs.readFileSync(rootDir + "custom.source.js", "UTF-8");
-		const modified =
-			fs.readFileSync(rootDir + "custom.modified.js", "UTF-8");
-		const expected =
-			fs.readFileSync(rootDir + "custom.expected.js", "UTF-8");
+		let source = fs.readFileSync(rootDir + "custom.source.js", "UTF-8");
+		let modified = fs.readFileSync(rootDir + "custom.modified.js", "UTF-8");
+		let expected = fs.readFileSync(rootDir + "custom.expected.js", "UTF-8");
+
+		source = source.replace(EOL_REGEXP, "\r\n");
+		modified = modified.replace(EOL_REGEXP, "\r\n");
+		expected = expected.replace(EOL_REGEXP, "\r\n");
+
+
 		const reports = [];
 		const astStringOptimizeStrategy =
 			new AstStringOptimizeStrategy(new CustomReporter(reports, "trace"));
