@@ -81,6 +81,7 @@ export async function fixTypeDependency(
 	modify = true, reporter: Reporter = new ConsoleReporter(ReportLevel.INFO),
 	mode = ProcessingMode.PARALLEL) {
 	let astDefineCall: ESTree.CallExpression;
+	let containsFindings = false;
 
 	const defineCalls =
 		ASTUtils.findCalls(ast, SapUiDefineCall.isValidRootPath, visitor);
@@ -125,6 +126,7 @@ export async function fixTypeDependency(
 						reporter.collect("Found missing module", 1);
 						reporter.collect(
 							"Added library dependency: " + oSymbol.module, 1);
+						containsFindings = true;
 						if (modify) {
 							// get param name of the library
 							let localRef =
@@ -196,6 +198,7 @@ export async function fixTypeDependency(
 		});
 		const oAnalysisResult = Object.create(null);
 		return {
+			containsFindings,
 			modified : bFileWasModified,
 			ast,
 			dependencies : [],

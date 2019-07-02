@@ -6,6 +6,7 @@ import * as fs from "graceful-fs";
 import * as path from "path";
 import {Reporter} from "../Migration";
 import {ReportLevel} from "../Migration";
+import {AnalysisResult} from "ui5-migration";
 
 
 
@@ -79,12 +80,17 @@ async function createApiInfo(
 }
 
 
+interface FixtypeDependencyResult extends AnalysisResult {
+	apiInfo: {};
+}
+
 /**
  * Analyzes the source code and returns a Promise with the resulting changes
  * @param args
  * @return {Promise} resolving with the found changes
  */
-async function analyse(args: Mod.AnalyseArguments): Promise<{}> {
+async function analyse(args: Mod.AnalyseArguments):
+	Promise<FixtypeDependencyResult> {
 	const apiInfo =
 		await createApiInfo(args.config, args.reporter, args.targetVersion);
 	const oResult = await typeDependencyUtil.fixTypeDependency(
@@ -101,7 +107,7 @@ async function analyse(args: Mod.AnalyseArguments): Promise<{}> {
  * @param args
  */
 async function migrate(args: Mod.MigrateArguments): Promise<boolean> {
-	const apiInfo = args.analyseResult.apiInfo;
+	const apiInfo = (args.analyseResult as FixtypeDependencyResult).apiInfo;
 	return typeDependencyUtil
 		.fixTypeDependency(
 			args.file.getAST(), args.file.getFileName(), args.visitor, apiInfo,

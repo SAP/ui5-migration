@@ -267,7 +267,7 @@ export async function migrate(oArgs: IndexArgs): Promise<{}> {
 	if (aFiles.length === 0) {
 		oTaskRunnerReporter.report(ReportLevel.INFO, "No files found!");
 		// exit
-		return undefined;
+		throw new Error("no files found");
 	}
 
 	// execute migration
@@ -280,12 +280,15 @@ export async function migrate(oArgs: IndexArgs): Promise<{}> {
 			oTaskRunnerReporter.report(ReportLevel.INFO, oModule.sRelPath));
 
 	// Process modules
+	let containsFinding = false;
 
 	// split into junks
 	const fileLimit = 100;
 
+	let aProcessModuleResult: ProcessModuleResult[] = [];
+
 	if (aFileInfo.length < fileLimit) {
-		await TaskRunner.processModules(
+		aProcessModuleResult = await TaskRunner.processModules(
 			aTasksToUse, aFileInfo, oTaskRunnerReporter, fileFinder, sOutputDir,
 			oOutputFormat, bDryRun, sVersion, oArgs.namespaces);
 	} else {
@@ -313,7 +316,11 @@ export async function migrate(oArgs: IndexArgs): Promise<{}> {
 					});
 			});
 		}
-		await chain;
+		aProcessModuleResult = await chain;
+	}
+
+	if (aProcessModuleResult.length > 0) {
+		containsFinding = true;
 	}
 
 	oTaskRunnerReporter.setContext(
@@ -322,5 +329,12 @@ export async function migrate(oArgs: IndexArgs): Promise<{}> {
 	oTaskRunnerReporter.report(
 		ReportLevel.INFO, `Finished in ${endTime[0]}s ${endTime[1]}ms`);
 	oTaskRunnerReporter.reportCollected(ReportLevel.INFO);
-	return oTaskRunnerReporter.finalize();
+	const result = oTaskRunnerReporter.finalize();
+
+	// when executed in analyze a finding should result in an error (like eslint
+	// does)
+	if (containsFinding && bDryRun) {
+		throw new Error(`Problems found`);
+	}
+	return result;
 }

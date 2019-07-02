@@ -196,11 +196,19 @@ declare module "ui5-migration" {
 	export interface MigrateArguments {
 		reporter: Reporter;
 		file: FileInfo;
-		analyseResult: any;
+		analyseResult: AnalysisResult;
 		fileFinder: FileFinder;
 		visitor?: ASTVisitor;
 		config?: any;
 		targetVersion?: string;
+	}
+
+	/**
+	 *
+	 * @export
+	 */
+	export interface AnalysisResult {
+		containsFindings?: boolean;
 	}
 	/**
 	 * Represents a single migration module
@@ -234,7 +242,7 @@ declare module "ui5-migration" {
 		 * @param {AnalyseArguments} args The argument object
 		 * @returns {Promise<any>} The analyse result for the migrate step to use
 		 */
-		analyse: (args: AnalyseArguments) => Promise<any>;
+		analyse: (args: AnalyseArguments) => Promise<AnalysisResult>;
 
 		/**
 		 * Migrates a module based on the result given by the analyse step

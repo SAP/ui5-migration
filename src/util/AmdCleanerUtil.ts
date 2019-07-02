@@ -745,6 +745,7 @@ module.exports = {
 		this.globalNameConvertedToAMDExport = false;
 		this.dependencies = {};
 		let blockStatementOfCreatedDefineCall = null;
+		let containsFindings = false;
 
 		// reporter.report(ReportLevel.DEBUG, JSON.stringify(ast,null,'\t'));
 		const defineCalls =
@@ -823,6 +824,7 @@ module.exports = {
 				]);
 
 			// make the define call the only top level statement
+			containsFindings = true;
 			if (modify) {
 				(ast as ESTree.Program).body =
 					[ builders.expressionStatement(defineCallNode) ];
@@ -841,6 +843,7 @@ module.exports = {
 
 			// preserve the top level comments
 			if (topLevelComments) {
+				containsFindings = true;
 				(ast as ESTree.Program).comments = topLevelComments;
 			}
 
@@ -856,6 +859,7 @@ module.exports = {
 		if (!this.defineCall.factory) {
 			// exit
 			return {
+				containsFindings,
 				modified : false,
 				ast,
 				dependencies : [],
@@ -873,6 +877,7 @@ module.exports = {
 		// if a define call has been created, try to identify the export value
 		// and add a return statement for it
 		if (blockStatementOfCreatedDefineCall) {
+			containsFindings = true;
 			if (modify) {
 				const oConvertExportResult = this.convertExport(
 					this.defineCall, blockStatementOfCreatedDefineCall,
@@ -967,6 +972,7 @@ module.exports = {
 								VariableNameCreator.getUniqueVariableName(
 									aUsedVariables,
 									oObject.oResult.declareName);
+							containsFindings = true;
 							if (modify) {
 								aBody.push(builders.returnStatement(
 									builders.identifier(sVariableName)));
@@ -984,6 +990,7 @@ module.exports = {
 							}
 						}
 						if (!that.defineCall.bExportsNode) {
+							containsFindings = true;
 							if (modify) {
 								const args = that.defineCall.node.arguments;
 								args.push(builders.identifier("true"));
@@ -1025,6 +1032,7 @@ module.exports = {
 						oAnalysisResult.defineCall = that.defineCall;
 					}
 					return {
+						containsFindings,
 						modified : bFileWasModified,
 						ast,
 						dependencies : that.dependencies,

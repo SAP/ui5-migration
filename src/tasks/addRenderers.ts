@@ -13,7 +13,7 @@ import * as ESTree from "estree";
 import * as fs from "graceful-fs";
 import * as path from "path";
 import * as recast from "recast";
-import {FileInfo} from "ui5-migration";
+import {AnalysisResult, FileInfo} from "ui5-migration";
 
 import * as Mod from "../Migration";
 import {ReportLevel} from "../Migration";
@@ -150,15 +150,14 @@ async function doesModuleExist(
 }
 
 //#endregion
-
-interface AddRenderersResult {
+interface AddRenderersResult extends AnalysisResult {
 	defineCall: SapUiDefineCall;
 	shouldAddRenderer: boolean;
 	classNode?: ESTree.ObjectExpression;
 }
 
 async function analyse(args: Mod.AnalyseArguments):
-	Promise<AddRenderersResult|undefined> {
+	Promise<AddRenderersResult> {
 	const moduleName = args.file.getFileName();
 	let astDefineCall: ESTree.CallExpression;
 
@@ -220,6 +219,7 @@ async function analyse(args: Mod.AnalyseArguments):
 		return {
 			defineCall,
 			shouldAddRenderer : true,
+			containsFindings : true,
 			classNode : embeddedRenderer.classNode
 		};
 	} else {

@@ -9,7 +9,7 @@ import {Syntax} from "esprima";
 import * as ESTree from "estree";
 import * as fs from "graceful-fs";
 import * as path from "path";
-import {ASTReplaceable} from "ui5-migration";
+import {AnalysisResult, ASTReplaceable} from "ui5-migration";
 
 import * as Mod from "../Migration";
 import {Reporter} from "../reporter/Reporter";
@@ -224,7 +224,7 @@ type ImportMap = {
 	[oldImport: string]: ImportInfo
 };
 
-interface ReplaceGlobalsAnalysis {
+interface ReplaceGlobalsAnalysis extends AnalysisResult {
 	defineCall: SapUiDefineCall;
 	replaceCalls: Array<{
 		callPath : NodePath; iLevel : number; import : ImportInfo;
@@ -246,7 +246,7 @@ function calculateImportName(oConfig: ImportConfig) {
 			 oConfig.newModulePath.lastIndexOf("/") + 1));
 }
 
-async function analyse(args: Mod.AnalyseArguments): Promise<{}> {
+async function analyse(args: Mod.AnalyseArguments): Promise<AnalysisResult> {
 	if (!args.config) {
 		throw new Error("No configuration given");
 	}
@@ -447,6 +447,7 @@ async function analyse(args: Mod.AnalyseArguments): Promise<{}> {
 
 	// replace with modules
 	const analysis: ReplaceGlobalsAnalysis = {
+		containsFindings : false,
 		defineCall,
 		addComments : [],
 		newRequires : [],
@@ -482,6 +483,7 @@ async function analyse(args: Mod.AnalyseArguments): Promise<{}> {
 			args.reporter.report(
 				Mod.ReportLevel.TRACE, sInfoMsg, oCallPath.value.loc);
 
+			analysis.containsFindings = true;
 			const sActionMsg = `Found call to replace "${sCallPathName}"`;
 			args.reporter.report(
 				Mod.ReportLevel.TRACE, sActionMsg, oCallPath.value.loc);

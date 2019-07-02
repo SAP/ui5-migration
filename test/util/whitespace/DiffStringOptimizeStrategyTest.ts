@@ -51,7 +51,9 @@ describe("DiffStringOptimizeStrategy", function() {
 	];
 
 	const commonLogs = (begin, end) => {
-		return [`trace: Performing DiffStringOptimizeStrategy ${begin} and ${end}`].concat(aCommonLogs);
+		return [
+			`trace: Performing DiffStringOptimizeStrategy ${begin} and ${end}`
+		].concat(aCommonLogs);
 	};
 
 

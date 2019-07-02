@@ -6,5 +6,6 @@ process.on("unhandledRejection", (reason, p) => {
 });
 
 CLI.start().catch((err) => {
-	throw err;
+	console.error(err.message);
+	process.exit(1);
 });

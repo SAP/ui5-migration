@@ -9,7 +9,7 @@ import {Syntax} from "esprima";
 import * as ESTree from "estree";
 import * as fs from "graceful-fs";
 import * as path from "path";
-import {ASTReplaceable} from "ui5-migration";
+import {AnalysisResult, ASTReplaceable} from "ui5-migration";
 
 import {EMPTY_FINDER_RESULT, Extender, Finder, FinderResult} from "../dependencies";
 import * as Mod from "../Migration";
@@ -189,7 +189,7 @@ interface FoundCall {
 	importObj: ConfigObject;
 }
 
-interface Analysis {
+interface Analysis extends AnalysisResult {
 	defineCall: SapUiDefineCall;
 	replaceCalls: FoundCall[];
 	removeRequires: string[];
@@ -221,7 +221,7 @@ function checkFindersInConfig(
 	}
 }
 
-async function analyse(args: Mod.AnalyseArguments): Promise<{}|undefined> {
+async function analyse(args: Mod.AnalyseArguments): Promise<AnalysisResult> {
 	if (!args.config) {
 		throw new Error("No configuration given");
 	}

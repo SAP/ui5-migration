@@ -1,5 +1,6 @@
 import * as ESTree from "estree";
 import {Node} from "estree";
+import {AnalysisResult} from "ui5-migration";
 
 import * as Mod from "../../src/Migration";
 import {AnalyseArguments, MigrateArguments, ReportLevel} from "../../src/Migration";
@@ -143,7 +144,7 @@ export class CustomMigrationTask implements MigrationTask {
 		this.aFnMigrate.push(fnMigrate);
 	}
 
-	analyse(args: AnalyseArguments): Promise<{}> {
+	analyse(args: AnalyseArguments): Promise<AnalysisResult> {
 		this.aFnAnalyze.forEach(function(fnAnalyze) {
 			if (fnAnalyze) {
 				fnAnalyze(args);

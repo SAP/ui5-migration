@@ -5,6 +5,7 @@ import {Reporter, ReportLevel} from "../Migration";
 import * as LoaderUtils from "../util/LoaderUtils";
 import * as fs from "graceful-fs";
 import * as path from "path";
+import {AnalysisResult} from "ui5-migration";
 
 
 const amdCleanerUtil = require("../util/AmdCleanerUtil");
@@ -88,7 +89,7 @@ async function createApiInfo(
  * @param args
  * @return {Promise} resolving with the found changes
  */
-async function analyse(args: Mod.AnalyseArguments): Promise<{}> {
+async function analyse(args: Mod.AnalyseArguments): Promise<AnalysisResult> {
 	// TODO check instanceof args.config.api being APIInfo and pass it through
 	// then
 	const apiInfo =

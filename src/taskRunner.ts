@@ -1,6 +1,7 @@
 // TODO: Needs to be refactored into modules which makes sense e.g.
 // TaskRunner.getSupportedTasks()
 import * as path from "path";
+import {AnalysisResult} from "ui5-migration";
 
 import {NamespaceConfig} from "./index";
 import * as Mod from "./Migration";
@@ -50,6 +51,7 @@ export async function getSupportedTasks(): Promise<MigrationTask[]> {
 
 export interface ProcessModuleResult {
 	modifiedCode: string;
+	modified: boolean;
 	fileInfo: Mod.FileInfo;
 }
 
@@ -71,7 +73,7 @@ export async function processModules(
 
 	aTasks = await flattenTaskArray(aTasks);
 
-	const aModifiedFiles: Array<Promise<ProcessModuleResult>> = [];
+	const aProcessModuleResult: Array<Promise<ProcessModuleResult>> = [];
 	for (const oFileInfo of aFileInfo) {
 		const oVisitor = new ASTVisitor();
 		oReporter.setContext(Object.assign(
@@ -86,7 +88,9 @@ export async function processModules(
 					", error: " + (err.message || err));
 			continue;
 		}
-		let oAnalyseResult;
+
+		let bContainsFinding = false;
+
 		for (const oTask of aTasks) {
 			const taskReporter = oReporter.registerReporter(oTask.name);
 			if (oFileInfo.getPath()) {
@@ -97,7 +101,7 @@ export async function processModules(
 
 			const oConfig = oTask.config;
 
-			oAnalyseResult =
+			const oAnalyseResult: AnalysisResult =
 				await oTask
 					.analyse({
 						reporter : taskReporter,
@@ -113,7 +117,12 @@ export async function processModules(
 							`Analysis failed. Error: ${err.message}`);
 						taskReporter.report(
 							Mod.ReportLevel.DEBUG, `Stack: ${err.stack}`);
+						return undefined;
 					});
+
+			if (oAnalyseResult && oAnalyseResult.containsFindings) {
+				bContainsFinding = true;
+			}
 
 			if (!bDryRun && oAnalyseResult && oTask && oTask.migrate) {
 				// Migrate step
@@ -146,7 +155,7 @@ export async function processModules(
 
 		if (oFileInfo.wasModified()) {
 			iFilesModified++;
-			aModifiedFiles.push(
+			aProcessModuleResult.push(
 				oFileInfo.saveContent(sOutputPath, oOutputFormat, oReporter)
 					.then((sResult) => {
 						oReporter.report(
@@ -156,9 +165,20 @@ export async function processModules(
 						// content needs to be unloaded after modification was
 						// performed
 						oFileInfo.unloadContent();
-						return { fileInfo : oFileInfo, modifiedCode : sResult };
+						return {
+							fileInfo : oFileInfo,
+							modifiedCode : sResult,
+							modified : true
+						};
 					}));
 		} else {
+			if (bContainsFinding) {
+				aProcessModuleResult.push(Promise.resolve({
+					fileInfo : oFileInfo,
+					modifiedCode : "",
+					modified : false
+				}));
+			}
 			oFileInfo.unloadContent();
 		}
 		oVisitor.resetCache();
@@ -168,5 +188,5 @@ export async function processModules(
 	}
 	oReporter.setContext({ logPrefix : "cli" });
 	oReporter.collectTopLevel("files modified", iFilesModified);
-	return await Promise.all(aModifiedFiles);
+	return await Promise.all(aProcessModuleResult);
 }
