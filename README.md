@@ -38,19 +38,7 @@ Execute migration for the current folder:
 ui5-migration migrate
 ```
 
-Currently the CLI is the easiest way to use the ui5-migration tool. Please see [command-line interface](./docs/guide/cli.md) for more details.
-
-### API
-The ui5-migration API might be consumed as in the following:
-
-```js
-var ui5Migration = require('ui5-migration');
-var mySourceCode = "mysourceCodeString";
-var aTasks = undefined;
-var migrationResult = await ui5Migration.migrateString(aTasks, mySourceCode);
-var log = migrationResult.log;
-var myModifiedSourceCode = migrationResult.output;
-```
+Please see [command-line interface](./docs/guide/cli.md) for more details.
 
 
 ### Available migration tasks
