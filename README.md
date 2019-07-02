@@ -10,7 +10,7 @@ Migration consists of an analysis part and a code modification part.
 
 Next to the standalone CLI command an add'tl API is provided, which simplifies integration into other tools (e.g. into custom node.js scripts, grunt).
 
-**IMNPORTANT**: The modified source code needs to be manually reviewed and tested. There is no 100% guarantee that the modified code works as expected.
+**IMPORTANT**: The modified source code needs to be manually reviewed and tested. There is no 100% guarantee that the modified code works as expected.
 
 **If you want to migrate your codebase, please see the [migration guide](./docs/guide/migrationguide.md)**
 
