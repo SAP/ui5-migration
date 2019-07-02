@@ -16,13 +16,14 @@
   "scripts": {
     "build": "tsc -p .",
     "build-watch": "tsc -w -p .",
-    "prepare": "rimraf js && tsc -p tsconfig-dist.json",
+    "prepare": "rimraf js && npm run build",
     "start": "node bin/cli.js",
     "lint": "tslint -p tsconfig.json -c tslint.json",
     "lintf": "npm run lint -- --fix",
-    "coverage": "nyc npm run test",
-    "test": "mocha ./js/test/*Test.js ./js/test/**/*Test.js",
-    "test-watch": "npm run test -- -w",
+    "test": "npm run lint && npm run check && npm run coverage",
+    "coverage": "nyc npm run unit",
+    "unit": "mocha ./js/test/*Test.js ./js/test/**/*Test.js",
+    "unit-watch": "npm run test -- -w",
     "typedoc": "typedoc --options  ./typedoc.json --tsconfig ./tsconfig_typedoc.json",
     "guides": "node docs/guide/guide.js",
     "check": "gts check",
@@ -33,9 +34,10 @@
   "types": "typings/index.d.ts",
   "files": [
     "index.js",
+    "CONTRIBUTING.md",
     "bin/**",
     "defaultConfig/**",
-    "js/**"
+    "js/src/**"
   ],
   "nyc": {
     "reporter": [
