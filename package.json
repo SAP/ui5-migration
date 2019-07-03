@@ -21,14 +21,17 @@
     "lint": "tslint -p tsconfig.json -c tslint.json",
     "lintf": "npm run lint -- --fix",
     "test": "npm run lint && npm run check && npm run coverage",
+    "test-azure": "npm run lint && npm run check && npm run coverage-junit",
     "coverage": "nyc npm run unit",
+    "coverage-junit": "nyc --reporter=text --reporter=text-summary --reporter=cobertura npm run unit-junit",
     "unit": "mocha ./js/test/*Test.js ./js/test/**/*Test.js",
+    "unit-junit": "npm run unit -- --reporter mocha-junit-reporter",
     "unit-watch": "npm run test -- -w",
     "typedoc": "typedoc --options  ./typedoc.json --tsconfig ./tsconfig_typedoc.json",
     "guides": "node docs/guide/guide.js",
     "check": "gts check",
-    "clean": "gts clean",
-    "fix": "gts fix"
+    "gtsclean": "gts clean",
+    "gtsfix": "gts fix"
   },
   "main": "index.js",
   "types": "typings/index.d.ts",
@@ -40,12 +43,14 @@
     "js/src/**"
   ],
   "nyc": {
+    "extends": "@istanbuljs/nyc-config-typescript",
     "reporter": [
       "lcov",
       "text",
       "text-summary"
     ],
     "exclude": [
+      "js/**/*.d.ts",
       "docs/**",
       "jsdocs/**",
       "coverage/**",
@@ -64,7 +69,7 @@
     "branches": 40,
     "watermarks": {
       "lines": [
-        70,
+        60,
         90
       ],
       "functions": [
@@ -76,13 +81,13 @@
         70
       ],
       "statements": [
-        70,
+        60,
         90
       ]
     },
     "cache": true,
     "all": true,
-    "report-dir": "./docs/coverage"
+    "report-dir": "./coverage"
   },
   "dependencies": {
     "diff": "^4.0.1",
@@ -100,6 +105,7 @@
     "ui5-migration": "./bin/cli.js"
   },
   "devDependencies": {
+    "@istanbuljs/nyc-config-typescript": "^0.1.3",
     "@types/esprima": "^4.0.2",
     "@types/estree": "0.0.39",
     "@types/graceful-fs": "^4.1.2",
@@ -110,9 +116,12 @@
     "@types/yargs": "^12.0.9",
     "gts": "^0.9.0",
     "mocha": "^6.0.2",
+    "mocha-junit-reporter": "^1.23.0",
     "nyc": "^14.1.1",
     "rimraf": "^2.6.3",
     "sinon": "^7.2.7",
+    "source-map-support": "^0.5.12",
+    "ts-node": "^8.3.0",
     "tslint": "^5.11.0",
     "typescript": "^3.3.3333"
   }

@@ -1382,6 +1382,9 @@ describe("replaceGlobals", function() {
 			});
 
 			it("should replace setObject", function(done) {
+				// increase test timeout since this test is long running
+				this.timeout(5000);
+
 				const expectedContent =
 					fs.readFileSync(rootDir + "setObject.expected.js", "utf8");
 				const config = JSON.parse(
