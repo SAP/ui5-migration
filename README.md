@@ -1,7 +1,9 @@
 ![UI5 logo](./docs/images/UI5_logo_wide.png)
 
 # ui5-migration
-Tooling to support the migration of UI5 projects by adapting your code for new UI5 framework versions.
+> Tooling to support the migration of UI5 projects by adapting your code for new UI5 framework versions.
+
+_**Note:** This project is currently in beta and in the process to become available via npm. While there are ongoing improvements and round-offs being applied to this project, we see the upcoming release as a great opportunity to collect feedback from the community to further advance the UI5 migration tooling. Appreciated._
 
 The UI5 migration tool performs source code replacements and optimizations to improve a UI5 project's codebase.
 The source code modification aims to reduce deprecated API and to leverage best practices.
@@ -44,12 +46,8 @@ Please see [command-line interface](./docs/guide/cli.md) for more details.
 ### Available migration tasks
 A list of the current migration tasks can be found [here](./docs/guide/tasks.md)
 
-### Available migration output printing options
+### Printing options for migration output
 A list of the printing options can be found [here](./docs/guide/print.md)
-
-## FAQ
-### How can I contribute?
-Please check our [Contribution Guidelines](https://github.com/SAP/ui5-migration/blob/master/CONTRIBUTING.md).
 
 ## Contributing
 Please check our [Contribution Guidelines](https://github.com/SAP/ui5-migration/blob/master/CONTRIBUTING.md).
