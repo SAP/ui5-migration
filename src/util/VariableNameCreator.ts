@@ -16,8 +16,85 @@ const reservedKeywords = [
 	"void",		  "volatile",	 "while",	"with",	"yield"
 ];
 const sapReservedKeywords = [ "sap" ];
+const reservedNativeTypes = [
+	"Array",
+	"ArrayBuffer",
+	"Atomics",
+	"BigInt",
+	"BigInt64Array",
+	"BigUint64Array",
+	"Boolean",
+	"DataView",
+	"Date",
+	"Error",
+	"EvalError",
+	"Float32Array",
+	"Float64Array",
+	"Function",
+	"Generator",
+	"GeneratorFunction",
+	"Infinity",
+	"Int16Array",
+	"Int32Array",
+	"Int8Array",
+	"InternalError",
+	"Intl",
+	"Intl.Collator",
+	"Intl.DateTimeFormat",
+	"Intl.Locale",
+	"Intl.NumberFormat",
+	"Intl.PluralRules",
+	"Intl.RelativeTimeFormat",
+	"JSON",
+	"Map",
+	"Math",
+	"NaN",
+	"Number",
+	"Object",
+	"Promise",
+	"Proxy",
+	"RangeError",
+	"ReferenceError",
+	"Reflect",
+	"RegExp",
+	"Set",
+	"SharedArrayBuffer",
+	"String",
+	"Symbol",
+	"SyntaxError",
+	"TypeError",
+	"TypedArray",
+	"URIError",
+	"Uint16Array",
+	"Uint32Array",
+	"Uint8Array",
+	"Uint8ClampedArray",
+	"WeakMap",
+	"WeakSet",
+	"WebAssembly",
+	"decodeURI()",
+	"decodeURIComponent()",
+	"encodeURI()",
+	"encodeURIComponent()",
+	"",
+	"eval()",
+	"globalThis",
+	"isFinite()",
+	"isNaN()",
+	"null",
+	"parseFloat()",
+	"parseInt()"
+];
 
-
+/**
+ * In case the candidate is already taken, the variable name gets prefixed with
+ * 'o' until it is unique
+ *
+ * @param aUsedVariables Existing variable names which are already in use, e.g.
+ * Component
+ * @param sName Name of the candidate, e.g. sap.ui.core.Component
+ * @returns A unique variable name
+ */
 export function getUniqueVariableName(aUsedVariables: string[], sName: string) {
 	let sResultName = "";
 	sName.split(".").reverse().some((sNamePart) => {
@@ -63,7 +140,8 @@ export function normalize(sVariableName: string): string {
 
 	// ensure there is no keyword match
 	while (reservedKeywords.includes(sVariableName) ||
-		   sapReservedKeywords.includes(sVariableName)) {
+		   sapReservedKeywords.includes(sVariableName) ||
+		   reservedNativeTypes.includes(sVariableName)) {
 		sVariableName = "o" + capitalize(sVariableName);
 	}
 

@@ -481,6 +481,17 @@ describe("AmdCleaner ui52amd", function() {
 		 api : { "sap.ui.core" : rootDir + "amdCleanup/varvar.api.json" }
 	 },
 	 {
+		 title : "sap.ui.model.type.Date should be replaced correctly",
+		 sourceCodeFileName : "amdCleanup/dateType.js",
+		 expectedCodeFileName : "amdCleanup/dateType.expected.js",
+		 modified : true,
+		 amdSettings : {
+			 addTodoForUnsafeReplacements : false,
+			 onlySafeReplacements : false
+		 },
+		 api : { "sap.ui.core" : rootDir + "amdCleanup/dateType.api.json" }
+	 },
+	 {
 		 title : "duplicate Export variable (duplicateExportVar)",
 		 sourceCodeFileName : "amdCleanup/duplicateExportVar.js",
 		 expectedCodeFileName : "amdCleanup/duplicateExportVar.expected.js",
@@ -972,6 +983,7 @@ describe("AmdCleaner ui52amd", function() {
 		const pathToApiJSON = rootDir +
 			(fixture.apiFileName ? fixture.apiFileName :
 								   "amdCleanup/_generic.api.json");
+
 		it(fixture.title, function(done) {
 			const sourceCodeFile = rootDir + fixture.sourceCodeFileName;
 			const expectedContent =
