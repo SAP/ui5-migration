@@ -31,7 +31,7 @@
     "guides": "node docs/guide/guide.js",
     "check": "gts check",
     "clean": "gts clean",
-    "fix": "gts fix"
+    "gtsfix": "gts fix"
   },
   "main": "index.js",
   "types": "typings/index.d.ts",
@@ -69,7 +69,7 @@
     "branches": 40,
     "watermarks": {
       "lines": [
-        70,
+        60,
         90
       ],
       "functions": [
@@ -81,13 +81,13 @@
         70
       ],
       "statements": [
-        70,
+        60,
         90
       ]
     },
     "cache": true,
     "all": true,
-    "report-dir": "./docs/coverage"
+    "report-dir": "./coverage"
   },
   "dependencies": {
     "diff": "^4.0.1",
