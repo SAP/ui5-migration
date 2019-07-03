@@ -41,3 +41,9 @@ steps:
     inputs:
       testResultsFormat: 'JUnit'
       testResultsFiles: '$(System.DefaultWorkingDirectory)/test-results.xml'
+
+  - task: PublishCodeCoverageResults@1
+    condition: succeededOrFailed()
+    inputs:
+      codeCoverageTool: 'cobertura'
+      summaryFileLocation: '$(System.DefaultWorkingDirectory)/coverage/cobertura-coverage.xml'
