@@ -6,6 +6,8 @@ const assert = require("assert");
 const fs = require("fs");
 const rootDir = "./test/util/whitespace/diffresources/";
 
+const EOL_REGEXP = /\r?\n/g;
+
 describe("DiffStringOptimizeStrategy", function() {
 	const aCommonLogs = [
 		"trace: DIFF: Found 123 diffs",
@@ -51,13 +53,16 @@ describe("DiffStringOptimizeStrategy", function() {
 	];
 
 	const commonLogs = (begin, end) => {
-		return [`trace: Performing DiffStringOptimizeStrategy ${begin} and ${end}`].concat(aCommonLogs);
+		return [
+			`trace: Performing DiffStringOptimizeStrategy ${begin} and ${end}`
+		].concat(aCommonLogs);
 	};
 
 
 
 	[{
 		baseName : "batch",
+		fileEOL : "\r\n",
 		logs : [
 			...commonLogs(76171, 76259),
 			"trace: DIFF Skipped 653:  '[\\r][\\n][\\t]'",
@@ -101,6 +106,7 @@ describe("DiffStringOptimizeStrategy", function() {
 	},
 	 {
 		 baseName : "list",
+		 fileEOL : "\r\n",
 		 logs : [
 			 ...commonLogs(1363, 1476),
 			 "trace: DIFF Skipped 653:  '[\\r][\\n][ ][ ][ ][ ]'",
@@ -144,6 +150,7 @@ describe("DiffStringOptimizeStrategy", function() {
 	 },
 	 {
 		 baseName : "actions",
+		 fileEOL : "\r\n",
 		 logs : [
 			 "trace: Performing DiffStringOptimizeStrategy 496 and 576",
 			 "trace: DIFF: Found 33 diffs",
@@ -152,6 +159,7 @@ describe("DiffStringOptimizeStrategy", function() {
 	 },
 	 {
 		 baseName : "abap",
+		 fileEOL : "\r\n",
 		 logs : [
 			 "trace: Performing DiffStringOptimizeStrategy 408 and 428",
 			 "trace: DIFF: Found 14 diffs",
@@ -165,6 +173,7 @@ describe("DiffStringOptimizeStrategy", function() {
 	 },
 	 {
 		 baseName : "endless",
+		 fileEOL : "\r\n",
 		 logs : [
 			 "trace: Performing DiffStringOptimizeStrategy 179 and 83",
 			 "trace: DIFF: Found 16 diffs", "trace: DIFF Added 48:  '[ ]'",
@@ -173,6 +182,7 @@ describe("DiffStringOptimizeStrategy", function() {
 	 },
 	 {
 		 baseName : "structure",
+		 fileEOL : "\r\n",
 		 description :
 			 "structural change by wrapping everything inside a sap.ui.define",
 		 logs : [
@@ -198,12 +208,19 @@ describe("DiffStringOptimizeStrategy", function() {
 			   (oTestConfig.description ? " (" + oTestConfig.description + ")" :
 										  ""),
 		   async function() {
-			   const source = fs.readFileSync(
+			   let source = fs.readFileSync(
 				   rootDir + oTestConfig.baseName + ".source.js", "UTF-8");
-			   const modified = fs.readFileSync(
+			   let modified = fs.readFileSync(
 				   rootDir + oTestConfig.baseName + ".modified.js", "UTF-8");
-			   const expected = fs.readFileSync(
+			   let expected = fs.readFileSync(
 				   rootDir + oTestConfig.baseName + ".expected.js", "UTF-8");
+
+			   if (oTestConfig.fileEOL) {
+				   source = source.replace(EOL_REGEXP, oTestConfig.fileEOL);
+				   modified = modified.replace(EOL_REGEXP, oTestConfig.fileEOL);
+				   expected = expected.replace(EOL_REGEXP, oTestConfig.fileEOL);
+			   }
+
 			   const reports = [];
 			   const diffStringOptimizeStrategy =
 				   new DiffStringOptimizeStrategy(
