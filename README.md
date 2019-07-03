@@ -1,7 +1,10 @@
 ![UI5 logo](./docs/images/UI5_logo_wide.png)
 
 # ui5-migration
-Tooling to support the migration of UI5 projects by adapting your code for new UI5 framework versions.
+> Tooling to support the migration of UI5 projects by adapting your code for new UI5 framework versions.
+
+_**Note:** This project is currently in beta and in the process to be become available via npm. While there are ongoing improvements and round-offs being applied to this project, we see the upcoming release as a great opportunity to collect feedback from the community to further advance the UI5 migration tooling. Thanks._
+
 
 The UI5 migration tool performs source code replacements and optimizations to improve a UI5 project's codebase.
 The source code modification aims to reduce deprecated API and to leverage best practices.
@@ -35,18 +38,6 @@ ui5-migration migrate
 ```
 
 Currently the CLI is the easiest way to use the ui5-migration tool. Please see [command-line interface](./docs/guide/cli.md) for more details.
-
-### API
-The ui5-migration API might be consumed as in the following:
-
-```js
-var ui5Migration = require('ui5-migration');
-var mySourceCode = "mysourceCodeString";
-var aTasks = undefined;
-var migrationResult = await ui5Migration.migrateString(aTasks, mySourceCode);
-var log = migrationResult.log;
-var myModifiedSourceCode = migrationResult.output;
-```
 
 
 ### Available migration tasks
