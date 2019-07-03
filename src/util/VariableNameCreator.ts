@@ -72,18 +72,17 @@ const reservedNativeTypes = [
 	"WeakMap",
 	"WeakSet",
 	"WebAssembly",
-	"decodeURI()",
-	"decodeURIComponent()",
-	"encodeURI()",
-	"encodeURIComponent()",
-	"",
-	"eval()",
+	"decodeURI",
+	"decodeURIComponent",
+	"encodeURI",
+	"encodeURIComponent",
+	"eval",
 	"globalThis",
-	"isFinite()",
-	"isNaN()",
+	"isFinite",
+	"isNaN",
 	"null",
-	"parseFloat()",
-	"parseInt()"
+	"parseFloat",
+	"parseInt"
 ];
 
 /**
