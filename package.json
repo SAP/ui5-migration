@@ -30,7 +30,7 @@
     "typedoc": "typedoc --options  ./typedoc.json --tsconfig ./tsconfig_typedoc.json",
     "guides": "node docs/guide/guide.js",
     "check": "gts check",
-    "clean": "gts clean",
+    "gtsclean": "gts clean",
     "gtsfix": "gts fix"
   },
   "main": "index.js",
