@@ -6,7 +6,8 @@ const assert = require("assert");
 
 describe("SapUiDefineCall", function() {
 	it("create SapUiDefineCall with relative imports", function() {
-		const src = `sap.ui.define(["a/b/c", "d/x/f", "./x"], function(c, f, x){
+		const src =
+			`sap.ui.define(["a/b/c", "d/x/f", "./x"], function(c, f, x){
 			return null;
 		});`;
 
@@ -32,7 +33,8 @@ describe("SapUiDefineCall", function() {
 	});
 
 	it("should check exportToGlobal flag", function() {
-		const src = `sap.ui.define(["a/b/c", "d/x/f", "./x"], function(c, f, x){
+		const src =
+			`sap.ui.define(["a/b/c", "d/x/f", "./x"], function(c, f, x){
 			return null;
 		}, true);`;
 

@@ -25,7 +25,8 @@ describe("NamespaceUtils", function() {
 	});
 
 	it("findNamespaceUsage", function() {
-		const src = `sap.ui.define(["a/b/c", "d/x/f", "./x"], function(c, f, x){
+		const src =
+			`sap.ui.define(["a/b/c", "d/x/f", "./x"], function(c, f, x){
 			a.g.blah = "fu";
 			return null;
 		});`;
@@ -37,7 +38,8 @@ describe("NamespaceUtils", function() {
 	});
 
 	it("findNamespaceUsage fail", function() {
-		const src = `sap.ui.define(["a/b/c", "d/x/f", "./x"], function(c, f, x){
+		const src =
+			`sap.ui.define(["a/b/c", "d/x/f", "./x"], function(c, f, x){
 			a.g.blah = "fu";
 			return null;
 		});`;

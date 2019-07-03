@@ -15,7 +15,7 @@
 				"check-operator"
 			]
 		},
-		"linebreak-style": [true, "LF"],
+		"linebreak-style": [true, "CRLF"],
 		"indent": [true, "tabs", 4],
 		"no-console": {},
 		"semicolon": {},
