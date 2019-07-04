@@ -217,6 +217,8 @@ async function analyse(args: Mod.AnalyseArguments):
 			Mod.ReportLevel.ERROR,
 			"detected missing dependency to Renderer module",
 			defineCall.node.callee.loc);
+		args.reporter.storeFinding(
+			"Missing Renderer", defineCall.node.callee.loc);
 		return {
 			defineCall,
 			shouldAddRenderer : true,

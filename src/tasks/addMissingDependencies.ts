@@ -54,7 +54,8 @@ function mapToFound(oPath: NodePath, oFound: FoundReplacement): FoundCall {
 }
 
 const visit = function(
-	analysis: Analysis, oModuleTree: {}, finders: { [name: string]: Finder }) {
+	analysis: Analysis, oModuleTree: {}, finders: { [name: string]: Finder },
+	reporter: Reporter) {
 	// @ts-ignore
 	return function(oPath) {
 		const aFound =
@@ -62,6 +63,10 @@ const visit = function(
 		if (aFound.length > 0) {
 			analysis.replaceCalls = analysis.replaceCalls.concat(
 				aFound.map(mapToFound.bind(null, oPath)));
+			const msg = aFound.map((oFound => oFound.newModulePath)).join(", ");
+			reporter.storeFinding(
+				`Found missing dependency: ${msg}`, oPath.value.loc);
+
 			analysis.newRequires = analysis.newRequires.concat(
 				aFound.map(function(oFound: FoundReplacement) {
 					return { modulePath : oFound.newModulePath };
@@ -75,7 +80,8 @@ const visit = function(
 
 function findCallsToReplace(
 	oAST: ESTree.Node, defineCall: SapUiDefineCall, oModuleTree: {},
-	finders: { [name: string]: Finder }, visitor: ASTVisitor): Analysis {
+	finders: { [name: string]: Finder }, visitor: ASTVisitor,
+	reporter: Reporter): Analysis {
 	// replace with modules
 	const analysis: Analysis = {
 		addComments : [],
@@ -88,13 +94,18 @@ function findCallsToReplace(
 
 	while (aStack.length > 0) {
 		visitor.visit(aStack.shift(), {
-			visitMemberExpression : visit(analysis, oModuleTree, finders),
+			visitMemberExpression :
+				visit(analysis, oModuleTree, finders, reporter),
 			// simple-identifier call (e.g. jQuery("xxx"))
-			visitCallExpression : visit(analysis, oModuleTree, finders),
-			visitBinaryExpression : visit(analysis, oModuleTree, finders),
-			visitVariableDeclarator : visit(analysis, oModuleTree, finders),
-			visitIdentifier : visit(analysis, oModuleTree, finders),
-			visitLogicalExpression : visit(analysis, oModuleTree, finders)
+			visitCallExpression :
+				visit(analysis, oModuleTree, finders, reporter),
+			visitBinaryExpression :
+				visit(analysis, oModuleTree, finders, reporter),
+			visitVariableDeclarator :
+				visit(analysis, oModuleTree, finders, reporter),
+			visitIdentifier : visit(analysis, oModuleTree, finders, reporter),
+			visitLogicalExpression :
+				visit(analysis, oModuleTree, finders, reporter)
 		});
 	}
 
@@ -268,7 +279,7 @@ async function analyse(args: Mod.AnalyseArguments): Promise<{}|undefined> {
 		args.config;
 
 	const oAnalysis = findCallsToReplace(
-		ast, defineCall, oConfig.modules, mFinderFuncs, visitor);
+		ast, defineCall, oConfig.modules, mFinderFuncs, visitor, args.reporter);
 	args.reporter.collect("replacementsFound", oAnalysis.replaceCalls.length);
 	return oAnalysis;
 }

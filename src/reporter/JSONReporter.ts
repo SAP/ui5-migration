@@ -1,6 +1,6 @@
 import * as ESTree from "estree";
 
-import {CompareReportLevel, ReportContext, Reporter, ReportLevel} from "./Reporter";
+import {CompareReportLevel, Finding, ReportContext, Reporter, ReportLevel} from "./Reporter";
 
 export interface JSONReporterResult {
 	reports: JSONReporterItem[];
@@ -24,12 +24,32 @@ export class JSONReporter implements Reporter {
 	sFileName: string;
 	oContext: ReportContext;
 	oMap: Map<string, string[]|number> = new Map();
+	findings: Finding[];
 
 	constructor(level: ReportLevel) {
 		this.sLevel = level;
 		this.sFileName = "";
 		this.aItems = [];
 		this.oContext = {};
+		this.findings = [];
+	}
+
+	storeFinding(msg: string, loc?: ESTree.SourceLocation) {
+		this.findings.push({
+			filename : this.oContext.fileName,
+			loc : {
+				start: loc.start.column
+			},
+			msg,
+			taskName : this.oContext.taskName
+		});
+	}
+
+	/**
+	 * get reported entries
+	 */
+	getFindings(): Finding[] {
+		return this.findings;
 	}
 
 	report(level: ReportLevel, msg: string, locNode?: ESTree.SourceLocation) {

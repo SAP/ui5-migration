@@ -37,6 +37,13 @@ export interface ReportContext {
 	logPrefix?: string;
 }
 
+export interface Finding {
+	msg: string;
+	loc: {start:number, end:number};
+	filename: string;
+	taskName: string;
+}
+
 /**
  * Used by migration modules to report information or errors.
  *
@@ -51,6 +58,17 @@ export interface Reporter {
 	 */
 	report(level: ReportLevel, msg: string, loc?: ESTree.SourceLocation): void;
 
+	/**
+	 * persists the finding
+	 * @param msg
+	 * @param loc
+	 */
+	storeFinding(msg: string, loc?: ESTree.SourceLocation);
+
+	/**
+	 * get reported entries
+	 */
+	getFindings(): Finding[];
 	/**
 	 * stores report relevant information
 	 * @param {string} sKey

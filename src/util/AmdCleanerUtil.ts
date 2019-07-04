@@ -197,6 +197,8 @@ function replaceSelfCalls(
 			}
 			declareResult.path.prune();
 		} else {
+			reporter.storeFinding(
+				"remove declare statement", declareResult.path.loc);
 			oAnalysisResult["remove-path"] =
 				oAnalysisResult["remove-path"] || [];
 			oAnalysisResult["remove-path"].push("jQuery.sap.declare");
@@ -380,6 +382,8 @@ function visitCode(
 						path.prune();
 						bFileWasModified = true;
 					} else {
+						reporter.storeFinding(
+							"found jQuery.sap.require", path.loc);
 						oAnalysisResult["remove-path"] =
 							oAnalysisResult["remove-path"] || [];
 						oAnalysisResult["remove-path"].push(
@@ -459,6 +463,8 @@ function visitCode(
 							bFileWasModified = bFileWasModified ||
 								addDependencyResult.modified;
 						} else {
+							reporter.storeFinding(
+								"add dependency", path.value.loc);
 							oAnalysisResult["addDependency"] =
 								oAnalysisResult["addDependency"] || [];
 
@@ -501,6 +507,8 @@ function visitCode(
 										Mod.ReportLevel.DEBUG, "Add shortcut",
 										path.value.loc);
 								} else {
+									reporter.storeFinding(
+										"add shortcut", path.value.loc);
 									oAnalysisResult["addShortcut"] =
 										oAnalysisResult["addShortcut"] || [];
 
@@ -587,6 +595,8 @@ function visitCode(
 									"Replace occurrence of " + replacementStr,
 									oLoc);
 							} else {
+								reporter.storeFinding(
+									"replace", path.value.loc);
 								oAnalysisResult["replace"] =
 									oAnalysisResult["replace"] || [];
 
@@ -623,6 +633,7 @@ function visitCode(
 							Mod.ReportLevel.DEBUG, "Add dependency",
 							path.value.loc);
 					} else {
+						reporter.storeFinding("add dependency", path.value.loc);
 						oAnalysisResult["addDependency"] =
 							oAnalysisResult["addDependency"] || [];
 
@@ -658,6 +669,7 @@ function visitCode(
 						path.replace(builders.identifier(localRef));
 						bFileWasModified = true;
 					} else {
+						reporter.storeFinding("replace", path.value.loc);
 						oAnalysisResult["replace"] =
 							oAnalysisResult["replace"] || [];
 
@@ -692,6 +704,7 @@ function visitCode(
 							Mod.ReportLevel.DEBUG, "Parent replacement",
 							path.value.loc);
 					} else {
+						reporter.storeFinding("replace parent", path.value.loc);
 						oAnalysisResult["parentReplace"] =
 							oAnalysisResult["parentReplace"] || [];
 
@@ -831,6 +844,8 @@ module.exports = {
 					Mod.ReportLevel.DEBUG, "Create empty define call",
 					(ast as ESTree.Program).loc);
 			} else {
+				reporter.storeFinding(
+					"Create define call", (ast as ESTree.Program).loc);
 				oAnalysisResult["body"] = oAnalysisResult["body"] || [];
 
 				oAnalysisResult["body"].push({
@@ -888,6 +903,8 @@ module.exports = {
 						(ast as ESTree.Program).loc);
 				}
 			} else {
+				reporter.storeFinding(
+					"Convert export", (ast as ESTree.Program).loc);
 				oAnalysisResult["convertExport"] =
 					oAnalysisResult["convertExport"] || [];
 
@@ -976,6 +993,8 @@ module.exports = {
 										sVariableName,
 									oLastStatement.loc);
 							} else {
+								reporter.storeFinding(
+									"return statement", oLastStatement.loc);
 								oAnalysisResult["returnStatement"] =
 									oAnalysisResult["returnStatement"] || [];
 
@@ -992,6 +1011,9 @@ module.exports = {
 									"Added true for global export",
 									oLastStatement.loc);
 							} else {
+								reporter.storeFinding(
+									"Add true for global export",
+									oLastStatement.loc);
 								oAnalysisResult["globalExport"] =
 									oAnalysisResult["globalExport"] || [];
 
@@ -1868,6 +1890,7 @@ function removeUnusedDependencies(
 				reporter.report(
 					Mod.ReportLevel.DEBUG, "Remove dependency", ast.loc);
 			} else {
+				reporter.storeFinding("remove dependency", ast.loc);
 				oAnalysisResult["removeDependency"] =
 					oAnalysisResult["removeDependency"] || [];
 				oAnalysisResult["removeDependency"].push(

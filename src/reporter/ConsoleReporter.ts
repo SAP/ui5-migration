@@ -2,16 +2,34 @@
 
 import * as ESTree from "estree";
 
-import {CompareReportLevel, ReportContext, Reporter, ReportLevel} from "./Reporter";
+import {CompareReportLevel, Finding, ReportContext, Reporter, ReportLevel} from "./Reporter";
 
 export class ConsoleReporter implements Reporter {
 	sLevel: ReportLevel;
 	oMap: Map<string, string[]|number> = new Map();
 	oReportContext: ReportContext;
+	findings: Finding[];
 
 	constructor(level: ReportLevel) {
 		this.sLevel = level;
 		this.oReportContext = {};
+		this.findings = [];
+	}
+
+	/**
+	 * get reported entries
+	 */
+	getFindings(): Finding[] {
+		return this.findings;
+	}
+
+	storeFinding(msg: string, loc?: ESTree.SourceLocation) {
+		this.findings.push({
+			filename : this.oReportContext.fileName,
+			loc,
+			msg,
+			taskName : this.oReportContext.taskName
+		});
 	}
 
 	report(level: ReportLevel, msg: string, loc?: ESTree.SourceLocation) {
