@@ -10,5 +10,6 @@ function (jQuery, UIComponent, UI5Object, MessageBox) {
 	oSuccessHandler.prototype.successMessagePopover = function(oComponent) {
 		var oDate = new sap.ui.model.type.Date();
 		return oDate;
+
 	};
 }, true);
