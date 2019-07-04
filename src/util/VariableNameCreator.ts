@@ -1,6 +1,8 @@
+import * as globals from "globals";
+
 const rAllowedStartCharacter = /^[A-Za-z_]/;
 const rInvalidChars = /[^A-Za-z0-9_]/g;
-const reservedKeywords = [
+const reservedJSLanguageKeywords = [
 	"abstract",   "arguments",	"await",	"boolean", "break",
 	"byte",		  "case",		  "catch",	"char",	"class",
 	"const",	  "continue",	 "debugger", "default", "delete",
@@ -17,72 +19,8 @@ const reservedKeywords = [
 ];
 const sapReservedKeywords = [ "sap" ];
 
-const reservedBrowserTypes = [
-	"Element", "History", "Node", "Option", "Performance", "Plugin", "Range",
-	"Request", "Response", "Storage", "StyleSheet", "Text", "Touch",
-	"WebSocket", "Worker"
-];
-const reservedNativeTypes = [
-	"Array",
-	"ArrayBuffer",
-	"Atomics",
-	"BigInt",
-	"BigInt64Array",
-	"BigUint64Array",
-	"Boolean",
-	"DataView",
-	"Date",
-	"Error",
-	"EvalError",
-	"Float32Array",
-	"Float64Array",
-	"Function",
-	"Generator",
-	"GeneratorFunction",
-	"Infinity",
-	"Int16Array",
-	"Int32Array",
-	"Int8Array",
-	"InternalError",
-	"Intl",
-	"Intl.Collator",
-	"Intl.DateTimeFormat",
-	"Intl.Locale",
-	"Intl.NumberFormat",
-	"Intl.PluralRules",
-	"Intl.RelativeTimeFormat",
-	"JSON",
-	"Map",
-	"Math",
-	"NaN",
-	"Number",
-	"Object",
-	"Promise",
-	"Proxy",
-	"RangeError",
-	"ReferenceError",
-	"Reflect",
-	"RegExp",
-	"Set",
-	"SharedArrayBuffer",
-	"String",
-	"Symbol",
-	"SyntaxError",
-	"TypeError",
-	"TypedArray",
-	"URIError",
-	"Uint16Array",
-	"Uint32Array",
-	"Uint8Array",
-	"Uint8ClampedArray",
-	"WeakMap",
-	"WeakSet",
-	"WebAssembly"
-];
-const reservedNativeFunctions = [
-	"decodeURI", "decodeURIComponent", "encodeURI", "encodeURIComponent",
-	"globalThis", "isFinite", "isNaN", "parseFloat", "parseInt"
-];
+const reservedBrowserTypes = Object.keys(globals.browser);
+const reservedNativeTypes = Object.keys(globals.builtin);
 
 export function getUniqueParameterName(
 	aUsedVariables: string[], sName: string) {
@@ -163,10 +101,9 @@ export function getUniqueVariableName(aUsedVariables: string[], sName: string) {
 }
 
 const isReservedWord = function(sVariableName: string) {
-	return reservedKeywords.includes(sVariableName) ||
+	return reservedJSLanguageKeywords.includes(sVariableName) ||
 		sapReservedKeywords.includes(sVariableName) ||
 		reservedBrowserTypes.includes(sVariableName) ||
-		reservedNativeFunctions.includes(sVariableName) ||
 		reservedNativeTypes.includes(sVariableName);
 };
 
