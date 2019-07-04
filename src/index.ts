@@ -267,7 +267,7 @@ export async function migrate(oArgs: IndexArgs): Promise<{}> {
 	if (aFiles.length === 0) {
 		oTaskRunnerReporter.report(ReportLevel.INFO, "No files found!");
 		// exit
-		return undefined;
+		throw new Error("No files found!");
 	}
 
 	// execute migration
@@ -322,5 +322,10 @@ export async function migrate(oArgs: IndexArgs): Promise<{}> {
 	oTaskRunnerReporter.report(
 		ReportLevel.INFO, `Finished in ${endTime[0]}s ${endTime[1]}ms`);
 	oTaskRunnerReporter.reportCollected(ReportLevel.INFO);
-	return oTaskRunnerReporter.finalize();
+	const result = oTaskRunnerReporter.finalize();
+	if (bDryRun && oTaskRunnerReporter.getFindings().length > 0) {
+		console.error(oTaskRunnerReporter.getFindings());
+		throw new Error("Found entries to be migrated!");
+	}
+	return result;
 }

@@ -62,6 +62,13 @@ declare module "ui5-migration" {
 	 */
 	export function CompareReportLevel(l1: ReportLevel, l2: ReportLevel): number;
 
+	export interface Finding {
+		msg: string;
+		loc: {start:number, end:number};
+		filename: string;
+		taskName: string;
+	}
+
 	/**
 	 * Used by migration modules to report information or errors.
 	 *
@@ -82,6 +89,20 @@ declare module "ui5-migration" {
 		 * @param {string | number} sValue
 		 */
 		collect(sKey:string, sValue:string|number):void;
+
+		/**
+		 * persists the finding
+		 * @param msg
+		 * @param loc
+		 */
+		storeFinding(msg: string, loc?: ESTree.SourceLocation);
+
+		/**
+		 * get reported entries
+		 */
+		getFindings(): Finding[];
+
+
 
 		/**
 		 * reports the collected information

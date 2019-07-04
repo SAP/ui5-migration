@@ -316,6 +316,10 @@ async function analyse(args: Mod.AnalyseArguments): Promise<{}> {
 		}
 	}
 	const aCallsToReplace = findCallsToReplace(ast, oModuleTree, visitor);
+	aCallsToReplace.forEach((oCallToReplace) => {
+		args.reporter.storeFinding(
+			"found deprecated global", oCallToReplace.value.loc);
+	});
 	args.reporter.collect("callsToReplace", aCallsToReplace.length);
 
 	const mOldImports = {};

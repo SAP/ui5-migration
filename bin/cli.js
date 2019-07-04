@@ -6,5 +6,7 @@ process.on("unhandledRejection", (reason, p) => {
 });
 
 CLI.start().catch((err) => {
-	throw err;
+	console.error(err.message);
+	// error causes program to exit with error status code
+	process.exit(1);
 });

@@ -125,6 +125,9 @@ export async function fixTypeDependency(
 						reporter.collect("Found missing module", 1);
 						reporter.collect(
 							"Added library dependency: " + oSymbol.module, 1);
+						reporter.storeFinding(
+							"Found missing module",
+							(depObj as ESTree.Literal).loc);
 						if (modify) {
 							// get param name of the library
 							let localRef =

@@ -1,10 +1,10 @@
 import * as ESTree from "estree";
-import {Node} from "estree";
+import {Node, SourceLocation} from "estree";
 
 import * as Mod from "../../src/Migration";
 import {AnalyseArguments, MigrateArguments, ReportLevel} from "../../src/Migration";
 import {MetaConsoleReporter} from "../../src/reporter/MetaConsoleReporter";
-import {ReportContext, Reporter} from "../../src/reporter/Reporter";
+import {Finding, ReportContext, Reporter} from "../../src/reporter/Reporter";
 import {MigrationTask} from "../../src/taskRunner";
 import {FileInfo} from "../../src/util/FileInfo";
 
@@ -76,6 +76,13 @@ export class CustomReporter implements Reporter {
 
 	getReports() {
 		return this.reports;
+	}
+
+	getFindings(): Finding[] {
+		return [];
+	}
+
+	storeFinding(msg: string, loc?: SourceLocation) {
 	}
 }
 
