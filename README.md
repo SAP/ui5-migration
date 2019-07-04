@@ -44,13 +44,13 @@ Please see [command-line interface](./docs/guide/cli.md) for more details.
 
 
 ### Available migration tasks
-A list of the current migration tasks can be found [here](./docs/guide/tasks.md)
+A list of currently available migration tasks can be found [here](./docs/guide/tasks.md)
 
-### Printing options for migration output
-A list of the printing options can be found [here](./docs/guide/print.md)
+### Formatting options
+A list of options to configure the formatting of migration output can be found [here](./docs/guide/print.md)
 
 ## Contributing
-Please check our [Contribution Guidelines](https://github.com/SAP/ui5-migration/blob/master/CONTRIBUTING.md).
+Please check our [Contribution Guidelines](https://github.com/SAP/ui5-migration/blob/master/CONTRIBUTING.md). Your input and support is welcome!
 
 ## Support
 Please follow our [Contribution Guidelines](https://github.com/SAP/ui5-migration/blob/master/CONTRIBUTING.md#report-an-issue) on how to report an issue.
