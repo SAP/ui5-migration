@@ -481,6 +481,25 @@ describe("AmdCleaner ui52amd", function() {
 		 api : { "sap.ui.core" : rootDir + "amdCleanup/varvar.api.json" }
 	 },
 	 {
+		 title : "sap.ui.model.type.Date should be replaced correctly",
+		 sourceCodeFileName : "amdCleanup/dateType.js",
+		 expectedCodeFileName : "amdCleanup/dateType.expected.js",
+		 logs : [
+			 "debug: found define call at position 0",
+			 "debug: found define call at position 0",
+			 "debug:   add import TypeDate <= sap/ui/model/type/Date",
+			 "debug: 11: Add dependency for sap.ui.model.type.Date",
+			 "debug: 11:   replace sap.ui.model.type.Date with TypeDate",
+			 "debug: 11: Replace occurrence of TypeDate"
+		 ],
+		 modified : true,
+		 amdSettings : {
+			 addTodoForUnsafeReplacements : false,
+			 onlySafeReplacements : false
+		 },
+		 api : { "sap.ui.core" : rootDir + "amdCleanup/dateType.api.json" }
+	 },
+	 {
 		 title : "duplicate Export variable (duplicateExportVar)",
 		 sourceCodeFileName : "amdCleanup/duplicateExportVar.js",
 		 expectedCodeFileName : "amdCleanup/duplicateExportVar.expected.js",
@@ -734,8 +753,8 @@ describe("AmdCleaner ui52amd", function() {
 			 "debug: 1: remove jQuery.sap.declare(sap.m.sample.TimePicker.const)",
 			 "debug: 1: Create empty define call",
 			 "debug: 1: remove jQuery.sap.declare(sap.m.sample.TimePicker.const)",
-			 "debug: 3: Added variable oConst",
-			 "debug: Added return statement of oConst",
+			 "debug: 3: Added variable timePickerConst",
+			 "debug: Added return statement of timePickerConst",
 			 "debug: Added true for global export"
 		 ],
 		 modified : true,
@@ -972,6 +991,7 @@ describe("AmdCleaner ui52amd", function() {
 		const pathToApiJSON = rootDir +
 			(fixture.apiFileName ? fixture.apiFileName :
 								   "amdCleanup/_generic.api.json");
+
 		it(fixture.title, function(done) {
 			const sourceCodeFile = rootDir + fixture.sourceCodeFileName;
 			const expectedContent =

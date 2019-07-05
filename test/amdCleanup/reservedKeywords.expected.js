@@ -1,9 +1,9 @@
 sap.ui.define([], function() {
     "use strict";
 
-	var oConst = {
+	var timePickerConst = {
 		x: 47
 	};
 
-	return oConst;
+	return timePickerConst;
 }, true);

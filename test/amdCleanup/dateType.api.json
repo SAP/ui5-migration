@@ -1,0 +1,26 @@
+{
+	"$schema-ref": "http://schemas.sap.com/sapui5/designtime/api.json/1.0",
+	"version": "1.60.0",
+	"library": "sap.ui.core",
+	"symbols": [
+		{
+			"kind": "class",
+			"name": "sap.ui.model.type.Date",
+			"basename": "Date",
+			"resource": "sap/ui/model/type/Date.js",
+			"module": "sap/ui/model/type/Date",
+			"export": "",
+			"static": true,
+			"visibility": "public",
+			"extends": "sap.ui.model.SimpleType",
+			"description": "This class represents date simple types.",
+			"ui5-metadata": {
+				"stereotype": "object"
+			},
+			"constructor": {
+				"visibility": "public"
+			}
+		}
+
+	]
+}

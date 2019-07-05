@@ -1336,48 +1336,32 @@ module.exports = {
 		}
 		return importNames;
 	},
+	/**
+	 *
+	 * @param module, e.g. "a/b/c"
+	 */
 	getLocalReference(module: string) {
 		let candidate;
-		let p = module.lastIndexOf("/");
-		if (p >= 0) {
-			candidate = module.slice(p + 1);
-		} else if (/^jquery\.sap\./.test(module)) {
+		if (/^jquery\.sap\./.test(module)) {
 			candidate = "jQuery";
 		} else {
-			candidate = module;
+			candidate = module.replace(/\//g, ".");
 		}
+
+		const aUsedParamNames = this.defineCall.paramNames.slice();
+		aUsedParamNames.push("library");
 
 		// ensure local reference does neither contain invalid characters nor is
 		// a language keyword
-		candidate = VariableNameCreator.normalize(candidate);
+		candidate = VariableNameCreator.getUniqueParameterName(
+			aUsedParamNames, candidate);
 
 		// if the library module from a different library is imported, add a
 		// package to distinguish it more easily
-		if (p > 0 && candidate === "library" && this.defineCall &&
-			this.defineCall.name.indexOf(module.slice(0, p)) !== 0) {
-			let prefix = module.slice(module.lastIndexOf("/", p - 1) + 1, p);
-			if (prefix === "m") {
-				prefix = "mobile";
-			}
-			candidate = prefix + candidate.slice(0, 1).toUpperCase() +
-				candidate.slice(1);
-			p = module.lastIndexOf("/", p - 1);
-		}
-
-		while (this.defineCall.paramNames &&
-			   this.defineCall.paramNames.indexOf(candidate) >= 0) {
-			if (p > 0) {
-				let prefix =
-					module.slice(module.lastIndexOf("/", p - 1) + 1, p);
-				if (prefix === "m") {
-					prefix = "mobile";
-				}
-				candidate = prefix + candidate.slice(0, 1).toUpperCase() +
-					candidate.slice(1);
-				p = module.lastIndexOf("/", p - 1);
-			} else {
-				candidate = candidate + this.defineCall.paramNames.length;
-			}
+		if (candidate === "mLibrary") {
+			candidate = "mobileLibrary";
+			candidate = VariableNameCreator.getUniqueParameterName(
+				aUsedParamNames, candidate);
 		}
 
 		return candidate;
