@@ -5,6 +5,7 @@ import * as recast from "recast";
 import {NodePath} from "ui5-migration";
 
 import {EMPTY_FINDER_RESULT, Finder, FinderResult} from "../../../dependencies";
+import {SapUiDefineCall} from "../../../util/SapUiDefineCall";
 
 
 /**
@@ -19,7 +20,7 @@ import {EMPTY_FINDER_RESULT, Finder, FinderResult} from "../../../dependencies";
 class CallWithArgumentFinder implements Finder {
 	find(
 		node: ESTree.Node, config: { finderIncludesName: string },
-		sConfigName: string): FinderResult {
+		sConfigName: string, defineCall: SapUiDefineCall): FinderResult {
 		if (node.type === Syntax.CallExpression) {
 			if (node.arguments.length > 0 &&
 				node.arguments[0].type === Syntax.Literal) {

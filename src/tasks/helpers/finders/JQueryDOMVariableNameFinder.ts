@@ -4,6 +4,7 @@ import * as recast from "recast";
 import {NodePath} from "ui5-migration";
 
 import {EMPTY_FINDER_RESULT, Finder, FinderResult} from "../../../dependencies";
+import {SapUiDefineCall} from "../../../util/SapUiDefineCall";
 
 
 /**
@@ -18,7 +19,7 @@ import {EMPTY_FINDER_RESULT, Finder, FinderResult} from "../../../dependencies";
 class JQueryDOMVariableNameFinder implements Finder {
 	find(
 		node: ESTree.Node, config: { variableNameToFind: string },
-		sConfigName: string): FinderResult {
+		sConfigName: string, defineCall: SapUiDefineCall): FinderResult {
 		const sNameToFind = config.variableNameToFind;
 
 
