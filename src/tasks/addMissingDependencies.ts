@@ -54,7 +54,7 @@ function mapToFound(oPath: NodePath, oFound: FoundReplacement): FoundCall {
 }
 
 const visit = function(
-	analysis: Analysis, oModuleTree: {}, finders: { [p: string]: Finder },
+	analysis: Analysis, oModuleTree: {}, finders: { [name: string]: Finder },
 	reporter: Reporter, defineCall: SapUiDefineCall) {
 	// @ts-ignore
 	return function(oPath) {
@@ -113,13 +113,21 @@ function findCallsToReplace(
 	return analysis;
 }
 
-
+/**
+ * Uses the finders to check if the given node contains valid findings.
+ * Returns the findings.
+ * @param oNode
+ * @param oNodePath
+ * @param oModuleTree
+ * @param finder
+ * @param defineCall
+ */
 function isFoundInConfig(
 	oNode: ESTree.Node, oNodePath: NodePath, oModuleTree: {
-		[p: string]:
-			{ [p: string]: { finder: string; newModulePath : string } }
+		[index: string]:
+			{ [index: string]: { finder: string; newModulePath : string } }
 	},
-	finder: { [p: string]: Finder },
+	finder: { [name: string]: Finder },
 	defineCall: SapUiDefineCall): FoundReplacement[] {
 	const aCalls = [];
 	for (const sModule in oModuleTree) {

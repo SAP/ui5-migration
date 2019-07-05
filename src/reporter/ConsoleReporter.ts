@@ -2,18 +2,19 @@
 
 import * as ESTree from "estree";
 
-import {CompareReportLevel, Finding, fromLoc, ReportContext, Reporter, ReportLevel} from "./Reporter";
+import {BaseReporter} from "./BaseReporter";
+import {CompareReportLevel, Finding, fromLoc, ReportLevel} from "./Reporter";
 
-export class ConsoleReporter implements Reporter {
+/**
+ * Represents a Reporter which logs to the console
+ */
+export class ConsoleReporter extends BaseReporter {
 	sLevel: ReportLevel;
 	oMap: Map<string, string[]|number> = new Map();
-	oReportContext: ReportContext;
-	findings: Finding[];
 
 	constructor(level: ReportLevel) {
+		super();
 		this.sLevel = level;
-		this.oReportContext = {};
-		this.findings = [];
 	}
 
 	/**
@@ -25,10 +26,10 @@ export class ConsoleReporter implements Reporter {
 
 	storeFinding(msg: string, loc?: ESTree.SourceLocation) {
 		this.findings.push({
-			filename : this.oReportContext.fileName,
+			fileName : this.getContext().fileName,
 			location : fromLoc(loc),
-			msg,
-			taskName : this.oReportContext.taskName
+			message : msg,
+			taskName : this.getContext().taskName
 		});
 	}
 
@@ -43,16 +44,16 @@ export class ConsoleReporter implements Reporter {
 		// Format rest and output
 		sMessage += "\x1b[36m%s\x1b[0m ";
 		aParams.push(level);
-		if (this.oReportContext.taskName) {
-			aParams.push(this.oReportContext.taskName);
+		if (this.getContext().taskName) {
+			aParams.push(this.getContext().taskName);
 			sMessage += "\x1b[35m%s\x1b[0m ";
 		}
-		if (this.oReportContext.logPrefix) {
-			aParams.push(this.oReportContext.logPrefix);
+		if (this.getContext().logPrefix) {
+			aParams.push(this.getContext().logPrefix);
 			sMessage += "\x1b[35m%s\x1b[0m ";
 		}
-		if (this.oReportContext.fileName) {
-			let sOutFileName = this.oReportContext.fileName;
+		if (this.getContext().fileName) {
+			let sOutFileName = this.getContext().fileName;
 			if (loc) {
 				let oLocation: ESTree.SourceLocation;
 				oLocation = loc as ESTree.SourceLocation;
@@ -117,7 +118,7 @@ export class ConsoleReporter implements Reporter {
 			return;
 		}
 		const sReporter =
-			this.oReportContext.logPrefix || this.oReportContext.taskName;
+			this.getContext().logPrefix || this.getContext().taskName;
 		this.setContext({ logPrefix : "", fileName : "" });
 		ConsoleReporter.log(level, "");
 		ConsoleReporter.log(
@@ -132,14 +133,6 @@ export class ConsoleReporter implements Reporter {
 			}
 		});
 		this.oMap.clear();
-	}
-
-	setContext(oReportContext: ReportContext): void {
-		this.oReportContext = oReportContext;
-	}
-
-	getContext(): ReportContext {
-		return this.oReportContext;
 	}
 
 	async finalize(): Promise<{}> {

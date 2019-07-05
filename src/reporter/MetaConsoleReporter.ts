@@ -3,6 +3,9 @@ import * as ESTree from "estree";
 import {ConsoleReporter} from "./ConsoleReporter";
 import {Finding, fromLoc, Reporter, ReportLevel} from "./Reporter";
 
+/**
+ * Reporter which contains multiple ConsoleReporters
+ */
 export class MetaConsoleReporter extends ConsoleReporter {
 	oReporters: { [index: string]: Reporter };
 	findings: Finding[];
@@ -36,17 +39,12 @@ export class MetaConsoleReporter extends ConsoleReporter {
 			.map((sKey) => this.oReporters[sKey]);
 	}
 
-	storeFinding(msg: string, loc?: ESTree.SourceLocation) {
-		this.findings.push({
-			filename : "meta",
-			taskName : "meta",
-			location : fromLoc(loc),
-			msg
-		});
+	storeFinding(message: string, loc?: ESTree.SourceLocation) {
+		// NOOP since this is only handling a set of ConsoleReporters
 	}
 
 	/**
-	 * get reported entries
+	 * get reported entries from all its nested reporters
 	 */
 	getFindings(): Finding[] {
 		let results = this.findings.slice();

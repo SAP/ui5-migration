@@ -70,9 +70,9 @@ declare module "ui5-migration" {
 	}
 
 	export interface Finding {
-		msg: string;
+		message: string;
 		location: FindingLocation;
-		filename: string;
+		fileName: string;
 		taskName: string;
 	}
 
@@ -99,10 +99,10 @@ declare module "ui5-migration" {
 
 		/**
 		 * persists the finding
-		 * @param msg
+		 * @param message
 		 * @param loc
 		 */
-		storeFinding(msg: string, loc?: ESTree.SourceLocation);
+		storeFinding(message: string, loc?: ESTree.SourceLocation);
 
 		/**
 		 * get reported entries
