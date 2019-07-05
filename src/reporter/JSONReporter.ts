@@ -1,6 +1,6 @@
 import * as ESTree from "estree";
 
-import {CompareReportLevel, Finding, ReportContext, Reporter, ReportLevel} from "./Reporter";
+import {CompareReportLevel, Finding, fromLoc, ReportContext, Reporter, ReportLevel} from "./Reporter";
 
 export interface JSONReporterResult {
 	reports: JSONReporterItem[];
@@ -37,9 +37,7 @@ export class JSONReporter implements Reporter {
 	storeFinding(msg: string, loc?: ESTree.SourceLocation) {
 		this.findings.push({
 			filename : this.oContext.fileName,
-			loc : {
-				start: loc.start.column
-			},
+			location : fromLoc(loc),
 			msg,
 			taskName : this.oContext.taskName
 		});

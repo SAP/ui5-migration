@@ -351,7 +351,6 @@ async function migrate(args: Mod.MigrateArguments): Promise<boolean> {
 				args.reporter.collect(
 					oNodePath.parentPath.value.property.name, 1);
 			}
-
 			bFileModified = true;
 		} catch (e) {
 			args.reporter.report(

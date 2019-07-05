@@ -1,7 +1,7 @@
 import * as ESTree from "estree";
 
 import {ConsoleReporter} from "./ConsoleReporter";
-import {Finding, Reporter, ReportLevel} from "./Reporter";
+import {Finding, fromLoc, Reporter, ReportLevel} from "./Reporter";
 
 export class MetaConsoleReporter extends ConsoleReporter {
 	oReporters: { [index: string]: Reporter };
@@ -37,7 +37,12 @@ export class MetaConsoleReporter extends ConsoleReporter {
 	}
 
 	storeFinding(msg: string, loc?: ESTree.SourceLocation) {
-		this.findings.push({ filename : "meta", taskName : "meta", loc, msg });
+		this.findings.push({
+			filename : "meta",
+			taskName : "meta",
+			location : fromLoc(loc),
+			msg
+		});
 	}
 
 	/**

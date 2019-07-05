@@ -62,9 +62,16 @@ declare module "ui5-migration" {
 	 */
 	export function CompareReportLevel(l1: ReportLevel, l2: ReportLevel): number;
 
+	export interface FindingLocation {
+		endLine: number;
+		endColumn: number;
+		startLine: number;
+		startColumn: number;
+	}
+
 	export interface Finding {
 		msg: string;
-		loc: {start:number, end:number};
+		location: FindingLocation;
 		filename: string;
 		taskName: string;
 	}

@@ -37,9 +37,25 @@ export interface ReportContext {
 	logPrefix?: string;
 }
 
+export function fromLoc(loc: ESTree.SourceLocation): FindingLocation {
+	return {
+		endLine : loc.end.line,
+		endColumn : loc.end.column,
+		startLine : loc.start.line,
+		startColumn : loc.start.column
+	};
+}
+
+export interface FindingLocation {
+	endLine: number;
+	endColumn: number;
+	startLine: number;
+	startColumn: number;
+}
+
 export interface Finding {
 	msg: string;
-	loc: {start:number, end:number};
+	location: FindingLocation;
 	filename: string;
 	taskName: string;
 }
