@@ -52,16 +52,24 @@ export abstract class BaseReporter implements Reporter {
 		return this.oReportContext;
 	}
 
-	collect(sKey: string, sValue: string|number): void {
-	}
+	/**
+	 * @see Reporter#collect
+	 */
+	abstract collect(sKey: string, sValue: string|number): void;
 
-	finalize(): Promise<{}> {
-		return undefined;
-	}
+	/**
+	 * @see Reporter#finalize
+	 */
+	abstract finalize(): Promise<{}>;
 
-	report(level: ReportLevel, msg: string, loc?: ESTree.SourceLocation): void {
-	}
+	/**
+	 * @see Reporter#report
+	 */
+	abstract report(
+		level: ReportLevel, msg: string, loc?: ESTree.SourceLocation): void;
 
-	reportCollected(level: ReportLevel): void {
-	}
+	/**
+	 * @see Reporter#reportCollected
+	 */
+	abstract reportCollected(level: ReportLevel): void;
 }
