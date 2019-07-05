@@ -83,10 +83,10 @@ function getCalleeExprParts(oAST: ESTree.Node): string[] {
 }
 
 function isCalleeMatchingModulesToReplace(
-	oAST: ESTree.Node, oModuleTree: ModuleTree): boolean {
+	oAST: ESTree.Node, oModuleTree: ModuleTree): string {
 	const memberExprParts = getCalleeExprParts(oAST);
 	if (!memberExprParts || memberExprParts.length === 0) {
-		return false;
+		return undefined;
 	}
 
 	let oCurObject = oModuleTree;
@@ -94,10 +94,10 @@ function isCalleeMatchingModulesToReplace(
 		if (oCurObject.hasOwnProperty(memberExprPart)) {
 			oCurObject = oCurObject[memberExprPart];
 		} else {
-			return "*" in oCurObject;
+			return "*" in oCurObject ? memberExprParts.join(".") : undefined;
 		}
 	}
-	return true;
+	return memberExprParts.join(".");
 }
 
 function isGlobalContext(oNode: ESTree.Node): boolean {
@@ -133,28 +133,63 @@ function isUsedAsExpression(oPath: TNodePath<ESTree.Identifier>): boolean {
 		(parentType === Syntax.ConditionalExpression));
 }
 
+interface CallToReplace {
+	nodePath: NodePath;
+	wouldReplace: boolean;
+}
+
+function wouldReplaceCall(moduleMap: {}, result, defineCall: SapUiDefineCall) {
+	const finding = moduleMap[result];
+	if (!finding) {
+		return false;
+	}
+	const name = [
+		finding.newVariableName, finding.functionName
+	].filter(Boolean).join(".");
+
+	// already present and would replace it with the same
+	const alreadyPresent =
+		(name === result &&
+		 defineCall.getNodeOfImport(finding.newModulePath)) &&
+		(!finding.replacer || finding.replacer === "Module" ||
+		 finding.replacer === "ModuleFunction");
+	return !alreadyPresent;
+}
+
 function findCallsToReplace(
-	oAST: ESTree.Node, oModuleTree: ModuleTree,
-	visitor: ASTVisitor): NodePath[] {
-	const oCalls: NodePath[] = [];
+	oAST: ESTree.Node, oModuleTree: ModuleTree, visitor: ASTVisitor,
+	defineCall: SapUiDefineCall, moduleMap: {}): CallToReplace[] {
+	const oCalls: CallToReplace[] = [];
 
 	visitor.visit(oAST, {
 		visitMemberExpression(oPath) {
-			if (isGlobalContext(oPath.value) &&
-				isCalleeMatchingModulesToReplace(oPath.value, oModuleTree)) {
-				oCalls.push(oPath);
-				oPath.protect();
-				return false;
+			if (isGlobalContext(oPath.value)) {
+				const result =
+					isCalleeMatchingModulesToReplace(oPath.value, oModuleTree);
+				if (result) {
+					const wouldReplace =
+						wouldReplaceCall(moduleMap, result, defineCall);
+
+					oCalls.push({ nodePath : oPath, wouldReplace });
+					oPath.protect();
+					return false;
+				}
 			}
 			this.traverse(oPath);
 			return undefined;
 		},
 		// simple-identifier call (e.g. jQuery("xxx"))
 		visitIdentifier(oPath) {
-			if (isUsedAsExpression(oPath) &&
-				isCalleeMatchingModulesToReplace(oPath.value, oModuleTree)) {
-				oCalls.push(oPath);
-				oPath.protect();
+			if (isUsedAsExpression(oPath)) {
+				const result =
+					isCalleeMatchingModulesToReplace(oPath.value, oModuleTree);
+				if (result) {
+					const wouldReplace =
+						wouldReplaceCall(moduleMap, result, defineCall);
+
+					oCalls.push({ nodePath : oPath, wouldReplace });
+					oPath.protect();
+				}
 			}
 			this.traverse(oPath);
 		}
@@ -281,6 +316,7 @@ async function analyse(args: Mod.AnalyseArguments): Promise<{}> {
 
 	const oModuleTree: ModuleTree = {};
 
+	const moduleMap = {};
 
 	// fill module tree
 	for (const sKeyOldModule in oConfig.modules) {  // jquery.sap.global
@@ -292,6 +328,8 @@ async function analyse(args: Mod.AnalyseArguments): Promise<{}> {
 
 				if (oldImports.hasOwnProperty(sOldImportName)) {
 					const oldImport = oldImports[sOldImportName];
+
+					moduleMap[sOldImportName] = oldImport;
 
 					let replacerName = oldImport.replacer;
 					if (!replacerName) {
@@ -315,10 +353,13 @@ async function analyse(args: Mod.AnalyseArguments): Promise<{}> {
 			}
 		}
 	}
-	const aCallsToReplace = findCallsToReplace(ast, oModuleTree, visitor);
+	const aCallsToReplace =
+		findCallsToReplace(ast, oModuleTree, visitor, defineCall, moduleMap);
 	aCallsToReplace.forEach((oCallToReplace) => {
-		args.reporter.storeFinding(
-			"found deprecated global", oCallToReplace.value.loc);
+		if (oCallToReplace.wouldReplace) {
+			args.reporter.storeFinding(
+				"found deprecated global", oCallToReplace.nodePath.value.loc);
+		}
 	});
 	args.reporter.collect("callsToReplace", aCallsToReplace.length);
 
@@ -348,7 +389,8 @@ async function analyse(args: Mod.AnalyseArguments): Promise<{}> {
 
 	// let aVariableNamesToKeep = new Set<string>();
 	for (const oCallPath of aCallsToReplace) {
-		const sCalleeName = getCalleeExprParts(oCallPath.value).join(".");
+		const sCalleeName =
+			getCalleeExprParts(oCallPath.nodePath.value).join(".");
 		const oResult = findImport(mOldImports, sCalleeName);
 		if (oResult) {
 			/*
@@ -459,13 +501,14 @@ async function analyse(args: Mod.AnalyseArguments): Promise<{}> {
 	};
 
 	for (const oCallPath of aCallsToReplace) {
-		const sCallPathName = getCalleeExprParts(oCallPath.value).join(".");
+		const sCallPathName =
+			getCalleeExprParts(oCallPath.nodePath.value).join(".");
 		const sCalleeName = sCallPathName.replace("$", "jQuery");
 		const oResult = findImportByCall(mImports, sCalleeName);
 
 		if (oResult) {
 			analysis.replaceCalls.push({
-				callPath : oCallPath,
+				callPath : oCallPath.nodePath,
 				iLevel : oResult.iLevel,
 				oldImportName : sCalleeName,
 				import : oResult.import
@@ -484,11 +527,12 @@ async function analyse(args: Mod.AnalyseArguments): Promise<{}> {
 					`Deprecated call of type ${oResult.import.replacerName}`;
 			}
 			args.reporter.report(
-				Mod.ReportLevel.TRACE, sInfoMsg, oCallPath.value.loc);
+				Mod.ReportLevel.TRACE, sInfoMsg, oCallPath.nodePath.value.loc);
 
 			const sActionMsg = `Found call to replace "${sCallPathName}"`;
 			args.reporter.report(
-				Mod.ReportLevel.TRACE, sActionMsg, oCallPath.value.loc);
+				Mod.ReportLevel.TRACE, sActionMsg,
+				oCallPath.nodePath.value.loc);
 
 			// schedule new module to be imported
 			if (oResult.import.newModule && oResult.import.hasToBeRequired) {
@@ -515,7 +559,7 @@ async function analyse(args: Mod.AnalyseArguments): Promise<{}> {
 
 		} else if (args.config.comments) {
 			analysis.addComments.push({
-				nodePath : oCallPath,
+				nodePath : oCallPath.nodePath,
 				comment : args.config.comments.unhandledReplacementComment
 			});
 		}

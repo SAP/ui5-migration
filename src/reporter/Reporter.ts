@@ -38,6 +38,9 @@ export interface ReportContext {
 }
 
 export function fromLoc(loc: ESTree.SourceLocation): FindingLocation {
+	if (!loc) {
+		return { endLine : 0, endColumn : 0, startLine : 0, startColumn : 0 };
+	}
 	return {
 		endLine : loc.end.line,
 		endColumn : loc.end.column,

@@ -198,7 +198,7 @@ function replaceSelfCalls(
 			declareResult.path.prune();
 		} else {
 			reporter.storeFinding(
-				"remove declare statement", declareResult.path.loc);
+				"remove declare statement", declareResult.path.value.loc);
 			oAnalysisResult["remove-path"] =
 				oAnalysisResult["remove-path"] || [];
 			oAnalysisResult["remove-path"].push("jQuery.sap.declare");
