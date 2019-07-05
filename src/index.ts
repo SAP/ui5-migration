@@ -324,7 +324,9 @@ export async function migrate(oArgs: IndexArgs): Promise<{}> {
 	oTaskRunnerReporter.reportCollected(ReportLevel.INFO);
 	const result = oTaskRunnerReporter.finalize();
 	if (bDryRun && oTaskRunnerReporter.getFindings().length > 0) {
-		console.error(oTaskRunnerReporter.getFindings());
+		oTaskRunnerReporter.report(
+			ReportLevel.TRACE,
+			`Findings: ${oTaskRunnerReporter.getFindings().join("\n")}`);
 		throw new Error("Found entries to be migrated!");
 	}
 	return result;
