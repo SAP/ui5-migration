@@ -116,7 +116,7 @@ export class SapUiDefineCall {
 			this.dependencyInsertionIdx = this.dependencyArray.elements.length;
 		}
 
-		if (args[i].type === Syntax.FunctionExpression) {
+		if (args[i] && args[i].type === Syntax.FunctionExpression) {
 			this.factory = args[i++] as ESTree.FunctionExpression;
 			const params = this.factory.params;
 			this.paramNames = params.map(function(param) {
