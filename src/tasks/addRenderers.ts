@@ -213,10 +213,7 @@ async function analyse(args: Mod.AnalyseArguments):
 
 	if (rendererExists && !embeddedRenderer.rendererDefined &&
 		!bRendererImportDefined) {
-		args.reporter.report(
-			Mod.ReportLevel.ERROR,
-			"detected missing dependency to Renderer module",
-			defineCall.node.callee.loc);
+		args.reporter.collect("missingRenderer", 1);
 		args.reporter.storeFinding(
 			"Missing Renderer", defineCall.node.callee.loc);
 		return {
@@ -239,7 +236,7 @@ async function migrate(args: Mod.MigrateArguments): Promise<boolean> {
 		const rendererModuleName = getRendererParameterName(args.file);
 		if (result.defineCall.getImportByParamName(rendererModuleName)) {
 			args.reporter.report(
-				ReportLevel.ERROR,
+				ReportLevel.WARNING,
 				"Renderer already defined for " + args.file.getFileName() +
 					". Renderer param name: " + rendererModuleName);
 			return false;
