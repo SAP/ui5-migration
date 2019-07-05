@@ -3,19 +3,19 @@ import * as globals from "globals";
 const rAllowedStartCharacter = /^[A-Za-z_]/;
 const rInvalidChars = /[^A-Za-z0-9_]/g;
 const reservedJSLanguageKeywords = [
-	"abstract",   "arguments",	"await",	"boolean", "break",
-	"byte",		  "case",		  "catch",	"char",	"class",
-	"const",	  "continue",	 "debugger", "default", "delete",
-	"do",		  "double",		  "else",	 "enum",	"eval",
-	"export",	 "extends",	  "false",	"final",   "finally",
-	"float",	  "for",		  "function", "goto",	"if",
-	"implements", "import",		  "",		  "in",		 "instanceof",
-	"int",		  "interface",	"let",	  "long",	"native",
-	"new",		  "null",		  "package",  "private", "protected",
-	"public",	 "return",		  "short",	"static",  "super",
-	"switch",	 "synchronized", "this",	 "throw",   "throws",
-	"transient",  "true",		  "try",	  "typeof",  "var",
-	"void",		  "volatile",	 "while",	"with",	"yield"
+	"abstract",		"arguments", "await",	"boolean",	"break",
+	"byte",			"case",		 "catch",	"char",	   "class",
+	"const",		"continue",  "debugger", "default",	"delete",
+	"do",			"double",	"else",	 "enum",	   "eval",
+	"export",		"extends",   "false",	"final",	  "finally",
+	"float",		"for",		 "function", "goto",	   "if",
+	"implements",   "import",	"in",		 "instanceof", "int",
+	"interface",	"let",		 "long",	 "native",	 "new",
+	"null",			"package",   "private",  "protected",  "public",
+	"return",		"short",	 "static",   "super",	  "switch",
+	"synchronized", "this",		 "throw",	"throws",	 "transient",
+	"true",			"try",		 "typeof",   "var",		   "void",
+	"volatile",		"while",	 "with",	 "yield"
 ];
 const sapReservedKeywords = [ "sap" ];
 
@@ -45,6 +45,12 @@ const isUnique = function(aUsedVariables: string[], sName: string): boolean {
 	return !aUsedVariables.includes(sName) && !isReservedWord(sName);
 };
 
+/**
+ *
+ * @param aUsedVariables
+ * @param sName, e.g. Date
+ * @returns whether or not the name is a valid candidate
+ */
 const isValidIdentifierName = function(
 	aUsedVariables: string[], sName: string) {
 	return rAllowedStartCharacter.test(sName) &&
@@ -56,29 +62,41 @@ const replaceInvalidCharacters = function(sName) {
 	return sName.replace(rInvalidChars, "_");
 };
 
-
+/**
+ *
+ * @param aUsedVariables variable names which are already in use and should not
+ * be taken
+ * @param sName module name e.g. sap.ui.model.type.Date
+ * @param createLowercaseVariableName whether or not to enforce variable name
+ * starting with a lowercase character
+ * @returns unique variable name which is neither reserved nor taken
+ */
 const getUniqueName = function(
 	aUsedVariables: string[], sName: string,
-	createLowercaseVariableName?: boolean) {
-	// for param names
+	createLowercaseVariableName?: boolean): string {
+	// split the name and reverse, e.g. ["Date", "type", "model", "ui", "sap"]
 	const aNameSplitted = sName.split(".").reverse();
 	let sResultName = "";
 	const bCreateLowercaseVariableName =
 		createLowercaseVariableName || isLowerCase(aNameSplitted[0].charAt(0));
+
+	// make use of the whole namespace before applying prefix
 	for (let i = 0; i < aNameSplitted.length; i++) {
+		// concatenate name
 		sResultName = replaceInvalidCharacters(aNameSplitted[i]) +
 			capitalize(sResultName);
 
 		const candidate = bCreateLowercaseVariableName ?
 			decapitalize(sResultName) :
 			capitalize(sResultName);
+
+		// check if candidate is valid
 		if (isValidIdentifierName(aUsedVariables, candidate)) {
 			return candidate;
 		}
 	}
 
-	// add O's
-	// ooooooDate
+	// add prefix to make it unique
 	const prefixCharacter = bCreateLowercaseVariableName ? "o" : "O";
 	while (!isValidIdentifierName(aUsedVariables, sResultName)) {
 		sResultName = prefixCharacter + capitalize(sResultName);
