@@ -82,9 +82,15 @@ function getCalleeExprParts(oAST: ESTree.Node): string[] {
 	}
 }
 
+/**
+ * Checks if the given node can be replaced
+ * @param oNode the current node
+ * @param oModuleTree tree structure of replacement config
+ * @returns {string} the call to replace, e.g. "jQuery.isArray" or undefined if not found
+ */
 function isCalleeMatchingModulesToReplace(
-	oAST: ESTree.Node, oModuleTree: ModuleTree): string {
-	const memberExprParts = getCalleeExprParts(oAST);
+	oNode: ESTree.Node, oModuleTree: ModuleTree): string {
+	const memberExprParts = getCalleeExprParts(oNode);
 	if (!memberExprParts || memberExprParts.length === 0) {
 		return undefined;
 	}
@@ -133,33 +139,63 @@ function isUsedAsExpression(oPath: TNodePath<ESTree.Identifier>): boolean {
 		(parentType === Syntax.ConditionalExpression));
 }
 
-interface CallToReplace {
+/**
+ * represents a finding
+ */
+interface ReplaceGlobalsFinding {
 	nodePath: NodePath;
+	/**
+	 * whether or not the finding would trigger a replacement
+	 */
 	wouldReplace: boolean;
 }
 
-function wouldReplaceCall(moduleMap: {}, result, defineCall: SapUiDefineCall) {
-	const finding = moduleMap[result];
-	if (!finding) {
+/**
+ * Whether or not the finding would trigger a replacement
+ * @param moduleMapFromConfig contains the callToReplace as Key, e.g. jQuery.get
+ * @param callToReplace
+ * @param defineCall
+ */
+function wouldReplaceCall(
+	moduleMapFromConfig: {}, callToReplace, defineCall: SapUiDefineCall) {
+	const configEntry = moduleMapFromConfig[callToReplace];
+	if (!configEntry) {
 		return false;
 	}
-	const name = [
-		finding.newVariableName, finding.functionName
+	const callToReplaceInConfig = [
+		configEntry.newVariableName, configEntry.functionName
 	].filter(Boolean).join(".");
 
 	// already present and would replace it with the same
+	// e.g. "jQuery.get": {
+	// 		"newModulePath": "sap/ui/thirdparty/jquery",
+	// 		"newVariableName": "jQuery",
+	// 		"functionName": "get",
+	// 		"version": "^1.58.0"
+	// 	}
 	const alreadyPresent =
-		(name === result &&
-		 defineCall.getNodeOfImport(finding.newModulePath)) &&
-		(!finding.replacer || finding.replacer === "Module" ||
-		 finding.replacer === "ModuleFunction");
+		(callToReplaceInConfig === callToReplace &&
+		 defineCall.getNodeOfImport(configEntry.newModulePath)) &&
+		(!configEntry.replacer || configEntry.replacer === "Module" ||
+		 configEntry.replacer === "ModuleFunction");
+
+	// if it is not already present the call would be replaced
 	return !alreadyPresent;
 }
 
+/**
+ *
+ * @param oAST
+ * @param oModuleTree
+ * @param visitor
+ * @param defineCall
+ * @param moduleMap contains a map of the replaceGlobals config entries
+ * @returns the findings
+ */
 function findCallsToReplace(
 	oAST: ESTree.Node, oModuleTree: ModuleTree, visitor: ASTVisitor,
-	defineCall: SapUiDefineCall, moduleMap: {}): CallToReplace[] {
-	const oCalls: CallToReplace[] = [];
+	defineCall: SapUiDefineCall, moduleMap: {}): ReplaceGlobalsFinding[] {
+	const aFoundCalls: ReplaceGlobalsFinding[] = [];
 
 	visitor.visit(oAST, {
 		visitMemberExpression(oPath) {
@@ -170,7 +206,7 @@ function findCallsToReplace(
 					const wouldReplace =
 						wouldReplaceCall(moduleMap, result, defineCall);
 
-					oCalls.push({ nodePath : oPath, wouldReplace });
+					aFoundCalls.push({ nodePath : oPath, wouldReplace });
 					oPath.protect();
 					return false;
 				}
@@ -187,7 +223,7 @@ function findCallsToReplace(
 					const wouldReplace =
 						wouldReplaceCall(moduleMap, result, defineCall);
 
-					oCalls.push({ nodePath : oPath, wouldReplace });
+					aFoundCalls.push({ nodePath : oPath, wouldReplace });
 					oPath.protect();
 				}
 			}
@@ -195,7 +231,7 @@ function findCallsToReplace(
 		}
 	});
 
-	return oCalls;
+	return aFoundCalls;
 }
 
 function findImport(oObject: ImportMap, sName: string) {
@@ -316,6 +352,18 @@ async function analyse(args: Mod.AnalyseArguments): Promise<{}> {
 
 	const oModuleTree: ModuleTree = {};
 
+	/**
+	 * the config grouped by replacement call
+	 * <code>
+	 * "jQuery.get": {
+	 *		"newModulePath": "sap/ui/thirdparty/jquery",
+	 *		"newVariableName": "jQuery",
+	 *		"functionName": "get",
+	 *		"version": "^1.58.0"
+	 *	},
+	 * jQuery.....
+	 * </code>
+	 */
 	const moduleMap = {};
 
 	// fill module tree

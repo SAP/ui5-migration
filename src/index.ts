@@ -187,7 +187,7 @@ export async function migrate(oArgs: IndexArgs): Promise<{}> {
 		oReportLevel = oArgs.reportLevel as ReportLevel || ReportLevel.INFO,
 		  oTaskRunnerReporter =
 			  oArgs.reporter || new MetaConsoleReporter(oReportLevel),
-		  bDryRun = oArgs.dryRun,
+		  bAnalyze = oArgs.dryRun,
 		  oOutputFormat = JSON.parse(
 			  await FileUtils.fsReadFile(oArgs.outputFormat, "utf8"));
 	oTaskRunnerReporter.setContext({ logPrefix : "cli" });
@@ -266,7 +266,7 @@ export async function migrate(oArgs: IndexArgs): Promise<{}> {
 	const aFiles = await fileFinder.getFiles();
 	if (aFiles.length === 0) {
 		oTaskRunnerReporter.report(ReportLevel.INFO, "No files found!");
-		// exit
+		// exit the program with an error
 		throw new Error("No files found!");
 	}
 
@@ -287,7 +287,7 @@ export async function migrate(oArgs: IndexArgs): Promise<{}> {
 	if (aFileInfo.length < fileLimit) {
 		await TaskRunner.processModules(
 			aTasksToUse, aFileInfo, oTaskRunnerReporter, fileFinder, sOutputDir,
-			oOutputFormat, bDryRun, sVersion, oArgs.namespaces);
+			oOutputFormat, bAnalyze, sVersion, oArgs.namespaces);
 	} else {
 		const nrOfChunks = Math.ceil(aFileInfo.length / fileLimit);
 
@@ -303,7 +303,7 @@ export async function migrate(oArgs: IndexArgs): Promise<{}> {
 						aFileInfo.slice(
 							i * fileLimit, i * fileLimit + fileLimit),
 						oTaskRunnerReporter, fileFinder, sOutputDir,
-						oOutputFormat, bDryRun, sVersion, oArgs.namespaces)
+						oOutputFormat, bAnalyze, sVersion, oArgs.namespaces)
 					.then((aResult) => {
 						oTaskRunnerReporter.report(
 							ReportLevel.INFO,
@@ -323,9 +323,12 @@ export async function migrate(oArgs: IndexArgs): Promise<{}> {
 		ReportLevel.INFO, `Finished in ${endTime[0]}s ${endTime[1]}ms`);
 	oTaskRunnerReporter.reportCollected(ReportLevel.INFO);
 	const result = oTaskRunnerReporter.finalize();
-	if (bDryRun && oTaskRunnerReporter.getFindings().length > 0) {
+
+	// check if there are potential replacements with "analyze" exit with an
+	// error similar to eslint, then it can be used within a CI
+	if (bAnalyze && oTaskRunnerReporter.getFindings().length > 0) {
 		oTaskRunnerReporter.report(
-			ReportLevel.WARNING,
+			ReportLevel.TRACE,
 			`Findings: ${JSON.stringify(oTaskRunnerReporter.getFindings())}`);
 		throw new Error("Found entries to be migrated!");
 	}

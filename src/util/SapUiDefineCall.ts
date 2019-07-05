@@ -92,6 +92,11 @@ export class SapUiDefineCall {
 		this.name = moduleName;
 		this.reporter = reporter;
 		this.dependencyArray = null;
+
+		/**
+		 * can be checked if the to determine if the sap.ui.define call is
+		 * usable for the tasks
+		 */
 		this.factory = null;
 
 		this.bExportsNode = null;
@@ -116,6 +121,8 @@ export class SapUiDefineCall {
 			this.dependencyInsertionIdx = this.dependencyArray.elements.length;
 		}
 
+		// There are sap.ui.defines which do not contain a function.
+		// These should not fail here. The #factory property is then null.
 		if (args[i] && args[i].type === Syntax.FunctionExpression) {
 			this.factory = args[i++] as ESTree.FunctionExpression;
 			const params = this.factory.params;

@@ -37,6 +37,12 @@ export interface ReportContext {
 	logPrefix?: string;
 }
 
+/**
+ * Transforms an ESTree.SourceLocation into a FindingLocation.
+ * Because the ESTree.SourceLocation contains too many properties while
+ * FindingLocation only contains the needed properties.
+ * @param loc
+ */
 export function fromLoc(loc: ESTree.SourceLocation): FindingLocation {
 	if (!loc) {
 		return { endLine : 0, endColumn : 0, startLine : 0, startColumn : 0 };
@@ -49,6 +55,9 @@ export function fromLoc(loc: ESTree.SourceLocation): FindingLocation {
 	};
 }
 
+/**
+ * Source code location
+ */
 export interface FindingLocation {
 	endLine: number;
 	endColumn: number;
@@ -56,10 +65,13 @@ export interface FindingLocation {
 	startColumn: number;
 }
 
+/**
+ * Represents a Finding of code to replace
+ */
 export interface Finding {
-	msg: string;
+	message: string;
 	location: FindingLocation;
-	filename: string;
+	fileName: string;
 	taskName: string;
 }
 

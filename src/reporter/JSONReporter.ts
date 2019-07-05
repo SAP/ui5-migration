@@ -1,6 +1,7 @@
 import * as ESTree from "estree";
 
-import {CompareReportLevel, Finding, fromLoc, ReportContext, Reporter, ReportLevel} from "./Reporter";
+import {BaseReporter} from "./BaseReporter";
+import {CompareReportLevel, ReportContext, ReportLevel} from "./Reporter";
 
 export interface JSONReporterResult {
 	reports: JSONReporterItem[];
@@ -18,36 +19,17 @@ export interface JSONReporterItem {
 	};
 }
 
-export class JSONReporter implements Reporter {
+export class JSONReporter extends BaseReporter {
 	sLevel: ReportLevel;
 	aItems: JSONReporterItem[];
 	sFileName: string;
-	oContext: ReportContext;
 	oMap: Map<string, string[]|number> = new Map();
-	findings: Finding[];
 
 	constructor(level: ReportLevel) {
+		super();
 		this.sLevel = level;
 		this.sFileName = "";
 		this.aItems = [];
-		this.oContext = {};
-		this.findings = [];
-	}
-
-	storeFinding(msg: string, loc?: ESTree.SourceLocation) {
-		this.findings.push({
-			filename : this.oContext.fileName,
-			location : fromLoc(loc),
-			msg,
-			taskName : this.oContext.taskName
-		});
-	}
-
-	/**
-	 * get reported entries
-	 */
-	getFindings(): Finding[] {
-		return this.findings;
 	}
 
 	report(level: ReportLevel, msg: string, locNode?: ESTree.SourceLocation) {
@@ -69,7 +51,7 @@ export class JSONReporter implements Reporter {
 			fileName : this.sFileName,
 			level,
 			codeReplacement : !!locNode,
-			context : this.oContext,
+			context : this.getContext(),
 			message : msg,
 			location : {
 				start : {
@@ -116,14 +98,6 @@ export class JSONReporter implements Reporter {
 			}
 		});
 		this.oMap.clear();
-	}
-
-	setContext(oContext: ReportContext): void {
-		this.oContext = oContext;
-	}
-
-	getContext(): ReportContext {
-		return this.oContext;
 	}
 
 	async finalize(): Promise<JSONReporterResult> {
