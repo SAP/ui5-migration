@@ -22,9 +22,12 @@ export interface Finder {
 	 * @param {object} config configuration object which can be enriched as it gets
 	 * passed through to replacer and extender
 	 * @param {string} sConfigName the input config name, set it within the
+	 * @param {SapUiDefineCall} defineCall the definecall
 	 * @returns {FinderResult} to indicate a finding
 	 */
-	find(node: ESTree.Node, config: {}, sConfigName: string): FinderResult;
+	find(
+		node: ESTree.Node, config: {}, sConfigName: string,
+		defineCall: SapUiDefineCall): FinderResult;
 }
 
 /**

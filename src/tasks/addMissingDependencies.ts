@@ -54,12 +54,12 @@ function mapToFound(oPath: NodePath, oFound: FoundReplacement): FoundCall {
 }
 
 const visit = function(
-	analysis: Analysis, oModuleTree: {}, finders: { [name: string]: Finder },
-	reporter: Reporter) {
+	analysis: Analysis, oModuleTree: {}, finders: { [p: string]: Finder },
+	reporter: Reporter, defineCall: SapUiDefineCall) {
 	// @ts-ignore
 	return function(oPath) {
-		const aFound =
-			isFoundInConfig(oPath.value, oPath, oModuleTree, finders);
+		const aFound = isFoundInConfig(
+			oPath.value, oPath, oModuleTree, finders, defineCall);
 		if (aFound.length > 0) {
 			analysis.replaceCalls = analysis.replaceCalls.concat(
 				aFound.map(mapToFound.bind(null, oPath)));
@@ -95,17 +95,18 @@ function findCallsToReplace(
 	while (aStack.length > 0) {
 		visitor.visit(aStack.shift(), {
 			visitMemberExpression :
-				visit(analysis, oModuleTree, finders, reporter),
+				visit(analysis, oModuleTree, finders, reporter, defineCall),
 			// simple-identifier call (e.g. jQuery("xxx"))
 			visitCallExpression :
-				visit(analysis, oModuleTree, finders, reporter),
+				visit(analysis, oModuleTree, finders, reporter, defineCall),
 			visitBinaryExpression :
-				visit(analysis, oModuleTree, finders, reporter),
+				visit(analysis, oModuleTree, finders, reporter, defineCall),
 			visitVariableDeclarator :
-				visit(analysis, oModuleTree, finders, reporter),
-			visitIdentifier : visit(analysis, oModuleTree, finders, reporter),
+				visit(analysis, oModuleTree, finders, reporter, defineCall),
+			visitIdentifier :
+				visit(analysis, oModuleTree, finders, reporter, defineCall),
 			visitLogicalExpression :
-				visit(analysis, oModuleTree, finders, reporter)
+				visit(analysis, oModuleTree, finders, reporter, defineCall)
 		});
 	}
 
@@ -115,10 +116,11 @@ function findCallsToReplace(
 
 function isFoundInConfig(
 	oNode: ESTree.Node, oNodePath: NodePath, oModuleTree: {
-		[index: string]:
-			{ [index: string]: { finder: string, newModulePath: string } }
+		[p: string]:
+			{ [p: string]: { finder: string; newModulePath : string } }
 	},
-	finder: { [name: string]: Finder }): FoundReplacement[] {
+	finder: { [p: string]: Finder },
+	defineCall: SapUiDefineCall): FoundReplacement[] {
 	const aCalls = [];
 	for (const sModule in oModuleTree) {
 		if (oModuleTree.hasOwnProperty(sModule)) {
@@ -127,8 +129,8 @@ function isFoundInConfig(
 				if (oModule.hasOwnProperty(sModuleInner)) {
 					const oModuleInner = oModule[sModuleInner];
 					const oFinder: Finder = finder[oModuleInner.finder];
-					const oResult: FinderResult =
-						oFinder.find(oNode, oModuleInner, sModuleInner);
+					const oResult: FinderResult = oFinder.find(
+						oNode, oModuleInner, sModuleInner, defineCall);
 					if (oResult && oResult !== EMPTY_FINDER_RESULT) {
 						aCalls.push({
 							module : sModule,

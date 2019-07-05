@@ -5,6 +5,7 @@ import * as recast from "recast";
 import {NodePath} from "ui5-migration";
 
 import {EMPTY_FINDER_RESULT, Finder, FinderResult} from "../../../dependencies";
+import {SapUiDefineCall} from "../../../util/SapUiDefineCall";
 
 
 /**
@@ -48,7 +49,7 @@ const fnNestedMember = function(node: ESTree.Node, aList: string[]): boolean {
 class JQuerySapFunctionFinder implements Finder {
 	find(
 		node: ESTree.Node, config: { finderIncludesName: string },
-		sConfigName: string): FinderResult {
+		sConfigName: string, defineCall: SapUiDefineCall): FinderResult {
 		const aObject = sConfigName.split(".");  // jQuery.sap.extend
 
 

@@ -4,6 +4,7 @@ import * as recast from "recast";
 import {NodePath} from "ui5-migration";
 
 import {EMPTY_FINDER_RESULT, Finder, FinderResult} from "../../../dependencies";
+import {SapUiDefineCall} from "../../../util/SapUiDefineCall";
 
 
 /**
@@ -16,7 +17,9 @@ import {EMPTY_FINDER_RESULT, Finder, FinderResult} from "../../../dependencies";
  * </code>
  */
 class AssignReplacementFinder implements Finder {
-	find(node: ESTree.Node, config: {}, sConfigName: string): FinderResult {
+	find(
+		node: ESTree.Node, config: {}, sConfigName: string,
+		defineCall: SapUiDefineCall): FinderResult {
 		if (node.type === Syntax.CallExpression &&
 			node.callee.type === Syntax.MemberExpression &&
 			node.callee.object.type === Syntax.MemberExpression &&

@@ -5,7 +5,7 @@
 				"newModulePath": "sap/ui/dom/jquery/cursorPos",
 				"replacer": "AddComment",
 				"commentText": " jQuery Plugin \"cursorPos\"",
-				"finder": "FunctionExtensionFinder",
+				"finder": "FunctionExtensionFinderWithDependencyCheck",
 				"extender": "AddUnusedImportWithComment",
 				"version": "^1.58.0"
 			},
@@ -13,7 +13,7 @@
 				"newModulePath": "sap/ui/dom/jquery/control",
 				"replacer": "AddComment",
 				"commentText": " jQuery Plugin \"control\"",
-				"finder": "JQueryFunctionExtensionFinder",
+				"finder": "JQueryFunctionExtensionFinderWithDependencyCheck",
 				"extender": "AddUnusedImportWithComment",
 				"version": "^1.58.0"
 			},
@@ -21,7 +21,7 @@
 				"newModulePath": "sap/ui/dom/jquery/Focusable",
 				"replacer": "AddComment",
 				"commentText": " jQuery Plugin \"firstFocusableDomRef\"",
-				"finder": "FunctionExtensionFinder",
+				"finder": "FunctionExtensionFinderWithDependencyCheck",
 				"extender": "AddUnusedImportWithComment",
 				"version": "^1.58.0"
 			},
@@ -29,7 +29,7 @@
 				"newModulePath": "sap/ui/dom/jquery/Focusable",
 				"replacer": "AddComment",
 				"commentText": " jQuery Plugin \"lastFocusableDomRef\"",
-				"finder": "FunctionExtensionFinder",
+				"finder": "FunctionExtensionFinderWithDependencyCheck",
 				"extender": "AddUnusedImportWithComment",
 				"version": "^1.58.0"
 			},
@@ -37,7 +37,7 @@
 				"newModulePath": "sap/ui/dom/jquery/getSelectedText",
 				"replacer": "AddComment",
 				"commentText": " jQuery Plugin \"getSelectedText\"",
-				"finder": "JQueryFunctionExtensionFinder",
+				"finder": "JQueryFunctionExtensionFinderWithDependencyCheck",
 				"extender": "AddUnusedImportWithComment",
 				"version": "^1.58.0"
 			},
@@ -45,7 +45,7 @@
 				"newModulePath": "sap/ui/dom/jquery/hasTabIndex",
 				"replacer": "AddComment",
 				"commentText": " jQuery Plugin \"hasTabIndex\"",
-				"finder": "FunctionExtensionFinder",
+				"finder": "FunctionExtensionFinderWithDependencyCheck",
 				"extender": "AddUnusedImportWithComment",
 				"version": "^1.58.0"
 			},
@@ -53,7 +53,7 @@
 				"newModulePath": "sap/ui/dom/jquery/parentByAttribute",
 				"replacer": "AddComment",
 				"commentText": " jQuery Plugin \"parentByAttribute\"",
-				"finder": "FunctionExtensionFinder",
+				"finder": "FunctionExtensionFinderWithDependencyCheck",
 				"extender": "AddUnusedImportWithComment",
 				"version": "^1.58.0"
 			},
@@ -61,7 +61,7 @@
 				"newModulePath": "sap/ui/dom/jquery/rect",
 				"replacer": "AddComment",
 				"commentText": " jQuery Plugin \"rect\"",
-				"finder": "FunctionExtensionFinder",
+				"finder": "FunctionExtensionFinderWithDependencyCheck",
 				"extender": "AddUnusedImportWithComment",
 				"version": "^1.58.0"
 			},
@@ -69,7 +69,7 @@
 				"newModulePath": "sap/ui/dom/jquery/rectContains",
 				"replacer": "AddComment",
 				"commentText": " jQuery Plugin \"rectContains\"",
-				"finder": "FunctionExtensionFinder",
+				"finder": "FunctionExtensionFinderWithDependencyCheck",
 				"extender": "AddUnusedImportWithComment",
 				"version": "^1.58.0"
 			},
@@ -77,7 +77,7 @@
 				"newModulePath": "sap/ui/dom/jquery/scrollLeftRTL",
 				"replacer": "AddComment",
 				"commentText": " jQuery Plugin \"scrollLeftRTL\"",
-				"finder": "FunctionExtensionFinder",
+				"finder": "FunctionExtensionFinderWithDependencyCheck",
 				"extender": "AddUnusedImportWithComment",
 				"version": "^1.58.0"
 			},
@@ -85,7 +85,7 @@
 				"newModulePath": "sap/ui/dom/jquery/scrollRightRTL",
 				"replacer": "AddComment",
 				"commentText": " jQuery Plugin \"scrollRightRTL\"",
-				"finder": "FunctionExtensionFinder",
+				"finder": "FunctionExtensionFinderWithDependencyCheck",
 				"extender": "AddUnusedImportWithComment",
 				"version": "^1.58.0"
 			},
@@ -93,7 +93,7 @@
 				"newModulePath": "sap/ui/dom/jquery/Selection",
 				"replacer": "AddComment",
 				"commentText": " jQuery Plugin \"disableSelection\"",
-				"finder": "FunctionExtensionFinder",
+				"finder": "FunctionExtensionFinderWithDependencyCheck",
 				"extender": "AddUnusedImportWithComment",
 				"version": "^1.58.0"
 			},
@@ -101,7 +101,7 @@
 				"newModulePath": "sap/ui/dom/jquery/Selection",
 				"replacer": "AddComment",
 				"commentText": " jQuery Plugin \"enableSelection\"",
-				"finder": "FunctionExtensionFinder",
+				"finder": "FunctionExtensionFinderWithDependencyCheck",
 				"extender": "AddUnusedImportWithComment",
 				"version": "^1.58.0"
 			},
@@ -109,7 +109,7 @@
 				"newModulePath": "sap/ui/dom/jquery/selectText",
 				"replacer": "AddComment",
 				"commentText": " jQuery Plugin \"selectText\"",
-				"finder": "JQueryFunctionExtensionFinder",
+				"finder": "JQueryFunctionExtensionFinderWithDependencyCheck",
 				"extender": "AddUnusedImportWithComment",
 				"version": "^1.58.0"
 			},
@@ -117,7 +117,7 @@
 				"newModulePath": "sap/ui/dom/jquery/zIndex",
 				"replacer": "AddComment",
 				"commentText": " jQuery Plugin \"zIndex\"",
-				"finder": "JQueryFunctionExtensionFinder",
+				"finder": "JQueryFunctionExtensionFinderWithDependencyCheck",
 				"extender": "AddUnusedImportWithComment",
 				"version": "^1.58.0"
 			},
@@ -125,7 +125,7 @@
 				"newModulePath": "sap/ui/dom/jquery/Aria",
 				"replacer": "AddComment",
 				"commentText": " jQuery Plugin \"addAriaLabelledBy\"",
-				"finder": "JQueryFunctionExtensionFinder",
+				"finder": "JQueryFunctionExtensionFinderWithDependencyCheck",
 				"extender": "AddUnusedImportWithComment",
 				"version": "^1.58.0"
 			},
@@ -133,7 +133,7 @@
 				"newModulePath": "sap/ui/dom/jquery/Aria",
 				"replacer": "AddComment",
 				"commentText": " jQuery Plugin \"removeAriaLabelledBy\"",
-				"finder": "JQueryFunctionExtensionFinder",
+				"finder": "JQueryFunctionExtensionFinderWithDependencyCheck",
 				"extender": "AddUnusedImportWithComment",
 				"version": "^1.58.0"
 			},
@@ -141,7 +141,7 @@
 				"newModulePath": "sap/ui/dom/jquery/Aria",
 				"replacer": "AddComment",
 				"commentText": " jQuery Plugin \"addAriaDescribedBy\"",
-				"finder": "JQueryFunctionExtensionFinder",
+				"finder": "JQueryFunctionExtensionFinderWithDependencyCheck",
 				"extender": "AddUnusedImportWithComment",
 				"version": "^1.58.0"
 			},
@@ -149,7 +149,7 @@
 				"newModulePath": "sap/ui/dom/jquery/Aria",
 				"replacer": "AddComment",
 				"commentText": " jQuery Plugin \"removeAriaDescribedBy\"",
-				"finder": "JQueryFunctionExtensionFinder",
+				"finder": "JQueryFunctionExtensionFinderWithDependencyCheck",
 				"extender": "AddUnusedImportWithComment",
 				"version": "^1.58.0"
 			}
@@ -159,7 +159,7 @@
 				"newModulePath": "sap/ui/dom/jquery/Selectors",
 				"replacer": "AddComment",
 				"commentText": " jQuery custom selectors \":sapTabbable\"",
-				"finder": "CallWithArgumentFinder",
+				"finder": "CallWithArgumentFinderWithDependencyCheck",
 				"finderIncludesName": ":sapTabbable",
 				"extender": "AddUnusedImportWithComment",
 				"version": "^1.58.0"
@@ -168,7 +168,7 @@
 				"newModulePath": "sap/ui/dom/jquery/Selectors",
 				"replacer": "AddComment",
 				"commentText": " jQuery custom selectors \":focusable\"",
-				"finder": "CallWithArgumentFinder",
+				"finder": "CallWithArgumentFinderWithDependencyCheck",
 				"finderIncludesName": ":focusable",
 				"extender": "AddUnusedImportWithComment",
 				"version": "^1.58.0"
@@ -177,7 +177,7 @@
 				"newModulePath": "sap/ui/dom/jquery/Selectors",
 				"replacer": "AddComment",
 				"commentText": " jQuery custom selectors \":sapFocusable\"",
-				"finder": "CallWithArgumentFinder",
+				"finder": "CallWithArgumentFinderWithDependencyCheck",
 				"finderIncludesName": ":sapFocusable",
 				"extender": "AddUnusedImportWithComment",
 				"version": "^1.58.0"
@@ -186,10 +186,11 @@
 	},
 	"finders": {
 		"FunctionExtensionFinder": "tasks/helpers/finders/FunctionExtensionFinder.js",
+		"FunctionExtensionFinderWithDependencyCheck": "tasks/helpers/finders/FunctionExtensionFinderWithDependencyCheck.js",
 		"JQueryFunctionExtensionFinder": "tasks/helpers/finders/JQueryFunctionExtensionFinder.js",
+		"JQueryFunctionExtensionFinderWithDependencyCheck": "tasks/helpers/finders/JQueryFunctionExtensionFinderWithDependencyCheck.js",
 		"CallWithArgumentFinder": "tasks/helpers/finders/CallWithArgumentFinder.js",
-		"JQuerySapExtendFinder": "tasks/helpers/finders/JQuerySapExtendFinder.js",
-		"AssignReplacementFinder": "tasks/helpers/finders/AssignReplacementFinder.js"
+		"CallWithArgumentFinderWithDependencyCheck": "tasks/helpers/finders/CallWithArgumentFinderWithDependencyCheck.js"
 	},
 	"extenders": {
 		"AddUnusedImport": "tasks/helpers/extenders/AddUnusedImport.js",
