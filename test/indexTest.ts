@@ -109,7 +109,7 @@ function(uid, Log) { uid(); Log.info(asd);
 
 	it("migrateString should jQuery calls with tasks only", function() {
 		// increase test timeout since this test is long running
-		this.timeout(5000);
+		this.timeout(10000);
 		return migrateString(
 				   [ "replace-globals" ], `sap.ui.define([], function(){
 				jQuery.sap.uid();
