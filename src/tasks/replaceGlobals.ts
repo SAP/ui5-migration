@@ -96,11 +96,13 @@ function isCalleeMatchingModulesToReplace(
 	}
 
 	let oCurObject = oModuleTree;
+	const aParts = [];
 	for (const memberExprPart of memberExprParts) {
 		if (oCurObject.hasOwnProperty(memberExprPart)) {
+			aParts.push(memberExprPart);
 			oCurObject = oCurObject[memberExprPart];
 		} else {
-			return "*" in oCurObject ? memberExprParts.join(".") : undefined;
+			return "*" in oCurObject ? aParts.concat("*").join(".") : undefined;
 		}
 	}
 	return memberExprParts.join(".");
@@ -165,6 +167,11 @@ function wouldReplaceCall(
 	const callToReplaceInConfig = [
 		configEntry.newVariableName, configEntry.functionName
 	].filter(Boolean).join(".");
+
+	// special module LEAVE never triggers a replacement
+	if (configEntry.replacer && configEntry.replacer === "LEAVE") {
+		return false;
+	}
 
 	// already present and would replace it with the same
 	// e.g. "jQuery.get": {

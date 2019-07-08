@@ -3,6 +3,7 @@ import {Node, SourceLocation} from "estree";
 
 import * as Mod from "../../src/Migration";
 import {AnalyseArguments, MigrateArguments, ReportLevel} from "../../src/Migration";
+import {BaseReporter} from "../../src/reporter/BaseReporter";
 import {MetaConsoleReporter} from "../../src/reporter/MetaConsoleReporter";
 import {Finding, ReportContext, Reporter} from "../../src/reporter/Reporter";
 import {MigrationTask} from "../../src/taskRunner";
@@ -38,11 +39,12 @@ export class CustomMetaReporter extends MetaConsoleReporter {
 	}
 }
 
-export class CustomReporter implements Reporter {
+export class CustomReporter extends BaseReporter {
 	private reports: string[];
 	private level: string;
 
 	constructor(reports = [], level = "debug") {
+		super();
 		this.reports = reports;
 		this.level = level;
 	}
@@ -67,22 +69,8 @@ export class CustomReporter implements Reporter {
 		return Promise.resolve({});
 	}
 
-	setContext(oContext: ReportContext): void {
-	}
-
-	getContext(): ReportContext {
-		return {};
-	}
-
 	getReports() {
 		return this.reports;
-	}
-
-	getFindings(): Finding[] {
-		return [];
-	}
-
-	storeFinding(msg: string, loc?: SourceLocation) {
 	}
 }
 
@@ -91,7 +79,9 @@ export class CustomFileInfo implements Mod.FileInfo {
 	private name: string;
 	private ast: ESTree.Node;
 	private namespace: string;
+	private path: string;
 	constructor(path: string, namespace?: string) {
+		this.path = path;
 		this.name = path.replace(/\.js$/, "");
 		this.sourceCode = fs.readFileSync(path, "utf8");
 		this.ast = recast.parse(this.sourceCode).program;
@@ -115,7 +105,7 @@ export class CustomFileInfo implements Mod.FileInfo {
 	}
 
 	getPath(): string {
-		return "";
+		return this.path;
 	}
 
 	loadContent(): Promise<Node> {
