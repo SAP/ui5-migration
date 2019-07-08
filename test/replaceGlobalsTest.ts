@@ -1,6 +1,5 @@
 import {analyse, migrate} from "../src/tasks/replaceGlobals";
 
-import * as assertEqualNormalized from "./assertEqualNormalized";
 import {CustomFileFinder, CustomFileInfo, CustomReporter} from "./util/testUtils";
 
 const fs = require("graceful-fs");
@@ -13,10 +12,17 @@ const fileFinder = new CustomFileFinder();
 function analyseMigrateAndTest(
 	module: CustomFileInfo, expectedModification: boolean,
 	expectedContent: string, config: {}, done: Function,
-	expectedReports: string[] = [], level = "trace", targetVersion = "latest") {
+	expectedReports: string[] = [], level = "trace", targetVersion = "latest",
+	findings = undefined) {
 	const reporter = new CustomReporter([], level);
+	reporter.setContext(
+		{ fileName : module.getPath(), taskName : "replaceGlobals" });
 	analyse({ file : module, fileFinder, reporter, config, targetVersion })
 		.then(function(analyseResult) {
+			if (findings) {
+				assert.deepStrictEqual(
+					reporter.getFindings(), findings, "Findings must match");
+			}
 			if (analyseResult && migrate) {
 				return migrate({
 					file : module,
@@ -182,12 +188,25 @@ describe("replaceGlobals", function() {
 				   const config = JSON.parse(fs.readFileSync(
 					   rootDir + "reuseVar.config.json", "utf8"));
 				   const module = new CustomFileInfo(rootDir + "reuseVar.js");
-				   analyseMigrateAndTest(module, true, expectedContent, config, done, [
-					   "trace: 10: Replace global call with \"sap.base.security.encodeXML\"",
-					   "trace: 10: Found call to replace \"jQuery.sap.encodeXML\"",
-					   "trace: 10: Replaced call \"jQuery.sap.encodeXML\"",
-					   "trace: 7: Remove dependency \"jquery.sap.encoder\""
-				   ]);
+				   analyseMigrateAndTest(
+					   module, true, expectedContent, config, done,
+					   [
+						   "trace: 10: Replace global call with \"sap.base.security.encodeXML\"",
+						   "trace: 10: Found call to replace \"jQuery.sap.encodeXML\"",
+						   "trace: 10: Replaced call \"jQuery.sap.encodeXML\"",
+						   "trace: 7: Remove dependency \"jquery.sap.encoder\""
+					   ],
+					   "trace", "latest", [ {
+						   fileName : "./test/replaceGlobals/reuseVar.js",
+						   location : {
+							   endColumn : 28,
+							   endLine : 10,
+							   startColumn : 8,
+							   startLine : 10
+						   },
+						   message : "found deprecated global",
+						   taskName : "replaceGlobals"
+					   } ]);
 			   });
 
 			it("should replaceGlobals unusedGlobals", function(done) {
@@ -197,10 +216,12 @@ describe("replaceGlobals", function() {
 					rootDir + "unusedGlobals.config.json", "utf8"));
 				const module = new CustomFileInfo(rootDir + "unusedGlobals.js");
 				analyseMigrateAndTest(
-					module, true, expectedContent, config, done, [
+					module, true, expectedContent, config, done,
+					[
 						"trace: 7: Remove dependency \"jquery.sap.mod1\"",
 						"trace: 7: Remove dependency \"jquery.sap.mod3\""
-					]);
+					],
+					"trace", "latest", []);
 			});
 
 			it("should replaceGlobals asterisk", function(done) {
@@ -209,12 +230,25 @@ describe("replaceGlobals", function() {
 				const config = JSON.parse(
 					fs.readFileSync(rootDir + "asterisk.config.json", "utf8"));
 				const module = new CustomFileInfo(rootDir + "asterisk.js");
-				analyseMigrateAndTest(module, true, expectedContent, config, done, [
-					"trace: 22: Replace global call with \"sap.base.i18n.ResourceBundle\"",
-					"trace: 22: Found call to replace \"jQuery.sap.resources.isBundle\"",
-					"trace: 22: Replaced call \"jQuery.sap.resources\"",
-					"trace: 7: Add dependency \"sap/base/i18n/ResourceBundle\" named \"ResourceBundle\""
-				]);
+				analyseMigrateAndTest(
+					module, true, expectedContent, config, done,
+					[
+						"trace: 22: Replace global call with \"sap.base.i18n.ResourceBundle\"",
+						"trace: 22: Found call to replace \"jQuery.sap.resources.isBundle\"",
+						"trace: 22: Replaced call \"jQuery.sap.resources\"",
+						"trace: 7: Add dependency \"sap/base/i18n/ResourceBundle\" named \"ResourceBundle\""
+					],
+					"trace", "latest", [ {
+						fileName : "./test/replaceGlobals/asterisk.js",
+						location : {
+							endColumn : 45,
+							endLine : 22,
+							startColumn : 16,
+							startLine : 22
+						},
+						message : "found deprecated global",
+						taskName : "replaceGlobals"
+					} ]);
 			});
 
 			it("should replaceGlobals startsWith", function(done) {
@@ -670,7 +704,8 @@ describe("replaceGlobals", function() {
 				const module =
 					new CustomFileInfo(rootDir + "nativeFunction.js");
 				analyseMigrateAndTest(
-					module, true, expectedContent, config, done, [
+					module, true, expectedContent, config, done,
+					[
 						"trace: 22: Replace global call with \"eval\"",
 						"trace: 22: Found call to replace \"jQuery.sap.eval\"",
 						"trace: 24: Replace global call with \"eval\"",
@@ -678,6 +713,32 @@ describe("replaceGlobals", function() {
 						"trace: 22: Replaced call \"jQuery.sap.eval\"",
 						"trace: 24: Replaced call \"jQuery.sap.eval\"",
 						"trace: 7: Remove dependency \"jquery.sap.global\"",
+					],
+					"trace", "latest", [
+						{
+							fileName :
+								"./test/replaceGlobals/nativeFunction.js",
+							location : {
+								endColumn : 27,
+								endLine : 22,
+								startColumn : 12,
+								startLine : 22
+							},
+							message : "found deprecated global",
+							taskName : "replaceGlobals"
+						},
+						{
+							fileName :
+								"./test/replaceGlobals/nativeFunction.js",
+							location : {
+								endColumn : 35,
+								endLine : 24,
+								startColumn : 20,
+								startLine : 24
+							},
+							message : "found deprecated global",
+							taskName : "replaceGlobals"
+						}
 					]);
 			});
 
@@ -1185,11 +1246,23 @@ describe("replaceGlobals", function() {
 					fs.readFileSync(rootDir + "assignmodfunc.config.json"));
 				const module = new CustomFileInfo(rootDir + "assignmodfunc.js");
 				analyseMigrateAndTest(
-					module, true, expectedContent, config, done, [
+					module, true, expectedContent, config, done,
+					[
 						"trace: 16: Replace global call with \"do.not.import\"",
 						"trace: 16: Found call to replace \"jQuery.sap.func\"",
 						"trace: 16: Replaced call \"jQuery.sap.func\""
-					]);
+					],
+					"trace", "latest", [ {
+						fileName : "./test/replaceGlobals/assignmodfunc.js",
+						location : {
+							endColumn : 23,
+							endLine : 16,
+							startColumn : 8,
+							startLine : 16
+						},
+						message : "found deprecated global",
+						taskName : "replaceGlobals"
+					} ]);
 			});
 
 			it("should be able to replace it as part of the arguments (array)",
@@ -1200,13 +1273,25 @@ describe("replaceGlobals", function() {
 					   fs.readFileSync(rootDir + "mock.config.json"));
 				   const module = new CustomFileInfo(rootDir + "mock.js");
 				   analyseMigrateAndTest(
-					   module, true, expectedContent, config, done, [
+					   module, true, expectedContent, config, done,
+					   [
 						   "trace: 22: Replace global call with \"sap.base.Log\"",
 						   "trace: 22: Found call to replace \"jQuery.sap.log\"",
 						   "trace: 22: Replaced call \"jQuery.sap.log\"",
 						   "trace: 7: Add dependency \"sap/base/Log\" named \"Log\"",
 						   "trace: 7: Remove dependency \"jquery.sap.global\""
-					   ]);
+					   ],
+					   "trace", "latest", [ {
+						   fileName : "./test/replaceGlobals/mock.js",
+						   location : {
+							   endColumn : 32,
+							   endLine : 22,
+							   startColumn : 18,
+							   startLine : 22
+						   },
+						   message : "found deprecated global",
+						   taskName : "replaceGlobals"
+					   } ]);
 			   });
 
 			it("should set import names if necessary", function(done) {
@@ -1654,16 +1739,42 @@ describe("replaceGlobals", function() {
 				const config = JSON.parse(
 					fs.readFileSync(rootDir + "isPlainObject.config.json"));
 				const module = new CustomFileInfo(rootDir + "isPlainObject.js");
-				analyseMigrateAndTest(module, true, expectedContent, config, done, [
-					"trace: 25: Replace global call with \"sap.base.util.isPlainObject\"",
-					"trace: 25: Found call to replace \"jQuery.isPlainObject\"",
-					"trace: 22: Replace global call with \"sap.base.util.isPlainObject\"",
-					"trace: 22: Found call to replace \"jQuery.isPlainObject\"",
-					"trace: 25: Replaced call \"jQuery.isPlainObject\"",
-					"trace: 22: Replaced call \"jQuery.isPlainObject\"",
-					"trace: 7: Add dependency \"sap/base/util/isPlainObject\" named \"isPlainObject\"",
-					"trace: 7: Remove dependency \"sap/ui/thirdparty/jquery\""
-				]);
+				analyseMigrateAndTest(
+					module, true, expectedContent, config, done,
+					[
+						"trace: 25: Replace global call with \"sap.base.util.isPlainObject\"",
+						"trace: 25: Found call to replace \"jQuery.isPlainObject\"",
+						"trace: 22: Replace global call with \"sap.base.util.isPlainObject\"",
+						"trace: 22: Found call to replace \"jQuery.isPlainObject\"",
+						"trace: 25: Replaced call \"jQuery.isPlainObject\"",
+						"trace: 22: Replaced call \"jQuery.isPlainObject\"",
+						"trace: 7: Add dependency \"sap/base/util/isPlainObject\" named \"isPlainObject\"",
+						"trace: 7: Remove dependency \"sap/ui/thirdparty/jquery\""
+					],
+					"trace", "latest", [
+						{
+							fileName : "./test/replaceGlobals/isPlainObject.js",
+							location : {
+								endColumn : 48,
+								endLine : 25,
+								startColumn : 28,
+								startLine : 25
+							},
+							message : "found deprecated global",
+							taskName : "replaceGlobals"
+						},
+						{
+							fileName : "./test/replaceGlobals/isPlainObject.js",
+							location : {
+								endColumn : 36,
+								endLine : 22,
+								startColumn : 16,
+								startLine : 22
+							},
+							message : "found deprecated global",
+							taskName : "replaceGlobals"
+						}
+					]);
 			});
 
 			it("isPlainObject with other jQuery", function(done) {
@@ -1748,11 +1859,25 @@ describe("replaceGlobals", function() {
 					rootDir + "jqueryExtendSkipImport.config.json"));
 				const module =
 					new CustomFileInfo(rootDir + "jqueryExtendSkipImport.js");
-				analyseMigrateAndTest(module, true, expectedContent, config, done, [
-					"trace: 22: Replace global call with \"sap.ui.thirdparty.jquery\"",
-					"trace: 22: Found call to replace \"jQuery.extend\"",
-					"trace: 22: Replaced call \"jQuery.extend\""
-				]);
+				analyseMigrateAndTest(
+					module, true, expectedContent, config, done,
+					[
+						"trace: 22: Replace global call with \"sap.ui.thirdparty.jquery\"",
+						"trace: 22: Found call to replace \"jQuery.extend\"",
+						"trace: 22: Replaced call \"jQuery.extend\""
+					],
+					"trace", "latest", [ {
+						fileName :
+							"./test/replaceGlobals/jqueryExtendSkipImport.js",
+						location : {
+							endColumn : 25,
+							endLine : 22,
+							startColumn : 12,
+							startLine : 22
+						},
+						message : "found deprecated global",
+						taskName : "replaceGlobals"
+					} ]);
 			});
 
 			it("should replace and add dependency for extend", function(done) {
@@ -1849,7 +1974,8 @@ describe("replaceGlobals", function() {
 					rootDir + "jqueryTrim.config.json", "utf8"));
 				const module = new CustomFileInfo(rootDir + "jqueryTrim.js");
 				analyseMigrateAndTest(
-					module, true, expectedContent, config, done, [
+					module, true, expectedContent, config, done,
+					[
 						"trace: 22: Deprecated call of type jQueryTrim",
 						"trace: 22: Found call to replace \"jQuery.trim\"",
 						"trace: 23: Deprecated call of type jQueryTrim",
@@ -1857,6 +1983,30 @@ describe("replaceGlobals", function() {
 						"trace: 22: Replaced call \"jQuery.trim\"",
 						"trace: 23: Replaced call \"jQuery.trim\"",
 						"trace: 7: Remove dependency \"sap/ui/thirdparty/jquery\""
+					],
+					"trace", "latest", [
+						{
+							fileName : "./test/replaceGlobals/jqueryTrim.js",
+							location : {
+								endColumn : 32,
+								endLine : 22,
+								startColumn : 21,
+								startLine : 22
+							},
+							message : "found deprecated global",
+							taskName : "replaceGlobals"
+						},
+						{
+							fileName : "./test/replaceGlobals/jqueryTrim.js",
+							location : {
+								endColumn : 34,
+								endLine : 23,
+								startColumn : 23,
+								startLine : 23
+							},
+							message : "found deprecated global",
+							taskName : "replaceGlobals"
+						}
 					]);
 			});
 
@@ -1950,7 +2100,8 @@ describe("replaceGlobals", function() {
 				const module = new CustomFileInfo(rootDir + "invalidDefine.js");
 				analyseMigrateAndTest(
 					module, false, expectedContent, config, done,
-					[ "warning: invalid sap.ui.define call without factory" ]);
+					[ "warning: invalid sap.ui.define call without factory" ],
+					"trace", "latest", []);
 			});
 
 			it("leave with comment", function(done) {
@@ -1960,12 +2111,14 @@ describe("replaceGlobals", function() {
 					fs.readFileSync(rootDir + "leave.config.json", "utf8"));
 				const module = new CustomFileInfo(rootDir + "leave.js");
 				analyseMigrateAndTest(
-					module, true, expectedContent, config, done, [
+					module, true, expectedContent, config, done,
+					[
 						"trace: 23: Replace global call with \"LEAVE\"",
 						"trace: 23: Found call to replace \"jQuery.sap.history\"",
 						"debug: 23: ignored element: jQuery.sap.history",
 						"error: 23: Error: Ignore"
-					]);
+					],
+					"trace", "latest", []);
 			});
 		});
 });
