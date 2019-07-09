@@ -1,6 +1,6 @@
 # Commandline-Interface (CLI)
 
-An overview of the cli commands will be printed by executing 
+An overview of the cli commands will be printed by executing
 ```shell
 ui5-migration --help
 ```
@@ -17,6 +17,34 @@ ui5-migration [command] [input-paths] [options]
 Multiple paths need to be separated by spaces.
 
 ```[options]``` have to be named explicitly.
+
+## Commands
+
+### ```analyze```
+
+The ```analyze``` command will exit with the following codes.
+
+Exit Code 0:
+
+* There are no findings
+
+Exit Code 1:
+
+* in case there are some findings
+* No files are found
+
+### ```migrate```
+
+The ```migrate``` command will exit with the following codes.
+
+Exit Code 0:
+
+* There are no findings
+* The migration has been performed successfully
+
+Exit Code 1:
+
+* No files are found
 
 ## Paths (input-paths)
 
