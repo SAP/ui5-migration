@@ -259,7 +259,8 @@ export async function migrate(oArgs: IndexArgs): Promise<{}> {
 	}
 
 	oTaskRunnerReporter.report(
-		ReportLevel.INFO, "Searching for files to migrate ...");
+		ReportLevel.INFO,
+		"Searching for files to " + (bAnalyze ? "analyze" : "migrate") + "...");
 
 	await Promise.all(aFilterPromises);
 	const fileFinder = builder.build();
@@ -273,7 +274,9 @@ export async function migrate(oArgs: IndexArgs): Promise<{}> {
 	// execute migration
 	const aFileInfo = await fileFinder.getFileInfoArray();
 	oTaskRunnerReporter.report(
-		ReportLevel.INFO, "Migrating: " + aFileInfo.length + " files:");
+		ReportLevel.INFO,
+		(bAnalyze ? "Analyzing" : "Migrating") + " " + aFileInfo.length + " " +
+			(aFileInfo.length === 1 ? "file" : "files") + ":");
 
 	aFileInfo.forEach(
 		oModule =>
@@ -320,7 +323,7 @@ export async function migrate(oArgs: IndexArgs): Promise<{}> {
 		Object.assign(oTaskRunnerReporter.getContext(), { fileName : "" }));
 	const endTime = process.hrtime(startTime);
 	oTaskRunnerReporter.report(
-		ReportLevel.INFO, `Finished in ${endTime[0]}s ${endTime[1]}ms`);
+		ReportLevel.INFO, `Finished in about ${endTime[0]}s`);
 	oTaskRunnerReporter.reportCollected(ReportLevel.INFO);
 	const result = oTaskRunnerReporter.finalize();
 
