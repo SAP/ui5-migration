@@ -1,20 +1,15 @@
 ![UI5 logo](./docs/images/UI5_logo_wide.png)
 
 # ui5-migration
-> Tooling to support the migration of UI5 projects by adapting your code for new UI5 framework versions.
+> Tooling to support the migration of UI5 projects by adapting code for new UI5 framework versions.
 
-_**Note:** This project is currently in beta and in the process to become available via npm. While there are ongoing improvements and round-offs being applied to this project, we see the upcoming release as a great opportunity to collect feedback from the community to further advance the UI5 migration tooling. Appreciated._
+_**Note:** This project is currently in beta. While there are ongoing improvements and round-offs being applied, we see the early release as a great opportunity to collect feedback from the community to further advance the UI5 migration tooling._
 
-The UI5 migration tool performs source code replacements and optimizations to improve a UI5 project's codebase.
-The source code modification aims to reduce deprecated API and to leverage best practices.
-It uses AST-parsing (recast, esprima) of JavaScript sources to perform code replacements.
-Migration consists of an analysis part and a code modification part.
+The UI5 migration tool is node.js-based and performs source code replacements and optimizations, reducing or getting rid of deprecated API. It builds upon a powerful parsing of JavaScript sources into an AST (abstract syntax tree) in order to perform the actual code replacements. Migration typically consists of an analysis part and a code modification part.
 
-Next to the standalone CLI command an add'tl API is provided, which simplifies integration into other tools (e.g. into custom node.js scripts, grunt).
+**IMPORTANT**: The modified source code needs to be manually reviewed and thoroughly tested. There is no 100% guarantee that the modified code works as expected.
 
-**IMPORTANT**: The modified source code needs to be manually reviewed and tested. There is no 100% guarantee that the modified code works as expected.
-
-**If you want to migrate your codebase, please see the [migration guide](./docs/guide/migrationguide.md)**
+**For more details on how-to migrate your project's codebase, please consult additional information such as the [migration guide](./docs/guide/migrationguide.md)**
 
 
 ## Installation
@@ -22,7 +17,7 @@ Next to the standalone CLI command an add'tl API is provided, which simplifies i
 ### Requirements
 - [Node.js](https://nodejs.org/) (**version 8.5 or higher** ⚠️)
 
-The migration tool is currently available for experimental usage. It can be installed with npm.
+The migration tool is currently available for early usage. It can be installed with npm.
 ```cli
 npm install --global @ui5/migration
 ```
@@ -30,7 +25,7 @@ npm install --global @ui5/migration
 ## Usage
 ### CLI
 
-To verify that the installation worked run:
+To verify that the installation worked, run:
 ```cli
 ui5-migration --help
 ```
