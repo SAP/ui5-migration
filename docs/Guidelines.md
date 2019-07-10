@@ -4,7 +4,7 @@ We enforce code style rules using Google TypeScript Style [gts](https://github.c
 To fix styling execute `npm run fix`.
 
 ## Testing
-Unit testing is based on the [mocha](https://github.com/mochajs/mocha) test framework. You can run all tests using `npm test` (this is what Travis CI does for pull requests).
+Unit testing is based on the [mocha](https://github.com/mochajs/mocha) test framework. You can run all tests using `npm test`.
 
 During development, you might want to use `npm run unit` or `npm run unit-watch` (re-runs tests automatically after file changes) to quickly execute all unit tests and see whether your change just broke one of them. 😉
 
