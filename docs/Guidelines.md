@@ -1,12 +1,12 @@
 # Development Conventions and Guidelines
-## JavaScript Coding Guidelines
-We enforce code style rules using [Gts](https://github.com/google/gts). Execute `npm run check` to check your code for style issues.
-To style is execute `npm run fix`.
+## TypeScript Coding Guidelines
+We enforce code style rules using Google TypeScript Style [gts](https://github.com/google/gts). Execute `npm run check` to check your code for style issues.
+To fix styling execute `npm run fix`.
 
 ## Testing
-Unit testing is based on the [mocha](https://github.com/mochajs/mocha) test-framework. You can run all tests using `npm test` (this is what Travis CI does for pull requests).
+Unit testing is based on the [mocha](https://github.com/mochajs/mocha) test framework. You can run all tests using `npm test`.
 
-During development, you might want to use `npm run test` or `npm run test-watch` (re-runs tests automatically after file changes) to quickly execute all unit tests and see whether your change just broke one of them. 😉
+During development, you might want to use `npm run unit` or `npm run unit-watch` (re-runs tests automatically after file changes) to quickly execute all unit tests and see whether your change just broke one of them. 😉
 
 ## Git Guidelines
 ### No Merge Commits
