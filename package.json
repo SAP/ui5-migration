@@ -1,10 +1,9 @@
 {
   "name": "@ui5/migration",
   "version": "0.1.0",
-  "description": "Tooling to support the migration of UI5 projects by adapting your code for new UI5 framework versions",
-  "engines": {
-    "node": ">=8.5"
-  },
+  "description": "Tooling to support the migration of UI5 projects by adapting code for new UI5 framework versions",
+  "author": "SAP SE (https://www.sap.com)",
+  "license": "Apache-2.0",
   "keywords": [
     "openui5",
     "sapui5",
@@ -12,37 +11,30 @@
     "migration",
     "tool"
   ],
-  "author": "SAP SE (https://www.sap.com)",
-  "license": "Apache-2.0",
-  "repository": {
-    "type": "git",
-    "url": "git@github.com:SAP/ui5-migration.git"
+  "main": "index.js",
+  "engines": {
+    "node": ">=8.5"
   },
   "scripts": {
     "build": "tsc -p .",
     "build-watch": "tsc -w -p .",
     "prepare": "rimraf js && npm run build",
-    "start": "node bin/cli.js",
     "lint": "tslint -p tsconfig.json -c tslint.json",
-    "lintf": "npm run lint -- --fix",
     "test": "npm run lint && npm run check && npm run coverage",
     "test-azure": "npm run lint && npm run check && npm run coverage-junit",
     "coverage": "nyc npm run unit",
     "coverage-junit": "nyc --reporter=text --reporter=text-summary --reporter=cobertura npm run unit-junit",
     "unit": "mocha ./js/test/*Test.js ./js/test/**/*Test.js",
     "unit-junit": "npm run unit -- --reporter mocha-junit-reporter",
-    "unit-watch": "npm run test -- -w",
-    "typedoc": "typedoc --options  ./typedoc.json --tsconfig ./tsconfig_typedoc.json",
-    "guides": "node docs/guide/guide.js",
+    "unit-watch": "npm run unit -- -w",
     "check": "gts check",
-    "gtsclean": "gts clean",
-    "gtsfix": "gts fix",
+    "clean": "gts clean",
+    "fix": "gts fix",
     "preversion": "npm test",
     "version": "git-chglog --next-tag v$npm_package_version -o CHANGELOG.md && git add CHANGELOG.md",
     "postversion": "git push --follow-tags",
     "release-note": "git-chglog -c .chglog/release-config.yml v$npm_package_version"
   },
-  "main": "index.js",
   "types": "typings/index.d.ts",
   "files": [
     "index.js",
@@ -98,6 +90,10 @@
     "cache": true,
     "all": true,
     "report-dir": "./coverage"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:SAP/ui5-migration.git"
   },
   "dependencies": {
     "diff": "^4.0.1",
