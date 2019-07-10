@@ -100,8 +100,8 @@ export async function fixTypeDependency(
 	const defineCall = new SapUiDefineCall(astDefineCall, moduleName, reporter);
 	if (!defineCall.dependencyArray) {
 		reporter.report(
-			Mod.ReportLevel.WARNING,
-			"invalid sap.ui.define call without dependency array");
+			Mod.ReportLevel.TRACE,
+			"sap.ui.define call without dependency array");
 		return Promise.resolve({ modified : false });
 	}
 	if (!defineCall.factory) {
