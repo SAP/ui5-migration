@@ -215,9 +215,9 @@
       "dev": true
     },
     "@types/node": {
-      "version": "11.13.17",
-      "resolved": "https://registry.npmjs.org/@types/node/-/node-11.13.17.tgz",
-      "integrity": "sha512-7W3kSMa8diVH6s24a8Qrmvwu+vG3ahOC/flMHFdWSdnPYoQI0yPO84h5zOWYXAha2Npn3Pw3SSuQSwBUfaniyQ==",
+      "version": "12.6.2",
+      "resolved": "https://registry.npmjs.org/@types/node/-/node-12.6.2.tgz",
+      "integrity": "sha512-gojym4tX0FWeV2gsW4Xmzo5wxGjXGm550oVUII7f7G5o4BV6c7DBdiG1RRQd+y1bvqRyYtPfMK85UM95vsapqQ==",
       "dev": true
     },
     "@types/yargs": {
