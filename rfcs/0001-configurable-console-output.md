@@ -14,14 +14,14 @@ The idea is to support integration scenarios where the output needs to be concis
 ## Detailed design
 
 ### Refactoring
-In order to achieve and easy configuration and extension of the output requires a refactoring of the existing Reporter mechanism and its surrounding classes.
+In order to achieve and easy configuration and extension of the output requires a refactoring of the existing `Reporter` centric mechanism and its surrounding classes.
 
 #### Favor composition over inheritance
 The concept of Reporter being an interface, `BaseReporter` the abstract implementation and `JSONReporter`, `ConsoleReporter` and `MetaConsoleReporter` their implementation is a pretty rigid construction.
 The approach should be flexible and use composition instead of inheritance.
 
 #### Single Responsibility Principle (SRP)
-The current concept makes the Reporters (`JSONReporter`, `ConsoleReporter` and `MetaConsoleReporter`) do many things:
+The current concept makes the Reporters (`JSONReporter`, `ConsoleReporter` and `MetaConsoleReporter`) do too many things:
 * collect Findings
 * format output
 * manage other reporters
@@ -36,27 +36,27 @@ The current concept makes the Reporters (`JSONReporter`, `ConsoleReporter` and `
 A `Dumper` dumps given content.
 It dumps findings in the given format
 
-##### `Console`Dumper``
+##### `ConsoleDumper`
 * Implementation of `Dumper`
 Dumps content to the console
 
-##### `JSON`Dumper``
+##### `JSONDumper`
 * Implementation of `Dumper`
 Dumps content in the JSON format
 
-##### `SimpleStructure`Dumper``
+##### `SimpleStructureDumper`
 * Implementation of `Dumper`
 Dumps content grouped by files (like eslint) to console
 
 
 ##### `ReporterManager`
 * Singleton
-The ReportManager is able to instantiate new Reporters.
+The `ReportManager` is able to instantiate new Reporters.
 It manages them and uses them to get all findings.
 It uses then a `Dumper` to dump them.
 
 ##### `Reporter`
-A Reporter collects findings and logs
+A `Reporter` collects findings and logs
 
 ### Configuration
 There should be a configuration option such that the user can configure the way the output is reported with option `--dump`.
