@@ -1,5 +1,5 @@
 - Start Date: 2019-07-18
-- RFC PR: - 
+- RFC PR: [#42](https://github.com/SAP/ui5-migration/pull/42) 
 - Issue: [#39](https://github.com/SAP/ui5-migration/issues/39)
 
 
