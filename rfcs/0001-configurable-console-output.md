@@ -1,72 +1,80 @@
+# RFC 0001 Configurable console output
+
 - Start Date: 2019-07-18
 - RFC PR: [#42](https://github.com/SAP/ui5-migration/pull/42) 
 - Issue: [#39](https://github.com/SAP/ui5-migration/issues/39)
 
-
-# RFC 0001 Configurable console output
-
 ## Summary
-The log output should be configurable to support use cases like machine-readability, summaries, eslint-like output.
+
+The output of the findings of a migration-run should be configurable. We want to support use-cases like machine-readability, summaries, eslint-like output. The final output should facilitate integration into CI environments.
 
 ## Motivation
-The idea is to support integration scenarios where the output needs to be concise to minimize the time to identify/fix the problem.
+
+See [Summary](#Summary).
+
+The internal refactoring efforts should aim to support integration scenarios, where the output needs to be concise to minimize the time to identify/fix the problem.
 
 ## Detailed design
 
 ### Refactoring
-In order to achieve and easy configuration and extension of the output requires a refactoring of the existing `Reporter` centric mechanism and its surrounding classes.
 
-#### Favor composition over inheritance
-The concept of Reporter being an interface, `BaseReporter` the abstract implementation and `JSONReporter`, `ConsoleReporter` and `MetaConsoleReporter` their implementation is a pretty rigid construction.
-The approach should be flexible and use composition instead of inheritance.
+In order to achieve an easy configuration and extension of the output, a deeper refactoring of the existing `Reporter` mechanism is required.
 
-#### Single Responsibility Principle (SRP)
-The current concept makes the Reporters (`JSONReporter`, `ConsoleReporter` and `MetaConsoleReporter`) do too many things:
-* collect Findings
-* format output
-* manage other reporters
-* instantiate other reporters
+### Favor composition over inheritance
 
-#### Solution
+The current implementation is heavily using inheritance, which makes it rather rigid and inconvenient to extend/maintain.  
+
+The new approach should be flexible and use composition instead of inheritance. We aim for better extensibility and maintainability.
+
+### Single Responsibility Principle
+
+The current concept makes the Reporters (`JSONReporter`, `ConsoleReporter` and `MetaConsoleReporter`) does too many things intermingled:
+
+- collect Findings
+- format output
+- manage other reporters
+- instantiate other reporters
+
+We aim to break this feature *lump* down into classes with only one single responsibility.  
+In the following [section](#Solution) we will explain our simplified class design.
+
+### Solution
+
+The following image shows our intended simplified class structure.
 
 ![concept](./../docs/images/ui5-migration-reporter-concept.png)
 
-##### `Dumper`
-* `Dumper` is an interface
-A `Dumper` dumps given content.
-It dumps findings in the given format
+#### `Exporter`
 
-##### `ConsoleDumper`
-* Implementation of `Dumper`
-Dumps content to the console
+`Exporter` is an interface.  
+An `Exporter` is responsible for exporting the given findings. The findings will be exported in the format defined by the implementing class.  
 
-##### `JSONDumper`
-* Implementation of `Dumper`
-Dumps content in the JSON format
+We currently want to provide two predefined `Exporter` implementations:
 
-##### `SimpleStructureDumper`
-* Implementation of `Dumper`
-Dumps content grouped by files (like eslint) to console
+1. `ConsoleExporter` (*implements `Exporter` interface*)  
+Dumps content to the console in human readable format.
 
+1. `JSONExporter` (*implements `Exporter` interface*)  
+For automation and visualization purposes we also provide a JSON export.
 
-##### `ReporterManager`
-* Singleton
-The `ReportManager` is able to instantiate new Reporters.
-It manages them and uses them to get all findings.
-It uses then a `Dumper` to dump them.
+#### `ReporterManager`
 
-##### `Reporter`
-A `Reporter` collects findings and logs
+- The `ReporterManager` is a Singleton
+- It serves as a `Reporter` factory and holds references on all instantiated Reporters.  
+- In the future the `ReporterManager` also might implement grouping and filtering mechanisms on all retained `Reporter` instances to allow for eslint-like "per-file" output.  
+- It uses then an `Exporter` instance for exporting the different findings.
+
+#### `Reporter`
+
+A `Reporter` collects findings and logs issued by the migration processors.
 
 ### Configuration
-There should be a configuration option such that the user can configure the way the output is reported with option `--dump`.
 
-## How we teach this
-- Documentation
-- Blog article
+There should be a configuration option such that the user can configure the way the output is reported with option `--export`.
 
-## Drawbacks
+Currently the available export formats will be *console-logs* and *JSON*.
 
-## Alternatives
+## Open Points
 
-## Unresolved Questions and Bikeshedding
+- Extend design to include the Migration `Task` class.  
+  Show how the `Task` classes can create a new `Reporter` via the `ReporterManager` factory.
