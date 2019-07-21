@@ -373,12 +373,6 @@
       "resolved": "https://registry.npmjs.org/ast-types/-/ast-types-0.13.1.tgz",
       "integrity": "sha512-b+EeK0WlzrSmpMw5jktWvQGxblpWnvMrV+vOp69RLjzGiHwWV0vgq75DPKtUjppKni3yWwSW8WLGV3Ch/XIWcQ=="
     },
-    "async": {
-      "version": "1.5.2",
-      "resolved": "https://registry.npmjs.org/async/-/async-1.5.2.tgz",
-      "integrity": "sha1-7GphrlZIDAw8skHJVhjiCJL5Zyo=",
-      "dev": true
-    },
     "asynckit": {
       "version": "0.4.0",
       "resolved": "https://registry.npmjs.org/asynckit/-/asynckit-0.4.0.tgz",
@@ -575,17 +569,6 @@
       "resolved": "https://registry.npmjs.org/ci-info/-/ci-info-1.6.0.tgz",
       "integrity": "sha512-vsGdkwSCDpWmP80ncATX7iea5DWQemg1UgCW5J8tqjU3lYw4FBYuj89J0CTVomA7BEfvSZd84GmHko+MxFQU2A==",
       "dev": true
-    },
-    "clang-format": {
-      "version": "1.2.3",
-      "resolved": "https://registry.npmjs.org/clang-format/-/clang-format-1.2.3.tgz",
-      "integrity": "sha512-x90Hac4ERacGDcZSvHKK58Ga0STuMD+Doi5g0iG2zf7wlJef5Huvhs/3BvMRFxwRYyYSdl6mpQNrtfMxE8MQzw==",
-      "dev": true,
-      "requires": {
-        "async": "^1.5.2",
-        "glob": "^7.0.0",
-        "resolve": "^1.1.6"
-      }
     },
     "cli-boxes": {
       "version": "1.0.0",
@@ -1173,30 +1156,22 @@
       "dev": true
     },
     "gts": {
-      "version": "0.9.0",
-      "resolved": "https://registry.npmjs.org/gts/-/gts-0.9.0.tgz",
-      "integrity": "sha512-Id2Vmg0xNU1FODc0AwmaFA1h0+h6V9/zBqu4NfT8FucVOVEP7pyJ16btyHfSH/UdzTCXjV1fq+fNBEgx/50EaA==",
+      "version": "1.0.0",
+      "resolved": "https://registry.npmjs.org/gts/-/gts-1.0.0.tgz",
+      "integrity": "sha512-/CRhAi0/xkH1l9UveIlTxLLBcTzUNa2PHyBrllLuYtVXZc8NPh/hZmxO6JwxF6OD1GxJyAwyMt5+RjnBncI5jw==",
       "dev": true,
       "requires": {
         "chalk": "^2.4.1",
-        "clang-format": "1.2.3",
-        "diff": "^3.5.0",
+        "diff": "^4.0.1",
         "entities": "^1.1.1",
         "inquirer": "^6.0.0",
         "meow": "^5.0.0",
         "pify": "^4.0.0",
+        "prettier": "^1.15.3",
         "rimraf": "^2.6.2",
-        "tslint": "^5.9.1",
+        "tslint": "^5.12.0",
         "update-notifier": "^2.5.0",
         "write-file-atomic": "^2.3.0"
-      },
-      "dependencies": {
-        "diff": {
-          "version": "3.5.0",
-          "resolved": "https://registry.npmjs.org/diff/-/diff-3.5.0.tgz",
-          "integrity": "sha512-A46qtFgd+g7pDZinpnwiRJtxbC1hpgf0uzP3iG89scHk0AUC7A1TGxf5OiiOUv/JMZR8GOt8hL900hV0bOy5xA==",
-          "dev": true
-        }
       }
     },
     "handlebars": {
@@ -2659,6 +2634,12 @@
       "version": "1.0.4",
       "resolved": "https://registry.npmjs.org/prepend-http/-/prepend-http-1.0.4.tgz",
       "integrity": "sha1-1PRWKwzjaW5BrFLQ4ALlemNdxtw=",
+      "dev": true
+    },
+    "prettier": {
+      "version": "1.18.2",
+      "resolved": "https://registry.npmjs.org/prettier/-/prettier-1.18.2.tgz",
+      "integrity": "sha512-OeHeMc0JhFE9idD4ZdtNibzY0+TPHSpSSb9h8FqtP+YnoZZ1sl8Vc9b1sasjfymH3SonAF4QcA2+mzHPhMvIiw==",
       "dev": true
     },
     "private": {
