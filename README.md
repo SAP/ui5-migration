@@ -4,6 +4,7 @@
 > Tooling to support the migration of UI5 projects by adapting code for new UI5 framework versions.
 
 [![Build Status](https://dev.azure.com/sap/opensource/_apis/build/status/SAP.ui5-migration?branchName=master)](https://dev.azure.com/sap/opensource/_build/latest?definitionId=41&branchName=master)
+[![npm version](https://badge.fury.io/js/%40ui5%2Fmigration.svg)](https://badge.fury.io/js/%40ui5%2Fmigration)
 
 _**Note:** This project is currently in beta. While there are ongoing improvements and round-offs being applied, we see the early release as a great opportunity to collect feedback from the community to further advance the UI5 migration tooling._
 
