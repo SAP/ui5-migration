@@ -1,10 +1,10 @@
 import * as ESTree from "estree";
 
-import {ASTVisitor} from "../src/util/ASTVisitor";
+import {ASTVisitor} from "../../src/util/ASTVisitor";
 
 const assert = require("assert");
 const recast = require("recast");
-const genRandomJS = require("../../test/genRandomJS");
+import * as genRandomJS from "./ASTVisitor/genRandomJS";
 
 /**
  * Provides an ES6 Proxy handler object which counts every function call
@@ -282,7 +282,7 @@ describe("ASTVisitor", function() {
 		});
 		const oTestPathCopy = Object.assign({}, oTestPath);
 
-		const oBigAst = recast.parse(genRandomJS(256));
+		const oBigAst = recast.parse(genRandomJS.genRandomJS(256));
 		oVisitor.visit(oBigAst, {}); // this should mess with the cache enough
 
 		assert.strictEqual(oTestPath.value, oTestPathCopy.value);
