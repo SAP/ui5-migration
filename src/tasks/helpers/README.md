@@ -1,9 +1,9 @@
 # About
 
 This package contains helper functions for tasks grouped by:
-* extenders
-* finders
-* replacers
+* extenders - used by `addMissingDependencies` and `variableNamePrettifier`
+* finders - used by `addMissingDependencies` and `variableNamePrettifier`
+* replacers - used by `addMissingDependencies`, `variableNamePrettifier` and `replaceGlobals`
 
 # Contents
 
