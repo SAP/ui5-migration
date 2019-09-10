@@ -19,7 +19,7 @@ sap.ui.define(["jquery.sap.script"],
 		 * @param sContent
 		 */
 		A.x = function () {
-			Object.assign({}, {}, {});
+			jQuery.sap.extend(false, {}, {}, {});
 			jQuery.sap.uid();
 		};
 

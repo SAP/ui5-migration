@@ -1880,6 +1880,35 @@ describe("replaceGlobals", function() {
 					} ]);
 			});
 
+			it("should replace jQuery.sap.extend", function(done) {
+				const expectedContent = fs.readFileSync(
+					rootDir + "jquerySapExtend.expected.js", "utf8");
+				const config = JSON.parse(
+					fs.readFileSync(rootDir + "jquerySapExtend.config.json"));
+				const module =
+					new CustomFileInfo(rootDir + "jquerySapExtend.js");
+				analyseMigrateAndTest(module, true, expectedContent, config, done, [
+					"trace: 22: Replace global call with \"sap.ui.thirdparty.jquery\"",
+					"trace: 22: Found call to replace \"jQuery.extend\"",
+					"trace: 23: Replace global call with \"sap.ui.thirdparty.jquery\"",
+					"trace: 23: Found call to replace \"jQuery.extend\"",
+					"trace: 24: Replace global call with \"sap.ui.thirdparty.jquery\"",
+					"trace: 24: Found call to replace \"jQuery.extend\"",
+					"trace: 25: Replace global call with \"sap.ui.thirdparty.jquery\"",
+					"trace: 25: Found call to replace \"jQuery.extend\"",
+					"trace: 26: Replace global call with \"sap.ui.thirdparty.jquery\"",
+					"trace: 26: Found call to replace \"jQuery.extend\"",
+					"trace: 27: Replace global call with \"sap.ui.thirdparty.jquery\"",
+					"trace: 27: Found call to replace \"jQuery.extend\"",
+					"trace: 22: Replaced call \"jQuery.extend\"",
+					"trace: 23: Replaced call \"jQuery.extend\"",
+					"trace: 24: Replaced call \"jQuery.extend\"",
+					"trace: 25: Replaced call \"jQuery.extend\"",
+					"trace: 26: Replaced call \"jQuery.extend\"",
+					"trace: 27: Replaced call \"jQuery.extend\"",
+				]);
+			});
+
 			it("should replace and add dependency for extend", function(done) {
 				const expectedContent =
 					fs.readFileSync(rootDir + "extend.expected.js", "utf8");
@@ -1916,6 +1945,7 @@ describe("replaceGlobals", function() {
 					"trace: 28: Replaced call \"jQuery.sap.extend\"",
 					"trace: 29: Replaced call \"jQuery.sap.extend\"",
 					"trace: 30: Replaced call \"jQuery.sap.extend\"",
+					"trace: 7: Add dependency \"sap/base/util/merge\" named \"merge\""
 				]);
 			});
 
