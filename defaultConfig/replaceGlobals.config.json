@@ -870,8 +870,6 @@
 				"version": "^1.58.0"
 			},
 			"jQuery.sap.extend": {
-				"newModulePath": "sap/base/util/merge",
-				"newVariableName": "merge",
 				"version": "^1.58.0"
 			},
 			"jQuery.sap.each": {
@@ -941,8 +939,6 @@
 				"version": "^1.58.0"
 			},
 			"$.sap.extend": {
-				"newModulePath": "sap/base/util/merge",
-				"newVariableName": "merge",
 				"version": "^1.58.0"
 			},
 			"$.sap.forIn": {
