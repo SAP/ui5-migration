@@ -1897,6 +1897,25 @@ describe("replaceGlobals", function() {
 				]);
 			});
 
+			it("should replace and add dependency for sap extend", function(done) {
+				const expectedContent =
+					fs.readFileSync(rootDir + "sapextend.expected.js", "utf8");
+				const config = JSON.parse(
+					fs.readFileSync(rootDir + "sapextend.config.json", "utf8"));
+				const module = new CustomFileInfo(rootDir + "sapextend.js");
+				analyseMigrateAndTest(module, false, expectedContent, config, done, [
+					"trace: 26: Deprecated call of type ModuleFunction",
+					"trace: 26: Found call to replace \"jQuery.sap.extend\"",
+					"trace: 28: Deprecated call of type ModuleFunction",
+					"trace: 28: Found call to replace \"jQuery.sap.extend\"",
+					"debug: 26: ignored element: jQuery.sap.extend",
+					"error: 26: Error: replacement ignored, no replacer configured for jQuery.sap.extend",
+					"debug: 28: ignored element: jQuery.sap.extend",
+					"error: 28: Error: replacement ignored, no replacer configured for jQuery.sap.extend"
+
+				]);
+			});
+
 			it("should replace and leave dependency for assign", function(done) {
 				const expectedContent =
 					fs.readFileSync(rootDir + "assign.expected.js", "utf8");
@@ -1931,7 +1950,7 @@ describe("replaceGlobals", function() {
 					   module, true, expectedContent, config, done,
 					   [
 						   "debug: 23: ignored element: jQuery.sap.uid",
-						   "error: 23: Error: Cannot read property 'replace' of undefined"
+						   "error: 23: Error: replacement ignored, no replacer configured for jQuery.sap.uid"
 					   ],
 					   "debug", "1.55.0");
 			   });

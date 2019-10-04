@@ -660,6 +660,11 @@ async function migrate(args: Mod.MigrateArguments): Promise<boolean> {
 
 		// Try to replace the call
 		try {
+			// if there is no replacer configured error out
+			if (!mReplacerFuncs[oReplace.import.replacerName]) {
+				throw Error(`replacement ignored, no replacer configured for ${
+					oReplace.oldImportName}`);
+			}
 			const oResult =
 				mReplacerFuncs[oReplace.import.replacerName].replace(
 					oNodePath, oReplace.import.requireName,
