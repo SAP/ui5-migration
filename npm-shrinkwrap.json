@@ -2007,6 +2007,24 @@
           "requires": {
             "has-flag": "^3.0.0"
           }
+        },
+        "yargs": {
+          "version": "13.3.0",
+          "resolved": "https://registry.npmjs.org/yargs/-/yargs-13.3.0.tgz",
+          "integrity": "sha512-2eehun/8ALW8TLoIl7MVaRUrg+yCnenu8B4kBlRxj3GJGDKU1Og7sMXPNm1BYyM1DOJmTZ4YeN/Nwxv+8XJsUA==",
+          "dev": true,
+          "requires": {
+            "cliui": "^5.0.0",
+            "find-up": "^3.0.0",
+            "get-caller-file": "^2.0.1",
+            "require-directory": "^2.1.1",
+            "require-main-filename": "^2.0.0",
+            "set-blocking": "^2.0.0",
+            "string-width": "^3.0.0",
+            "which-module": "^2.0.0",
+            "y18n": "^4.0.0",
+            "yargs-parser": "^13.1.1"
+          }
         }
       }
     },
@@ -2187,6 +2205,24 @@
           "resolved": "https://registry.npmjs.org/semver/-/semver-5.7.1.tgz",
           "integrity": "sha512-sauaDf/PZdVgrLTNYHRtpXa1iRiKcaebiKQ1BJdpQlWH2lCvexQdX55snPFyK7QzpudqbCI0qXFfOasHdyNDGQ==",
           "dev": true
+        },
+        "yargs": {
+          "version": "13.3.0",
+          "resolved": "https://registry.npmjs.org/yargs/-/yargs-13.3.0.tgz",
+          "integrity": "sha512-2eehun/8ALW8TLoIl7MVaRUrg+yCnenu8B4kBlRxj3GJGDKU1Og7sMXPNm1BYyM1DOJmTZ4YeN/Nwxv+8XJsUA==",
+          "dev": true,
+          "requires": {
+            "cliui": "^5.0.0",
+            "find-up": "^3.0.0",
+            "get-caller-file": "^2.0.1",
+            "require-directory": "^2.1.1",
+            "require-main-filename": "^2.0.0",
+            "set-blocking": "^2.0.0",
+            "string-width": "^3.0.0",
+            "which-module": "^2.0.0",
+            "y18n": "^4.0.0",
+            "yargs-parser": "^13.1.1"
+          }
         }
       }
     },
@@ -3308,11 +3344,12 @@
       "dev": true
     },
     "yargs": {
-      "version": "13.3.0",
-      "resolved": "https://registry.npmjs.org/yargs/-/yargs-13.3.0.tgz",
-      "integrity": "sha512-2eehun/8ALW8TLoIl7MVaRUrg+yCnenu8B4kBlRxj3GJGDKU1Og7sMXPNm1BYyM1DOJmTZ4YeN/Nwxv+8XJsUA==",
+      "version": "14.0.0",
+      "resolved": "https://registry.npmjs.org/yargs/-/yargs-14.0.0.tgz",
+      "integrity": "sha512-ssa5JuRjMeZEUjg7bEL99AwpitxU/zWGAGpdj0di41pOEmJti8NR6kyUIJBkR78DTYNPZOU08luUo0GTHuB+ow==",
       "requires": {
         "cliui": "^5.0.0",
+        "decamelize": "^1.2.0",
         "find-up": "^3.0.0",
         "get-caller-file": "^2.0.1",
         "require-directory": "^2.1.1",
@@ -3342,6 +3379,26 @@
         "flat": "^4.1.0",
         "lodash": "^4.17.15",
         "yargs": "^13.3.0"
+      },
+      "dependencies": {
+        "yargs": {
+          "version": "13.3.0",
+          "resolved": "https://registry.npmjs.org/yargs/-/yargs-13.3.0.tgz",
+          "integrity": "sha512-2eehun/8ALW8TLoIl7MVaRUrg+yCnenu8B4kBlRxj3GJGDKU1Og7sMXPNm1BYyM1DOJmTZ4YeN/Nwxv+8XJsUA==",
+          "dev": true,
+          "requires": {
+            "cliui": "^5.0.0",
+            "find-up": "^3.0.0",
+            "get-caller-file": "^2.0.1",
+            "require-directory": "^2.1.1",
+            "require-main-filename": "^2.0.0",
+            "set-blocking": "^2.0.0",
+            "string-width": "^3.0.0",
+            "which-module": "^2.0.0",
+            "y18n": "^4.0.0",
+            "yargs-parser": "^13.1.1"
+          }
+        }
       }
     },
     "yn": {
