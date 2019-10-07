@@ -31,11 +31,11 @@ sap.ui.define(["sap/base/util/merge"],
 			if (oParam.control(1)) {
 				var sKey = "Test." + iconName + oParam.control;
 				if (iconInfo.resourceBundle.hasText(sKey)) {
-					$(sKey).control(Object.assign({}, sKey, sContent));
+					$(sKey).control(jQuery.sap.extend(false, {}, sKey, sContent));
 				}
-				var x$ = Object.assign(sKey, sContent);
-				x$ += Object.assign(sKey, sContent);
-				x$ += Object.assign({}, sContent);
+				var x$ = jQuery.sap.extend(false, sKey, sContent);
+				x$ += merge(sKey, sContent);
+				x$ += merge({}, sContent);
 				x$.control();
 			}
 		};
