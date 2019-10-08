@@ -9,29 +9,31 @@
  * @example
  *  sap.ui.require(["sap/base/assert"], function(assert){assert(true);})"
  *
- * Within the sap.ui.define/sap.ui.require call the function arguments (e.g. assert) as well
- * as the array arguments (e.g. "sap/base/assert") are called imports in here.
+ * Within the sap.ui.define/sap.ui.require call the function arguments (e.g.
+ * assert) as well as the array arguments (e.g. "sap/base/assert") are called
+ * imports in here.
  *
  *
  * The configuration decides on:
- *  * replacer (code file)
- *  * variable name of import
- *  * module path of import
- *  * other config options which are passed to replacer
+ *  - replacer (code file)
+ *  - variable name of import
+ *  - module path of import
+ *  - other config options which are passed to replacer
  *
  * The replacer can then operate on the AST Node found
  *
  * The changes to the DefineCall are handled here.
  * Following actions are performed:
- *  * leave the import
- *  * remove the import
- *  * add the import
+ *  - leave the import
+ *  - remove the import
+ *  - add the import
  *
  *
  * The configuration is taken as the source of truth for imports.
  * Such that if no replacement call can be found for an import or all
  * replacements are successfully performed the import can be safely removed.
- * E.g. "jquery.sap.script" can be safely removed if there are no findings anymore e.g. such as jQuery.sap.each, jQuery.sap.forIn,...
+ * E.g. "jquery.sap.script" can be safely removed if there are no findings
+ * anymore e.g. such as jQuery.sap.each, jQuery.sap.forIn,...
  *
  */
 import {Syntax} from "esprima";
