@@ -1,9 +1,38 @@
 /**
- *  Will check each source file (*.js) for using global jquery functions
- * replaces these functions with the appropriate module such as,
- *  @example
+ * Uses a configuration object to find global jquery and jquery.sap functions.
+ * Replaces these functions with the appropriate module such as:
+ * @example
  *  jQuery.sap.assert(true)
- *  require(["sap/base/assert"], function(assert){assert(true);})"
+ *
+ *  will become
+ *
+ * @example
+ *  sap.ui.require(["sap/base/assert"], function(assert){assert(true);})"
+ *
+ * Within the sap.ui.define/sap.ui.require call the function arguments (e.g. assert) as well
+ * as the array arguments (e.g. "sap/base/assert") are called imports in here.
+ *
+ *
+ * The configuration decides on:
+ *  * replacer (code file)
+ *  * variable name of import
+ *  * module path of import
+ *  * other config options which are passed to replacer
+ *
+ * The replacer can then operate on the AST Node found
+ *
+ * The changes to the DefineCall are handled here.
+ * Following actions are performed:
+ *  * leave the import
+ *  * remove the import
+ *  * add the import
+ *
+ *
+ * The configuration is taken as the source of truth for imports.
+ * Such that if no replacement call can be found for an import or all
+ * replacements are successfully performed the import can be safely removed.
+ * E.g. "jquery.sap.script" can be safely removed if there are no findings anymore e.g. such as jQuery.sap.each, jQuery.sap.forIn,...
+ *
  */
 import {Syntax} from "esprima";
 import * as ESTree from "estree";
