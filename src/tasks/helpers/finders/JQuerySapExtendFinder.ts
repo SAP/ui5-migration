@@ -1,6 +1,5 @@
 import {Syntax} from "esprima";
 import * as ESTree from "estree";
-import {Literal} from "estree";
 import * as recast from "recast";
 import {NodePath} from "ui5-migration";
 
@@ -9,12 +8,9 @@ import {SapUiDefineCall} from "../../../util/SapUiDefineCall";
 
 
 /**
- * Finds the following 2 occurrences where: ":sapTabbable" is the first argument
+ * Finds jQuery.sap.extend calls which have first argument being true (for deep)
  * <code>
- * jQuery.merge($Ref.parents().prevAll(), $Ref.prevAll()).find(':sapTabbable')
- * var $InteractiveElements = $Cell.find(":sapTabbable, input:sapFocusable,
- * .sapUiTableTreeIcon"); var aTabbables = jQuery(":sapTabbable",
- * that.$()).get();
+ * jQuery.sap.extend(true, {}, {});
  * </code>
  */
 class JQuerySapExtendFinder implements Finder {

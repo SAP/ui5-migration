@@ -1,0 +1,31 @@
+{
+	"modules": {
+		"Replace jQuery.sap.extend(true,..) to merge(...)": {
+			"jQuery.sap.extend": {
+				"finder": "JQuerySapExtendFinder",
+				"variableNameToFind":"jQuery.sap.extend",
+				"replacer": "VariableNameReplacer",
+				"newVariableName": "merge",
+				"newVariablePath": "sap/base/util/merge",
+				"extender": "CleanJQueryImportsExtender",
+				"oldVariablePath": "jQuery.sap.script",
+				"oldVariableName": "jQuery"
+			}
+		}
+	},
+	"finders": {
+		"JQuerySapExtendFinder": "tasks/helpers/finders/JQuerySapExtendFinder.js",
+		"JQueryExtendDeepFinder": "tasks/helpers/finders/JQueryExtendDeepFinder.js",
+		"JQueryExtendShallowFinder": "tasks/helpers/finders/JQueryExtendShallowFinder.js"
+	},
+	"extenders": {
+		"CleanJQueryImportsExtender": "tasks/helpers/extenders/CleanJQueryImportsExtender.js"
+	},
+	"replacers": {
+		"VariableNameReplacer": "tasks/helpers/replacers/VariableNameReplacer.js"
+	},
+	"comments": {
+		"unhandledReplacementComment": "TODO unhandled replacement"
+	},
+	"excludes": []
+}

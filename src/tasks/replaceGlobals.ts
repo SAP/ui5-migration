@@ -792,7 +792,7 @@ const replaceGlobals: Mod.Task = {
 				__dirname, "../../../defaultConfig/replaceGlobals.config.json"),
 			"utf8")));
 	},
-	postTasks : [ "variable-name-prettifier" ],
+	postTasks : [ "replace-globals-advanced", "variable-name-prettifier" ],
 	// TODO: add config schema
 
 	analyse,
