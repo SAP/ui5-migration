@@ -98,7 +98,7 @@
   "dependencies": {
     "diff": "^4.0.1",
     "esprima": "^4.0.1",
-    "globals": "^12.1.0",
+    "globals": "^12.1.1",
     "graceful-fs": "^4.2.2",
     "ignore": "^5.1.4",
     "json5": "^2.1.1",
