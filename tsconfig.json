@@ -10,6 +10,7 @@
 		"newLine": "lf",
 		"strict": false,
 		"noImplicitReturns": true,
+		"resolveJsonModule": true,
 		"typeRoots": [
 			"typings",
 			"node_modules/@types"
