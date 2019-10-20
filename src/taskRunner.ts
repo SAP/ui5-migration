@@ -168,5 +168,5 @@ export async function processModules(
 	}
 	oReporter.setContext({ logPrefix : "cli" });
 	oReporter.collectTopLevel("files modified", iFilesModified);
-	return await Promise.all(aModifiedFiles);
+	return Promise.all(aModifiedFiles);
 }

@@ -56,7 +56,6 @@ function mapToFound(oPath: NodePath, oFound: FoundReplacement): FoundCall {
 const visit = function(
 	analysis: Analysis, oModuleTree: {}, finders: { [name: string]: Finder },
 	reporter: Reporter, defineCall: SapUiDefineCall) {
-	// @ts-ignore
 	return function(oPath) {
 		const aFound = isFoundInConfig(
 			oPath.value, oPath, oModuleTree, finders, defineCall);
@@ -75,6 +74,7 @@ const visit = function(
 			return false;
 		}
 		this.traverse(oPath);
+		return undefined;
 	};
 };
 
@@ -162,9 +162,9 @@ function isFoundInConfig(
  */
 const GLOBALS = "GLOBALS";
 
-type ModuleTree = {
-	[name: string]: ModuleTree
-};
+interface ModuleTree {
+	[name: string]: ModuleTree;
+}
 
 
 interface ImportInfo {
@@ -177,9 +177,9 @@ interface ImportInfo {
 	hasToBeRequired: boolean;
 }
 
-type ImportMap = {
-	[oldImport: string]: ImportInfo
-};
+interface ImportMap {
+	[oldImport: string]: ImportInfo;
+}
 
 interface FoundReplacement {
 	module: string;
