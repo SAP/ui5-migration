@@ -14,8 +14,8 @@ export interface JSONReporterItem {
 	message: string;
 	codeReplacement: boolean;
 	location?: {
-		start: { line: number, column: number },
-		end: { line: number, column: number }
+		start: {line: number; column: number};
+		end: {line: number; column: number};
 	};
 }
 
@@ -23,7 +23,7 @@ export class JSONReporter extends BaseReporter {
 	sLevel: ReportLevel;
 	aItems: JSONReporterItem[];
 	sFileName: string;
-	oMap: Map<string, string[]|number> = new Map();
+	oMap: Map<string, string[] | number> = new Map();
 
 	constructor(level: ReportLevel) {
 		super();
@@ -42,31 +42,31 @@ export class JSONReporter extends BaseReporter {
 			oLocation = locNode as ESTree.SourceLocation;
 		} else {
 			oLocation = {
-				start : { line : 1, column : 0 },
-				end : { line : 1, column : 0 }
+				start: {line: 1, column: 0},
+				end: {line: 1, column: 0},
 			};
 		}
 
 		this.aItems.push({
-			fileName : this.sFileName,
+			fileName: this.sFileName,
 			level,
-			codeReplacement : !!locNode,
-			context : this.getContext(),
-			message : msg,
-			location : {
-				start : {
-					line : oLocation.start.line,
-					column : oLocation.start.column
+			codeReplacement: !!locNode,
+			context: this.getContext(),
+			message: msg,
+			location: {
+				start: {
+					line: oLocation.start.line,
+					column: oLocation.start.column,
 				},
-				end : {
-					line : oLocation.end.line,
-					column : oLocation.end.column
-				}
-			}
+				end: {
+					line: oLocation.end.line,
+					column: oLocation.end.column,
+				},
+			},
 		});
 	}
 
-	collect(sKey: string, oValue: string|number) {
+	collect(sKey: string, oValue: string | number) {
 		if (typeof oValue === "number") {
 			if (!this.oMap.has(sKey)) {
 				this.oMap.set(sKey, oValue);
@@ -94,14 +94,18 @@ export class JSONReporter extends BaseReporter {
 				that.report(level, "value: " + key + ": " + value);
 			} else {
 				that.report(
-					level, "value: " + key + ": entries: " + value.length);
+					level,
+					"value: " + key + ": entries: " + value.length
+				);
 			}
 		});
 		this.oMap.clear();
 	}
 
 	async finalize(): Promise<JSONReporterResult> {
-		return Promise.resolve(
-			{ reports : this.aItems, context : this.getContext() });
+		return Promise.resolve({
+			reports: this.aItems,
+			context: this.getContext(),
+		});
 	}
 }

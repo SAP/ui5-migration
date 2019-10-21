@@ -15,11 +15,12 @@ const builders = recast.types.builders;
  * @returns {void}
  */
 const replaceable: ASTReplaceable = {
-
 	replace(
-		node: NodePath, name: string, fnName: string, oldModuleCall: string) :
-		ASTReplaceableResult |
-	void {
+		node: NodePath,
+		name: string,
+		fnName: string,
+		oldModuleCall: string
+	): ASTReplaceableResult | void {
 		const oInsertionPoint = node.parentPath.value;
 		const oInsertion = node.value;
 		const oNodeName = builders.identifier(name);
@@ -31,8 +32,8 @@ const replaceable: ASTReplaceable = {
 		}
 
 		// CallExpression
-		if (oInsertion.type ===
-			Syntax.CallExpression) {  // e.g. jQuery(oElement).replaceWith(...);
+		if (oInsertion.type === Syntax.CallExpression) {
+			// e.g. jQuery(oElement).replaceWith(...);
 			oInsertion.callee = oNodeName;
 		} else if (oInsertionPoint.type === Syntax.CallExpression) {
 			oInsertionPoint.callee = oNodeName;
@@ -47,9 +48,9 @@ const replaceable: ASTReplaceable = {
 				oInsertionPoint.right = oNodeName;
 			} else {
 				return {
-					modified : true,
-					addDependency : true
-				};  // successfully handled, but do not remove dependency
+					modified: true,
+					addDependency: true,
+				}; // successfully handled, but do not remove dependency
 			}
 		} else if (oInsertionPoint.type === Syntax.NewExpression) {
 			oInsertionPoint.callee = oNodeName;
@@ -66,9 +67,10 @@ const replaceable: ASTReplaceable = {
 		} else {
 			throw new Error(
 				"ModuleFunction: insertion is of an unsupported type " +
-				oInsertionPoint.type);
+					oInsertionPoint.type
+			);
 		}
-	}
+	},
 };
 
 module.exports = replaceable;

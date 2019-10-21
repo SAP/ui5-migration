@@ -17,13 +17,14 @@ const builders = recast.types.builders;
  * @returns {void}
  */
 const replaceable: ASTReplaceable = {
-
 	replace(
-		node: NodePath, name: string, fnName: string, oldModuleCall: string,
-		config: { newVariableName: string }) : ASTReplaceableResult |
-	void {
+		node: NodePath,
+		name: string,
+		fnName: string,
+		oldModuleCall: string,
+		config: {newVariableName: string}
+	): ASTReplaceableResult | void {
 		const oInsertion = node.parentPath.value;
-
 
 		// CallExpression
 		if (oInsertion.type === Syntax.CallExpression) {
@@ -31,8 +32,10 @@ const replaceable: ASTReplaceable = {
 
 			const arg0 = oInsertion.arguments[0];
 			let bDeepCopy = false;
-			if (arg0.type === Syntax.Literal &&
-				typeof arg0.value === "boolean") {
+			if (
+				arg0.type === Syntax.Literal &&
+				typeof arg0.value === "boolean"
+			) {
 				oInsertion.arguments.shift();
 				bDeepCopy = arg0.value;
 			}
@@ -40,22 +43,26 @@ const replaceable: ASTReplaceable = {
 			if (bDeepCopy) {
 				oInsertionPoint[node.parentPath.name] = builders.callExpression(
 					builders.identifier(name || config.newVariableName),
-					oInsertion.arguments);
+					oInsertion.arguments
+				);
 			} else {
 				oInsertionPoint[node.parentPath.name] = builders.callExpression(
 					builders.memberExpression(
 						builders.identifier("Object"),
-						builders.identifier("assign")),
-					oInsertion.arguments);
-				return { modified : false, addDependency : false };
+						builders.identifier("assign")
+					),
+					oInsertion.arguments
+				);
+				return {modified: false, addDependency: false};
 			}
-
 		} else {
 			throw new Error(
-				"insertion is of type " + oInsertion.type +
-				"(supported are only Call-Expressions)");
+				"insertion is of type " +
+					oInsertion.type +
+					"(supported are only Call-Expressions)"
+			);
 		}
-	}
+	},
 };
 
 module.exports = replaceable;

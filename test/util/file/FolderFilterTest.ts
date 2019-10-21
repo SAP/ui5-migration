@@ -2,7 +2,6 @@ import {FolderFilter} from "../../../src/util/file/FolderFilter";
 
 const assert = require("assert");
 
-
 describe("FolderFilter", function() {
 	it("should be possible to filter using FilderFilter", function() {
 		const fsFilter = FolderFilter.create("myfolder");

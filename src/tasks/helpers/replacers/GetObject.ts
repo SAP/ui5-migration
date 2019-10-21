@@ -14,10 +14,12 @@ const builders = recast.types.builders;
  * @returns {void}
  */
 const replaceable: ASTReplaceable = {
-
 	replace(
-		node: NodePath, name: string, fnName: string,
-		oldModuleCall: string) : void {
+		node: NodePath,
+		name: string,
+		fnName: string,
+		oldModuleCall: string
+	): void {
 		const oInsertionPoint = node.parentPath.parentPath.value;
 		const oInsertion = node.parentPath.value;
 
@@ -29,11 +31,13 @@ const replaceable: ASTReplaceable = {
 			let oPath = aArgs[0];
 			if (oPath && oPath.type !== Syntax.Literal) {
 				oPath = builders.logicalExpression(
-					"||", aArgs[0], builders.literal(""));
+					"||",
+					aArgs[0],
+					builders.literal("")
+				);
 			}
 			const oNoCreates = aArgs[1];
 			const oContext = aArgs[2];
-
 
 			/**
 			 * before
@@ -58,32 +62,42 @@ const replaceable: ASTReplaceable = {
 			 *
 			 */
 
-			if (aArgs.length === 1 ||
-				(aArgs.length >= 2 && oNoCreates &&
-				 oNoCreates.type === Syntax.Identifier &&
-				 oNoCreates.name === "undefined")) {
-				oInsertionPoint[node.parentPath.name].callee =
-					builders.identifier("ObjectPath.get");
-				oInsertionPoint[node.parentPath.name].arguments =
-					oContext ? [ oPath, oContext ] : [ oPath ];
+			if (
+				aArgs.length === 1 ||
+				(aArgs.length >= 2 &&
+					oNoCreates &&
+					oNoCreates.type === Syntax.Identifier &&
+					oNoCreates.name === "undefined")
+			) {
+				oInsertionPoint[
+					node.parentPath.name
+				].callee = builders.identifier("ObjectPath.get");
+				oInsertionPoint[node.parentPath.name].arguments = oContext
+					? [oPath, oContext]
+					: [oPath];
 			} else if (
-				aArgs.length >= 2 && oNoCreates &&
+				aArgs.length >= 2 &&
+				oNoCreates &&
 				oNoCreates.type === Syntax.Literal &&
-				(oNoCreates.value === null || oNoCreates.value === 0)) {
+				(oNoCreates.value === null || oNoCreates.value === 0)
+			) {
 				oInsertionPoint[node.parentPath.name] = builders.callExpression(
 					builders.identifier("ObjectPath.create"),
-					oContext ? [ oPath, oContext ] : [ oPath ]);
+					oContext ? [oPath, oContext] : [oPath]
+				);
 			} else {
 				throw new Error(
-					"Failed to replace getObject. Cannot determine 2nd or 3rd parameter");
+					"Failed to replace getObject. Cannot determine 2nd or 3rd parameter"
+				);
 			}
-
 		} else {
 			throw new Error(
-				"insertion is of type " + oInsertion.type +
-				"(supported are only Call-Expressions)");
+				"insertion is of type " +
+					oInsertion.type +
+					"(supported are only Call-Expressions)"
+			);
 		}
-	}
+	},
 };
 
 module.exports = replaceable;

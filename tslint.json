@@ -23,5 +23,10 @@
 			"options": ["consistent-as-needed"]
 		},
 		"curly": {}
+	},
+	"linterOptions": {
+		"exclude": [
+			"**/*.json"
+		]
 	}
 }

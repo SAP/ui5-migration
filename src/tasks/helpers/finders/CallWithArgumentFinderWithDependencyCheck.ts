@@ -9,15 +9,24 @@ import {EMPTY_FINDER_RESULT, Finder, FinderResult} from "../../../dependencies";
  */
 class CallWithArgumentFinderWithDependencyCheck implements Finder {
 	find(
-		node: ESTree.Node, config: { newModulePath: string },
-		sConfigName: string, defineCall: SapUiDefineCall): FinderResult {
-		const result =
-			callWithArgumentFinder.find(node, config, sConfigName, defineCall);
+		node: ESTree.Node,
+		config: {newModulePath: string},
+		sConfigName: string,
+		defineCall: SapUiDefineCall
+	): FinderResult {
+		const result = callWithArgumentFinder.find(
+			node,
+			config,
+			sConfigName,
+			defineCall
+		);
 		// if the result is already empty or the dependency is already present
 		// nothing is found
-		if (result === EMPTY_FINDER_RESULT ||
+		if (
+			result === EMPTY_FINDER_RESULT ||
 			(config.newModulePath &&
-			 defineCall.getNodeOfImport(config.newModulePath))) {
+				defineCall.getNodeOfImport(config.newModulePath))
+		) {
 			return EMPTY_FINDER_RESULT;
 		}
 		return result;

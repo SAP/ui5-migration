@@ -5,13 +5,16 @@ export enum ReportLevel {
 	WARNING = "warning",
 	INFO = "info",
 	DEBUG = "debug",
-	TRACE = "trace"
+	TRACE = "trace",
 }
 
 // sorted from low to high severity
 const reportLevels: ReportLevel[] = [
-	ReportLevel.TRACE, ReportLevel.DEBUG, ReportLevel.INFO, ReportLevel.WARNING,
-	ReportLevel.ERROR
+	ReportLevel.TRACE,
+	ReportLevel.DEBUG,
+	ReportLevel.INFO,
+	ReportLevel.WARNING,
+	ReportLevel.ERROR,
 ];
 
 /**
@@ -22,9 +25,12 @@ const reportLevels: ReportLevel[] = [
  * @constructor
  */
 export function CompareReportLevel(
-	currentLevel: ReportLevel, requiredLevel: ReportLevel): number {
+	currentLevel: ReportLevel,
+	requiredLevel: ReportLevel
+): number {
 	if (typeof currentLevel === "string" && typeof requiredLevel === "string") {
-		const iResult = reportLevels.indexOf(currentLevel) -
+		const iResult =
+			reportLevels.indexOf(currentLevel) -
 			reportLevels.indexOf(requiredLevel);
 		return Math.max(-1, Math.min(iResult, 1));
 	}
@@ -45,13 +51,13 @@ export interface ReportContext {
  */
 export function fromLoc(loc: ESTree.SourceLocation): FindingLocation {
 	if (!loc) {
-		return { endLine : 0, endColumn : 0, startLine : 0, startColumn : 0 };
+		return {endLine: 0, endColumn: 0, startLine: 0, startColumn: 0};
 	}
 	return {
-		endLine : loc.end.line,
-		endColumn : loc.end.column,
-		startLine : loc.start.line,
-		startColumn : loc.start.column
+		endLine: loc.end.line,
+		endColumn: loc.end.column,
+		startLine: loc.start.line,
+		startColumn: loc.start.column,
 	};
 }
 
@@ -105,7 +111,7 @@ export interface Reporter {
 	 * @param {string} sKey
 	 * @param {string | number} sValue
 	 */
-	collect(sKey: string, sValue: string|number): void;
+	collect(sKey: string, sValue: string | number): void;
 
 	/**
 	 * reports the collected information

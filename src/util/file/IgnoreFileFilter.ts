@@ -58,13 +58,15 @@ export class IgnoreFileFilter implements FsFilter {
 	static createFromContent(sFolder: string, sIgnoreFileContent: string) {
 		const aLines = StringWhitespaceUtils.splitLines(sIgnoreFileContent);
 		// ignore comments
-		const aEntries = aLines.filter((sLine) => {
-			return sLine && sLine.trim() &&
-				!sLine.trim().startsWith(commentCharacter);
+		const aEntries = aLines.filter(sLine => {
+			return (
+				sLine &&
+				sLine.trim() &&
+				!sLine.trim().startsWith(commentCharacter)
+			);
 		});
 		return IgnoreFileFilter.create(sFolder, aEntries);
 	}
-
 
 	/**
 	 * Creates IgnoreFileFilter from ignore strings.

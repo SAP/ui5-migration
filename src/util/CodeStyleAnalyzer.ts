@@ -1,6 +1,6 @@
 export enum AnalyzeCharacter {
 	NEWLINE,
-	INDENT
+	INDENT,
 }
 
 export class CodeStyleAnalyzer {

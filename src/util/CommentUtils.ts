@@ -11,7 +11,7 @@ const builders = recast.types.builders;
 interface NodeComments {
 	comments: ESTree.Comment[];
 }
-export type NodeWithComments = NodeComments&ESTree.Node;
+export type NodeWithComments = NodeComments & ESTree.Node;
 
 /**
  * checks if a node is a safe spot to insert a comment
@@ -70,8 +70,10 @@ export function hasCommentRec(oNodePath: NodePath, sComment: string) {
 	let oTempParent = oNodePath;
 	while (oTempParent) {
 		const oNode = oTempParent.value as NodeWithComments;
-		if (oNode.comments &&
-			oNode.comments.some(oComment => oComment.value === sComment)) {
+		if (
+			oNode.comments &&
+			oNode.comments.some(oComment => oComment.value === sComment)
+		) {
 			return true;
 		}
 		oTempParent = oTempParent.parentPath;

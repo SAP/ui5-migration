@@ -7,7 +7,6 @@ import {FsFilter} from "./file/FsFilter";
 import {FileInfo} from "./FileInfo";
 import * as FileUtils from "./FileUtils";
 
-
 /**
  * Internal class used to build the FileFinder
  */
@@ -19,12 +18,13 @@ class FileFinderBuilder {
 
 	namespaces(aNamespaces: NamespaceConfig[]) {
 		// adjusts the path to make the relative NamespaceConfig path absolute
-		const aNamespacesCopy = aNamespaces.map((oNamespace) => {
+		const aNamespacesCopy = aNamespaces.map(oNamespace => {
 			return Object.assign({}, oNamespace, {
-				filePath :
+				filePath:
 					FileUtils.normalize(
-						path.join(this.getWd(), oNamespace.filePath), "/") +
-					"/",
+						path.join(this.getWd(), oNamespace.filePath),
+						"/"
+					) + "/",
 			});
 		});
 		this.aNamespaces = this.aNamespaces.concat(aNamespacesCopy);
@@ -124,7 +124,7 @@ class FileFinderBuilder {
  */
 export class FileFinder implements Mod.FileFinder {
 	private builder: FileFinderBuilder;
-	private mModules: { [localPath: string]: FileInfo };
+	private mModules: {[localPath: string]: FileInfo};
 
 	constructor(builder: FileFinderBuilder) {
 		this.builder = builder;
@@ -142,34 +142,43 @@ export class FileFinder implements Mod.FileFinder {
 		const aFilePromises: Array<Promise<string[]>> = [];
 		this.builder.getAddFilters().forEach(function(oIncludeFilter) {
 			const wd = oIncludeFilter.getDir();
-			const pFilePromise =
-				FileUtils.getFilesRecursive(wd, function(sFile) {
-					// there should not be one exclude filter match
-					return !that.builder.getExcludeFilters().some(function(
-						oExcludeFilter) {
+			const pFilePromise = FileUtils.getFilesRecursive(wd, function(
+				sFile
+			) {
+				// there should not be one exclude filter match
+				return !that.builder
+					.getExcludeFilters()
+					.some(function(oExcludeFilter) {
 						return oExcludeFilter.match(sFile);
 					});
-				});
-			aFilePromises.push(pFilePromise.then(function(aFiles) {
-				const fnReducer = function(aPrevious: string[], sFile: string) {
-					if (oIncludeFilter.match(sFile)) {
-						aPrevious.push(sFile);
-					}
-					return aPrevious;
-				};
-				return aFiles.reduce(fnReducer, []);
-			}));
+			});
+			aFilePromises.push(
+				pFilePromise.then(function(aFiles) {
+					const fnReducer = function(
+						aPrevious: string[],
+						sFile: string
+					) {
+						if (oIncludeFilter.match(sFile)) {
+							aPrevious.push(sFile);
+						}
+						return aPrevious;
+					};
+					return aFiles.reduce(fnReducer, []);
+				})
+			);
 		});
 		return Promise.all(aFilePromises).then(function(aResults) {
 			let aResultFiles: string[] = [];
 			aResults.forEach(function(aResult) {
-				aResultFiles =
-					aResultFiles.concat(aResult.filter(function(sResult) {
-						return that.builder.getPostFilters().every(function(
-							oPostFilter) {
-							return oPostFilter.match(sResult);
-						});
-					}));
+				aResultFiles = aResultFiles.concat(
+					aResult.filter(function(sResult) {
+						return that.builder
+							.getPostFilters()
+							.every(function(oPostFilter) {
+								return oPostFilter.match(sResult);
+							});
+					})
+				);
 			});
 			return aResultFiles;
 		});
@@ -179,7 +188,6 @@ export class FileFinder implements Mod.FileFinder {
 		return FileUtils.normalize(sFile, "/").replace(/\.js$/, "");
 	}
 
-
 	/**
 	 * Retrieves namespace for a given file
 	 * @param {string} sFile src/a/b.js
@@ -188,7 +196,7 @@ export class FileFinder implements Mod.FileFinder {
 	 */
 	static getNamespace(sFile: string, nameSpaces: NamespaceConfig[]): string {
 		// clone namespace config
-		const normalizedNameSpaces = nameSpaces.map((oNameSpace) => {
+		const normalizedNameSpaces = nameSpaces.map(oNameSpace => {
 			const newNameSpace = Object.assign({}, oNameSpace);
 			if (!newNameSpace.filePath.endsWith("/")) {
 				newNameSpace.filePath = newNameSpace.filePath + "/";
@@ -196,7 +204,7 @@ export class FileFinder implements Mod.FileFinder {
 			return newNameSpace;
 		});
 
-		const aFiltered = normalizedNameSpaces.filter((oNameSpace) => {
+		const aFiltered = normalizedNameSpaces.filter(oNameSpace => {
 			return sFile.startsWith(oNameSpace.filePath);
 		});
 		if (aFiltered.length === 0) {
@@ -207,13 +215,17 @@ export class FileFinder implements Mod.FileFinder {
 			return a.filePath.length > b.filePath.length ? a : b;
 		});
 		if (best) {
-			return best.namespace + "." +
-				FileUtils.normalize(sFile.substring(best.filePath.length), ".")
-					.replace(/\.js$/, "");
+			return (
+				best.namespace +
+				"." +
+				FileUtils.normalize(
+					sFile.substring(best.filePath.length),
+					"."
+				).replace(/\.js$/, "")
+			);
 		}
 		return undefined;
 	}
-
 
 	private async convertToFileInfoMapping() {
 		const that = this;
@@ -226,12 +238,16 @@ export class FileFinder implements Mod.FileFinder {
 		files.forEach(function(sFile) {
 			const sModuleName = FileFinder.getModuleName(sFile);
 			const sNamespace = FileFinder.getNamespace(
-				sModuleName, that.builder.getNameSpaces());
+				sModuleName,
+				that.builder.getNameSpaces()
+			);
 
 			that.mModules[sModuleName] = new FileInfo(
 				that.builder.getWd(),
-				path.relative(that.builder.getWd(), sFile), sModuleName,
-				sNamespace);
+				path.relative(that.builder.getWd(), sFile),
+				sModuleName,
+				sNamespace
+			);
 		});
 		return Promise.resolve(this.mModules);
 	}
@@ -243,7 +259,7 @@ export class FileFinder implements Mod.FileFinder {
 		});
 	}
 
-	async findByPath(sPath: string): Promise<FileInfo|null> {
+	async findByPath(sPath: string): Promise<FileInfo | null> {
 		const sNormPath = FileFinder.getModuleName(sPath);
 		const mModules = await this.convertToFileInfoMapping();
 		if (sNormPath in mModules) {
@@ -258,8 +274,8 @@ export class FileFinder implements Mod.FileFinder {
 					this.builder.getWd(),
 					path.relative(this.builder.getWd(), sPath),
 					FileFinder.getModuleName(sPath),
-					FileFinder.getNamespace(
-						sPath, this.builder.getNameSpaces()));
+					FileFinder.getNamespace(sPath, this.builder.getNameSpaces())
+				);
 			}
 			return undefined;
 		}

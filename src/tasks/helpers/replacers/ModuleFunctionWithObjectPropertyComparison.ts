@@ -17,41 +17,57 @@ const builders = recast.types.builders;
  * @returns {void}
  */
 const replaceable: ASTReplaceable = {
-
 	replace(
-		node: NodePath, name: string, fnName: string, oldModuleCall: string,
-		config: { objectProperty: string, comparisonValue: string }) : void {
+		node: NodePath,
+		name: string,
+		fnName: string,
+		oldModuleCall: string,
+		config: {objectProperty: string; comparisonValue: string}
+	): void {
 		const oNodeIdentifier: ESTree.Identifier = builders.identifier(name);
 		let oNodeModule: ESTree.Expression = oNodeIdentifier;
 		if (config.objectProperty) {
 			oNodeModule = builders.memberExpression(
-				oNodeIdentifier, builders.identifier(config.objectProperty));
+				oNodeIdentifier,
+				builders.identifier(config.objectProperty)
+			);
 		}
 
 		const oInsertionPoint = node.parentPath.value;
 		const oInsertion = node.value;
 		if (fnName) {
 			oNodeModule = builders.memberExpression(
-				oNodeModule, builders.identifier(fnName), false);
+				oNodeModule,
+				builders.identifier(fnName),
+				false
+			);
 		}
 
 		let oReplacement: ESTree.Expression = oNodeModule;
 		if (config.comparisonValue) {
 			oReplacement = builders.binaryExpression(
-				"===", oReplacement, builders.literal(config.comparisonValue));
+				"===",
+				oReplacement,
+				builders.literal(config.comparisonValue)
+			);
 		}
 
 		switch (oInsertion.type) {
-			case (Syntax.MemberExpression): {  // MyModule.myField
-				oInsertionPoint[node.name] = oReplacement;
-			} break;
+			case Syntax.MemberExpression:
+				{
+					// MyModule.myField
+					oInsertionPoint[node.name] = oReplacement;
+				}
+				break;
 			default: {
 				throw new Error(
-					"insertion is of type " + oInsertion.type +
-					"(supported are only Call- and Member-Expressions)");
+					"insertion is of type " +
+						oInsertion.type +
+						"(supported are only Call- and Member-Expressions)"
+				);
 			}
 		}
-	}
+	},
 };
 
 module.exports = replaceable;

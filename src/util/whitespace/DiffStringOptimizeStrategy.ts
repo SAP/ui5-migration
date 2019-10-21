@@ -5,10 +5,8 @@ import * as StringWhitespaceUtils from "./StringWhitespaceUtils";
 
 const diff = require("diff");
 
-
 export class DiffStringOptimizeStrategy implements StringOptimizeStrategy {
 	private reporter: Reporter;
-
 
 	constructor(reporter?: Reporter) {
 		this.reporter = reporter;
@@ -18,8 +16,9 @@ export class DiffStringOptimizeStrategy implements StringOptimizeStrategy {
 		const aResult: Range[] = [];
 		let iCount = 0;
 		// const aDiffWords = diff.diffWordsWithSpace(original, modified);
-		const aDiffWords =
-			diff.diffLines(original, modified, { ignoreWhitespace : true });
+		const aDiffWords = diff.diffLines(original, modified, {
+			ignoreWhitespace: true,
+		});
 		for (let i = 0; i < aDiffWords.length; i++) {
 			const oResultElement = aDiffWords[i];
 			const sLength = oResultElement.value.length;
@@ -41,8 +40,8 @@ export class DiffStringOptimizeStrategy implements StringOptimizeStrategy {
 		if (this.reporter) {
 			this.reporter.report(
 				ReportLevel.TRACE,
-				`Performing DiffStringOptimizeStrategy ${original.length} and ${
-					modified.length}`);
+				`Performing DiffStringOptimizeStrategy ${original.length} and ${modified.length}`
+			);
 		}
 
 		// use diff with words to minimize false positives
@@ -51,10 +50,12 @@ export class DiffStringOptimizeStrategy implements StringOptimizeStrategy {
 		const aResult = diff.diffWordsWithSpace(original, modified);
 		if (this.reporter) {
 			this.reporter.report(
-				ReportLevel.TRACE, `DIFF: Found ${aResult.length} diffs`);
+				ReportLevel.TRACE,
+				`DIFF: Found ${aResult.length} diffs`
+			);
 		}
 		let iIndex = 0;
-		aResult.forEach((oChange) => {
+		aResult.forEach(oChange => {
 			iIndex = sIgnoreWhitespaceChanges.length;
 			if (oChange.removed === undefined && oChange.added === undefined) {
 				sIgnoreWhitespaceChanges += oChange.value;
@@ -65,12 +66,15 @@ export class DiffStringOptimizeStrategy implements StringOptimizeStrategy {
 				} else {
 					if (this.reporter) {
 						this.reporter.collect(
-							"DiffStringOptimizeStrategy.skipped", 1);
+							"DiffStringOptimizeStrategy.skipped",
+							1
+						);
 						this.reporter.report(
 							ReportLevel.TRACE,
-							`DIFF Skipped ${iIndex}: ${
-								StringWhitespaceUtils.formatWhitespaceChars(
-									oChange.value)}`);
+							`DIFF Skipped ${iIndex}: ${StringWhitespaceUtils.formatWhitespaceChars(
+								oChange.value
+							)}`
+						);
 					}
 				}
 			} else if (oChange.removed && oChange.added === undefined) {
@@ -79,17 +83,19 @@ export class DiffStringOptimizeStrategy implements StringOptimizeStrategy {
 					sIgnoreWhitespaceChanges += oChange.value;
 					if (this.reporter) {
 						this.reporter.collect(
-							"DiffStringOptimizeStrategy.added", 1);
+							"DiffStringOptimizeStrategy.added",
+							1
+						);
 						this.reporter.report(
 							ReportLevel.TRACE,
-							`DIFF Added ${iIndex}: ${
-								StringWhitespaceUtils.formatWhitespaceChars(
-									oChange.value)}`);
+							`DIFF Added ${iIndex}: ${StringWhitespaceUtils.formatWhitespaceChars(
+								oChange.value
+							)}`
+						);
 					}
 				}
 			}
 		});
-
 
 		return sIgnoreWhitespaceChanges;
 	}

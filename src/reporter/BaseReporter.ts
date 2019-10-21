@@ -1,6 +1,12 @@
 import * as ESTree from "estree";
 
-import {Finding, fromLoc, ReportContext, Reporter, ReportLevel} from "./Reporter";
+import {
+	Finding,
+	fromLoc,
+	ReportContext,
+	Reporter,
+	ReportLevel,
+} from "./Reporter";
 
 /**
  * Represents a reporter base class which can:
@@ -30,10 +36,10 @@ export abstract class BaseReporter implements Reporter {
 	 */
 	storeFinding(message: string, loc?: ESTree.SourceLocation) {
 		this.findings.push({
-			fileName : this.oReportContext.fileName,
-			location : fromLoc(loc),
+			fileName: this.oReportContext.fileName,
+			location: fromLoc(loc),
 			message,
-			taskName : this.oReportContext.taskName
+			taskName: this.oReportContext.taskName,
 		});
 	}
 
@@ -55,7 +61,7 @@ export abstract class BaseReporter implements Reporter {
 	/**
 	 * @see Reporter#collect
 	 */
-	abstract collect(sKey: string, sValue: string|number): void;
+	abstract collect(sKey: string, sValue: string | number): void;
 
 	/**
 	 * @see Reporter#finalize
@@ -66,7 +72,10 @@ export abstract class BaseReporter implements Reporter {
 	 * @see Reporter#report
 	 */
 	abstract report(
-		level: ReportLevel, msg: string, loc?: ESTree.SourceLocation): void;
+		level: ReportLevel,
+		msg: string,
+		loc?: ESTree.SourceLocation
+	): void;
 
 	/**
 	 * @see Reporter#reportCollected

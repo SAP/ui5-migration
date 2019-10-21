@@ -6,19 +6,26 @@ import {NodePath} from "ui5-migration";
 import {EMPTY_FINDER_RESULT, Finder, FinderResult} from "../../../dependencies";
 import {SapUiDefineCall} from "../../../util/SapUiDefineCall";
 
-
 class JQueryEventExtensionFinder implements Finder {
 	find(
-		node: ESTree.Node, config: { finderIncludesName: string },
-		sConfigName: string, defineCall: SapUiDefineCall): FinderResult {
+		node: ESTree.Node,
+		config: {finderIncludesName: string},
+		sConfigName: string,
+		defineCall: SapUiDefineCall
+	): FinderResult {
 		const oObject = sConfigName.split(".");
 		if (node.type === Syntax.MemberExpression) {
-			if (node.object.type === Syntax.Identifier &&
-				node.object.name.toLowerCase().includes(
-					config.finderIncludesName)) {
-				if (node.property.type === Syntax.Identifier &&
-					node.property.name === oObject[1]) {
-					return { configName : sConfigName };
+			if (
+				node.object.type === Syntax.Identifier &&
+				node.object.name
+					.toLowerCase()
+					.includes(config.finderIncludesName)
+			) {
+				if (
+					node.property.type === Syntax.Identifier &&
+					node.property.name === oObject[1]
+				) {
+					return {configName: sConfigName};
 				}
 			}
 		}

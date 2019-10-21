@@ -22,20 +22,30 @@ const builders = recast.types.builders;
 
 class ModuleWithInvocationReplaceable implements ASTReplaceable {
 	replace(
-		node: NodePath, name: string, fnName: string, oldModuleCall: string,
-		config: {}) {
+		node: NodePath,
+		name: string,
+		fnName: string,
+		oldModuleCall: string,
+		config: {}
+	) {
 		return this.replaceInternal(node, name, fnName, oldModuleCall, config);
 	}
 
-
 	replaceInternal(
-		node: NodePath, name: string, fnName: string, oldModuleCall: string,
-		config: {}, aParams: ESTree.Expression[] = []): void {
+		node: NodePath,
+		name: string,
+		fnName: string,
+		oldModuleCall: string,
+		config: {},
+		aParams: ESTree.Expression[] = []
+	): void {
 		const oInsertionPoint = node.parentPath.value;
 		const oInsertion = node.value;
 		const oNodeFunction = builders.memberExpression(
 			builders.callExpression(builders.identifier(name), aParams),
-			builders.identifier(fnName), false);
+			builders.identifier(fnName),
+			false
+		);
 
 		if (oInsertionPoint.type === Syntax.CallExpression) {
 			oInsertionPoint.callee = oNodeFunction;
@@ -47,8 +57,10 @@ class ModuleWithInvocationReplaceable implements ASTReplaceable {
 			oInsertionPoint[node.name] = oNodeFunction;
 		} else {
 			throw new Error(
-				"insertion is of type " + oInsertion.type +
-				"(supported are only Call- and Member-Expressions)");
+				"insertion is of type " +
+					oInsertion.type +
+					"(supported are only Call- and Member-Expressions)"
+			);
 		}
 	}
 }

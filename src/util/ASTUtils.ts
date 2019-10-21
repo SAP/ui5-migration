@@ -10,8 +10,10 @@ export type CallCondition = (call: TNodePath<ESTree.CallExpression>) => boolean;
  * Find function calls which can be filtered
  */
 export function findCalls(
-	ast: ESTree.Node, cond?: CallCondition,
-	visitor?: ASTVisitor): Array<TNodePath<ESTree.CallExpression>> {
+	ast: ESTree.Node,
+	cond?: CallCondition,
+	visitor?: ASTVisitor
+): Array<TNodePath<ESTree.CallExpression>> {
 	const results = [];
 
 	if (!visitor) {
@@ -22,11 +24,11 @@ export function findCalls(
 			if (!cond || cond(path)) {
 				path.protect();
 				results.push(path);
-				return false;  // no nested extend calls
+				return false; // no nested extend calls
 			}
 			this.traverse(path);
 			return undefined;
-		}
+		},
 	});
 
 	return results;
@@ -45,8 +47,11 @@ export function getMemberExprParts(ast: ESTree.MemberExpression): string[] {
 	do {
 		parts.unshift(curAst.property.name);
 		curAst = curAst.object;
-	} while (curAst && curAst.type === Syntax.MemberExpression &&
-			 curAst.property.type === Syntax.Identifier);
+	} while (
+		curAst &&
+		curAst.type === Syntax.MemberExpression &&
+		curAst.property.type === Syntax.Identifier
+	);
 
 	if (curAst.type === Syntax.Identifier) {
 		parts.unshift(curAst.name);

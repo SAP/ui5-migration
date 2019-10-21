@@ -46,7 +46,9 @@ export class SapUiDefineCall {
 	private reporter: Reporter = new ConsoleReporter(ReportLevel.INFO);
 
 	static isValid(node: ESTree.Node): boolean {
-		if (node && node.type === Syntax.CallExpression &&
+		if (
+			node &&
+			node.type === Syntax.CallExpression &&
 			node.callee.type === Syntax.MemberExpression &&
 			node.callee.object.type === Syntax.MemberExpression &&
 			node.callee.object.object.type === Syntax.Identifier &&
@@ -54,13 +56,16 @@ export class SapUiDefineCall {
 			node.callee.object.property.type === Syntax.Identifier &&
 			node.callee.object.property.name === "ui" &&
 			node.callee.property.type === Syntax.Identifier &&
-			node.arguments.length > 0) {
+			node.arguments.length > 0
+		) {
 			if (node.callee.property.name === "define") {
 				// define call might have a literal as optional first argument
 				return true;
 			} else if (
-				node.callee.property.name === "require" && node.arguments[0] &&
-				node.arguments[0].type === Syntax.ArrayExpression) {
+				node.callee.property.name === "require" &&
+				node.arguments[0] &&
+				node.arguments[0].type === Syntax.ArrayExpression
+			) {
 				// require call must have an array (dependencies) as first
 				// argument
 				return true;
@@ -77,17 +82,20 @@ export class SapUiDefineCall {
 		 *       expression: SapUiDefineCall
 		 */
 		return (
-			SapUiDefineCall.isValid(path.value) && path.parentPath &&
+			SapUiDefineCall.isValid(path.value) &&
+			path.parentPath &&
 			path.parentPath.value.type === Syntax.ExpressionStatement &&
 			path.parentPath.parentPath &&
 			path.parentPath.parentPath.parentPath &&
-			path.parentPath.parentPath.parentPath.value.type ===
-				Syntax.Program);
+			path.parentPath.parentPath.parentPath.value.type === Syntax.Program
+		);
 	}
 
 	constructor(
-		node: ESTree.CallExpression, moduleName: string,
-		reporter: Reporter = new ConsoleReporter(ReportLevel.INFO)) {
+		node: ESTree.CallExpression,
+		moduleName: string,
+		reporter: Reporter = new ConsoleReporter(ReportLevel.INFO)
+	) {
 		this.node = node;
 		this.name = moduleName;
 		this.reporter = reporter;
@@ -147,14 +155,17 @@ export class SapUiDefineCall {
 			}
 		}
 
-		if (this.factory &&
+		if (
+			this.factory &&
 			((this.dependencyArray &&
-			  this.factory.params.length >
-				  this.dependencyArray.elements.length) ||
-			 (!this.dependencyArray && this.factory.params.length > 0))) {
+				this.factory.params.length >
+					this.dependencyArray.elements.length) ||
+				(!this.dependencyArray && this.factory.params.length > 0))
+		) {
 			this.reporter.report(
 				ReportLevel.TRACE,
-				"**** warning: AMD factory has more parameters than dependencies!");
+				"**** warning: AMD factory has more parameters than dependencies!"
+			);
 		}
 
 		if (this.factory) {
@@ -181,7 +192,7 @@ export class SapUiDefineCall {
 	 * @returns {string[]} dependency array elements resolved absolutely, e.g. ["a/b/c", "g/f/j"]
 	 */
 	getAbsoluteDependencyPaths() {
-		return this.dependencyArray.elements.map((oElement) => {
+		return this.dependencyArray.elements.map(oElement => {
 			const value = (oElement as ESTree.Literal).value.toString();
 			return SapUiDefineCall._resolveRelativeImports(value, this.name);
 		});
@@ -198,8 +209,8 @@ export class SapUiDefineCall {
 		if (!this.dependencyArray) {
 			const arrayExpression = builders.arrayExpression([]);
 			this.node.arguments.splice(0, 0, arrayExpression);
-			this.dependencyArray =
-				this.node.arguments[0] as ESTree.ArrayExpression;
+			this.dependencyArray = this.node
+				.arguments[0] as ESTree.ArrayExpression;
 		}
 
 		// check if dependency is already contained
@@ -207,7 +218,6 @@ export class SapUiDefineCall {
 		if (i < 0) {
 			return false;
 		}
-
 
 		// add new dependency and shortcut
 		this.dependencyArray.elements[i] = builders.literal(sModule);
@@ -228,14 +238,15 @@ export class SapUiDefineCall {
 		if (!this.dependencyArray) {
 			const arrayExpression = builders.arrayExpression([]);
 			this.node.arguments.splice(0, 0, arrayExpression);
-			this.dependencyArray =
-				this.node.arguments[0] as ESTree.ArrayExpression;
+			this.dependencyArray = this.node
+				.arguments[0] as ESTree.ArrayExpression;
 		}
 
 		// check if dependency is already contained
 		let i = this.dependencyArray.elements.findIndex(
 			oElement =>
-				oElement.type === "Literal" && oElement.value === sModule);
+				oElement.type === "Literal" && oElement.value === sModule
+		);
 		if (i >= 0) {
 			if (sShortcut && i >= this.paramNames.length) {
 				// add shortcut by removing dependency and readd it
@@ -279,29 +290,36 @@ export class SapUiDefineCall {
 			return false;
 		}
 
-		const aAlreadyMatchingElements =
-			this.dependencyArray.elements.filter(function(oElement) {
+		const aAlreadyMatchingElements = this.dependencyArray.elements.filter(
+			function(oElement) {
 				if (oElement.type !== "Literal") {
 					throw new Error(
-						"Dependency is not a literal in " + this.name);
+						"Dependency is not a literal in " + this.name
+					);
 				}
 				return oElement.value === sModule;
-			});
+			}
+		);
 		if (aAlreadyMatchingElements.length === 0) {
 			return false;
 		}
 
-		let iIndexToRemove =
-			this.dependencyArray.elements.indexOf(aAlreadyMatchingElements[0]);
+		let iIndexToRemove = this.dependencyArray.elements.indexOf(
+			aAlreadyMatchingElements[0]
+		);
 		if (aAlreadyMatchingElements.length > 1 && sParam) {
 			const iIndex = this.paramNames.indexOf(sParam);
 
 			if (iIndex > 0) {
-				const matchingIndexElements =
-					aAlreadyMatchingElements.filter((oMatchingElement) => {
-						return this.dependencyArray.elements.indexOf(
-								   oMatchingElement) === iIndex;
-					});
+				const matchingIndexElements = aAlreadyMatchingElements.filter(
+					oMatchingElement => {
+						return (
+							this.dependencyArray.elements.indexOf(
+								oMatchingElement
+							) === iIndex
+						);
+					}
+				);
 				if (matchingIndexElements.length === 1) {
 					iIndexToRemove = iIndex;
 				}
@@ -360,15 +378,15 @@ export class SapUiDefineCall {
 		return oParam;
 	}
 
-
 	getParamNameByImport(sModule: string): string {
 		const oMatchingElement = this.getNodeOfImport(sModule);
 		if (!oMatchingElement) {
 			return undefined;
 		}
 
-		const iIndexToRemove =
-			this.dependencyArray.elements.indexOf(oMatchingElement);
+		const iIndexToRemove = this.dependencyArray.elements.indexOf(
+			oMatchingElement
+		);
 
 		if (iIndexToRemove === -1) {
 			return undefined;
@@ -382,14 +400,16 @@ export class SapUiDefineCall {
 			return undefined;
 		}
 		const that = this;
-		const aAlreadyMatchingElements =
-			this.dependencyArray.elements.filter(function(oElement) {
+		const aAlreadyMatchingElements = this.dependencyArray.elements.filter(
+			function(oElement) {
 				if (oElement.type !== "Literal") {
 					throw new Error(
-						"Dependency is not a literal in " + that.name);
+						"Dependency is not a literal in " + that.name
+					);
 				}
 				return oElement.value === sModule;
-			});
+			}
+		);
 		if (aAlreadyMatchingElements.length === 0) {
 			return undefined;
 		}
@@ -410,7 +430,8 @@ export class SapUiDefineCall {
 			let insertionPoint = 0;
 			while (
 				insertionPoint < statements.length &&
-				SapUiDefineCallUtils.isDirective(statements[insertionPoint])) {
+				SapUiDefineCallUtils.isDirective(statements[insertionPoint])
+			) {
 				insertionPoint++;
 			}
 			statements.splice(insertionPoint, 0, stmt);
@@ -422,51 +443,65 @@ export class SapUiDefineCall {
 	_analyzeBody() {
 		let returns = 0;
 		let exportName;
-		const classDefinitions = this.classDefinitions = {};
+		const classDefinitions = (this.classDefinitions = {});
 
 		// Pass 1: determine shortcut variables and module export (return value)
-		this.factory.body.body.forEach((stmt) => {
+		this.factory.body.body.forEach(stmt => {
 			if (stmt.type === Syntax.VariableDeclaration) {
-				stmt.declarations.forEach((decl) => {
+				stmt.declarations.forEach(decl => {
 					if (decl.id.type === Syntax.Identifier) {
-						const shortcut =
-							SapUiDefineCallUtils.checkForShortcutExpression(
-								this, decl.init);
+						const shortcut = SapUiDefineCallUtils.checkForShortcutExpression(
+							this,
+							decl.init
+						);
 						if (shortcut) {
 							const globalName =
-								shortcut.module.replace(/\//g, ".")
+								shortcut.module
+									.replace(/\//g, ".")
 									.replace(/\.library$/, "") +
-								"." + shortcut.propertyPath;
+								"." +
+								shortcut.propertyPath;
 							this.reporter.report(
 								ReportLevel.DEBUG,
-								"possible shortcut found:" + decl.id.name +
-									" " + shortcut.leftmostName + "." +
-									shortcut.propertyPath + " (" + globalName +
-									")");
+								"possible shortcut found:" +
+									decl.id.name +
+									" " +
+									shortcut.leftmostName +
+									"." +
+									shortcut.propertyPath +
+									" (" +
+									globalName +
+									")"
+							);
 							this.shortcuts[globalName] = {
-								local : decl.id.name,
-								module : shortcut.module,
-								global : globalName,
+								local: decl.id.name,
+								module: shortcut.module,
+								global: globalName,
 								stmt,
 								decl,
 							};
 						}
 					}
-					if (decl.id.type === Syntax.Identifier && decl.init &&
+					if (
+						decl.id.type === Syntax.Identifier &&
+						decl.init &&
 						decl.init.type === Syntax.CallExpression &&
 						decl.init.callee.type === Syntax.MemberExpression &&
 						decl.init.callee.property.type === Syntax.Identifier &&
 						decl.init.callee.property.name === "extend" &&
-						decl.init.arguments.length > 0) {
+						decl.init.arguments.length > 0
+					) {
 						const init0 = decl.init.arguments[0];
-						if (init0.type === Syntax.Literal &&
-							typeof init0.value === "string") {
+						if (
+							init0.type === Syntax.Literal &&
+							typeof init0.value === "string"
+						) {
 							// console.log("found potential class definition %s
 							// = %s", decl.id.name,
 							// decl.init.arguments[0].value);
 							classDefinitions[decl.id.name] = {
-								name : init0.value,
-								info : decl.init.arguments[1]
+								name: init0.value,
+								info: decl.init.arguments[1],
 							};
 						}
 					}
@@ -483,39 +518,53 @@ export class SapUiDefineCall {
 			this.exportName = exportName;
 			if (typeof classDefinitions[exportName] === "object") {
 				this.reporter.report(
-					ReportLevel.TRACE, "  module exports class %s",
-					classDefinitions[exportName].name);
+					ReportLevel.TRACE,
+					"  module exports class %s",
+					classDefinitions[exportName].name
+				);
 				this.globalExportRequired = false;
 			}
 		}
 
 		// Pass 2: identify AMD factory and class methods
-		Object.defineProperty(
-			this.factory, "__classMethodName",
-			{ enumerable : false, value : "AMD-factory" });
-		this.factory.body.body.forEach((stmt) => {
-			if (stmt.type === Syntax.ExpressionStatement &&
+		Object.defineProperty(this.factory, "__classMethodName", {
+			enumerable: false,
+			value: "AMD-factory",
+		});
+		this.factory.body.body.forEach(stmt => {
+			if (
+				stmt.type === Syntax.ExpressionStatement &&
 				stmt.expression.type === Syntax.AssignmentExpression &&
 				this.exportName &&
 				SapUiDefineCallUtils.isMemberOf(
-					stmt.expression.left, this.exportName)) {
-				if (stmt.expression.left.type === Syntax.MemberExpression &&
+					stmt.expression.left,
+					this.exportName
+				)
+			) {
+				if (
+					stmt.expression.left.type === Syntax.MemberExpression &&
 					stmt.expression.left.object.type ===
 						Syntax.MemberExpression &&
 					stmt.expression.left.object.property.type ===
 						Syntax.Identifier &&
 					stmt.expression.left.object.property.name === "prototype" &&
-					stmt.expression.left.property.type === Syntax.Identifier) {
+					stmt.expression.left.property.type === Syntax.Identifier
+				) {
 					this.reporter.report(
 						ReportLevel.DEBUG,
 						"  found class method: " +
 							SapUiDefineCallUtils.getObjectName(
-								stmt.expression.left));
+								stmt.expression.left
+							)
+					);
 					Object.defineProperty(
-						stmt.expression.right, "__classMethodName", {
-							enumerable : false,
-							value : stmt.expression.left.property.name
-						});
+						stmt.expression.right,
+						"__classMethodName",
+						{
+							enumerable: false,
+							value: stmt.expression.left.property.name,
+						}
+					);
 				}
 			}
 		});
@@ -534,8 +583,8 @@ export class SapUiDefineCall {
 		let bWasModified = false;
 		if (typeof this.shortcuts[fullName] === "object") {
 			return {
-				modified : bWasModified,
-				path : this.shortcuts[fullName].local
+				modified: bWasModified,
+				path: this.shortcuts[fullName].local,
 			};
 		}
 
@@ -548,7 +597,8 @@ export class SapUiDefineCall {
 			if (pos >= 0) {
 				builders.memberExpression(
 					buildAccessTo(path.slice(0, pos)),
-					builders.identifier(path.slice(pos + 1)));
+					builders.identifier(path.slice(pos + 1))
+				);
 			}
 			return builders.identifier(path);
 		}
@@ -557,30 +607,33 @@ export class SapUiDefineCall {
 			builders.variableDeclarator(
 				builders.identifier(shortcut),
 				builders.memberExpression(
-					builders.identifier(localRef), buildAccessTo(memberName)))
+					builders.identifier(localRef),
+					buildAccessTo(memberName)
+				)
+			),
 		]);
 		shortcutVar.comments = shortcut.comments || [];
 		shortcutVar.comments.push({
-			type : "Line",
-			value : " shortcut for " + fullName,
-			leading : true
+			type: "Line",
+			value: " shortcut for " + fullName,
+			leading: true,
 		});
 
 		this.reporter.report(
 			ReportLevel.TRACE,
-			"  add shortcut " + shortcut + " for " + localRef + "." +
-				memberName);
+			"  add shortcut " + shortcut + " for " + localRef + "." + memberName
+		);
 		bWasModified = this.prependStatementToFactory(shortcutVar);
 
 		this.shortcuts[fullName] = {
-			local : shortcut,
+			local: shortcut,
 			module,
-			globalName : fullName,
-			stmt : shortcutVar,
-			decl : shortcutVar.declarations[0]
+			globalName: fullName,
+			stmt: shortcutVar,
+			decl: shortcutVar.declarations[0],
 		};
 
-		return { modified : bWasModified, path : shortcut };
+		return {modified: bWasModified, path: shortcut};
 	}
 
 	/**
@@ -602,14 +655,16 @@ export class SapUiDefineCall {
 					} else {
 						this.reporter.report(
 							ReportLevel.TRACE,
-							"**** could not find shortcut declaration in module factory");
+							"**** could not find shortcut declaration in module factory"
+						);
 					}
 				}
 				delete this.shortcuts[fullName];
 			} else {
 				this.reporter.report(
 					ReportLevel.TRACE,
-					"**** could not find shortcut declaration");
+					"**** could not find shortcut declaration"
+				);
 			}
 			return shortcutInfo.local;
 		}

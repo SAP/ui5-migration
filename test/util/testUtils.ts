@@ -2,7 +2,11 @@ import * as ESTree from "estree";
 import {Node, SourceLocation} from "estree";
 
 import * as Mod from "../../src/Migration";
-import {AnalyseArguments, MigrateArguments, ReportLevel} from "../../src/Migration";
+import {
+	AnalyseArguments,
+	MigrateArguments,
+	ReportLevel,
+} from "../../src/Migration";
 import {BaseReporter} from "../../src/reporter/BaseReporter";
 import {MetaConsoleReporter} from "../../src/reporter/MetaConsoleReporter";
 import {Finding, ReportContext, Reporter} from "../../src/reporter/Reporter";
@@ -59,11 +63,9 @@ export class CustomReporter extends BaseReporter {
 		const fullMsg = level + ": " + locStr + msg;
 		this.reports.push(fullMsg);
 	}
-	collect() {
-	}
+	collect() {}
 
-	reportCollected(level: ReportLevel): void {
-	}
+	reportCollected(level: ReportLevel): void {}
 
 	finalize(): Promise<{}> {
 		return Promise.resolve({});
@@ -112,22 +114,18 @@ export class CustomFileInfo implements Mod.FileInfo {
 		return undefined;
 	}
 
-	markModified(bWasModified: boolean) {
-	}
+	markModified(bWasModified: boolean) {}
 
 	saveContent(sOutputPath: string): Promise<string> {
 		return undefined;
 	}
 
-	unloadContent(): void {
-	}
+	unloadContent(): void {}
 
 	wasModified(): boolean {
 		return false;
 	}
 }
-
-
 
 export class CustomMigrationTask implements MigrationTask {
 	private aFnAnalyze: Function[] = [];
@@ -173,7 +171,8 @@ export class CustomLocalFileInfo extends FileInfo {
 	}
 
 	addOnSaveListener(
-		fnSave: (bWasModified: boolean, sSourceCode: string) => void) {
+		fnSave: (bWasModified: boolean, sSourceCode: string) => void
+	) {
 		if (fnSave) {
 			this.aFnSave.push(fnSave);
 		}
@@ -184,13 +183,12 @@ export class CustomLocalFileInfo extends FileInfo {
 		this.wasUnloaded = true;
 	}
 
-
 	async saveContent(sOutputPath: string): Promise<string> {
-		this.sSourceCode =
-			recast.print(this.oAST, { useTabs : true, lineTerminator : "\n" })
-				.code;
+		this.sSourceCode = recast.print(this.oAST, {
+			useTabs: true,
+			lineTerminator: "\n",
+		}).code;
 		const that = this;
-
 
 		// mkdir operation should be async
 		await new Promise((resolve, reject) => {
@@ -216,7 +214,7 @@ export class CustomLocalFileInfo extends FileInfo {
 }
 
 export class CustomFileFinder implements Mod.FileFinder {
-	async findByPath(sPath: string): Promise<Mod.FileInfo|null> {
+	async findByPath(sPath: string): Promise<Mod.FileInfo | null> {
 		try {
 			const oCustomFileInfo = new CustomFileInfo(sPath);
 			return Promise.resolve(oCustomFileInfo);

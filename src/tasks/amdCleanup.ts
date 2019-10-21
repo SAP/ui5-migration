@@ -6,10 +6,8 @@ import * as LoaderUtils from "../util/LoaderUtils";
 import * as fs from "graceful-fs";
 import * as path from "path";
 
-
 const amdCleanerUtil = require("../util/AmdCleanerUtil");
 const apiInfo = require("../util/APIInfo");
-
 
 /**
  * creates an APIInfo from the given config
@@ -20,12 +18,14 @@ const apiInfo = require("../util/APIInfo");
  */
 async function createApiInfo(
 	config: {
-		api: {},
-		apiResources: object[],
-		apiVersion: string,
-		rootPath: string
+		api: {};
+		apiResources: object[];
+		apiVersion: string;
+		rootPath: string;
 	},
-	reporter: Reporter, targetVersion: string): Promise<{}> {
+	reporter: Reporter,
+	targetVersion: string
+): Promise<{}> {
 	const oApi = {};
 	const oApiResources = {};
 	let apiVersion;
@@ -33,55 +33,63 @@ async function createApiInfo(
 	const aPromises: Array<Promise<void>> = [];
 	if (config.api) {
 		Object.keys(config.api).forEach(function(sKey) {
-			aPromises.push(LoaderUtils.fetchResource(config.api[sKey])
-							   .then(function(oResult) {
-								   oApi[sKey] = oResult;
-							   })
-							   .catch(function(e) {
-								   reporter.report(
-									   ReportLevel.ERROR,
-									   "failed to load " + sKey +
-										   ", error: " + e);
-							   }));
+			aPromises.push(
+				LoaderUtils.fetchResource(config.api[sKey])
+					.then(function(oResult) {
+						oApi[sKey] = oResult;
+					})
+					.catch(function(e) {
+						reporter.report(
+							ReportLevel.ERROR,
+							"failed to load " + sKey + ", error: " + e
+						);
+					})
+			);
 		});
 	}
 	if (config.apiResources) {
 		Object.keys(config.apiResources).forEach(function(sKey) {
-			aPromises.push(LoaderUtils.fetchResource(config.apiResources[sKey])
-							   .then(function(oResult) {
-								   oApiResources[sKey] = oResult;
-							   })
-							   .catch(function(e) {
-								   reporter.report(
-									   ReportLevel.ERROR,
-									   "failed to load resources for " + sKey +
-										   ", error: " + e);
-							   }));
+			aPromises.push(
+				LoaderUtils.fetchResource(config.apiResources[sKey])
+					.then(function(oResult) {
+						oApiResources[sKey] = oResult;
+					})
+					.catch(function(e) {
+						reporter.report(
+							ReportLevel.ERROR,
+							"failed to load resources for " +
+								sKey +
+								", error: " +
+								e
+						);
+					})
+			);
 		});
 	}
 	if (config.apiVersion) {
-		aPromises.push(LoaderUtils.fetchResource(config.apiVersion)
-						   .then(function(oResult) {
-							   apiVersion = oResult;
-						   })
-						   .catch(function(e) {
-							   reporter.report(
-								   ReportLevel.ERROR,
-								   "failed to load " + config.apiVersion +
-									   ", error: " + e);
-						   }));
+		aPromises.push(
+			LoaderUtils.fetchResource(config.apiVersion)
+				.then(function(oResult) {
+					apiVersion = oResult;
+				})
+				.catch(function(e) {
+					reporter.report(
+						ReportLevel.ERROR,
+						"failed to load " + config.apiVersion + ", error: " + e
+					);
+				})
+		);
 	}
 	await Promise.all(aPromises);
 	return apiInfo.create({
-		mApi : oApi,
-		oApiVersion : apiVersion,
-		mApiIncludedResources : oApiResources,
-		rootPath : config.rootPath,
+		mApi: oApi,
+		oApiVersion: apiVersion,
+		mApiIncludedResources: oApiResources,
+		rootPath: config.rootPath,
 		reporter,
-		targetVersion
+		targetVersion,
 	});
 }
-
 
 /**
  * Analyzes the source code and returns a Promise with the resulting changes
@@ -91,15 +99,22 @@ async function createApiInfo(
 async function analyse(args: Mod.AnalyseArguments): Promise<{}> {
 	// TODO check instanceof args.config.api being APIInfo and pass it through
 	// then
-	const apiInfo =
-		await createApiInfo(args.config, args.reporter, args.targetVersion);
+	const apiInfo = await createApiInfo(
+		args.config,
+		args.reporter,
+		args.targetVersion
+	);
 	const pAnalysis = amdCleanerUtil.ui52amd(
-		args.file.getAST(), args.file.getFileName(), args.file.getNamespace(),
-		args.config.amd, apiInfo, false, args.reporter);
+		args.file.getAST(),
+		args.file.getFileName(),
+		args.file.getNamespace(),
+		args.config.amd,
+		apiInfo,
+		false,
+		args.reporter
+	);
 
-
-
-	return pAnalysis.then((oAnalysisResult) => {
+	return pAnalysis.then(oAnalysisResult => {
 		const oAnalysis = oAnalysisResult.oAnalysisResult;
 		if (oAnalysis) {
 			let iReplacements = 0;
@@ -116,7 +131,9 @@ async function analyse(args: Mod.AnalyseArguments): Promise<{}> {
 
 			args.reporter.collect("replacementsFound", iReplacements);
 			args.reporter.collect(
-				"amdStructureCreated", countModifications(oAnalysis, "body"));
+				"amdStructureCreated",
+				countModifications(oAnalysis, "body")
+			);
 		}
 		return oAnalysisResult;
 	});
@@ -134,13 +151,21 @@ function countModifications(oAnalysis, sValue) {
  * @param args
  */
 async function migrate(args: Mod.MigrateArguments): Promise<boolean> {
-	const apiInfo =
-		await createApiInfo(args.config, args.reporter, args.targetVersion);
+	const apiInfo = await createApiInfo(
+		args.config,
+		args.reporter,
+		args.targetVersion
+	);
 	return amdCleanerUtil
 		.ui52amd(
-			args.file.getAST(), args.file.getFileName(),
-			args.file.getNamespace(), args.config.amd, apiInfo, true,
-			args.reporter)
+			args.file.getAST(),
+			args.file.getFileName(),
+			args.file.getNamespace(),
+			args.config.amd,
+			apiInfo,
+			true,
+			args.reporter
+		)
 		.then(function(oResult) {
 			return oResult.modified;
 		});
@@ -150,17 +175,24 @@ async function migrate(args: Mod.MigrateArguments): Promise<boolean> {
  * Exports AmdCleaner
  */
 const migration: Mod.Task = {
-	description :
+	description:
 		"Remove global module invocations and add required dependencies.",
 	defaultConfig() {
-		return Promise.resolve(JSON.parse(fs.readFileSync(
-			path.join(
-				__dirname, "../../../defaultConfig/AmdCleaner.config.json"),
-			"utf8")));
+		return Promise.resolve(
+			JSON.parse(
+				fs.readFileSync(
+					path.join(
+						__dirname,
+						"../../../defaultConfig/AmdCleaner.config.json"
+					),
+					"utf8"
+				)
+			)
+		);
 	},
-	keywords : [ "all", "apply-amd-syntax" ],
-	priority : 10,
+	keywords: ["all", "apply-amd-syntax"],
+	priority: 10,
 	analyse,
-	migrate
+	migrate,
 };
 export = migration;

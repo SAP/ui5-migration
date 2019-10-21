@@ -9,7 +9,6 @@ function escapeControlChars(cChar) {
 	return cChar;
 }
 
-
 export function formatWhitespaceChars(toEscape) {
 	let sAdd = "";
 	if (toEscape === "") {

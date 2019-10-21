@@ -8,20 +8,28 @@ const assert = require("assert");
 describe("NamespaceUtils", function() {
 	it("Should get the common part", function() {
 		assert.equal(
-			NamespaceUtils.getCommonPart("a.b.c.d", "a.b.x.y"), "a.b",
-			"a.b. common part");
+			NamespaceUtils.getCommonPart("a.b.c.d", "a.b.x.y"),
+			"a.b",
+			"a.b. common part"
+		);
 
 		assert.equal(
-			NamespaceUtils.getCommonPart("f.b.c.d", "a.b.x.y"), "",
-			"no common part");
+			NamespaceUtils.getCommonPart("f.b.c.d", "a.b.x.y"),
+			"",
+			"no common part"
+		);
 
 		assert.equal(
-			NamespaceUtils.getCommonPart("f.b.c.d", "b.c.d"), "",
-			"no common part");
+			NamespaceUtils.getCommonPart("f.b.c.d", "b.c.d"),
+			"",
+			"no common part"
+		);
 
 		assert.equal(
-			NamespaceUtils.getCommonPart("a.be.c.d", "a.b.x.y"), "a",
-			"a. common part");
+			NamespaceUtils.getCommonPart("a.be.c.d", "a.b.x.y"),
+			"a",
+			"a. common part"
+		);
 	});
 
 	it("findNamespaceUsage", function() {
@@ -33,7 +41,9 @@ describe("NamespaceUtils", function() {
 		const ast = recast.parse(src).program;
 
 		assert.ok(
-			NamespaceUtils.findNamespaceUsage(ast, "a.g.h"), "namespace found");
+			NamespaceUtils.findNamespaceUsage(ast, "a.g.h"),
+			"namespace found"
+		);
 	});
 
 	it("findNamespaceUsage fail", function() {
@@ -45,6 +55,8 @@ describe("NamespaceUtils", function() {
 		const ast = recast.parse(src).program;
 
 		assert.ok(
-			NamespaceUtils.findNamespaceUsage(ast, "a.z.h"), "namespace found");
+			NamespaceUtils.findNamespaceUsage(ast, "a.z.h"),
+			"namespace found"
+		);
 	});
 });

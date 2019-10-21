@@ -53,19 +53,22 @@ export class StringFileInfo implements Mod.FileInfo {
 	}
 
 	async saveContent(
-		sOutputPath: string, oOutputFormat: {
-			lineTerminator?: string,
-			useTabs?: boolean,
-			tabWidth?: number
+		sOutputPath: string,
+		oOutputFormat: {
+			lineTerminator?: string;
+			useTabs?: boolean;
+			tabWidth?: number;
 		} = {},
-		oReporter?: Reporter): Promise<string> {
+		oReporter?: Reporter
+	): Promise<string> {
 		if (!this.oAST) {
 			throw new Error("File Info is not loaded");
 		}
 
 		oOutputFormat = Object.assign(
-			{ useTabs : true, lineTerminator : "\n" }, oOutputFormat);
-
+			{useTabs: true, lineTerminator: "\n"},
+			oOutputFormat
+		);
 
 		const bAutoLineTerminator = oOutputFormat["auto.lineTerminator"];
 		const bAutoUseTabs = oOutputFormat["auto.useTabs"];
@@ -73,16 +76,18 @@ export class StringFileInfo implements Mod.FileInfo {
 			const startTime = process.hrtime();
 			const analyzer = new CodeStyleAnalyzer(this.input);
 			if (bAutoLineTerminator) {
-				const mostCommonNewline =
-					analyzer.getMostCommon(AnalyzeCharacter.NEWLINE);
+				const mostCommonNewline = analyzer.getMostCommon(
+					AnalyzeCharacter.NEWLINE
+				);
 				if (mostCommonNewline) {
 					oOutputFormat.lineTerminator =
 						mostCommonNewline === "N" ? "\n" : "\r\n";
 				}
 			}
 			if (bAutoUseTabs) {
-				const mostCommonIndent =
-					analyzer.getMostCommon(AnalyzeCharacter.INDENT);
+				const mostCommonIndent = analyzer.getMostCommon(
+					AnalyzeCharacter.INDENT
+				);
 				if (mostCommonIndent) {
 					const isTab = mostCommonIndent === true;
 					oOutputFormat.useTabs = isTab;
@@ -93,12 +98,16 @@ export class StringFileInfo implements Mod.FileInfo {
 			if (oReporter) {
 				oReporter.report(
 					ReportLevel.TRACE,
-					`Finished recast auto options in ${endTime[0]}s ${
-						endTime[1]}ms`);
+					`Finished recast auto options in ${endTime[0]}s ${endTime[1]}ms`
+				);
 				oReporter.report(
 					ReportLevel.TRACE,
-					`Finished recast auto options with: ${
-						JSON.stringify(oOutputFormat, null, 3)}`);
+					`Finished recast auto options with: ${JSON.stringify(
+						oOutputFormat,
+						null,
+						3
+					)}`
+				);
 			}
 		}
 
@@ -110,11 +119,15 @@ export class StringFileInfo implements Mod.FileInfo {
 			if (oReporter) {
 				oReporter.report(
 					ReportLevel.TRACE,
-					`Performing diff optimization: ${sStrategy}`);
+					`Performing diff optimization: ${sStrategy}`
+				);
 			}
 			try {
-				const modulePath =
-					path.join(__dirname, "whitespace", sStrategy + ".js");
+				const modulePath = path.join(
+					__dirname,
+					"whitespace",
+					sStrategy + ".js"
+				);
 				const oCachedStrategy = mStrategiesCache.get(modulePath);
 				const oStrategy = oCachedStrategy || require(modulePath);
 				if (!oCachedStrategy) {
@@ -125,26 +138,31 @@ export class StringFileInfo implements Mod.FileInfo {
 					if (oReporter) {
 						oReporter.report(
 							ReportLevel.ERROR,
-							`Failed to load strategy ${sStrategy}`);
+							`Failed to load strategy ${sStrategy}`
+						);
 					}
 				} else {
 					const startTime = process.hrtime();
 					this.input = await DiffOptimizer.optimizeString(
-						prevSourceCode, this.input, oReporter,
-						new oStrategy[sStrategy](oReporter));
+						prevSourceCode,
+						this.input,
+						oReporter,
+						new oStrategy[sStrategy](oReporter)
+					);
 					const endTime = process.hrtime(startTime);
 					if (oReporter) {
 						oReporter.report(
 							ReportLevel.TRACE,
-							`Finished diff auto in ${endTime[0]}s ${
-								endTime[1]}ms`);
+							`Finished diff auto in ${endTime[0]}s ${endTime[1]}ms`
+						);
 					}
 				}
 			} catch (e) {
 				if (oReporter) {
 					oReporter.report(
 						ReportLevel.ERROR,
-						`Failed to optimize whitespaces ${e}`);
+						`Failed to optimize whitespaces ${e}`
+					);
 				}
 			}
 		}

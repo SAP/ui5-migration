@@ -22,32 +22,38 @@ const bIgnoreExoticCases = true;
  * @returns {void}
  */
 const replaceable: ASTReplaceable = {
-
 	replace(
-		node: NodePath, name: string, fnName: string,
-		oldModuleCall: string) : void {
+		node: NodePath,
+		name: string,
+		fnName: string,
+		oldModuleCall: string
+	): void {
 		const oInsertionPoint: ESTree.Node = node.parentPath.parentPath.value;
 		const oInsertion: ESTree.Node = node.parentPath.value;
 		let aArgs = [];
 		let oNewExpression: ESTree.Expression;
 		let oNewExpressionWithoutSuffix: ESTree.Expression;
-		const rOrginalSubTypes =
-			/\.(?:(?:(?:view\.|fragment\.|controller\.|designtime\.)?js)|(?:(?:view\.|fragment\.)?xml)|(?:(?:view\.|fragment\.)?json)|(?:(?:view\.|fragment\.)?html)|[^.]+)$/;
+		const rOrginalSubTypes = /\.(?:(?:(?:view\.|fragment\.|controller\.|designtime\.)?js)|(?:(?:view\.|fragment\.)?xml)|(?:(?:view\.|fragment\.)?json)|(?:(?:view\.|fragment\.)?html)|[^.]+)$/;
 		const oSapUi: ESTree.MemberExpression = builders.memberExpression(
-			builders.identifier("sap"), builders.identifier("ui"));
-		const oSapUiRequire: ESTree.MemberExpression =
-			builders.memberExpression(oSapUi, builders.identifier("require"));
-		const oSapUiRequireToUrl: ESTree.MemberExpression =
-			builders.memberExpression(
-				oSapUiRequire, builders.identifier("toUrl"));
+			builders.identifier("sap"),
+			builders.identifier("ui")
+		);
+		const oSapUiRequire: ESTree.MemberExpression = builders.memberExpression(
+			oSapUi,
+			builders.identifier("require")
+		);
+		const oSapUiRequireToUrl: ESTree.MemberExpression = builders.memberExpression(
+			oSapUiRequire,
+			builders.identifier("toUrl")
+		);
 
 		if (oInsertion.type === Syntax.CallExpression) {
 			aArgs = oInsertionPoint[node.parentPath.name].arguments;
 		}
 		if (aArgs.length === 0) {
 			throw new Error(
-				"Failed to replace" + oldModuleCall +
-				". No parameter is given.");
+				"Failed to replace" + oldModuleCall + ". No parameter is given."
+			);
 		}
 
 		const isGetModulePathCall =
@@ -62,20 +68,32 @@ const replaceable: ASTReplaceable = {
 
 		function appendSuffixIfNecessary(
 			oExpressionWithoutSuffix: ESTree.Expression,
-			aModuleArgs: ESTree.Node[], sSuffix?: string) {
-			if (sSuffix && aModuleArgs.length === 1) {  // Suffix newly created
+			aModuleArgs: ESTree.Node[],
+			sSuffix?: string
+		) {
+			if (sSuffix && aModuleArgs.length === 1) {
+				// Suffix newly created
 				return builders.binaryExpression(
-					"+", oExpressionWithoutSuffix, builders.literal(sSuffix));
+					"+",
+					oExpressionWithoutSuffix,
+					builders.literal(sSuffix)
+				);
 			} else if (
-				aModuleArgs[1] && aModuleArgs[1].type === Syntax.Literal) {
+				aModuleArgs[1] &&
+				aModuleArgs[1].type === Syntax.Literal
+			) {
 				return builders.binaryExpression(
-					"+", oExpressionWithoutSuffix,
-					builders.literal((aModuleArgs[1] as ESTree.Literal).value));
+					"+",
+					oExpressionWithoutSuffix,
+					builders.literal((aModuleArgs[1] as ESTree.Literal).value)
+				);
 			} else if (aModuleArgs[1]) {
 				sSuffix = recast.print(aModuleArgs[1]).code;
 				return builders.binaryExpression(
-					"+", oExpressionWithoutSuffix,
-					builders.identifier(sSuffix));
+					"+",
+					oExpressionWithoutSuffix,
+					builders.identifier(sSuffix)
+				);
 			} else {
 				return oExpressionWithoutSuffix;
 			}
@@ -97,13 +115,14 @@ const replaceable: ASTReplaceable = {
 			}
 			if (aArgs.length === 1 && sResourceValue !== "") {
 				const aSegments = sResourceValue.split(/\//);
-				const aMatches =
-					rOrginalSubTypes.exec(aSegments[aSegments.length - 1]);
+				const aMatches = rOrginalSubTypes.exec(
+					aSegments[aSegments.length - 1]
+				);
 				if (aMatches) {
 					sSuffix = aMatches[0];
-					aSegments[aSegments.length - 1] =
-						aSegments[aSegments.length - 1].slice(
-							0, aMatches.index);
+					aSegments[aSegments.length - 1] = aSegments[
+						aSegments.length - 1
+					].slice(0, aMatches.index);
 					sResourceValue = aSegments.join("/");
 				} else {
 					sSuffix = "";
@@ -122,21 +141,30 @@ const replaceable: ASTReplaceable = {
 			}
 
 			oNewExpressionWithoutSuffix = builders.callExpression(
-				oSapUiRequireToUrl, [ builders.literal(sResourceValue) ]);
+				oSapUiRequireToUrl,
+				[builders.literal(sResourceValue)]
+			);
 			oNewExpression = appendSuffixIfNecessary(
-				oNewExpressionWithoutSuffix, aArgs, sSuffix);
-
+				oNewExpressionWithoutSuffix,
+				aArgs,
+				sSuffix
+			);
 		} else if (aArgs[0]) {
 			let sResourceCode: string = recast.print(aArgs[0]).code;
 			if (isGetModulePathCall) {
 				if (bIgnoreExoticCases) {
 					sResourceCode =
-						"(" + sResourceCode + ").replace(/\\./g, \"/\")";
+						"(" + sResourceCode + ').replace(/\\./g, "/")';
 				} else {
-					sResourceCode = "(function(){if(/^jquery\\.sap\\./.test(" +
-						sResourceCode + ")){return " + sResourceCode + ";}" +
-						"else { return (" + sResourceCode +
-						").replace(/\\./g, \"/\");}}.bind(this)())";
+					sResourceCode =
+						"(function(){if(/^jquery\\.sap\\./.test(" +
+						sResourceCode +
+						")){return " +
+						sResourceCode +
+						";}" +
+						"else { return (" +
+						sResourceCode +
+						').replace(/\\./g, "/");}}.bind(this)())';
 				}
 			}
 			if (aArgs.length === 1) {
@@ -145,22 +173,29 @@ const replaceable: ASTReplaceable = {
 					sReplacement =
 						"sap.ui.require.toUrl(" + sResourceCode + ")";
 				} else {
-					const sReplacement: string = "(function(){" +
-						"var aParts = (" + sResourceCode +
-						").match(/(?:(.*\\.(?:view|fragment|controller|designtime))(\\.js|\\.xml|\\.json|\\.html))$/) || [\"\"," +
-						sResourceCode + ", \"\"];" +
+					const sReplacement: string =
+						"(function(){" +
+						"var aParts = (" +
+						sResourceCode +
+						').match(/(?:(.*\\.(?:view|fragment|controller|designtime))(\\.js|\\.xml|\\.json|\\.html))$/) || ["",' +
+						sResourceCode +
+						', ""];' +
 						"return sap.ui.require.toUrl(aParts[1]) + aParts[2];}.bind(this)())";
 				}
 				oNewExpression = builders.identifier(sReplacement);
 			} else {
 				oNewExpressionWithoutSuffix = builders.callExpression(
-					oSapUiRequireToUrl, [ builders.identifier(sResourceCode) ]);
-				oNewExpression =
-					appendSuffixIfNecessary(oNewExpressionWithoutSuffix, aArgs);
+					oSapUiRequireToUrl,
+					[builders.identifier(sResourceCode)]
+				);
+				oNewExpression = appendSuffixIfNecessary(
+					oNewExpressionWithoutSuffix,
+					aArgs
+				);
 			}
 		}
 		oInsertionPoint[node.parentPath.name] = oNewExpression;
-	}
+	},
 };
 
 module.exports = replaceable;

@@ -7,7 +7,6 @@ import {NodePath} from "ui5-migration";
 import {EMPTY_FINDER_RESULT, Finder, FinderResult} from "../../../dependencies";
 import {SapUiDefineCall} from "../../../util/SapUiDefineCall";
 
-
 /**
  * DRAFT
  * @param node
@@ -16,14 +15,16 @@ import {SapUiDefineCall} from "../../../util/SapUiDefineCall";
  */
 const fnNestedMember = function(node: ESTree.Node, aList: string[]): boolean {
 	const sLast = aList.pop();
-	if (sLast && node.type === Syntax.MemberExpression &&
+	if (
+		sLast &&
+		node.type === Syntax.MemberExpression &&
 		(node as ESTree.MemberExpression).property.type === Syntax.Identifier &&
-		((node as ESTree.MemberExpression).property as ESTree.Identifier)
-			.name) {
-		const prop =
-			((node as ESTree.MemberExpression).property as ESTree.Identifier);
-		const objProp =
-			((node as ESTree.MemberExpression).object as ESTree.Identifier);
+		((node as ESTree.MemberExpression).property as ESTree.Identifier).name
+	) {
+		const prop = (node as ESTree.MemberExpression)
+			.property as ESTree.Identifier;
+		const objProp = (node as ESTree.MemberExpression)
+			.object as ESTree.Identifier;
 		if (aList.length === 2) {
 			return prop.name === sLast && objProp.name === aList.pop();
 		}
@@ -48,20 +49,27 @@ const fnNestedMember = function(node: ESTree.Node, aList: string[]): boolean {
  */
 class JQuerySapFunctionFinder implements Finder {
 	find(
-		node: ESTree.Node, config: { finderIncludesName: string },
-		sConfigName: string, defineCall: SapUiDefineCall): FinderResult {
-		const aObject = sConfigName.split(".");  // jQuery.sap.extend
-
+		node: ESTree.Node,
+		config: {finderIncludesName: string},
+		sConfigName: string,
+		defineCall: SapUiDefineCall
+	): FinderResult {
+		const aObject = sConfigName.split("."); // jQuery.sap.extend
 
 		if (node.type === Syntax.CallExpression) {
-			if (node.arguments.length > 0 &&
-				node.arguments[0].type === Syntax.Literal) {
-				const arg0: ESTree.Literal =
-					node.arguments[0] as ESTree.Literal;
+			if (
+				node.arguments.length > 0 &&
+				node.arguments[0].type === Syntax.Literal
+			) {
+				const arg0: ESTree.Literal = node
+					.arguments[0] as ESTree.Literal;
 
-				if (typeof arg0.value === "string" && arg0.value.includes &&
-					arg0.value.includes(config.finderIncludesName)) {
-					return { configName : sConfigName };
+				if (
+					typeof arg0.value === "string" &&
+					arg0.value.includes &&
+					arg0.value.includes(config.finderIncludesName)
+				) {
+					return {configName: sConfigName};
 				}
 			}
 		}

@@ -23,7 +23,6 @@ interface LibraryInfo {
 	name: string;
 }
 
-
 interface VersionInfo {
 	libraries: LibraryInfo[];
 }
@@ -37,14 +36,11 @@ interface APIInfoOptions {
 	reporter: Reporter;
 }
 
-
 interface LibDocSymbolObject {
 	module: string;
 	name: string;
 	static: boolean;
 }
-
-
 
 interface LibDocSymbol {
 	name?: string;
@@ -52,7 +48,7 @@ interface LibDocSymbol {
 	member?: LibDocSymbolObject;
 	module?: string;
 	kind?: string;
-	export?: string|undefined;
+	export?: string | undefined;
 	properties?: LibDocSymbolObject[];
 	methods?: LibDocSymbolObject[];
 	visibility?: string;
@@ -65,22 +61,20 @@ interface LibDoc {
 }
 
 const EMPTY_LIB_DOC: LibDoc = {
-	symbols : []
+	symbols: [],
 };
-
 
 /**
  * Provides API info with a given JSON
  */
 export class APIInfo {
-	private oLibraryDocumentation: { [index: string]: LibDoc };
+	private oLibraryDocumentation: {[index: string]: LibDoc};
 	private oApiVersion: VersionInfo;
 	private mApi: object;
 	private mApiIncludedResources: object;
 	private rootPath: string;
 	private reporter: Reporter = new ConsoleReporter(ReportLevel.INFO);
 	private mEntityToSymbol: Map<string, Promise<LibDocSymbol>>;
-
 
 	constructor(oOptions: APIInfoOptions) {
 		/**
@@ -107,17 +101,23 @@ export class APIInfo {
 
 	async loadJSON(rootPath: string, resource: string): Promise<{}> {
 		this.reporter.report(
-			ReportLevel.TRACE, "Loading resource " + rootPath + resource);
+			ReportLevel.TRACE,
+			"Loading resource " + rootPath + resource
+		);
 		return LoaderUtils.fetchResource(rootPath + resource);
 	}
 
 	static findLibraryName(
-		sEntityName: string, oVersionInfo: VersionInfo|undefined): string {
+		sEntityName: string,
+		oVersionInfo: VersionInfo | undefined
+	): string {
 		if (oVersionInfo && Array.isArray(oVersionInfo.libraries)) {
 			for (let i = 0; i < oVersionInfo.libraries.length; i++) {
 				const library = oVersionInfo.libraries[i];
-				if (sEntityName === library.name ||
-					sEntityName.indexOf(library.name + ".") === 0) {
+				if (
+					sEntityName === library.name ||
+					sEntityName.indexOf(library.name + ".") === 0
+				) {
 					return library.name;
 				}
 			}
@@ -135,18 +135,24 @@ export class APIInfo {
 		// TODO resolve this o0
 		if (this.oApiVersion && Object.keys(this.oApiVersion).length > 0) {
 			return Promise.resolve(
-				APIInfo.findLibraryName(sEntityName, this.oApiVersion));
+				APIInfo.findLibraryName(sEntityName, this.oApiVersion)
+			);
 		} else if (this.rootPath) {
-			return this.loadJSON(this.rootPath, "resources/sap-ui-version.json")
-				.then(
-					function(oObject: {}) {
-						that.oApiVersion = oObject as VersionInfo;
-						return APIInfo.findLibraryName(
-							sEntityName, that.oApiVersion);
-					},
-					function() {
-						return "sap.ui.core";
-					});
+			return this.loadJSON(
+				this.rootPath,
+				"resources/sap-ui-version.json"
+			).then(
+				function(oObject: {}) {
+					that.oApiVersion = oObject as VersionInfo;
+					return APIInfo.findLibraryName(
+						sEntityName,
+						that.oApiVersion
+					);
+				},
+				function() {
+					return "sap.ui.core";
+				}
+			);
 		} else {
 			// fallback to core (this ensures that the extraordinary packages of
 			// sap.ui.core are found, but doesn't work as soon as other libs do
@@ -156,7 +162,7 @@ export class APIInfo {
 	}
 
 	postProcessAPIJSON(oLibDoc: LibDoc, reporter: Reporter): LibDoc {
-		const modules: { [index: string]: LibDocSymbol[] } = {};
+		const modules: {[index: string]: LibDocSymbol[]} = {};
 		let symbols = oLibDoc.symbols;
 		let i;
 		let j;
@@ -168,8 +174,8 @@ export class APIInfo {
 			if (moduleSymbolName) {
 				modules[moduleSymbolName] = modules[moduleSymbolName] || [];
 				modules[moduleSymbolName].push({
-					name : symbols[i].name,
-					symbol : symbols[i],
+					name: symbols[i].name,
+					symbol: symbols[i],
 				});
 			}
 			const props = symbols[i].properties;
@@ -179,8 +185,8 @@ export class APIInfo {
 						modules[props[j].module] =
 							modules[props[j].module] || [];
 						modules[props[j].module].push({
-							name : symbols[i].name + "." + props[j].name,
-							symbol : props[j]
+							name: symbols[i].name + "." + props[j].name,
+							symbol: props[j],
 						});
 					}
 				}
@@ -192,8 +198,8 @@ export class APIInfo {
 						modules[meths[j].module] =
 							modules[meths[j].module] || [];
 						modules[meths[j].module].push({
-							name : symbols[i].name + "." + meths[j].name,
-							symbol : meths[j]
+							name: symbols[i].name + "." + meths[j].name,
+							symbol: meths[j],
 						});
 					}
 				}
@@ -213,8 +219,9 @@ export class APIInfo {
 				// defaultExport);
 			} else if (symbol.name.lastIndexOf(defaultExport + ".", 0) === 0) {
 				// default export is a prefix of the symbol name
-				symbol.symbol.export =
-					symbol.name.slice(defaultExport.length + 1);
+				symbol.symbol.export = symbol.name.slice(
+					defaultExport.length + 1
+				);
 				// reporter.report(ReportLevel.TRACE,"    " +
 				// symbol.name.slice(defaultExport.length + 1) + ":" +
 				// symbol.name);
@@ -225,7 +232,8 @@ export class APIInfo {
 				reporter.report(
 					ReportLevel.TRACE,
 					"    **** could not identify module export for API " +
-						symbol.name);
+						symbol.name
+				);
 			}
 		}
 
@@ -249,11 +257,14 @@ export class APIInfo {
 					symbols.forEach(guessExport.bind(null, defaultExport));
 				} else if (/\/library$/.test(n)) {
 					// library.js modules export the library namespace
-					defaultExport =
-						n.replace(/\/library$/, "").replace(/\//g, ".");
-					if (symbols.some(function(symbol) {
+					defaultExport = n
+						.replace(/\/library$/, "")
+						.replace(/\//g, ".");
+					if (
+						symbols.some(function(symbol) {
 							return symbol.name === defaultExport;
-						})) {
+						})
+					) {
 						// if there is a symbol for the namespace,
 						// then all other symbols from the module should be
 						// sub-exports of that symbol
@@ -264,8 +275,10 @@ export class APIInfo {
 							symbol.symbol.export = symbol.name;
 							reporter.report(
 								ReportLevel.TRACE,
-								"    **** unresolved " + symbol.name +
-									" in library.js (no export that matches module name)");
+								"    **** unresolved " +
+									symbol.name +
+									" in library.js (no export that matches module name)"
+							);
 						});
 					}
 				} else {
@@ -273,9 +286,11 @@ export class APIInfo {
 					// identical to the name of the module (converted to a 'dot'
 					// name)
 					defaultExport = n.replace(/\//g, ".");
-					if (symbols.some(function(symbol) {
+					if (
+						symbols.some(function(symbol) {
 							return symbol.name === defaultExport;
-						})) {
+						})
+					) {
 						symbols.forEach(guessExport.bind(null, defaultExport));
 						// } else if ( symbols.length === 1 &&
 						// (symbols[0].symbol.kind === 'class' ||
@@ -291,8 +306,10 @@ export class APIInfo {
 							symbol.symbol.export = undefined;
 							reporter.report(
 								ReportLevel.TRACE,
-								"    **** unresolved " + symbol.name +
-									" (no export that matches module name)");
+								"    **** unresolved " +
+									symbol.name +
+									" (no export that matches module name)"
+							);
 						});
 					}
 				}
@@ -313,7 +330,7 @@ export class APIInfo {
 		return undefined;
 	}
 
-	findSymbol(oLibDoc: LibDoc, sEntityName: string): LibDocSymbol|undefined {
+	findSymbol(oLibDoc: LibDoc, sEntityName: string): LibDocSymbol | undefined {
 		if (!oLibDoc || oLibDoc === EMPTY_LIB_DOC) {
 			return undefined;
 		}
@@ -324,31 +341,37 @@ export class APIInfo {
 			let j;
 			for (i = 0; i < symbols.length; i++) {
 				if (symbols[i].name === sEntityName) {
-					return { symbol : symbols[i] };
+					return {symbol: symbols[i]};
 				}
 				if (sEntityName.indexOf(symbols[i].name + ".") === 0) {
 					if (symbols[i].properties) {
 						for (j = 0; j < symbols[i].properties.length; j++) {
-							if (symbols[i].properties[j].static &&
+							if (
+								symbols[i].properties[j].static &&
 								sEntityName ===
-									(symbols[i].name + "." +
-									 symbols[i].properties[j].name)) {
+									symbols[i].name +
+										"." +
+										symbols[i].properties[j].name
+							) {
 								return {
-									symbol : symbols[i],
-									member : symbols[i].properties[j]
+									symbol: symbols[i],
+									member: symbols[i].properties[j],
 								};
 							}
 						}
 					}
 					if (symbols[i].methods) {
 						for (j = 0; j < symbols[i].methods.length; j++) {
-							if (symbols[i].methods[j].static &&
+							if (
+								symbols[i].methods[j].static &&
 								sEntityName ===
-									(symbols[i].name + "." +
-									 symbols[i].methods[j].name)) {
+									symbols[i].name +
+										"." +
+										symbols[i].methods[j].name
+							) {
 								return {
-									symbol : symbols[i],
-									member : symbols[i].methods[j]
+									symbol: symbols[i],
+									member: symbols[i].methods[j],
 								};
 							}
 						}
@@ -359,7 +382,6 @@ export class APIInfo {
 		return undefined;
 	}
 
-
 	async getSymbol(sEntityName: string): Promise<LibDocSymbol> {
 		const that = this;
 		this.mEntityToSymbol = this.mEntityToSymbol || new Map();
@@ -369,10 +391,11 @@ export class APIInfo {
 		}
 
 		result = this.findLibrary(sEntityName).then(function(sLibrary) {
-			return that.getLibraryMetaInformation(sLibrary).then(function(
-				oLibDoc) {
-				return that.findSymbol(oLibDoc, sEntityName);
-			});
+			return that
+				.getLibraryMetaInformation(sLibrary)
+				.then(function(oLibDoc) {
+					return that.findSymbol(oLibDoc, sEntityName);
+				});
 		});
 		this.mEntityToSymbol.set(sEntityName, result);
 		return result;
@@ -383,15 +406,17 @@ export class APIInfo {
 	 * @param sEntityName
 	 * @param resolveInheritance
 	 */
-	async getMeta(sEntityName: string, resolveInheritance: boolean):
-		Promise<MetaObject|undefined> {
+	async getMeta(
+		sEntityName: string,
+		resolveInheritance: boolean
+	): Promise<MetaObject | undefined> {
 		// TODO use memoization
 		function merge(name, meta, meta2) {
 			const r1 = meta[name];
 			const r2 = meta2[name];
 			if (r1 && r1.length && r2 && r2.length) {
 				r2.forEach(function(item) {
-					if (!r1.some((candidate) => candidate.name === item.name)) {
+					if (!r1.some(candidate => candidate.name === item.name)) {
 						r1.push(item);
 					}
 				});
@@ -407,7 +432,8 @@ export class APIInfo {
 				// TODO implement merge on symbol, not on metadata
 				meta = JSON.parse(JSON.stringify(meta));
 				if (resolveInheritance && symbol.extends) {
-					return that.getMeta(symbol.extends, true)
+					return that
+						.getMeta(symbol.extends, true)
 						.then(function(meta2) {
 							if (meta2) {
 								meta.defaultAggregation =
@@ -421,8 +447,8 @@ export class APIInfo {
 							} else {
 								that.reporter.report(
 									ReportLevel.ERROR,
-									"couldn't find base class " +
-										symbol.extends);
+									"couldn't find base class " + symbol.extends
+								);
 							}
 							return undefined;
 						});
@@ -437,8 +463,9 @@ export class APIInfo {
 	}
 
 	getLocalResourcesAPIJSON(sLibrary: string) {
-		return this.mApiIncludedResources &&
-			this.mApiIncludedResources[sLibrary];
+		return (
+			this.mApiIncludedResources && this.mApiIncludedResources[sLibrary]
+		);
 	}
 
 	/**
@@ -459,21 +486,24 @@ export class APIInfo {
 
 		const that = this;
 
-
 		const fnEnrichLibraryDoc = function(oResources, oLibraryDoc: LibDoc) {
 			if (Array.isArray(oResources.resources)) {
 				oResources.resources.forEach(function(resource) {
-					if (/\.js$/.test(resource.module) && !resource.isDebug &&
-						!that.findModule(resource.module, oLibraryDoc)) {
+					if (
+						/\.js$/.test(resource.module) &&
+						!resource.isDebug &&
+						!that.findModule(resource.module, oLibraryDoc)
+					) {
 						// reporter.report(ReportLevel.TRACE,"  adding symbol
 						// for module " + resource.module);
 						oLibraryDoc.symbols.push({
-							kind : "namespace",
-							name : resource.module.replace(/\.js$/, "")
-									   .replace(/\//g, "."),
-							module : resource.module.replace(/\.js$/, ""),
-							export : "",
-							visibility : "private"
+							kind: "namespace",
+							name: resource.module
+								.replace(/\.js$/, "")
+								.replace(/\//g, "."),
+							module: resource.module.replace(/\.js$/, ""),
+							export: "",
+							visibility: "private",
 						});
 					}
 				});
@@ -489,34 +519,37 @@ export class APIInfo {
 			} else if (this.rootPath) {
 				aLoadLibraryApiJson.push(
 					this.loadJSON(
-							this.rootPath,
-							"test-resources/" + sLibrary.replace(/\./g, "/") +
-								"/designtime/api.json")
-						.then(
-							function(oRes: LibDoc):
-								LibDoc {
-									oLibraryDoc = {
-										// make a copy of the symbols from the
-										// response
-										// because it may be extended and the
-										// original
-										// result in the cache shouldn't be
-										// modified
-										symbols : oRes.symbols.slice()
-									};
-									that.oLibraryDocumentation[sLibrary] =
-										oLibraryDoc;
-									return oLibraryDoc;
-								},
-							function() {
-								that.reporter.report(
-									ReportLevel.TRACE,
-									`Failed to load library ${sLibrary}`);
-								that.oLibraryDocumentation[sLibrary] =
-									EMPTY_LIB_DOC;
-								oLibraryDoc = EMPTY_LIB_DOC;
-								return EMPTY_LIB_DOC;
-							}));
+						this.rootPath,
+						"test-resources/" +
+							sLibrary.replace(/\./g, "/") +
+							"/designtime/api.json"
+					).then(
+						function(oRes: LibDoc): LibDoc {
+							oLibraryDoc = {
+								// make a copy of the symbols from the
+								// response
+								// because it may be extended and the
+								// original
+								// result in the cache shouldn't be
+								// modified
+								symbols: oRes.symbols.slice(),
+							};
+							that.oLibraryDocumentation[sLibrary] = oLibraryDoc;
+							return oLibraryDoc;
+						},
+						function() {
+							that.reporter.report(
+								ReportLevel.TRACE,
+								`Failed to load library ${sLibrary}`
+							);
+							that.oLibraryDocumentation[
+								sLibrary
+							] = EMPTY_LIB_DOC;
+							oLibraryDoc = EMPTY_LIB_DOC;
+							return EMPTY_LIB_DOC;
+						}
+					)
+				);
 			} else {
 				return Promise.resolve(EMPTY_LIB_DOC);
 			}
@@ -527,33 +560,37 @@ export class APIInfo {
 			} else if (this.rootPath) {
 				aLoadLibraryApiJson.push(
 					this.loadJSON(
-							this.rootPath,
-							"resources/" + sLibrary.replace(/\./g, "/") +
-								"/resources.json")
-						.catch(function() {
-							that.reporter.report(
-								ReportLevel.TRACE,
-								`Failed to load resources for ${sLibrary}`);
-							return {};
-						}));
+						this.rootPath,
+						"resources/" +
+							sLibrary.replace(/\./g, "/") +
+							"/resources.json"
+					).catch(function() {
+						that.reporter.report(
+							ReportLevel.TRACE,
+							`Failed to load resources for ${sLibrary}`
+						);
+						return {};
+					})
+				);
 			}
 
 			return Promise.all(aLoadLibraryApiJson).then(function(aResults) {
 				oLibraryDoc = that.postProcessAPIJSON(
-					oLibraryDoc || EMPTY_LIB_DOC, that.reporter);
+					oLibraryDoc || EMPTY_LIB_DOC,
+					that.reporter
+				);
 				if (aResults.length > 1) {
 					fnEnrichLibraryDoc(aResults[1], oLibraryDoc);
 				}
 				that.oLibraryDocumentation[sLibrary] = oLibraryDoc;
 				return oLibraryDoc;
 			});
-
 		} catch (e) {
-			oLibraryDoc = this.oLibraryDocumentation[sLibrary] =
-				null;  // avoid future tries to load this file
+			oLibraryDoc = this.oLibraryDocumentation[sLibrary] = null; // avoid future tries to load this file
 			that.reporter.report(
 				ReportLevel.ERROR,
-				"failed to loaded api.json for " + sLibrary + ": " + e);
+				"failed to loaded api.json for " + sLibrary + ": " + e
+			);
 			return Promise.reject(e);
 		}
 	}

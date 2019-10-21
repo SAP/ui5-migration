@@ -10,8 +10,7 @@ export const fsReadFile = util.promisify(fs.readFile);
 export const fsWriteFile = util.promisify(fs.writeFile);
 export const fsMkdir = util.promisify(fs.mkdir);
 
-
-export async function getStats(sPath: string): Promise<Stats|undefined> {
+export async function getStats(sPath: string): Promise<Stats | undefined> {
 	try {
 		return await fsStat(sPath);
 	} catch (e) {
@@ -77,8 +76,11 @@ const allFilesMatcher = function() {
  * @param fnMatcher optional file filter function
  */
 async function parseDir(
-	aFlatFiles: string[], srcFile: string, basePath: string,
-	fnMatcher: FileMatcher = allFilesMatcher): Promise<void> {
+	aFlatFiles: string[],
+	srcFile: string,
+	basePath: string,
+	fnMatcher: FileMatcher = allFilesMatcher
+): Promise<void> {
 	const aEntries = await fsReadDir(srcFile);
 	const aPromises = [];
 	for (let sEntry of aEntries) {
@@ -88,7 +90,8 @@ async function parseDir(
 		if (fnMatcher(sEntryPath)) {
 			if (await isDir(sEntryPath)) {
 				aPromises.push(
-					parseDir(aFlatFiles, sEntryPath, sEntry, fnMatcher));
+					parseDir(aFlatFiles, sEntryPath, sEntry, fnMatcher)
+				);
 			} else {
 				aFlatFiles.push(sEntryPath);
 			}
@@ -106,7 +109,9 @@ async function parseDir(
  * @param fnMatcher optional file matcher function
  */
 export async function getFilesRecursive(
-	srcFile: string, fnMatcher?: FileMatcher): Promise<string[]> {
+	srcFile: string,
+	fnMatcher?: FileMatcher
+): Promise<string[]> {
 	if (fnMatcher && !fnMatcher(srcFile)) {
 		return Promise.resolve([]);
 	}
@@ -115,7 +120,7 @@ export async function getFilesRecursive(
 		await parseDir(aFiles, srcFile, "", fnMatcher);
 		return Promise.resolve(aFiles);
 	} else {
-		return Promise.resolve([ srcFile ]);
+		return Promise.resolve([srcFile]);
 	}
 }
 
@@ -126,7 +131,7 @@ export async function getFilesRecursive(
  * @param {any} dir
  */
 export async function mkdirs(dir: string): Promise<void> {
-	const aStack = [ normalize(dir) ];
+	const aStack = [normalize(dir)];
 	while (aStack.length > 0) {
 		try {
 			await fsMkdir(aStack[0]);

@@ -15,39 +15,47 @@ const builders = recast.types.builders;
  * @returns {void}
  */
 const replaceable: ASTReplaceable = {
-
 	replace(
-		node: NodePath, name: string, fnName: string, oldModuleCall: string) :
-		void {
-			const oNodeParent = node.parentPath;
-			const oInsertionPoint = oNodeParent.value;
-			const aObjectParts = fnName.split(".");
+		node: NodePath,
+		name: string,
+		fnName: string,
+		oldModuleCall: string
+	): void {
+		const oNodeParent = node.parentPath;
+		const oInsertionPoint = oNodeParent.value;
+		const aObjectParts = fnName.split(".");
 
-			const oNativeObject = aObjectParts.slice(2).reduce(
-				function(oNativeObject, sProperty) {
-					return builders.memberExpression(
-						oNativeObject, builders.identifier(sProperty));
-				},
-				builders.memberExpression(
-					builders.identifier(aObjectParts[0]),
-					builders.identifier(aObjectParts[1])));
+		const oNativeObject = aObjectParts
+			.slice(2)
+			.reduce(function(oNativeObject, sProperty) {
+				return builders.memberExpression(
+					oNativeObject,
+					builders.identifier(sProperty)
+				);
+			}, builders.memberExpression(
+				builders.identifier(aObjectParts[0]),
+				builders.identifier(aObjectParts[1])
+			));
 
-			if (oInsertionPoint.type === Syntax.IfStatement) {
-				oInsertionPoint.test = oNativeObject;
-			} else if (oInsertionPoint.type === Syntax.BinaryExpression) {
-				oInsertionPoint.right = oNativeObject;
-			} else if (
-				oInsertionPoint[0] &&
-				oInsertionPoint[0].type === Syntax.MemberExpression) {
-				oInsertionPoint[0] = oNativeObject;
-			} else if (oInsertionPoint.type === Syntax.CallExpression) {
-				oInsertionPoint[node.name] = oNativeObject;
-			} else {
-				throw new Error(
-					"insertion is of type " + oInsertionPoint.type +
-					"(supported are only Call-Expressions)");
-			}
+		if (oInsertionPoint.type === Syntax.IfStatement) {
+			oInsertionPoint.test = oNativeObject;
+		} else if (oInsertionPoint.type === Syntax.BinaryExpression) {
+			oInsertionPoint.right = oNativeObject;
+		} else if (
+			oInsertionPoint[0] &&
+			oInsertionPoint[0].type === Syntax.MemberExpression
+		) {
+			oInsertionPoint[0] = oNativeObject;
+		} else if (oInsertionPoint.type === Syntax.CallExpression) {
+			oInsertionPoint[node.name] = oNativeObject;
+		} else {
+			throw new Error(
+				"insertion is of type " +
+					oInsertionPoint.type +
+					"(supported are only Call-Expressions)"
+			);
 		}
+	},
 };
 
 module.exports = replaceable;

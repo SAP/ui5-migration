@@ -14,7 +14,6 @@ import * as VariableNameCreator from "./VariableNameCreator";
 const recast = require("recast");
 const Syntax = require("esprima").Syntax;
 
-
 const builders = recast.types.builders;
 
 /**
@@ -37,15 +36,19 @@ async function fillApiInfo(ast, that, reporter: Reporter, config, apiInfo) {
 				// reporter.report(ReportLevel.DEBUG, " found ", name);
 				// don't touch LHS member expressions (like in sap.m.ButtonStyle
 				// = ...)
-				if (path.parent &&
+				if (
+					path.parent &&
 					path.parent.node.type === Syntax.AssignmentExpression &&
 					path.parent.node.left === path.node &&
-					!that.globalNameConvertedToAMDExport) {
+					!that.globalNameConvertedToAMDExport
+				) {
 					reporter.report(
 						ReportLevel.TRACE,
-						"  **** LHS of an assignment is not touched: " + name +
+						"  **** LHS of an assignment is not touched: " +
+							name +
 							".",
-						path.parent.value.loc);
+						path.parent.value.loc
+					);
 					return false;
 				}
 
@@ -53,8 +56,10 @@ async function fillApiInfo(ast, that, reporter: Reporter, config, apiInfo) {
 					reporter.report(
 						ReportLevel.DEBUG,
 						"  RHS of instanceof operator not touched in pass 1: " +
-							name + ".",
-						path.value.loc);
+							name +
+							".",
+						path.value.loc
+					);
 					return false;
 				}
 
@@ -65,7 +70,6 @@ async function fillApiInfo(ast, that, reporter: Reporter, config, apiInfo) {
 				}
 
 				aPromises.push(that.resolveSymbol(name, apiInfo));
-
 			} else if (that.isJQueryMember(path.value)) {
 				const name = that.getObjectName(path.value);
 				aPromises.push(that.resolveSymbol(name, apiInfo));
@@ -77,7 +81,7 @@ async function fillApiInfo(ast, that, reporter: Reporter, config, apiInfo) {
 			}
 			this.traverse(path);
 			return undefined;
-		}
+		},
 	});
 	// TODO push the promises with the correct name and do a lookup later
 	aPromises = aPromises.concat(aLaterPromises);
@@ -92,7 +96,7 @@ interface VisitCodeResult {
 }
 
 function getArgumentName(value) {
-	return value.arguments.map((o) => o.value).join(",");
+	return value.arguments.map(o => o.value).join(",");
 }
 
 /**
@@ -103,28 +107,31 @@ function getArgumentName(value) {
  * @returns {{sDeclareName:string, path}}
  */
 function getDeclareCallNameAndPath(ast, that, reporter) {
-	const result = { sDeclareName : "", path : undefined };
+	const result = {sDeclareName: "", path: undefined};
 	recast.visit(ast, {
 		visitCallExpression(path) {
 			if (that.isJQuerySAPDeclareCall(path.value)) {
 				// remove
 				reporter.report(
 					ReportLevel.DEBUG,
-					"remove jQuery.sap.declare(" + getArgumentName(path.value) +
+					"remove jQuery.sap.declare(" +
+						getArgumentName(path.value) +
 						")",
-					path.value.loc);
+					path.value.loc
+				);
 
-				if (path.value.arguments.length === 1 &&
-					path.value.arguments[0].type === Syntax.Literal) {
-					result.sDeclareName =
-						(path.value.arguments[0] as ESTree.Literal)
-							.value.toString();
+				if (
+					path.value.arguments.length === 1 &&
+					path.value.arguments[0].type === Syntax.Literal
+				) {
+					result.sDeclareName = (path.value
+						.arguments[0] as ESTree.Literal).value.toString();
 				}
 				result.path = path;
 			}
 			this.traverse(path);
 			return undefined;
-		}
+		},
 	});
 	return result;
 }
@@ -138,11 +145,10 @@ function getExtendCalls(ast, that) {
 			}
 			this.traverse(path);
 			return undefined;
-		}
+		},
 	});
 	return aResult;
 }
-
 
 function getExtendCallName(ast, that) {
 	const aExtendCalls = getExtendCalls(ast, that);
@@ -167,9 +173,16 @@ function getExtendCallName(ast, that) {
  * @param aUsedVariables
  */
 function replaceSelfCalls(
-	ast, that, reporter: Reporter, config, fnGetSymbol, aModificationsPromise,
-	modify: boolean, oAnalysisResult,
-	aUsedVariables: string[]): VisitCodeResult {
+	ast,
+	that,
+	reporter: Reporter,
+	config,
+	fnGetSymbol,
+	aModificationsPromise,
+	modify: boolean,
+	oAnalysisResult,
+	aUsedVariables: string[]
+): VisitCodeResult {
 	let bWasDefined = false;
 	let bFileWasModified = false;
 	let bWasDeclared = false;
@@ -192,13 +205,14 @@ function replaceSelfCalls(
 			bFileWasModified = true;
 			// restore comments of declare (add them to the define call)
 			if (declareResult.path.parentPath.value.comments) {
-				that.defineCall.node.comments =
-					declareResult.path.parentPath.value.comments.slice();
+				that.defineCall.node.comments = declareResult.path.parentPath.value.comments.slice();
 			}
 			declareResult.path.prune();
 		} else {
 			reporter.storeFinding(
-				"remove declare statement", declareResult.path.value.loc);
+				"remove declare statement",
+				declareResult.path.value.loc
+			);
 			oAnalysisResult["remove-path"] =
 				oAnalysisResult["remove-path"] || [];
 			oAnalysisResult["remove-path"].push("jQuery.sap.declare");
@@ -215,35 +229,41 @@ function replaceSelfCalls(
 					const name = that.getObjectName(path.value);
 
 					// check if level is the same as the return statement
-					if (path.parent &&
+					if (
+						path.parent &&
 						path.parent.node.type === Syntax.AssignmentExpression &&
 						path.parent.node.left === path.node &&
 						that.isModuleBodyStatement(
-							path.parent.parentPath.value, that.defineCall)) {
+							path.parent.parentPath.value,
+							that.defineCall
+						)
+					) {
 						if (ModuleNameComparator.compare(name, sDeclareName)) {
-							const sVariableName =
-								VariableNameCreator.getUniqueVariableName(
-									aUsedVariables, sDeclareName);
+							const sVariableName = VariableNameCreator.getUniqueVariableName(
+								aUsedVariables,
+								sDeclareName
+							);
 
 							// store comments
 							let aComments =
-								path.parentPath.parentPath.parent
-									.node[path.parentPath.parentPath.parent
-											  .name][path.parentPath.parentPath
-														 .name]
-									.comments;
+								path.parentPath.parentPath.parent.node[
+									path.parentPath.parentPath.parent.name
+								][path.parentPath.parentPath.name].comments;
 							aComments = aComments ? aComments.slice() : [];
-							const newVariableDeclaration =
-								builders.variableDeclaration(
-									"var",
-									[ builders.variableDeclarator(
+							const newVariableDeclaration = builders.variableDeclaration(
+								"var",
+								[
+									builders.variableDeclarator(
 										builders.identifier(sVariableName),
-										path.parent.node.right) ]);
-							path.parentPath.parentPath.parent
-								.node[path.parentPath.parentPath.parent
-										  .name][path.parentPath.parentPath
-													 .name] =
-								newVariableDeclaration;
+										path.parent.node.right
+									),
+								]
+							);
+							path.parentPath.parentPath.parent.node[
+								path.parentPath.parentPath.parent.name
+							][
+								path.parentPath.parentPath.name
+							] = newVariableDeclaration;
 
 							// add comments to replacement
 							if (aComments.length > 0) {
@@ -254,13 +274,14 @@ function replaceSelfCalls(
 							reporter.report(
 								Mod.ReportLevel.DEBUG,
 								"Added variable " + sVariableName,
-								path.value.loc);
+								path.value.loc
+							);
 						}
 					}
 				}
 				this.traverse(path);
 				return undefined;
-			}
+			},
 		});
 
 		//
@@ -271,31 +292,38 @@ function replaceSelfCalls(
 		if (sDeclareName && modify && !bWasDefined) {
 			recast.visit(ast, {
 				visitCallExpression(path) {
-					if (that.isExtendCall(path.value) &&
+					if (
+						that.isExtendCall(path.value) &&
 						path.parentPath.value.type !== Syntax.ReturnStatement &&
 						path.parentPath.value.type !==
 							Syntax.VariableDeclarator &&
 						path.value.arguments[0].value.toString() ===
-							sDeclareName) {
-						const sVariableName =
-							VariableNameCreator.getUniqueVariableName(
-								aUsedVariables, sDeclareName);
-						path.parentPath.parentPath.value[path.parentPath.name] =
-							builders.variableDeclaration(
-								"var", [ builders.variableDeclarator(
-										   builders.identifier(sVariableName),
-										   path.value) ]);
+							sDeclareName
+					) {
+						const sVariableName = VariableNameCreator.getUniqueVariableName(
+							aUsedVariables,
+							sDeclareName
+						);
+						path.parentPath.parentPath.value[
+							path.parentPath.name
+						] = builders.variableDeclaration("var", [
+							builders.variableDeclarator(
+								builders.identifier(sVariableName),
+								path.value
+							),
+						]);
 						bWasDefined = true;
 						bFileWasModified = true;
 
 						reporter.report(
 							Mod.ReportLevel.DEBUG,
 							"Added variable declaration " + sVariableName,
-							path.value.loc);
+							path.value.loc
+						);
 					}
 					this.traverse(path);
 					return undefined;
-				}
+				},
 			});
 		}
 
@@ -308,31 +336,34 @@ function replaceSelfCalls(
 						const name = that.getObjectName(path.value);
 
 						if (ModuleNameComparator.compare(name, sDeclareName)) {
-							const sVariableName =
-								VariableNameCreator.getUniqueVariableName(
-									aUsedVariables, sDeclareName);
-							path.parent.node[path.name] =
-								builders.identifier(sVariableName);
+							const sVariableName = VariableNameCreator.getUniqueVariableName(
+								aUsedVariables,
+								sDeclareName
+							);
+							path.parent.node[path.name] = builders.identifier(
+								sVariableName
+							);
 							bFileWasModified = true;
 
 							reporter.report(
 								Mod.ReportLevel.DEBUG,
 								"Replace using variable " + sVariableName,
-								path.value.loc);
+								path.value.loc
+							);
 						}
 					}
 					this.traverse(path);
 					return undefined;
-				}
+				},
 			});
 		}
 	}
 
 	return {
-		fileWasModified : bFileWasModified,
-		declareName : sDeclareName,
+		fileWasModified: bFileWasModified,
+		declareName: sDeclareName,
 		bWasDefined,
-		bWasDeclared
+		bWasDeclared,
 	};
 }
 
@@ -350,9 +381,16 @@ function replaceSelfCalls(
  * @return
  */
 function visitCode(
-	ast, that, reporter: Reporter, config, fnGetSymbol, aModificationsPromise,
-	modify: boolean, bFileWasModified: boolean,
-	oAnalysisResult): VisitCodeResult {
+	ast,
+	that,
+	reporter: Reporter,
+	config,
+	fnGetSymbol,
+	aModificationsPromise,
+	modify: boolean,
+	bFileWasModified: boolean,
+	oAnalysisResult
+): VisitCodeResult {
 	recast.visit(ast, {
 		visitCallExpression(path) {
 			// reporter.report(ReportLevel.DEBUG,
@@ -362,13 +400,17 @@ function visitCode(
 				reporter.report(
 					ReportLevel.DEBUG,
 					"jQuery.sap.require(" + getArgumentName(path.value) + ")",
-					loc);
+					loc
+				);
 
 				// only process jQuery.sap.require calls and modify the AST if
 				// modify flag is true
 				if (modify) {
 					const processResult = that.processJQuerySAPRequireCall(
-						path, config, reporter);
+						path,
+						config,
+						reporter
+					);
 					if (processResult.modified) {
 						bFileWasModified = true;
 					}
@@ -378,16 +420,21 @@ function visitCode(
 					if (!processResult.pruned) {
 						reporter.report(
 							Mod.ReportLevel.DEBUG,
-							"Remove jquery sap require call", loc);
+							"Remove jquery sap require call",
+							loc
+						);
 						path.prune();
 						bFileWasModified = true;
 					} else {
 						reporter.storeFinding(
-							"found jQuery.sap.require", path.loc);
+							"found jQuery.sap.require",
+							path.loc
+						);
 						oAnalysisResult["remove-path"] =
 							oAnalysisResult["remove-path"] || [];
 						oAnalysisResult["remove-path"].push(
-							"jQuery.sap.require");
+							"jQuery.sap.require"
+						);
 					}
 				}
 			}
@@ -401,15 +448,19 @@ function visitCode(
 				// reporter.report(ReportLevel.DEBUG, " found ", name);
 				// don't touch LHS member expressions (like in sap.m.ButtonStyle
 				// = ...)
-				if (path.parent &&
+				if (
+					path.parent &&
 					path.parent.node.type === Syntax.AssignmentExpression &&
 					path.parent.node.left === path.node &&
-					!that.globalNameConvertedToAMDExport) {
+					!that.globalNameConvertedToAMDExport
+				) {
 					reporter.report(
 						ReportLevel.TRACE,
-						"  **** LHS of an assignment is not touched: " + name +
+						"  **** LHS of an assignment is not touched: " +
+							name +
 							".",
-						path.parent.value.loc);
+						path.parent.value.loc
+					);
 					return false;
 				}
 
@@ -417,8 +468,10 @@ function visitCode(
 					reporter.report(
 						ReportLevel.DEBUG,
 						"  RHS of instanceof operator not touched in pass 1: " +
-							name + ".",
-						path.value.loc);
+							name +
+							".",
+						path.value.loc
+					);
 					return false;
 				}
 
@@ -430,20 +483,24 @@ function visitCode(
 
 				const oSymbol = fnGetSymbol(name);
 
-				if (config.optionalDependency &&
-					config.optionalDependency.indexOf(name) >= 0) {
+				if (
+					config.optionalDependency &&
+					config.optionalDependency.indexOf(name) >= 0
+				) {
 					// do not traverse as the MemberExpression is fully handled
 					// this.traverse(path);
 					reporter.report(
-						Mod.ReportLevel.DEBUG, "Optional dependency",
-						path.value.loc);
+						Mod.ReportLevel.DEBUG,
+						"Optional dependency",
+						path.value.loc
+					);
 					that.addDependencyUsage(oSymbol.module, name, reporter);
 					return false;
 				}
 
-
 				if (oSymbol) {
-					const isSafe = that.isSafeModule(oSymbol.module, config) ||
+					const isSafe =
+						that.isSafeModule(oSymbol.module, config) ||
 						that.isSafeLocation(path);
 					if (isSafe || !config.onlySafeReplacements) {
 						// reporter.report(ReportLevel.DEBUG, "  " + name + "
@@ -454,37 +511,51 @@ function visitCode(
 
 						if (modify) {
 							const addDependencyResult = that.addDependency(
-								that.defineCall, oSymbol.module, name,
-								reporter);
+								that.defineCall,
+								oSymbol.module,
+								name,
+								reporter
+							);
 							reporter.report(
 								Mod.ReportLevel.DEBUG,
-								"Add dependency for " + name, path.value.loc);
+								"Add dependency for " + name,
+								path.value.loc
+							);
 							localRef = addDependencyResult.path;
-							bFileWasModified = bFileWasModified ||
+							bFileWasModified =
+								bFileWasModified ||
 								addDependencyResult.modified;
 						} else {
 							reporter.storeFinding(
-								"add dependency", path.value.loc);
+								"add dependency",
+								path.value.loc
+							);
 							oAnalysisResult["addDependency"] =
 								oAnalysisResult["addDependency"] || [];
 
-							oAnalysisResult["addDependency"].push(
-								{ moudle : oSymbol.module, name });
+							oAnalysisResult["addDependency"].push({
+								moudle: oSymbol.module,
+								name,
+							});
 						}
 						// if an export is known, replace global access path
 						// with local shortcut + export path
 						if (localRef == null) {
 							reporter.report(
 								ReportLevel.TRACE,
-								"keep global access to '" + name +
+								"keep global access to '" +
+									name +
 									"' (reference to self)",
-								path.value.loc);
+								path.value.loc
+							);
 						} else if (oSymbol.export === undefined) {
 							reporter.report(
 								ReportLevel.TRACE,
-								"keep global access to '" + name +
+								"keep global access to '" +
+									name +
 									"' (no module export known)",
-								path.value.loc);
+								path.value.loc
+							);
 						} else {
 							let replacement;
 							let replacementStr;
@@ -495,45 +566,56 @@ function visitCode(
 								// builders.identifier(resolve.export) ))
 								let shortcut = null;
 								if (modify) {
-									const oAddShortCutResult =
-										that.defineCall.addShortcut(
-											localRef, oSymbol.module,
-											oSymbol.export,
-											oSymbol.symbol.name);
-									bFileWasModified = bFileWasModified ||
+									const oAddShortCutResult = that.defineCall.addShortcut(
+										localRef,
+										oSymbol.module,
+										oSymbol.export,
+										oSymbol.symbol.name
+									);
+									bFileWasModified =
+										bFileWasModified ||
 										oAddShortCutResult.modified;
 									shortcut = oAddShortCutResult.path;
 									reporter.report(
-										Mod.ReportLevel.DEBUG, "Add shortcut",
-										path.value.loc);
+										Mod.ReportLevel.DEBUG,
+										"Add shortcut",
+										path.value.loc
+									);
 								} else {
 									reporter.storeFinding(
-										"add shortcut", path.value.loc);
+										"add shortcut",
+										path.value.loc
+									);
 									oAnalysisResult["addShortcut"] =
 										oAnalysisResult["addShortcut"] || [];
 
 									oAnalysisResult["addShortcut"].push({
 										localRef,
-										moudle : oSymbol.module,
-										exportName : oSymbol.export,
-										symbolName : oSymbol.symbol.name
+										moudle: oSymbol.module,
+										exportName: oSymbol.export,
+										symbolName: oSymbol.symbol.name,
 									});
 								}
 
 								// check special case where original code
 								// introduced a shortcut already: remove
 								// shortcut
-								if (path.parent &&
+								if (
+									path.parent &&
 									path.parent.node.type ===
 										Syntax.VariableDeclarator &&
-									path.parent.node.init === path.node) {
-									if (path.parent.node.id.type ===
+									path.parent.node.init === path.node
+								) {
+									if (
+										path.parent.node.id.type ===
 											Syntax.Identifier &&
-										path.parent.node.id.name === shortcut) {
+										path.parent.node.id.name === shortcut
+									) {
 										reporter.report(
 											ReportLevel.DEBUG,
 											"**** found shortcut of same name",
-											path.value.loc);
+											path.value.loc
+										);
 										if (modify) {
 											path.parent.prune();
 										}
@@ -547,14 +629,17 @@ function visitCode(
 								// check special case where original code
 								// introduced a shortcut already: remove
 								// shortcut
-								if (path.parent &&
+								if (
+									path.parent &&
 									path.parent.node.type ===
 										Syntax.VariableDeclarator &&
-									path.parent.node.init === path.node) {
+									path.parent.node.init === path.node
+								) {
 									reporter.report(
 										ReportLevel.DEBUG,
 										"  removing redundant shortcut var ",
-										path.parent.node.loc);
+										path.parent.node.loc
+									);
 									return false;
 								}
 
@@ -564,26 +649,31 @@ function visitCode(
 							// wrap with a member expression if necessary
 							if (oSymbol.member) {
 								// TODO handle deeper path
-								const identifier =
-									builders.identifier(oSymbol.member);
+								const identifier = builders.identifier(
+									oSymbol.member
+								);
 								replacement = builders.memberExpression(
-									replacement, identifier);
+									replacement,
+									identifier
+								);
 								replacementStr =
 									replacementStr + "." + oSymbol.member;
 							}
 							reporter.report(
 								ReportLevel.DEBUG,
 								"  replace " + name + " with " + replacementStr,
-								path.value.loc);
-							if (!isSafe &&
-								config.addTodoForUnsafeReplacements) {
+								path.value.loc
+							);
+							if (
+								!isSafe &&
+								config.addTodoForUnsafeReplacements
+							) {
 								replacement.comments =
 									replacement.comments || [];
 								replacement.comments.push({
-									type : "Block",
-									value :
-										"TODO review import and replacement",
-									leading : true
+									type: "Block",
+									value: "TODO review import and replacement",
+									leading: true,
 								});
 							}
 							if (modify) {
@@ -593,15 +683,20 @@ function visitCode(
 								reporter.report(
 									Mod.ReportLevel.DEBUG,
 									"Replace occurrence of " + replacementStr,
-									oLoc);
+									oLoc
+								);
 							} else {
 								reporter.storeFinding(
-									"replace", path.value.loc);
+									"replace",
+									path.value.loc
+								);
 								oAnalysisResult["replace"] =
 									oAnalysisResult["replace"] || [];
 
-								oAnalysisResult["replace"].push(
-									{ path, replacement });
+								oAnalysisResult["replace"].push({
+									path,
+									replacement,
+								});
 							}
 						}
 						return false;
@@ -609,8 +704,12 @@ function visitCode(
 						reporter.report(
 							ReportLevel.WARNING,
 							"  **** unsafe replacement skipped: " +
-								oSymbol.module + " (" + name + ")",
-							path.value.loc);
+								oSymbol.module +
+								" (" +
+								name +
+								")",
+							path.value.loc
+						);
 						return false;
 					}
 				}
@@ -626,45 +725,61 @@ function visitCode(
 					/* var localRef = */
 					if (modify) {
 						const oAddDependencyResult = that.addDependency(
-							that.defineCall, oSymbol.module, name, reporter);
+							that.defineCall,
+							oSymbol.module,
+							name,
+							reporter
+						);
 						bFileWasModified =
 							bFileWasModified || oAddDependencyResult.modified;
 						reporter.report(
-							Mod.ReportLevel.DEBUG, "Add dependency",
-							path.value.loc);
+							Mod.ReportLevel.DEBUG,
+							"Add dependency",
+							path.value.loc
+						);
 					} else {
 						reporter.storeFinding("add dependency", path.value.loc);
 						oAnalysisResult["addDependency"] =
 							oAnalysisResult["addDependency"] || [];
 
-						oAnalysisResult["addDependency"].push(
-							{ moudle : oSymbol.module, name });
+						oAnalysisResult["addDependency"].push({
+							moudle: oSymbol.module,
+							name,
+						});
 					}
 				}
 			}
 			this.traverse(path);
 			return undefined;
-		}
+		},
 	});
 
 	// process remaining instanceof operators
 	recast.visit(ast, {
 		visitMemberExpression(path) {
-			if (that.isStaticGlobal(path, reporter) &&
-				that.isRHSOfInstanceOf(path)) {
+			if (
+				that.isStaticGlobal(path, reporter) &&
+				that.isRHSOfInstanceOf(path)
+			) {
 				const name = that.getObjectName(path.value);
 				// try to find a module
 				const oSymbol = fnGetSymbol(name);
 				// option 1: if there's a module, find an existing import and
 				// use that
-				const localRef = oSymbol && oSymbol.module &&
+				const localRef =
+					oSymbol &&
+					oSymbol.module &&
 					that.findDependency(oSymbol.module);
 				if (localRef) {
 					reporter.report(
 						ReportLevel.DEBUG,
-						"  replace '... instanceof " + localRef +
-							"' with '... instanceof " + name + "'",
-						path.value.loc);
+						"  replace '... instanceof " +
+							localRef +
+							"' with '... instanceof " +
+							name +
+							"'",
+						path.value.loc
+					);
 					if (modify) {
 						path.replace(builders.identifier(localRef));
 						bFileWasModified = true;
@@ -673,8 +788,10 @@ function visitCode(
 						oAnalysisResult["replace"] =
 							oAnalysisResult["replace"] || [];
 
-						oAnalysisResult["replace"].push(
-							{ identifier : localRef, path });
+						oAnalysisResult["replace"].push({
+							identifier: localRef,
+							path,
+						});
 					}
 					return false;
 				}
@@ -684,35 +801,45 @@ function visitCode(
 				if (config.useWeakInstanceof && oSymbol && !oSymbol.export) {
 					reporter.report(
 						ReportLevel.DEBUG,
-						"  replace '... instanceof " + name +
-							"' with 'sap.ui.instanceof(...,'" + oSymbol.module +
+						"  replace '... instanceof " +
+							name +
+							"' with 'sap.ui.instanceof(...,'" +
+							oSymbol.module +
 							"')",
-						path.value.loc);
+						path.value.loc
+					);
 					if (modify) {
-						path.parent.replace(builders.callExpression(
-							builders.memberExpression(
+						path.parent.replace(
+							builders.callExpression(
 								builders.memberExpression(
-									builders.identifier("sap"),
-									builders.identifier("ui")),
-								builders.identifier("instanceof")),
-							[
-								path.parent.node.left,
-								builders.literal(oSymbol.module)
-							]));
+									builders.memberExpression(
+										builders.identifier("sap"),
+										builders.identifier("ui")
+									),
+									builders.identifier("instanceof")
+								),
+								[
+									path.parent.node.left,
+									builders.literal(oSymbol.module),
+								]
+							)
+						);
 						bFileWasModified = true;
 						reporter.report(
-							Mod.ReportLevel.DEBUG, "Parent replacement",
-							path.value.loc);
+							Mod.ReportLevel.DEBUG,
+							"Parent replacement",
+							path.value.loc
+						);
 					} else {
 						reporter.storeFinding("replace parent", path.value.loc);
 						oAnalysisResult["parentReplace"] =
 							oAnalysisResult["parentReplace"] || [];
 
 						oAnalysisResult["parentReplace"].push({
-							member : "sap.ui.instanceof",
-							node : path.parent,
-							argLeft : path.parent.node.left,
-							literal : oSymbol.module
+							member: "sap.ui.instanceof",
+							node: path.parent,
+							argLeft: path.parent.node.left,
+							literal: oSymbol.module,
 						});
 					}
 					return false;
@@ -722,13 +849,14 @@ function visitCode(
 				reporter.report(
 					ReportLevel.DEBUG,
 					"  **** '... instanceof " + name + "' not touched",
-					path.value.loc);
+					path.value.loc
+				);
 			}
 			this.traverse(path);
 			return undefined;
-		}
+		},
 	});
-	return { fileWasModified : bFileWasModified };
+	return {fileWasModified: bFileWasModified};
 }
 
 module.exports = {
@@ -744,10 +872,14 @@ module.exports = {
 	 * @returns Promise {{ast: *, dependencies: *, oAnalysisResult: *}}
 	 */
 	async ui52amd(
-		ast: ESTree.Node, moduleName: string, namespace: string,
-		config: { removeUnusedDependencies?: boolean }, apiInfo: APIInfo,
+		ast: ESTree.Node,
+		moduleName: string,
+		namespace: string,
+		config: {removeUnusedDependencies?: boolean},
+		apiInfo: APIInfo,
 		modify = true,
-		reporter: Reporter = new ConsoleReporter(ReportLevel.INFO)) {
+		reporter: Reporter = new ConsoleReporter(ReportLevel.INFO)
+	) {
 		const oAnalysisResult = Object.create(null);
 		let bFileWasModified = false;
 		/*
@@ -760,21 +892,26 @@ module.exports = {
 		let blockStatementOfCreatedDefineCall = null;
 
 		// reporter.report(ReportLevel.DEBUG, JSON.stringify(ast,null,'\t'));
-		const defineCalls =
-			ASTUtils.findCalls(ast, SapUiDefineCall.isValidRootPath);
+		const defineCalls = ASTUtils.findCalls(
+			ast,
+			SapUiDefineCall.isValidRootPath
+		);
 		let defineCallNode;
 		if (defineCalls.length > 1) {
 			throw new Error("can't handle files with multiple modules");
 		} else if (defineCalls.length === 1) {
 			defineCallNode = defineCalls[0].value;
 			reporter.report(
-				ReportLevel.DEBUG, "found define call at position 0");
+				ReportLevel.DEBUG,
+				"found define call at position 0"
+			);
 		} else {
 			// should check for and complain about global variable declarations
 			(ast as ESTree.Program).body.forEach((node: ESTree.Node) => {
 				if (node.type === Syntax.VariableDeclaration) {
 					throw new Error(
-						"Defines global variables and can't be wrapped into an AMD module");
+						"Defines global variables and can't be wrapped into an AMD module"
+					);
 				}
 			});
 
@@ -783,35 +920,37 @@ module.exports = {
 			const topLevelStmts = (ast as ESTree.Program).body;
 			let topLevelComments;
 
-
-			const relevantTopLevelStatements =
-				this.getRelevantNodes(topLevelStmts);
-			if (relevantTopLevelStatements.length === 1 &&
-				this.isIIFEWithoutArguments(relevantTopLevelStatements[0])) {
+			const relevantTopLevelStatements = this.getRelevantNodes(
+				topLevelStmts
+			);
+			if (
+				relevantTopLevelStatements.length === 1 &&
+				this.isIIFEWithoutArguments(relevantTopLevelStatements[0])
+			) {
 				// unwrap an IIFE if it doesn't have arguments
-				block = (((relevantTopLevelStatements[0] as
-						   ESTree.ExpressionStatement)
-							  .expression as ESTree.CallExpression)
-							 .callee as ESTree.FunctionExpression)
-							.body as ESTree.BlockStatement;
+				block = (((relevantTopLevelStatements[0] as ESTree.ExpressionStatement)
+					.expression as ESTree.CallExpression)
+					.callee as ESTree.FunctionExpression)
+					.body as ESTree.BlockStatement;
 				if (topLevelStmts.length > 1) {
-					const iifeUnwrapped = block.body.filter((node) => {
+					const iifeUnwrapped = block.body.filter(node => {
 						return !this.containsUseStrict(node);
 					});
-					const iifeIndex =
-						topLevelStmts.indexOf(relevantTopLevelStatements[0]);
+					const iifeIndex = topLevelStmts.indexOf(
+						relevantTopLevelStatements[0]
+					);
 
 					// include all other statements
 					const topLevelStatementsClone = [
-						...topLevelStmts.slice(0, iifeIndex), ...iifeUnwrapped,
-						...topLevelStmts.slice(iifeIndex + 1)
+						...topLevelStmts.slice(0, iifeIndex),
+						...iifeUnwrapped,
+						...topLevelStmts.slice(iifeIndex + 1),
 					];
 					block = builders.blockStatement(topLevelStatementsClone);
 				}
 
-				topLevelComments =
-					(topLevelStmts[0] as ESTree.ExpressionStatement)
-						.leadingComments;
+				topLevelComments = (topLevelStmts[0] as ESTree.ExpressionStatement)
+					.leadingComments;
 				if (!topLevelComments) {
 					topLevelComments = topLevelStmts[0]["comments"];
 				}
@@ -820,37 +959,48 @@ module.exports = {
 			}
 
 			if (!this.containsUseStrict(block.body[0])) {
-				block.body.unshift(builders.expressionStatement(
-					builders.literal("use strict")));
+				block.body.unshift(
+					builders.expressionStatement(builders.literal("use strict"))
+				);
 			}
 
 			// create a define call
 			const sapUiMemberExpr = builders.memberExpression(
-				builders.identifier("sap"), builders.identifier("ui"));
+				builders.identifier("sap"),
+				builders.identifier("ui")
+			);
 			defineCallNode = builders.callExpression(
 				builders.memberExpression(
-					sapUiMemberExpr, builders.identifier("define")),
+					sapUiMemberExpr,
+					builders.identifier("define")
+				),
 				[
 					builders.arrayExpression([]),
-					builders.functionExpression(null, [], block)
-				]);
+					builders.functionExpression(null, [], block),
+				]
+			);
 
 			// make the define call the only top level statement
 			if (modify) {
-				(ast as ESTree.Program).body =
-					[ builders.expressionStatement(defineCallNode) ];
+				(ast as ESTree.Program).body = [
+					builders.expressionStatement(defineCallNode),
+				];
 				bFileWasModified = true;
 				reporter.report(
-					Mod.ReportLevel.DEBUG, "Create empty define call",
-					(ast as ESTree.Program).loc);
+					Mod.ReportLevel.DEBUG,
+					"Create empty define call",
+					(ast as ESTree.Program).loc
+				);
 			} else {
 				reporter.storeFinding(
-					"Create define call", (ast as ESTree.Program).loc);
+					"Create define call",
+					(ast as ESTree.Program).loc
+				);
 				oAnalysisResult["body"] = oAnalysisResult["body"] || [];
 
 				oAnalysisResult["body"].push({
-					path : (ast as ESTree.Program).body,
-					expression : defineCallNode
+					path: (ast as ESTree.Program).body,
+					expression: defineCallNode,
 				});
 			}
 
@@ -866,17 +1016,18 @@ module.exports = {
 		this.defineCall = new SapUiDefineCall(
 			defineCallNode,
 			(namespace && namespace.split(".").join("/")) || moduleName,
-			reporter);
+			reporter
+		);
 
 		if (!this.defineCall.factory) {
 			// exit
 			return {
-				modified : false,
+				modified: false,
 				ast,
-				dependencies : [],
+				dependencies: [],
 				// for the analyze task modify is false therefore return
 				// AnalysisResult
-				oAnalysisResult : modify ? undefined : oAnalysisResult
+				oAnalysisResult: modify ? undefined : oAnalysisResult,
 			};
 		}
 		const that = this;
@@ -890,8 +1041,10 @@ module.exports = {
 		if (blockStatementOfCreatedDefineCall) {
 			if (modify) {
 				const oConvertExportResult = this.convertExport(
-					this.defineCall, blockStatementOfCreatedDefineCall,
-					reporter);
+					this.defineCall,
+					blockStatementOfCreatedDefineCall,
+					reporter
+				);
 				bFileWasModified =
 					bFileWasModified || oConvertExportResult.modified;
 				this.globalNameConvertedToAMDExport =
@@ -899,28 +1052,35 @@ module.exports = {
 
 				if (oConvertExportResult.modified) {
 					reporter.report(
-						Mod.ReportLevel.DEBUG, "Convert export",
-						(ast as ESTree.Program).loc);
+						Mod.ReportLevel.DEBUG,
+						"Convert export",
+						(ast as ESTree.Program).loc
+					);
 				}
 			} else {
 				reporter.storeFinding(
-					"Convert export", (ast as ESTree.Program).loc);
+					"Convert export",
+					(ast as ESTree.Program).loc
+				);
 				oAnalysisResult["convertExport"] =
 					oAnalysisResult["convertExport"] || [];
 
-				oAnalysisResult["convertExport"].push(
-					{ blockStatementOfCreatedDefineCall });
+				oAnalysisResult["convertExport"].push({
+					blockStatementOfCreatedDefineCall,
+				});
 			}
 		}
-
 
 		// TODO should only visit content of factory function
 
 		const encapsulate = function(aPromiseResults) {
 			return function(name: string) {
 				const aRes = aPromiseResults.filter(function(oResult) {
-					return oResult && oResult.symbol &&
-						oResult.symbol.name === name;
+					return (
+						oResult &&
+						oResult.symbol &&
+						oResult.symbol.name === name
+					);
 				});
 				if (aRes.length > 0) {
 					// TODO which one to return
@@ -934,72 +1094,103 @@ module.exports = {
 			.then(function(aPromiseResults) {
 				const aModificationsPromise: Array<Promise<{}>> = [];
 				const oResult = replaceSelfCalls(
-					ast, that, reporter, config, encapsulate(aPromiseResults),
-					aModificationsPromise, modify, oAnalysisResult,
-					aUsedVariables);
+					ast,
+					that,
+					reporter,
+					config,
+					encapsulate(aPromiseResults),
+					aModificationsPromise,
+					modify,
+					oAnalysisResult,
+					aUsedVariables
+				);
 
-				return { oResult, aPromiseResults };
+				return {oResult, aPromiseResults};
 			})
 			.then(function(oObject) {
 				bFileWasModified =
 					bFileWasModified || oObject.oResult.fileWasModified;
 				const aModificationsPromise: Array<Promise<{}>> = [];
 				const visitCodeResult = visitCode(
-					ast, that, reporter, config,
-					encapsulate(oObject.aPromiseResults), aModificationsPromise,
-					modify, bFileWasModified, oAnalysisResult);
+					ast,
+					that,
+					reporter,
+					config,
+					encapsulate(oObject.aPromiseResults),
+					aModificationsPromise,
+					modify,
+					bFileWasModified,
+					oAnalysisResult
+				);
 				bFileWasModified = visitCodeResult.fileWasModified;
 
 				// identify unused imports
-				const aUnusedImportNames = config.removeUnusedDependencies ?
-					identifyUnusedImports(that) :
-					[];
-
+				const aUnusedImportNames = config.removeUnusedDependencies
+					? identifyUnusedImports(that)
+					: [];
 
 				return Promise.all(aModificationsPromise).then(function() {
 					// remove unused dependencies
 					if (config.removeUnusedDependencies) {
 						bFileWasModified =
 							removeUnusedDependencies(
-								aUnusedImportNames, that, moduleName, reporter,
-								modify, ast, oAnalysisResult) ||
-							bFileWasModified;
+								aUnusedImportNames,
+								that,
+								moduleName,
+								reporter,
+								modify,
+								ast,
+								oAnalysisResult
+							) || bFileWasModified;
 					}
 
 					// if the module doesn't require the bExport flag, remove it
-					if (that.defineCall &&
+					if (
+						that.defineCall &&
 						!that.defineCall.globalExportRequired &&
-						that.defineCall.bExportsNode != null) {
+						that.defineCall.bExportsNode != null
+					) {
 						const args = that.defineCall.node.arguments;
 						args.splice(args.length - 1, 1);
 					}
 
-					if (oObject.oResult.declareName &&
-						oObject.oResult.bWasDefined) {
+					if (
+						oObject.oResult.declareName &&
+						oObject.oResult.bWasDefined
+					) {
 						const aBody = that.defineCall.factory.body.body;
 						const oLastStatement = aBody[aBody.length - 1];
-						if (oLastStatement &&
-							oLastStatement.type !== Syntax.ReturnStatement) {
-							const sVariableName =
-								VariableNameCreator.getUniqueVariableName(
-									aUsedVariables,
-									oObject.oResult.declareName);
+						if (
+							oLastStatement &&
+							oLastStatement.type !== Syntax.ReturnStatement
+						) {
+							const sVariableName = VariableNameCreator.getUniqueVariableName(
+								aUsedVariables,
+								oObject.oResult.declareName
+							);
 							if (modify) {
-								aBody.push(builders.returnStatement(
-									builders.identifier(sVariableName)));
+								aBody.push(
+									builders.returnStatement(
+										builders.identifier(sVariableName)
+									)
+								);
 								reporter.report(
 									Mod.ReportLevel.DEBUG,
 									"Added return statement of " +
 										sVariableName,
-									oLastStatement.loc);
+									oLastStatement.loc
+								);
 							} else {
 								reporter.storeFinding(
-									"return statement", oLastStatement.loc);
+									"return statement",
+									oLastStatement.loc
+								);
 								oAnalysisResult["returnStatement"] =
 									oAnalysisResult["returnStatement"] || [];
 
-								oAnalysisResult["returnStatement"].push(
-									{ module : sVariableName });
+								oAnalysisResult["returnStatement"].push({
+									module: sVariableName,
+								});
 							}
 						}
 						if (!that.defineCall.bExportsNode) {
@@ -1009,35 +1200,44 @@ module.exports = {
 								reporter.report(
 									Mod.ReportLevel.DEBUG,
 									"Added true for global export",
-									oLastStatement.loc);
+									oLastStatement.loc
+								);
 							} else {
 								reporter.storeFinding(
 									"Add true for global export",
-									oLastStatement.loc);
+									oLastStatement.loc
+								);
 								oAnalysisResult["globalExport"] =
 									oAnalysisResult["globalExport"] || [];
 
-								oAnalysisResult["globalExport"].push(
-									{ module : "true" });
+								oAnalysisResult["globalExport"].push({
+									module: "true",
+								});
 							}
 						}
 					}
 
 					// find namespace usage which shares declared module's
 					// namespace
-					if (modify && oObject.oResult.declareName &&
+					if (
+						modify &&
+						oObject.oResult.declareName &&
 						oObject.oResult.bWasDeclared &&
-						oObject.oResult.declareName.split(".").length > 1) {
-						const sNamespace =
-							oObject.oResult.declareName.substring(
-								0,
-								oObject.oResult.declareName.lastIndexOf("."));
-						const bNamespaces =
-							NamespaceUtils.findNamespaceUsage(ast, sNamespace);
+						oObject.oResult.declareName.split(".").length > 1
+					) {
+						const sNamespace = oObject.oResult.declareName.substring(
+							0,
+							oObject.oResult.declareName.lastIndexOf(".")
+						);
+						const bNamespaces = NamespaceUtils.findNamespaceUsage(
+							ast,
+							sNamespace
+						);
 						if (bNamespaces) {
-							const objectCreateCall =
-								NamespaceUtils.introduceObjectPathCreate(
-									that.defineCall, sNamespace);
+							const objectCreateCall = NamespaceUtils.introduceObjectPathCreate(
+								that.defineCall,
+								sNamespace
+							);
 							const aBody = that.defineCall.factory.body.body;
 							aBody.splice(1, 0, objectCreateCall);
 						}
@@ -1047,12 +1247,12 @@ module.exports = {
 						oAnalysisResult.defineCall = that.defineCall;
 					}
 					return {
-						modified : bFileWasModified,
+						modified: bFileWasModified,
 						ast,
-						dependencies : that.dependencies,
+						dependencies: that.dependencies,
 						// for the analyze task modify is false therefore return
 						// AnalysisResult
-						oAnalysisResult : modify ? undefined : oAnalysisResult
+						oAnalysisResult: modify ? undefined : oAnalysisResult,
 					};
 				});
 			});
@@ -1068,51 +1268,60 @@ module.exports = {
 	 */
 	normalizeDependencyQuotes(defineCall: SapUiDefineCall, reporter: Reporter) {
 		let bModified = false;
-		if (defineCall && defineCall.dependencyArray &&
-			defineCall.dependencyArray.elements.length > 0) {
+		if (
+			defineCall &&
+			defineCall.dependencyArray &&
+			defineCall.dependencyArray.elements.length > 0
+		) {
 			reporter.report(
-				ReportLevel.DEBUG, "  normalizing dependency quotes");
+				ReportLevel.DEBUG,
+				"  normalizing dependency quotes"
+			);
 			let iCountDoubleQuotes = 0;
 			defineCall.dependencyArray.elements.forEach((dep: ESTree.Node) => {
-				if (dep.type === Syntax.Literal &&
+				if (
+					dep.type === Syntax.Literal &&
 					typeof (dep as ESTree.Literal).value === "string" &&
-					(dep as ESTree.Literal).raw != null) {
-					if ((dep as ESTree.Literal).raw.charAt(0) === "\"") {
+					(dep as ESTree.Literal).raw != null
+				) {
+					if ((dep as ESTree.Literal).raw.charAt(0) === '"') {
 						iCountDoubleQuotes++;
 					} else {
 						iCountDoubleQuotes--;
 					}
 				}
 			});
-			if (iCountDoubleQuotes !== 0 &&
+			if (
+				iCountDoubleQuotes !== 0 &&
 				iCountDoubleQuotes !==
-					defineCall.dependencyArray.elements.length) {
-				const quote = iCountDoubleQuotes < 0 ? "'" : "\"";
-				const elements: Expression[] =
-					defineCall.dependencyArray.elements.map(
-						(dep: ESTree.Expression) => {
-							if (dep.type === Syntax.Literal &&
-								typeof (dep as ESTree.Literal).value ===
-									"string" &&
-								((dep as ESTree.Literal).raw == null ||
-								 (dep as ESTree.Literal).raw.charAt(0) !==
-									 quote)) {
-								bModified = true;
-								// TODO in theory requires quoting of value, but
-								// shouldn't be necessary for AMD dependencies
-								(dep as ESTree.Literal).raw = quote +
-									(dep as ESTree.Literal).value + quote;
+					defineCall.dependencyArray.elements.length
+			) {
+				const quote = iCountDoubleQuotes < 0 ? "'" : '"';
+				const elements: Expression[] = defineCall.dependencyArray.elements.map(
+					(dep: ESTree.Expression) => {
+						if (
+							dep.type === Syntax.Literal &&
+							typeof (dep as ESTree.Literal).value === "string" &&
+							((dep as ESTree.Literal).raw == null ||
+								(dep as ESTree.Literal).raw.charAt(0) !== quote)
+						) {
+							bModified = true;
+							// TODO in theory requires quoting of value, but
+							// shouldn't be necessary for AMD dependencies
+							(dep as ESTree.Literal).raw =
+								quote + (dep as ESTree.Literal).value + quote;
 
-								// TODO this is a dirty hack here
-								const dir = builders.stringLiteral(
-									quote + (dep as ESTree.Literal).value +
-									quote);
-								dir.value = quote +
-									(dep as ESTree.Literal).value + quote;
-								return dir;
-							}
-							return dep;
-						});
+							// TODO this is a dirty hack here
+							const dir = builders.stringLiteral(
+								quote + (dep as ESTree.Literal).value + quote
+							);
+							dir.value =
+								quote + (dep as ESTree.Literal).value + quote;
+							return dir;
+						}
+						return dep;
+					}
+				);
 				if (bModified) {
 					defineCall.dependencyArray.elements = elements;
 				}
@@ -1134,7 +1343,10 @@ module.exports = {
 	 * @return {boolean} whether or not ast was modified
 	 */
 	convertExport(
-		defineCall: SapUiDefineCall, node: ESTree.Node, reporter: Reporter) {
+		defineCall: SapUiDefineCall,
+		node: ESTree.Node,
+		reporter: Reporter
+	) {
 		let mainClassName;
 		let mainClassNameShortcut = undefined;
 		const that = this;
@@ -1166,8 +1378,9 @@ module.exports = {
 			const className = call.arguments[0].value;
 			if (className.replace(/\./g, "/") === defineCall.name) {
 				mainClassName = className;
-				mainClassNameShortcut =
-					className.slice(className.lastIndexOf(".") + 1);
+				mainClassNameShortcut = className.slice(
+					className.lastIndexOf(".") + 1
+				);
 			}
 		}
 
@@ -1178,34 +1391,38 @@ module.exports = {
 			let exportVar;
 			(node as ESTree.BlockStatement).body.forEach((stmt, idx) => {
 				if (stmt.type === Syntax.ExpressionStatement) {
-					const expression =
-						(stmt as ESTree.ExpressionStatement).expression;
-					if (expression.type === Syntax.AssignmentExpression &&
-						isMainAssignment(expression)) {
-						(node as ESTree.BlockStatement).body[idx] =
-							builders.variableDeclaration(
-								"var",
-								[ builders.variableDeclarator(
-									builders.identifier(
-										mainClassNameShortcut),  // TODO check
-									// that name is
-									// not used yet
-									(expression as ESTree.AssignmentExpression)
-										.right) ]);
+					const expression = (stmt as ESTree.ExpressionStatement)
+						.expression;
+					if (
+						expression.type === Syntax.AssignmentExpression &&
+						isMainAssignment(expression)
+					) {
+						(node as ESTree.BlockStatement).body[
+							idx
+						] = builders.variableDeclaration("var", [
+							builders.variableDeclarator(
+								builders.identifier(mainClassNameShortcut), // TODO check
+								// that name is
+								// not used yet
+								(expression as ESTree.AssignmentExpression)
+									.right
+							),
+						]);
 						bModified = true;
 						exportVar = mainClassNameShortcut;
 						globalNameConvertedToAMDExport = mainClassName;
 					} else if (isMainClassDefinition(expression)) {
 						handleExtendCall(expression);
-						(node as ESTree.BlockStatement).body[idx] =
-							builders.variableDeclaration(
-								"var",
-								[ builders.variableDeclarator(
-									builders.identifier(
-										mainClassNameShortcut),  // TODO check
-									// that name is
-									// not used yet
-									expression) ]);
+						(node as ESTree.BlockStatement).body[
+							idx
+						] = builders.variableDeclaration("var", [
+							builders.variableDeclarator(
+								builders.identifier(mainClassNameShortcut), // TODO check
+								// that name is
+								// not used yet
+								expression
+							),
+						]);
 						exportVar = mainClassNameShortcut;
 						globalNameConvertedToAMDExport = mainClassName;
 						bModified = true;
@@ -1214,28 +1431,35 @@ module.exports = {
 						mainClassName &&
 						mainClassName ===
 							that.getObjectName(
-								(expression as ESTree.AssignmentExpression)
-									.left)) {
-						(expression as ESTree.AssignmentExpression).left =
-							builders.identifier(mainClassNameShortcut);
+								(expression as ESTree.AssignmentExpression).left
+							)
+					) {
+						(expression as ESTree.AssignmentExpression).left = builders.identifier(
+							mainClassNameShortcut
+						);
 						reporter.report(
 							ReportLevel.DEBUG,
-							"  replace LHS qualified name " + mainClassName +
-								" with shortcut " + mainClassNameShortcut,
-							node.loc);
+							"  replace LHS qualified name " +
+								mainClassName +
+								" with shortcut " +
+								mainClassNameShortcut,
+							node.loc
+						);
 						bModified = true;
 					}
 				}
 			});
 			if (exportVar) {
-				(node as ESTree.BlockStatement)
-					.body.push(builders.returnStatement(
-						builders.identifier(mainClassNameShortcut)));
+				(node as ESTree.BlockStatement).body.push(
+					builders.returnStatement(
+						builders.identifier(mainClassNameShortcut)
+					)
+				);
 				defineCall.exportName = exportVar;
 				bModified = true;
 			}
 		}
-		return { modified : bModified, globalNameConvertedToAMDExport };
+		return {modified: bModified, globalNameConvertedToAMDExport};
 	},
 	/**
 	 * Modifies the AST by using SapUiDefineCall#addDependency
@@ -1246,67 +1470,86 @@ module.exports = {
 	 * @return {{modified:boolean, path:string}}
 	 */
 	addDependency(
-		defineCall: SapUiDefineCall, moduleName: string, cause: string,
-		reporter: Reporter) {
+		defineCall: SapUiDefineCall,
+		moduleName: string,
+		cause: string,
+		reporter: Reporter
+	) {
 		let bWasModified = false;
 		if (defineCall && moduleName === defineCall.name) {
 			reporter.report(ReportLevel.DEBUG, "  ignoring dependency to self");
-			return { modified : bWasModified, path : defineCall.exportName };
+			return {modified: bWasModified, path: defineCall.exportName};
 		}
 
 		if (defineCall && defineCall.dependencyArray) {
-			const dependencyArrayIndex =
-				defineCall.getAbsoluteDependencyPaths().indexOf(moduleName);
+			const dependencyArrayIndex = defineCall
+				.getAbsoluteDependencyPaths()
+				.indexOf(moduleName);
 			if (dependencyArrayIndex >= 0) {
 				if (!this.dependencies[moduleName]) {
 					this.dependencies[moduleName] = {
-						local :
-							this.defineCall.paramNames[dependencyArrayIndex],
-						causes : [ cause ]
+						local: this.defineCall.paramNames[dependencyArrayIndex],
+						causes: [cause],
 					};
 				} else {
-					if (this.dependencies[moduleName].causes.indexOf(cause) <
-						0) {
+					if (
+						this.dependencies[moduleName].causes.indexOf(cause) < 0
+					) {
 						this.dependencies[moduleName].causes.push(cause);
 					}
 				}
 				return {
-					modified : bWasModified,
-					path : this.dependencies[moduleName].local
+					modified: bWasModified,
+					path: this.dependencies[moduleName].local,
 				};
 			}
 		}
 
 		if (!this.dependencies[moduleName]) {
 			this.dependencies[moduleName] = {
-				local : this.getLocalReference(moduleName),
-				causes : [ cause ]
+				local: this.getLocalReference(moduleName),
+				causes: [cause],
 			};
 			let paramName = this.dependencies[moduleName].local;
-			if (/^jquery\.sap\./.test(moduleName) && defineCall &&
-				defineCall.dependencyArray) {
+			if (
+				/^jquery\.sap\./.test(moduleName) &&
+				defineCall &&
+				defineCall.dependencyArray
+			) {
 				defineCall.dependencyArray.elements.forEach(
 					(mod: ESTree.Node, idx) => {
-						if (paramName &&
+						if (
+							paramName &&
 							/^jquery\.sap\./.test(
-								(mod as ESTree.Literal).value.toString()) &&
-							idx < defineCall.paramNames.length) {
+								(mod as ESTree.Literal).value.toString()
+							) &&
+							idx < defineCall.paramNames.length
+						) {
 							paramName = null;
 							this.dependencies[moduleName].local =
 								defineCall.paramNames[idx];
 							reporter.report(
 								ReportLevel.DEBUG,
 								" using " +
-									this.dependencies[moduleName].local + " (" +
+									this.dependencies[moduleName].local +
+									" (" +
 									(mod as ESTree.Literal).value +
-									") for jquery import " + moduleName);
+									") for jquery import " +
+									moduleName
+							);
 						}
-					});
+					}
+				);
 			}
 			reporter.report(
 				ReportLevel.DEBUG,
-				"  add import " + this.dependencies[moduleName].local + " <= " +
-					moduleName + "" + (paramName == null ? " (hidden)" : ""));
+				"  add import " +
+					this.dependencies[moduleName].local +
+					" <= " +
+					moduleName +
+					"" +
+					(paramName == null ? " (hidden)" : "")
+			);
 			bWasModified = defineCall.addDependency(moduleName, paramName);
 		} else {
 			if (this.dependencies[moduleName].causes.indexOf(cause) < 0) {
@@ -1314,8 +1557,8 @@ module.exports = {
 			}
 		}
 		return {
-			modified : bWasModified,
-			path : this.dependencies[moduleName].local
+			modified: bWasModified,
+			path: this.dependencies[moduleName].local,
 		};
 	},
 	findDependency(module: string) {
@@ -1325,14 +1568,14 @@ module.exports = {
 	},
 	addDependencyUsage(moduleName: string, cause: string, reporter: Reporter) {
 		if (this.defineCall && this.defineCall.dependencyArray.elements) {
-			const dependencyIndex =
-				this.defineCall.getAbsoluteDependencyPaths().indexOf(
-					moduleName);
+			const dependencyIndex = this.defineCall
+				.getAbsoluteDependencyPaths()
+				.indexOf(moduleName);
 			if (dependencyIndex >= 0) {
 				if (!this.dependencies[moduleName]) {
 					this.dependencies[moduleName] = {
-						local : this.defineCall.paramNames[dependencyIndex],
-						causes : []
+						local: this.defineCall.paramNames[dependencyIndex],
+						causes: [],
 					};
 				}
 				if (this.dependencies[moduleName].causes.indexOf(cause) < 0) {
@@ -1340,8 +1583,12 @@ module.exports = {
 
 					reporter.report(
 						ReportLevel.DEBUG,
-						"  keep dependency to " + moduleName + " because " +
-							cause + " is used");
+						"  keep dependency to " +
+							moduleName +
+							" because " +
+							cause +
+							" is used"
+					);
 				}
 			}
 		}
@@ -1352,7 +1599,8 @@ module.exports = {
 				if (importNames.indexOf(this.dependencies[module].local) >= 0) {
 					importNames.splice(
 						importNames.indexOf(this.dependencies[module].local),
-						1);
+						1
+					);
 				}
 			}
 		}
@@ -1376,14 +1624,18 @@ module.exports = {
 		// ensure local reference does neither contain invalid characters nor is
 		// a language keyword
 		candidate = VariableNameCreator.getUniqueParameterName(
-			aUsedParamNames, candidate);
+			aUsedParamNames,
+			candidate
+		);
 
 		// if the library module from a different library is imported, add a
 		// package to distinguish it more easily
 		if (candidate === "mLibrary") {
 			candidate = "mobileLibrary";
 			candidate = VariableNameCreator.getUniqueParameterName(
-				aUsedParamNames, candidate);
+				aUsedParamNames,
+				candidate
+			);
 		}
 
 		return candidate;
@@ -1395,8 +1647,7 @@ module.exports = {
 		return ui5name.replace(/\./g, "/");
 	},
 	isSafeLocation(path) {
-		const oRegx =
-			/^(?:AMD-factory|constructor|init|onInit|initCompositeSupport|onAfterRendering|onBeforeRendering)$/;
+		const oRegx = /^(?:AMD-factory|constructor|init|onInit|initCompositeSupport|onAfterRendering|onBeforeRendering)$/;
 		return !path.scope || oRegx.test(path.scope.node.__classMethodName);
 	},
 	/**
@@ -1407,9 +1658,11 @@ module.exports = {
 	 * @returns {{modified:boolean, pruned:boolean}}
 	 */
 	processJQuerySAPRequireCall(
-		path, config,
-		reporter: Reporter) : { modified : boolean, pruned : boolean } {
-		const result = { modified : false, pruned : false };
+		path,
+		config,
+		reporter: Reporter
+	): {modified: boolean; pruned: boolean} {
+		const result = {modified: false, pruned: false};
 		const requireCall = path.value;
 		// reporter.report(ReportLevel.DEBUG, "require contained in method: " +
 		// path.scope.node.__classMethodName);
@@ -1419,12 +1672,17 @@ module.exports = {
 		requireCall.arguments.forEach(function(arg) {
 			if (arg.type === Syntax.Literal && typeof arg.value === "string") {
 				const modName = that.makeModuleName(arg.value);
-				if (that.isSafeModule(modName, config) || safeLocation ||
-					!config.onlySafeReplacements) {
-					const modified =
-						that.addDependency(
-								that.defineCall, modName, undefined, reporter)
-							.modified;
+				if (
+					that.isSafeModule(modName, config) ||
+					safeLocation ||
+					!config.onlySafeReplacements
+				) {
+					const modified = that.addDependency(
+						that.defineCall,
+						modName,
+						undefined,
+						reporter
+					).modified;
 					if (modified) {
 						result.modified = true;
 					}
@@ -1436,8 +1694,10 @@ module.exports = {
 			reporter.report(
 				ReportLevel.DEBUG,
 				"  transformed to dependencies: jQuery.sap.require(" +
-					getArgumentName(path.value) + ")",
-				path.value.loc);
+					getArgumentName(path.value) +
+					")",
+				path.value.loc
+			);
 			result.pruned = true;
 			result.modified = true;
 			path.prune();
@@ -1446,8 +1706,10 @@ module.exports = {
 			reporter.report(
 				ReportLevel.DEBUG,
 				"  partially transformed to dependencies jQuery.sap.require(" +
-					getArgumentName(path.value) + ")",
-				path.value.loc);
+					getArgumentName(path.value) +
+					")",
+				path.value.loc
+			);
 		}
 		return result;
 	},
@@ -1467,7 +1729,9 @@ module.exports = {
 				// HACK: ui5loader defines sap.ui.define, therefore it needs to
 				// be excluded
 				else if (
-					symbol.member && symbol.member.module === "ui5loader") {
+					symbol.member &&
+					symbol.member.module === "ui5loader"
+				) {
 					return undefined;
 				}
 				// HACK: avoid resolution sap/ui/Device.browser.msie as
@@ -1477,19 +1741,20 @@ module.exports = {
 						return undefined;
 					}
 					return {
-						symbol : symbol.symbol,
-						module : symbol.symbol.module,
-						export : "",
-						member : symbol.symbol.export
+						symbol: symbol.symbol,
+						module: symbol.symbol.module,
+						export: "",
+						member: symbol.symbol.export,
 					};
 				} else if (/jQuery\.sap\./.test(name)) {
 					// reporter.report(ReportLevel.DEBUG, symbol);
 					return {
-						symbol : symbol.symbol,
-						module : symbol.symbol.module,
-						export : "",
-						member : symbol.symbol.export +
-							(symbol.member ? "." + symbol.member.name : "")
+						symbol: symbol.symbol,
+						module: symbol.symbol.module,
+						export: "",
+						member:
+							symbol.symbol.export +
+							(symbol.member ? "." + symbol.member.name : ""),
 					};
 				}
 
@@ -1497,28 +1762,29 @@ module.exports = {
 					// symbol has member information, but member has no own
 					// module, use export info of symbol
 					return {
-						symbol : symbol.symbol,
-						module : symbol.symbol.module,
-						export : symbol.symbol.export,
-						member : symbol.symbol.export === undefined ?
-							undefined :
-							symbol.member.name
+						symbol: symbol.symbol,
+						module: symbol.symbol.module,
+						export: symbol.symbol.export,
+						member:
+							symbol.symbol.export === undefined
+								? undefined
+								: symbol.member.name,
 					};
 				} else if (symbol.member && symbol.member.module) {
 					// symbol has member information and member has own module
 					// information, use it
 					return {
-						symbol : symbol.symbol,
-						module : symbol.member.module,
-						export : symbol.member.export
+						symbol: symbol.symbol,
+						module: symbol.member.module,
+						export: symbol.member.export,
 					};
 				} else {
 					// symbol has no member information, use export info of
 					// symbol
 					return {
-						symbol : symbol.symbol,
-						module : symbol.symbol.module,
-						export : symbol.symbol.export
+						symbol: symbol.symbol,
+						module: symbol.symbol.module,
+						export: symbol.symbol.export,
 					};
 				}
 			}
@@ -1527,15 +1793,15 @@ module.exports = {
 				const moduleGuess = name.replace(/\./g, "/");
 				if (that.defineCall.getParamNameByImport(moduleGuess)) {
 					return {
-						module : moduleGuess,
-						export : ""  // default export
+						module: moduleGuess,
+						export: "", // default export
 					};
 				}
 				// or is it a self-reference to the current module?
 				if (that.defineCall.name === moduleGuess) {
 					return {
-						module : moduleGuess,
-						export : ""  // default export
+						module: moduleGuess,
+						export: "", // default export
 					};
 				}
 			}
@@ -1572,21 +1838,28 @@ module.exports = {
 			}
 			// special UI5 rule: a reference to the renderer of current module
 			// (control) is also 'safe'
-			if (this.defineCall.name &&
-					this.defineCall.name + "Renderer" === moduleName ||
-				this.defineCall.name === moduleName + "Renderer") {
+			if (
+				(this.defineCall.name &&
+					this.defineCall.name + "Renderer" === moduleName) ||
+				this.defineCall.name === moduleName + "Renderer"
+			) {
 				return true;
 			}
 			// when a module is already referenced, it is regarded as 'safe' as
 			// well
-			if (this.defineCall.dependencyArray &&
-				this.defineCall.getAbsoluteDependencyPaths().indexOf(
-					moduleName) >= 0) {
+			if (
+				this.defineCall.dependencyArray &&
+				this.defineCall
+					.getAbsoluteDependencyPaths()
+					.indexOf(moduleName) >= 0
+			) {
 				return true;
 			}
 		}
-		if (config.basicModules &&
-			config.basicModules.indexOf(moduleName) >= 0) {
+		if (
+			config.basicModules &&
+			config.basicModules.indexOf(moduleName) >= 0
+		) {
 			// reference to a configured 'safe' module
 			return true;
 		}
@@ -1594,105 +1867,109 @@ module.exports = {
 		return /\/library$/.test(moduleName);
 	},
 	isJQuerySAPDeclareCall(node: ESTree.Node) {
-		const bMemberCall = node.type === Syntax.CallExpression &&
+		const bMemberCall =
+			node.type === Syntax.CallExpression &&
 			(node as ESTree.CallExpression).callee.type ===
 				Syntax.MemberExpression &&
 			((node as ESTree.CallExpression).callee as ESTree.MemberExpression)
-					.object.type === Syntax.MemberExpression &&
+				.object.type === Syntax.MemberExpression &&
 			(((node as ESTree.CallExpression).callee as ESTree.MemberExpression)
-				 .object as ESTree.MemberExpression)
-					.object.type === Syntax.Identifier;
+				.object as ESTree.MemberExpression).object.type ===
+				Syntax.Identifier;
 		if (bMemberCall) {
-			const member =
-				((node as ESTree.CallExpression).callee as
-				 ESTree.MemberExpression);
-			const ident =
-				((member.object as ESTree.MemberExpression).object as
-				 ESTree.Identifier);
+			const member = (node as ESTree.CallExpression)
+				.callee as ESTree.MemberExpression;
+			const ident = (member.object as ESTree.MemberExpression)
+				.object as ESTree.Identifier;
 			const bJQuery = ident.name === "jQuery" || ident.name === "$";
 			if (bJQuery) {
-				const call =
-					(member.object as ESTree.MemberExpression).property;
-				return call.type === Syntax.Identifier &&
+				const call = (member.object as ESTree.MemberExpression)
+					.property;
+				return (
+					call.type === Syntax.Identifier &&
 					(call as ESTree.Identifier).name === "sap" &&
 					member.property.type === Syntax.Identifier &&
-					(member.property as ESTree.Identifier).name === "declare";
+					(member.property as ESTree.Identifier).name === "declare"
+				);
 			}
 		}
 		return false;
 	},
 	isJQuerySAPRequireCall(node: ESTree.Node) {
-		const bMemberCall = node.type === Syntax.CallExpression &&
+		const bMemberCall =
+			node.type === Syntax.CallExpression &&
 			(node as ESTree.CallExpression).callee.type ===
 				Syntax.MemberExpression &&
 			((node as ESTree.CallExpression).callee as ESTree.MemberExpression)
-					.object.type === Syntax.MemberExpression &&
+				.object.type === Syntax.MemberExpression &&
 			(((node as ESTree.CallExpression).callee as ESTree.MemberExpression)
-				 .object as ESTree.MemberExpression)
-					.object.type === Syntax.Identifier;
+				.object as ESTree.MemberExpression).object.type ===
+				Syntax.Identifier;
 		if (bMemberCall) {
-			const member =
-				((node as ESTree.CallExpression).callee as
-				 ESTree.MemberExpression);
-			const ident =
-				((member.object as ESTree.MemberExpression).object as
-				 ESTree.Identifier);
+			const member = (node as ESTree.CallExpression)
+				.callee as ESTree.MemberExpression;
+			const ident = (member.object as ESTree.MemberExpression)
+				.object as ESTree.Identifier;
 			const bJQuery = ident.name === "jQuery" || ident.name === "$";
 			if (bJQuery) {
-				const call =
-					(member.object as ESTree.MemberExpression).property;
-				return call.type === Syntax.Identifier &&
+				const call = (member.object as ESTree.MemberExpression)
+					.property;
+				return (
+					call.type === Syntax.Identifier &&
 					(call as ESTree.Identifier).name === "sap" &&
 					member.property.type === Syntax.Identifier &&
-					(member.property as ESTree.Identifier).name === "require";
+					(member.property as ESTree.Identifier).name === "require"
+				);
 			}
 		}
 		return false;
 	},
 	isExtendCall(node: ESTree.Node) {
-		return (node && node.type === Syntax.CallExpression &&
-				(node as ESTree.CallExpression).callee.type ===
-					Syntax.MemberExpression &&
-				((node as ESTree.CallExpression).callee as
-				 ESTree.MemberExpression)
-						.property.type === Syntax.Identifier &&
-				(((node as ESTree.CallExpression).callee as
-				  ESTree.MemberExpression)
-					 .property as ESTree.Identifier)
-						.name === "extend" &&
-				(node as ESTree.CallExpression).arguments.length > 0 &&
-				(node as ESTree.CallExpression).arguments[0].type ===
-					Syntax.Literal) &&
-			typeof (
-				(node as ESTree.CallExpression).arguments[0] as ESTree.Literal)
-				.value === "string";
+		return (
+			node &&
+			node.type === Syntax.CallExpression &&
+			(node as ESTree.CallExpression).callee.type ===
+				Syntax.MemberExpression &&
+			((node as ESTree.CallExpression).callee as ESTree.MemberExpression)
+				.property.type === Syntax.Identifier &&
+			(((node as ESTree.CallExpression).callee as ESTree.MemberExpression)
+				.property as ESTree.Identifier).name === "extend" &&
+			(node as ESTree.CallExpression).arguments.length > 0 &&
+			(node as ESTree.CallExpression).arguments[0].type ===
+				Syntax.Literal &&
+			typeof ((node as ESTree.CallExpression)
+				.arguments[0] as ESTree.Literal).value === "string"
+		);
 	},
-	getObjectName(node: ESTree.Node) : string {
-		if (node.type === Syntax.MemberExpression &&
+	getObjectName(node: ESTree.Node): string {
+		if (
+			node.type === Syntax.MemberExpression &&
 			(node as ESTree.MemberExpression).property.type ===
-				Syntax.Identifier) {
-			return this.getObjectName(
-					   (node as ESTree.MemberExpression).object) +
+				Syntax.Identifier
+		) {
+			return (
+				this.getObjectName((node as ESTree.MemberExpression).object) +
 				"." +
-				((node as ESTree.MemberExpression).property as
-				 ESTree.Identifier)
-					.name;
+				((node as ESTree.MemberExpression)
+					.property as ESTree.Identifier).name
+			);
 		} else if (node.type === Syntax.Identifier) {
 			return (node as ESTree.Identifier).name;
 		}
 		return undefined;
 	},
 	isIIFE(node: ESTree.Node) {
-		if (node.type === Syntax.ExpressionStatement &&
+		if (
+			node.type === Syntax.ExpressionStatement &&
 			(node as ESTree.ExpressionStatement).expression.type ===
 				Syntax.CallExpression &&
-			((node as ESTree.ExpressionStatement).expression as
-			 ESTree.CallExpression)
-					.callee.type === Syntax.FunctionExpression) {
-			const oCallExpression =
-				((node as ESTree.ExpressionStatement).expression as
-				 ESTree.CallExpression);
-			return [ oCallExpression.callee, oCallExpression.arguments ];
+			((node as ESTree.ExpressionStatement)
+				.expression as ESTree.CallExpression).callee.type ===
+				Syntax.FunctionExpression
+		) {
+			const oCallExpression = (node as ESTree.ExpressionStatement)
+				.expression as ESTree.CallExpression;
+			return [oCallExpression.callee, oCallExpression.arguments];
 		}
 		return undefined;
 	},
@@ -1705,7 +1982,7 @@ module.exports = {
 	 * @param nodes
 	 */
 	getRelevantNodes(nodes: ESTree.Node[]) {
-		return nodes.filter((node) => {
+		return nodes.filter(node => {
 			// use strict is filtered out
 			if (this.containsUseStrict(node)) {
 				return false;
@@ -1713,22 +1990,29 @@ module.exports = {
 			} else if (
 				node.type === Syntax.ExpressionStatement &&
 				this.isJQuerySAPRequireCall(
-					(node as ESTree.ExpressionStatement).expression)) {
+					(node as ESTree.ExpressionStatement).expression
+				)
+			) {
 				return false;
 				// jQuery.sap.declare is filtered out
 			} else if (
 				node.type === Syntax.ExpressionStatement &&
 				this.isJQuerySAPDeclareCall(
-					(node as ESTree.ExpressionStatement).expression)) {
+					(node as ESTree.ExpressionStatement).expression
+				)
+			) {
 				return false;
 			}
 			return true;
 		});
 	},
 	containsUseStrict(node: ESTree.ExpressionStatement) {
-		return node && node.type === Syntax.ExpressionStatement &&
+		return (
+			node &&
+			node.type === Syntax.ExpressionStatement &&
 			node.expression.type === Syntax.Literal &&
-			(node.expression as ESTree.Literal).value === "use strict";
+			(node.expression as ESTree.Literal).value === "use strict"
+		);
 	},
 	/**
 	 *
@@ -1742,8 +2026,10 @@ module.exports = {
 	isStaticGlobal(path, reporter: Reporter) {
 		// identify left-most part of member expression
 		let candidate = path.value;
-		while (candidate.type === Syntax.MemberExpression &&
-			   !candidate.computed) {
+		while (
+			candidate.type === Syntax.MemberExpression &&
+			!candidate.computed
+		) {
 			candidate = candidate.object;
 		}
 
@@ -1757,7 +2043,8 @@ module.exports = {
 				reporter.report(
 					ReportLevel.DEBUG,
 					"**** found in global scope: " + candidate.name,
-					path.value.loc);
+					path.value.loc
+				);
 			}
 			return !scope || scope.isGlobal;
 		}
@@ -1767,20 +2054,24 @@ module.exports = {
 		return (
 			path.parent.node.type === Syntax.BinaryExpression &&
 			path.parent.node.operator === "instanceof" &&
-			path.parent.node.right === path.value);
+			path.parent.node.right === path.value
+		);
 	},
 	isJQueryMember(node: ESTree.Node) {
 		let candidate = node;
-		while (candidate.type === Syntax.MemberExpression &&
-			   !(candidate as ESTree.MemberExpression).computed) {
+		while (
+			candidate.type === Syntax.MemberExpression &&
+			!(candidate as ESTree.MemberExpression).computed
+		) {
 			candidate = (candidate as ESTree.MemberExpression).object;
 		}
 		return (
 			node.type === Syntax.MemberExpression &&
 			candidate.type === Syntax.Identifier &&
-			(candidate as ESTree.Identifier).name === "jQuery");
+			(candidate as ESTree.Identifier).name === "jQuery"
+		);
 		// TODO resolve name
-	}
+	},
 };
 
 /**
@@ -1797,7 +2088,7 @@ function findVariableDeclarationNames(ast): string[] {
 				aVariableNames.push((node.id as ESTree.Identifier).name);
 			}
 			this.traverse(path);
-		}
+		},
 	});
 	return aVariableNames;
 }
@@ -1809,8 +2100,7 @@ function findVariableDeclarationNames(ast): string[] {
  * @param amdCleanerUtilInstance amdCleanerUtilInstance
  */
 function identifyUnusedImports(amdCleanerUtilInstance) {
-	const aImportParamNames =
-		amdCleanerUtilInstance.defineCall.paramNames.slice();
+	const aImportParamNames = amdCleanerUtilInstance.defineCall.paramNames.slice();
 	amdCleanerUtilInstance.removeUsedDependencies(aImportParamNames);
 
 	// find used variables and remove them from aImportParamNames
@@ -1818,24 +2108,27 @@ function identifyUnusedImports(amdCleanerUtilInstance) {
 		visitIdentifier(path) {
 			const node = path.value;
 			const parent = path.parent.node;
-			if ((parent.type === Syntax.MemberExpression &&
-				 node === parent.object)
+			if (
+				(parent.type === Syntax.MemberExpression &&
+					node === parent.object) ||
 				// children of BYFIELD only when identifier is the
 				// first in the sequence
-				|| (parent.type === Syntax.Property && node === parent.value)
+				(parent.type === Syntax.Property && node === parent.value) ||
 				// children of NAMEDVALUE only if identifier is not
 				// the NAME
-				|| (parent.type === Syntax.LabeledStatement &&
+				(parent.type === Syntax.LabeledStatement &&
 					node !== parent.label) ||
 				(parent.type === Syntax.ContinueStatement &&
-				 node !== parent.label) ||
+					node !== parent.label) ||
 				(parent.type === Syntax.BreakStatement &&
-				 node !== parent.label) ||
+					node !== parent.label) ||
 				(parent.type !== Syntax.MemberExpression &&
-				 parent.type !== Syntax.Property &&
-				 parent.type !== Syntax.LabeledStatement &&
-				 parent.type !== Syntax.ContinueStatement &&
-				 parent.type !== Syntax.BreakStatement)) {  // and children of
+					parent.type !== Syntax.Property &&
+					parent.type !== Syntax.LabeledStatement &&
+					parent.type !== Syntax.ContinueStatement &&
+					parent.type !== Syntax.BreakStatement)
+			) {
+				// and children of
 				// all other tokens
 				const idx = aImportParamNames.indexOf(node.name);
 				if (idx >= 0) {
@@ -1843,7 +2136,7 @@ function identifyUnusedImports(amdCleanerUtilInstance) {
 				}
 			}
 			this.traverse(path);
-		}
+		},
 	});
 	return aImportParamNames;
 }
@@ -1861,40 +2154,55 @@ function identifyUnusedImports(amdCleanerUtilInstance) {
  * @return boolean whether or not the AST has been modified
  */
 function removeUnusedDependencies(
-	aUnusedParamNames: string[], amdCleanerUtilInstance, moduleName: string,
-	reporter: Reporter, modify: boolean, ast: ESTree.Node,
-	oAnalysisResult: {}) {
+	aUnusedParamNames: string[],
+	amdCleanerUtilInstance,
+	moduleName: string,
+	reporter: Reporter,
+	modify: boolean,
+	ast: ESTree.Node,
+	oAnalysisResult: {}
+) {
 	let bFileWasModified = false;
 	aUnusedParamNames.forEach((unusedParamName: string) => {
-		const importPath =
-			amdCleanerUtilInstance.defineCall.getImportByParamName(
-				unusedParamName);  // e.g. "sap/ui/model/Filter"
+		const importPath = amdCleanerUtilInstance.defineCall.getImportByParamName(
+			unusedParamName
+		); // e.g. "sap/ui/model/Filter"
 		// check that import exists and that we didn't just
 		// add it in this run Note: the tool might have
 		// found a hidden dependency like sap/ui/core/Core
 		// when sap.ui.getCore() is called Note: also don't
 		// remove the library to which this module belongs
 		// and don't remove thirdparty
-		if (importPath && !amdCleanerUtilInstance.dependencies[importPath] &&
+		if (
+			importPath &&
+			!amdCleanerUtilInstance.dependencies[importPath] &&
 			!amdCleanerUtilInstance.isLibraryFor(moduleName, importPath) &&
-			!/sap\/ui\/thirdparty\//.test(importPath)) {
+			!/sap\/ui\/thirdparty\//.test(importPath)
+		) {
 			reporter.report(
 				ReportLevel.DEBUG,
-				"Remove unused import " + importPath + " (" + unusedParamName +
-					")");
+				"Remove unused import " +
+					importPath +
+					" (" +
+					unusedParamName +
+					")"
+			);
 			if (modify) {
-				const bWasRemoved =
-					amdCleanerUtilInstance.defineCall.removeDependency(
-						importPath, unusedParamName);
+				const bWasRemoved = amdCleanerUtilInstance.defineCall.removeDependency(
+					importPath,
+					unusedParamName
+				);
 				bFileWasModified = bFileWasModified || bWasRemoved;
 				reporter.report(
-					Mod.ReportLevel.DEBUG, "Remove dependency", ast.loc);
+					Mod.ReportLevel.DEBUG,
+					"Remove dependency",
+					ast.loc
+				);
 			} else {
 				reporter.storeFinding("remove dependency", ast.loc);
 				oAnalysisResult["removeDependency"] =
 					oAnalysisResult["removeDependency"] || [];
-				oAnalysisResult["removeDependency"].push(
-					{ module : importPath });
+				oAnalysisResult["removeDependency"].push({module: importPath});
 			}
 		}
 	});

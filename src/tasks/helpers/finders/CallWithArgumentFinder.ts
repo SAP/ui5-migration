@@ -7,7 +7,6 @@ import {NodePath} from "ui5-migration";
 import {EMPTY_FINDER_RESULT, Finder, FinderResult} from "../../../dependencies";
 import {SapUiDefineCall} from "../../../util/SapUiDefineCall";
 
-
 /**
  * Finds the following 2 occurrences where: ":sapTabbable" is the first argument
  * <code>
@@ -19,17 +18,25 @@ import {SapUiDefineCall} from "../../../util/SapUiDefineCall";
  */
 class CallWithArgumentFinder implements Finder {
 	find(
-		node: ESTree.Node, config: { finderIncludesName: string },
-		sConfigName: string, defineCall: SapUiDefineCall): FinderResult {
+		node: ESTree.Node,
+		config: {finderIncludesName: string},
+		sConfigName: string,
+		defineCall: SapUiDefineCall
+	): FinderResult {
 		if (node.type === Syntax.CallExpression) {
-			if (node.arguments.length > 0 &&
-				node.arguments[0].type === Syntax.Literal) {
-				const arg0: ESTree.Literal =
-					node.arguments[0] as ESTree.Literal;
+			if (
+				node.arguments.length > 0 &&
+				node.arguments[0].type === Syntax.Literal
+			) {
+				const arg0: ESTree.Literal = node
+					.arguments[0] as ESTree.Literal;
 
-				if (typeof arg0.value === "string" && arg0.value.includes &&
-					arg0.value.includes(config.finderIncludesName)) {
-					return { configName : sConfigName };
+				if (
+					typeof arg0.value === "string" &&
+					arg0.value.includes &&
+					arg0.value.includes(config.finderIncludesName)
+				) {
+					return {configName: sConfigName};
 				}
 			}
 		}

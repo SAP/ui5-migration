@@ -2,7 +2,6 @@ import {Syntax} from "esprima";
 import * as recast from "recast";
 import {ASTReplaceable, NodePath} from "ui5-migration";
 
-
 const fnModuleWithInvocation = require("./ModuleWithInvocation");
 const builders = recast.types.builders;
 
@@ -20,14 +19,23 @@ const builders = recast.types.builders;
  * @returns {void}
  */
 const replaceable: ASTReplaceable = {
-
 	replace(
-		node: NodePath, name: string, fnName: string, oldModuleCall: string,
-		config: {}) : void {
-		const aExports = [ builders.identifier("window") ];
+		node: NodePath,
+		name: string,
+		fnName: string,
+		oldModuleCall: string,
+		config: {}
+	): void {
+		const aExports = [builders.identifier("window")];
 		return fnModuleWithInvocation.replaceInternal(
-			node, name, fnName, oldModuleCall, config, aExports);
-	}
+			node,
+			name,
+			fnName,
+			oldModuleCall,
+			config,
+			aExports
+		);
+	},
 };
 
 module.exports = replaceable;

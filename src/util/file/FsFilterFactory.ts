@@ -8,7 +8,6 @@ import {FsFilter} from "./FsFilter";
 import {GlobFilter} from "./GlobFilter";
 import {IgnoreFileFilter} from "./IgnoreFileFilter";
 
-
 /**
  * Walks the path and returns the last valid folder
  * @param wdOrGlob
@@ -32,8 +31,9 @@ async function getFolderFromGlob(wdOrGlob: string) {
 	return sExistingFolder;
 }
 
-export async function createIgnoreFileFilter(sIgnoreFile: string):
-	Promise<FsFilter> {
+export async function createIgnoreFileFilter(
+	sIgnoreFile: string
+): Promise<FsFilter> {
 	const oStats = await FileUtils.getStats(sIgnoreFile);
 	if (oStats && oStats.isFile()) {
 		const sFileContent = await FileUtils.fsReadFile(sIgnoreFile, "utf8");
@@ -41,7 +41,9 @@ export async function createIgnoreFileFilter(sIgnoreFile: string):
 		sExistingFolder = path.resolve(sExistingFolder);
 		sExistingFolder = FileUtils.normalize(sExistingFolder);
 		return IgnoreFileFilter.createFromContent(
-			sExistingFolder, sFileContent);
+			sExistingFolder,
+			sFileContent
+		);
 	}
 	throw Error("invalid ignore file specified " + sIgnoreFile);
 }
@@ -64,7 +66,6 @@ export async function createFilter(wdOrGlob: string): Promise<FsFilter> {
 		sExistingFolder = path.resolve(sExistingFolder);
 		sExistingFolder = FileUtils.normalize(sExistingFolder);
 		return GlobFilter.create(sExistingFolder, wdOrGlob);
-
 	} else if (oStats.isDirectory()) {
 		// src
 		wdOrGlob = path.resolve(wdOrGlob);

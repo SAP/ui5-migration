@@ -19,68 +19,89 @@ const builders = recast.types.builders;
  * @returns {void}
  */
 const replaceable: ASTReplaceable = {
-
 	replace(
-		node: NodePath, name: string, fnName: string,
-		oldModuleCall: string) : void {
+		node: NodePath,
+		name: string,
+		fnName: string,
+		oldModuleCall: string
+	): void {
 		const oFunctionCall = node.parentPath.value;
 		const oInsertionPoint = node.parentPath.parentPath.value;
 		const sInsertionKey = node.parentPath.name;
 
 		if (oFunctionCall.type === Syntax.CallExpression) {
 			if (oFunctionCall.arguments.length === 0) {
-				if (oInsertionPoint.type === Syntax.VariableDeclarator ||
-					oInsertionPoint.type === Syntax.AssignmentExpression) {
-					oInsertionPoint[sInsertionKey] =
-						builders.identifier("undefined");
+				if (
+					oInsertionPoint.type === Syntax.VariableDeclarator ||
+					oInsertionPoint.type === Syntax.AssignmentExpression
+				) {
+					oInsertionPoint[sInsertionKey] = builders.identifier(
+						"undefined"
+					);
 				}
 			} else if (oFunctionCall.arguments.length > 0) {
 				const oArg = oFunctionCall.arguments[0];
 
-				if (oArg.type === Syntax.Literal ||
-					oArg.type === Syntax.SpreadElement) {
+				if (
+					oArg.type === Syntax.Literal ||
+					oArg.type === Syntax.SpreadElement
+				) {
 					throw new Error(
-						"Argument value is not constant, incompatible changes would occur");
+						"Argument value is not constant, incompatible changes would occur"
+					);
 				} else if (
-					oInsertionPoint.type === Syntax.ExpressionStatement) {
+					oInsertionPoint.type === Syntax.ExpressionStatement
+				) {
 					// good case
 					const oFocusCall = builders.callExpression(
 						builders.memberExpression(
-							oArg, builders.identifier("focus")),
-						[]);
+							oArg,
+							builders.identifier("focus")
+						),
+						[]
+					);
 					const ifStatament = builders.ifStatement(
 						oArg,
-						builders.blockStatement(
-							[ builders.expressionStatement(oFocusCall) ]));
+						builders.blockStatement([
+							builders.expressionStatement(oFocusCall),
+						])
+					);
 
 					// replace expression statement
-					node.parentPath.parentPath.parentPath
-						.value[node.parentPath.parentPath.name] = ifStatament;
+					node.parentPath.parentPath.parentPath.value[
+						node.parentPath.parentPath.name
+					] = ifStatament;
 					return;
-
 				} else if (hasConstantValue(oArg)) {
-					oInsertionPoint[sInsertionKey] =
-						builders.conditionalExpression(
-							oArg,
-							builders.logicalExpression(
-								"||", oFunctionCall,
-								builders.identifier("true")),
-							builders.identifier("undefined"));
+					oInsertionPoint[
+						sInsertionKey
+					] = builders.conditionalExpression(
+						oArg,
+						builders.logicalExpression(
+							"||",
+							oFunctionCall,
+							builders.identifier("true")
+						),
+						builders.identifier("undefined")
+					);
 				} else {
 					oInsertionPoint[sInsertionKey] = builders.identifier(
 						"(function(o){return o ? o.focus() || true : undefined;}(" +
-						recast.print(oArg).code + "))");
+							recast.print(oArg).code +
+							"))"
+					);
 				}
 				oFunctionCall.arguments.shift();
 				(oFunctionCall.callee as ESTree.MemberExpression).object = oArg;
 			}
-
 		} else {
 			throw new Error(
-				"insertion is of type " + oFunctionCall.type +
-				"(supported are only Call-Expressions)");
+				"insertion is of type " +
+					oFunctionCall.type +
+					"(supported are only Call-Expressions)"
+			);
 		}
-	}
+	},
 };
 
 module.exports = replaceable;

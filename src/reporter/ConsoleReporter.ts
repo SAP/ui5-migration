@@ -10,7 +10,7 @@ import {CompareReportLevel, Finding, fromLoc, ReportLevel} from "./Reporter";
  */
 export class ConsoleReporter extends BaseReporter {
 	sLevel: ReportLevel;
-	oMap: Map<string, string[]|number> = new Map();
+	oMap: Map<string, string[] | number> = new Map();
 
 	constructor(level: ReportLevel) {
 		super();
@@ -26,10 +26,10 @@ export class ConsoleReporter extends BaseReporter {
 
 	storeFinding(msg: string, loc?: ESTree.SourceLocation) {
 		this.findings.push({
-			fileName : this.getContext().fileName,
-			location : fromLoc(loc),
-			message : msg,
-			taskName : this.getContext().taskName
+			fileName: this.getContext().fileName,
+			location: fromLoc(loc),
+			message: msg,
+			taskName: this.getContext().taskName,
 		});
 	}
 
@@ -59,7 +59,10 @@ export class ConsoleReporter extends BaseReporter {
 				oLocation = loc as ESTree.SourceLocation;
 
 				if (oLocation.start) {
-					sOutFileName += ":" + oLocation.start.line + ":" +
+					sOutFileName +=
+						":" +
+						oLocation.start.line +
+						":" +
 						oLocation.start.column;
 				} else {
 					sOutFileName += ":1:1";
@@ -78,7 +81,10 @@ export class ConsoleReporter extends BaseReporter {
 	}
 
 	private static log(
-		level: string, sMessage: string, aParams: string[] = []) {
+		level: string,
+		sMessage: string,
+		aParams: string[] = []
+	) {
 		switch (level) {
 			case ReportLevel.WARNING:
 				console.warn(sMessage, ...aParams);
@@ -92,7 +98,7 @@ export class ConsoleReporter extends BaseReporter {
 		}
 	}
 
-	collect(sKey: string, oValue: string|number) {
+	collect(sKey: string, oValue: string | number) {
 		if (typeof oValue === "number") {
 			if (!this.oMap.has(sKey)) {
 				this.oMap.set(sKey, oValue);
@@ -119,17 +125,20 @@ export class ConsoleReporter extends BaseReporter {
 		}
 		const sReporter =
 			this.getContext().logPrefix || this.getContext().taskName;
-		this.setContext({ logPrefix : "", fileName : "" });
+		this.setContext({logPrefix: "", fileName: ""});
 		ConsoleReporter.log(level, "");
-		ConsoleReporter.log(
-			level, "Report for \x1b[31m%s\x1b[0m:", [ sReporter ]);
+		ConsoleReporter.log(level, "Report for \x1b[31m%s\x1b[0m:", [
+			sReporter,
+		]);
 		const that = this;
 		this.oMap.forEach(function(value, key, map) {
 			if (typeof value === "number") {
 				that.report(level, key + ": " + value);
 			} else {
 				that.report(
-					level, "value: " + key + ": entries: " + value.length);
+					level,
+					"value: " + key + ": entries: " + value.length
+				);
 			}
 		});
 		this.oMap.clear();

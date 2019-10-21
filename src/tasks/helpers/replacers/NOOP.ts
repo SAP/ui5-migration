@@ -14,12 +14,14 @@ const builders = recast.types.builders;
  * @returns {void}
  */
 const replaceable: ASTReplaceable = {
-
 	replace(
-		node: NodePath, name: string, fnName: string, oldModuleCall: string) :
-		void {
-			// Does nothing (as expected)
-		}
+		node: NodePath,
+		name: string,
+		fnName: string,
+		oldModuleCall: string
+	): void {
+		// Does nothing (as expected)
+	},
 };
 
 module.exports = replaceable;

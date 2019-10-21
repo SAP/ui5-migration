@@ -16,10 +16,12 @@ const builders = recast.types.builders;
  * @returns {void}
  */
 const replaceable: ASTReplaceable = {
-
 	replace(
-		node: NodePath, name: string, fnName: string,
-		oldModuleCall: string) : void {
+		node: NodePath,
+		name: string,
+		fnName: string,
+		oldModuleCall: string
+	): void {
 		const oInsertionPoint = node.parentPath.parentPath.value;
 		const oInsertion = node.parentPath.value;
 
@@ -28,8 +30,11 @@ const replaceable: ASTReplaceable = {
 			builders.identifier("window"),
 			builders.memberExpression(
 				builders.identifier("document"),
-				builders.identifier("getElementById"), false),
-			false);
+				builders.identifier("getElementById"),
+				false
+			),
+			false
+		);
 
 		// CallExpression
 		if (oInsertion.type === Syntax.CallExpression) {
@@ -39,16 +44,24 @@ const replaceable: ASTReplaceable = {
 
 			if (oCustomWindow) {
 				// (arg1 || window).document.getElementById
-				oMemberExpression.object =
-					builders.logicalExpression("||", oCustomWindow, oWindow);
+				oMemberExpression.object = builders.logicalExpression(
+					"||",
+					oCustomWindow,
+					oWindow
+				);
 			}
-			let oRootExpression: ESTree.Expression =
-				builders.callExpression(oMemberExpression, [ oIdExpression ]);
+			let oRootExpression: ESTree.Expression = builders.callExpression(
+				oMemberExpression,
+				[oIdExpression]
+			);
 
 			// sId ? (oWindow || window).document.getElementById(sId) : null;
 			if (oIdExpression.type !== Syntax.Literal) {
 				oRootExpression = builders.conditionalExpression(
-					oIdExpression, oRootExpression, builders.literal(null));
+					oIdExpression,
+					oRootExpression,
+					builders.literal(null)
+				);
 			}
 
 			oInsertionPoint[node.parentPath.name] = oRootExpression;
@@ -58,10 +71,12 @@ const replaceable: ASTReplaceable = {
 			oInsertion.init = oMemberExpression;
 		} else {
 			throw new Error(
-				"insertion is of type " + oInsertion.type +
-				"(supported are only Call-Expressions)");
+				"insertion is of type " +
+					oInsertion.type +
+					"(supported are only Call-Expressions)"
+			);
 		}
-	}
+	},
 };
 
 module.exports = replaceable;

@@ -8,7 +8,7 @@ export function compare(fqmn1: string, fqmn2: string): boolean {
 	return normalize(fqmn1) === normalize(fqmn2);
 }
 
-const aGlobalReferences = [ "self", "window" ];
+const aGlobalReferences = ["self", "window"];
 
 /**
  *
@@ -25,7 +25,7 @@ function normalize(str: string): string {
 }
 
 function startsWith(str: string): string {
-	const iIndex = aGlobalReferences.findIndex((sGlobalReference) => {
+	const iIndex = aGlobalReferences.findIndex(sGlobalReference => {
 		return str.startsWith(sGlobalReference);
 	});
 	if (iIndex >= 0) {

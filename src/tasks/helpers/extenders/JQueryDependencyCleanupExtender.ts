@@ -1,7 +1,6 @@
 import {Extender} from "../../../dependencies";
 import {SapUiDefineCall} from "../../../util/SapUiDefineCall";
 
-
 class JQueryDependencyCleanupExtender implements Extender {
 	/**
 	 *
@@ -9,10 +8,13 @@ class JQueryDependencyCleanupExtender implements Extender {
 	 * @param config
 	 * @returns {boolean}
 	 */
-	extend(defineCall: SapUiDefineCall, config: {
-		newVariableName: string,
-		variableNameToFind: string
-	}): boolean {
+	extend(
+		defineCall: SapUiDefineCall,
+		config: {
+			newVariableName: string;
+			variableNameToFind: string;
+		}
+	): boolean {
 		const newVariableName = config.newVariableName;
 		const variableNameToFind = config.variableNameToFind;
 
@@ -25,13 +27,15 @@ class JQueryDependencyCleanupExtender implements Extender {
 		if (bContainsJQueryDOM && !bContainsJQuery) {
 			const iIndex = defineCall.paramNames.indexOf(variableNameToFind);
 			defineCall.modifyDependency(
-				iIndex, defineCall.getImportByParamName(variableNameToFind),
-				newVariableName);
-
+				iIndex,
+				defineCall.getImportByParamName(variableNameToFind),
+				newVariableName
+			);
 		} else if (bContainsJQueryDOM && bContainsJQuery) {
 			// jQueryDOM and jQuery
 			defineCall.removeDependency(
-				defineCall.getImportByParamName(variableNameToFind));
+				defineCall.getImportByParamName(variableNameToFind)
+			);
 		} else {
 			// 2 only jQuery
 			// nais

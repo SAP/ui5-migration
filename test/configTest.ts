@@ -5,31 +5,36 @@ const path = require("path");
 const rootDir = "./";
 const jsDir = rootDir + "js/src/";
 
-
 interface ConfigObject {
 	modules: {
 		[index: string]: {
-			[index: string]:
-				{ replacer: string, finder: string, extender: string }
-		}
+			[index: string]: {
+				replacer: string;
+				finder: string;
+				extender: string;
+			};
+		};
 	};
-	extenders: { [index: string]: string };
-	finders: { [index: string]: string };
-	replacers: { [index: string]: string };
+	extenders: {[index: string]: string};
+	finders: {[index: string]: string};
+	replacers: {[index: string]: string};
 }
 
 const parseConfig = function(sConfigFile: string): Promise<ConfigObject> {
-	const sNormalizedConfigFile =
-		path.normalize(rootDir + "defaultConfig/" + sConfigFile);
+	const sNormalizedConfigFile = path.normalize(
+		rootDir + "defaultConfig/" + sConfigFile
+	);
 	return new Promise(function(resolve, reject) {
-		fs.readFile(
-			sNormalizedConfigFile, "utf8", function(err: string, data: string) {
-				if (err) {
-					reject(err);
-					return;
-				}
-				resolve(JSON.parse(data));
-			});
+		fs.readFile(sNormalizedConfigFile, "utf8", function(
+			err: string,
+			data: string
+		) {
+			if (err) {
+				reject(err);
+				return;
+			}
+			resolve(JSON.parse(data));
+		});
 	});
 };
 
@@ -48,17 +53,19 @@ describe("Config validation", function() {
 					if (sReplacer) {
 						let sReplacerFile = oJsonObj.replacers[sReplacer];
 						assert.ok(
-							sReplacerFile, "Replacer " + sReplacer + " exists");
+							sReplacerFile,
+							"Replacer " + sReplacer + " exists"
+						);
 						sReplacerFile = path.normalize(jsDir + sReplacerFile);
 						assert.ok(
 							fs.existsSync(sReplacerFile),
-							"File " + sReplacerFile + " exists");
+							"File " + sReplacerFile + " exists"
+						);
 					}
 				});
 			});
 		});
 	});
-
 
 	it("should validate the config addMissingDependencies", function() {
 		// load config
@@ -74,35 +81,45 @@ describe("Config validation", function() {
 					if (sReplacer) {
 						const sReplacerFile = oJsonObj.replacers[sReplacer];
 						assert.ok(
-							sReplacerFile, "Replacer " + sReplacer + " exists");
-						const sNormalizedReplacerFile =
-							path.normalize(jsDir + sReplacerFile);
+							sReplacerFile,
+							"Replacer " + sReplacer + " exists"
+						);
+						const sNormalizedReplacerFile = path.normalize(
+							jsDir + sReplacerFile
+						);
 						assert.ok(
 							fs.existsSync(sNormalizedReplacerFile),
-							"File " + sNormalizedReplacerFile + " exists");
+							"File " + sNormalizedReplacerFile + " exists"
+						);
 					}
 
 					const sFinder = oModule[sModuleKey].finder;
 					if (sFinder) {
 						const sFinderFile = oJsonObj.finders[sFinder];
 						assert.ok(sFinderFile, "Finder " + sFinder + " exists");
-						const sNormalizedFinderFile =
-							path.normalize(jsDir + sFinderFile);
+						const sNormalizedFinderFile = path.normalize(
+							jsDir + sFinderFile
+						);
 						assert.ok(
 							fs.existsSync(sNormalizedFinderFile),
-							"File " + sNormalizedFinderFile + " exists");
+							"File " + sNormalizedFinderFile + " exists"
+						);
 					}
 
 					const sExtender = oModule[sModuleKey].extender;
 					if (sExtender) {
 						const sExtenderFile = oJsonObj.extenders[sExtender];
 						assert.ok(
-							sExtenderFile, "Finder " + sExtender + " exists");
-						const sNormalizedExtenderFile =
-							path.normalize(jsDir + sExtenderFile);
+							sExtenderFile,
+							"Finder " + sExtender + " exists"
+						);
+						const sNormalizedExtenderFile = path.normalize(
+							jsDir + sExtenderFile
+						);
 						assert.ok(
 							fs.existsSync(sNormalizedExtenderFile),
-							"File " + sNormalizedExtenderFile + " exists");
+							"File " + sNormalizedExtenderFile + " exists"
+						);
 					}
 				});
 			});

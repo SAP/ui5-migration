@@ -19,49 +19,66 @@ const builders = recast.types.builders;
  * @returns {void}
  */
 const replaceable: ASTReplaceable = {
-
 	replace(
-		node: NodePath, name: string, fnName: string, oldModuleCall: string) :
-		ASTReplaceableResult |
-	void {
+		node: NodePath,
+		name: string,
+		fnName: string,
+		oldModuleCall: string
+	): ASTReplaceableResult | void {
 		const oInsertionPoint = node.parentPath.value;
 		const oActualInsertionPoint = node.parentPath.parentPath.value;
-		if (oInsertionPoint.type === Syntax.CallExpression &&
-			oInsertionPoint.arguments.length === 1) {
+		if (
+			oInsertionPoint.type === Syntax.CallExpression &&
+			oInsertionPoint.arguments.length === 1
+		) {
 			const arg0 = oInsertionPoint.arguments[0] as ESTree.Expression;
 			const trimCall: ESTree.Expression = builders.callExpression(
 				builders.memberExpression(
-					arg0, builders.identifier("trim"), false),
-				[]);
+					arg0,
+					builders.identifier("trim"),
+					false
+				),
+				[]
+			);
 
-			const trimCallForString: ESTree.Expression =
-				builders.callExpression(
-					builders.memberExpression(
-						builders.callExpression(
-							builders.identifier("String"), [ arg0 ]),
-						builders.identifier("trim"), false),
-					[]);
+			const trimCallForString: ESTree.Expression = builders.callExpression(
+				builders.memberExpression(
+					builders.callExpression(builders.identifier("String"), [
+						arg0,
+					]),
+					builders.identifier("trim"),
+					false
+				),
+				[]
+			);
 
 			const typeOfString = builders.binaryExpression(
-				"===", builders.unaryExpression("typeof", arg0),
-				builders.literal("string"));
+				"===",
+				builders.unaryExpression("typeof", arg0),
+				builders.literal("string")
+			);
 
 			const alternative = builders.conditionalExpression(
 				builders.binaryExpression("!=", arg0, builders.literal(null)),
-				trimCallForString, builders.literal(""));
+				trimCallForString,
+				builders.literal("")
+			);
 			const condition = builders.conditionalExpression(
-				typeOfString, trimCall, alternative);
-
+				typeOfString,
+				trimCall,
+				alternative
+			);
 
 			oActualInsertionPoint[node.parentPath.name] = condition;
-			return { modified : false, addDependency : false };
+			return {modified: false, addDependency: false};
 		} else {
 			throw new Error(
-				"insertion is of type " + oInsertionPoint.type +
-				"(supported are only Call-Expressions)");
+				"insertion is of type " +
+					oInsertionPoint.type +
+					"(supported are only Call-Expressions)"
+			);
 		}
-	}
+	},
 };
-
 
 module.exports = replaceable;

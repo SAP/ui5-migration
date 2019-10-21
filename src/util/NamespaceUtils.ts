@@ -4,7 +4,6 @@ const builders = recast.types.builders;
 import * as ESTree from "estree";
 import {SapUiDefineCall} from "./SapUiDefineCall";
 
-
 export function getCommonPart(ns1: string, ns2: string): string {
 	const aResult = [];
 	const ans1 = ns1.split(".");
@@ -31,18 +30,24 @@ export function getCommonPart(ns1: string, ns2: string): string {
  * @returns callExpression
  */
 export function introduceObjectPathCreate(
-	defineCall: SapUiDefineCall, sNamespace: string) {
+	defineCall: SapUiDefineCall,
+	sNamespace: string
+) {
 	defineCall.addDependency("sap/base/util/ObjectPath", "ObjectPath");
 	const memberExpression = builders.memberExpression(
-		builders.identifier("ObjectPath"), builders.identifier("create"));
+		builders.identifier("ObjectPath"),
+		builders.identifier("create")
+	);
 
-
-	const expressionStatement =
-		builders.expressionStatement(builders.callExpression(
-			memberExpression, [ builders.literal(sNamespace) ]));
+	const expressionStatement = builders.expressionStatement(
+		builders.callExpression(memberExpression, [
+			builders.literal(sNamespace),
+		])
+	);
 	expressionStatement.comments = [];
 	expressionStatement.comments.push(
-		builders.commentLine(" create namespace"));
+		builders.commentLine(" create namespace")
+	);
 	return expressionStatement;
 }
 
@@ -60,7 +65,7 @@ export function findNamespaceUsage(ast, sNamespace: string): boolean {
 	recast.visit(ast, {
 		visitMemberExpression(path) {
 			if (!bResult && isStaticGlobal(path)) {
-				const sObjectName = getObjectName(path.value);  // e.g. a.b.c
+				const sObjectName = getObjectName(path.value); // e.g. a.b.c
 				if (!sObjectName) {
 					return false;
 				}
@@ -72,7 +77,7 @@ export function findNamespaceUsage(ast, sNamespace: string): boolean {
 			}
 			this.traverse(path);
 			return undefined;
-		}
+		},
 	});
 
 	return bResult;
@@ -99,11 +104,16 @@ export function isStaticGlobal(path): boolean {
  * @returns {string}
  */
 export function getObjectName(node: ESTree.Node): string {
-	if (node.type === Syntax.MemberExpression &&
-		(node as ESTree.MemberExpression).property.type === Syntax.Identifier) {
-		return getObjectName((node as ESTree.MemberExpression).object) + "." +
+	if (
+		node.type === Syntax.MemberExpression &&
+		(node as ESTree.MemberExpression).property.type === Syntax.Identifier
+	) {
+		return (
+			getObjectName((node as ESTree.MemberExpression).object) +
+			"." +
 			((node as ESTree.MemberExpression).property as ESTree.Identifier)
-				.name;
+				.name
+		);
 	} else if (node.type === Syntax.Identifier) {
 		return (node as ESTree.Identifier).name;
 	}

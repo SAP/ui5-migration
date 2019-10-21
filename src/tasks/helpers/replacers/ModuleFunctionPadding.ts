@@ -18,37 +18,44 @@ const builders = recast.types.builders;
  * @returns {void}
  */
 const replaceable: ASTReplaceable = {
-
 	replace(
-		node: NodePath, name: string, fnName: string, oldModuleCall: string) :
-		void {
-			const oInsertionPoint = node.parentPath.value;
-			const oInsertion = node.value;
+		node: NodePath,
+		name: string,
+		fnName: string,
+		oldModuleCall: string
+	): void {
+		const oInsertionPoint = node.parentPath.value;
+		const oInsertion = node.value;
 
-			// CallExpression
-			if (oInsertionPoint.type === Syntax.CallExpression) {
-				const padString = oInsertionPoint.arguments[1];
+		// CallExpression
+		if (oInsertionPoint.type === Syntax.CallExpression) {
+			const padString = oInsertionPoint.arguments[1];
 
-				if (padString.type === Syntax.Literal &&
-					typeof padString.value === "string" &&
-					padString.value.length === 1) {
-					const aParams = [ oInsertionPoint.arguments[2], padString ];
-					const strName =
-						oInsertionPoint.arguments[0] as ESTree.Expression;
+			if (
+				padString.type === Syntax.Literal &&
+				typeof padString.value === "string" &&
+				padString.value.length === 1
+			) {
+				const aParams = [oInsertionPoint.arguments[2], padString];
+				const strName = oInsertionPoint
+					.arguments[0] as ESTree.Expression;
 
-					oInsertionPoint.callee = builders.memberExpression(
-						strName, builders.identifier(fnName));
-					oInsertionPoint.arguments = aParams;
-				} else {
-					CommentUtils.addComment(node, "TODO: Remove padding call");
-				}
-
+				oInsertionPoint.callee = builders.memberExpression(
+					strName,
+					builders.identifier(fnName)
+				);
+				oInsertionPoint.arguments = aParams;
 			} else {
-				throw new Error(
-					"insertion is of type " + oInsertion.type +
-					"(supported are only Call- and Member-Expressions)");
+				CommentUtils.addComment(node, "TODO: Remove padding call");
 			}
+		} else {
+			throw new Error(
+				"insertion is of type " +
+					oInsertion.type +
+					"(supported are only Call- and Member-Expressions)"
+			);
 		}
+	},
 };
 
 module.exports = replaceable;

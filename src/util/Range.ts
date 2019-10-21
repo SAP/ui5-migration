@@ -19,7 +19,6 @@ export class Range {
 		return this.end;
 	}
 
-
 	static from(beginning, end) {
 		return new Range(beginning, end);
 	}
@@ -36,20 +35,24 @@ export class Range {
 	 */
 	isOverlappedBy(otherRange: Range): boolean {
 		// other range should contain beginning
-		if (this.getBeginning() > otherRange.getBeginning() &&
-			this.getBeginning() < otherRange.getEnd()) {
+		if (
+			this.getBeginning() > otherRange.getBeginning() &&
+			this.getBeginning() < otherRange.getEnd()
+		) {
 			return true;
 		}
 		// other range should contain end
 		else if (
 			this.getEnd() > otherRange.getBeginning() &&
-			this.getEnd() < otherRange.getEnd()) {
+			this.getEnd() < otherRange.getEnd()
+		) {
 			return true;
 
 			// this range should contain other beginning
 		} else if (
 			otherRange.getBeginning() > this.getBeginning() &&
-			otherRange.getBeginning() < this.getEnd()) {
+			otherRange.getBeginning() < this.getEnd()
+		) {
 			return true;
 		}
 

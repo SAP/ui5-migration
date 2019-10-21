@@ -21,10 +21,12 @@ const builders = recast.types.builders;
  * @returns {void}
  */
 const replaceable: ASTReplaceable = {
-
 	replace(
-		node: NodePath, name: string, fnName: string,
-		oldModuleCall: string) : void {
+		node: NodePath,
+		name: string,
+		fnName: string,
+		oldModuleCall: string
+	): void {
 		const oInsertionPoint = node.parentPath.parentPath.value;
 		const oInsertion = node.parentPath.value;
 
@@ -33,31 +35,31 @@ const replaceable: ASTReplaceable = {
 			const aArgs = oInsertion.arguments;
 
 			if (aArgs[0]) {
-				const sText = "(function () {\n" +
+				const sText =
+					"(function () {\n" +
 					"	URLWhitelist.delete(URLWhitelist.entries()[iIndexToReplace]);\n" +
 					"})";
 				const oAst = recast.parse(sText);
 				const oNodeUrlWhitelistDelete =
 					oAst.program.body["0"].expression.body.body["0"].expression;
 
-
-				oNodeUrlWhitelistDelete.arguments[0].property =
-					aArgs[0];  // iIndexToReplace
+				oNodeUrlWhitelistDelete.arguments[0].property = aArgs[0]; // iIndexToReplace
 
 				oInsertionPoint[node.parentPath.name] = oNodeUrlWhitelistDelete;
-
 			} else {
 				CommentUtils.addComment(
 					node,
-					"TODO: Remove obsolete jQuery.sap.removeUrlWhitelist call");
+					"TODO: Remove obsolete jQuery.sap.removeUrlWhitelist call"
+				);
 			}
-
 		} else {
 			throw new Error(
-				"insertion is of type " + oInsertion.type +
-				"(supported are only Call-Expressions)");
+				"insertion is of type " +
+					oInsertion.type +
+					"(supported are only Call-Expressions)"
+			);
 		}
-	}
+	},
 };
 
 module.exports = replaceable;

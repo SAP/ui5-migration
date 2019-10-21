@@ -1,8 +1,14 @@
 import * as ESTree from "estree";
 
-import {NodePath, Reporter, ReportLevel, TNodePath, VisitorFunctions} from "../Migration";
+import {
+	NodePath,
+	Reporter,
+	ReportLevel,
+	TNodePath,
+	VisitorFunctions,
+} from "../Migration";
 
-export {NodePath, TNodePath} from "../Migration";  // re-expose the pure interfaces for consistency
+export {NodePath, TNodePath} from "../Migration"; // re-expose the pure interfaces for consistency
 
 /**
  * If more than CACHE_MAX_GROWTH * count of paths are requested, the cache
@@ -17,7 +23,7 @@ const START_CACHE_SIZE = 256;
 
 enum CacheResetCause {
 	Manual = "M",
-	TooMuchNewPaths = "N"
+	TooMuchNewPaths = "N",
 }
 
 /**
@@ -52,7 +58,7 @@ class NodePathImpl implements NodePath {
 	protect(): this {
 		let oCurNode: NodePathImpl = this;
 		while (oCurNode) {
-			oCurNode.protected ++;
+			oCurNode.protected++;
 			oCurNode = oCurNode.parentPath as NodePathImpl;
 		}
 		return this;
@@ -63,7 +69,7 @@ class NodePathImpl implements NodePath {
 			let oCurNode: NodePathImpl = this;
 			while (oCurNode) {
 				if (oCurNode.protected > 0) {
-					oCurNode.protected --;
+					oCurNode.protected--;
 				}
 				oCurNode = oCurNode.parentPath as NodePathImpl;
 			}
@@ -73,8 +79,7 @@ class NodePathImpl implements NodePath {
 }
 
 export class ASTVisitor {
-	private newPaths:
-		number;  // count of requested paths since the last cache reset
+	private newPaths: number; // count of requested paths since the last cache reset
 	private allNodePaths: NodePathImpl[];
 	private availableNodePaths: NodePathImpl[];
 	private reporter: Reporter;
@@ -106,14 +111,18 @@ export class ASTVisitor {
 	 * @memberof ASTVisitor
 	 */
 	private _createPath(
-		value: ESTree.Node, name: string,
-		parentPath: NodePathImpl): NodePathImpl {
+		value: ESTree.Node,
+		name: string,
+		parentPath: NodePathImpl
+	): NodePathImpl {
 		let oPath: NodePathImpl;
 		if (this.availableNodePaths.length) {
 			// there is a path ready to use
 			oPath = this.availableNodePaths.pop().reset();
 		} else if (
-			this.newPaths * CACHE_MAX_GROWTH >= this.allNodePaths.length) {
+			this.newPaths * CACHE_MAX_GROWTH >=
+			this.allNodePaths.length
+		) {
 			// too many paths were requested since last cache reset
 			this.resetCache(CacheResetCause.TooMuchNewPaths);
 			return this._createPath(value, name, parentPath);
@@ -143,8 +152,12 @@ export class ASTVisitor {
 	 */
 	private _checkChild(node: ESTree.Node, name: string): boolean {
 		if (typeof node[name] === "object" && node[name]) {
-			if (Array.isArray(node[name]) && node[name].length > 0 &&
-				node[name][0] && typeof node[name][0].type === "string") {
+			if (
+				Array.isArray(node[name]) &&
+				node[name].length > 0 &&
+				node[name][0] &&
+				typeof node[name][0].type === "string"
+			) {
 				return true;
 			} else if (typeof node[name].type === "string") {
 				return true;
@@ -163,12 +176,17 @@ export class ASTVisitor {
 	 * @memberof ASTVisitor
 	 */
 	visitSingle<T extends ESTree.Node>(
-		rootPath: TNodePath<T>, childName: string): NodePath {
+		rootPath: TNodePath<T>,
+		childName: string
+	): NodePath {
 		if (!rootPath || !childName || !(rootPath instanceof NodePathImpl)) {
 			return null;
 		} else if (this._checkChild(rootPath.value, childName)) {
 			return this._createPath(
-				rootPath.value[childName], childName, rootPath as NodePathImpl);
+				rootPath.value[childName],
+				childName,
+				rootPath as NodePathImpl
+			);
 		} else {
 			return null;
 		}
@@ -182,8 +200,9 @@ export class ASTVisitor {
 	 * @memberof ASTVisitor
 	 */
 	visit(rootNode: ESTree.Node, fncts: VisitorFunctions): void {
-		const stack: NodePathImpl[] =
-			[ this._createPath(rootNode, null, null).protect() ];
+		const stack: NodePathImpl[] = [
+			this._createPath(rootNode, null, null).protect(),
+		];
 		const me = this;
 
 		// the context used to call the visitor functions
@@ -191,8 +210,8 @@ export class ASTVisitor {
 			pushChild(path, node, key) {
 				if (me._checkChild(node, key)) {
 					const oNewPath = me._createPath(node[key], key, path);
-					oNewPath.protect();  // keep it protected until we pop it
-										 // off the stack
+					oNewPath.protect(); // keep it protected until we pop it
+					// off the stack
 					stack.push(oNewPath);
 				}
 			},
@@ -210,7 +229,7 @@ export class ASTVisitor {
 						}
 					}
 				}
-			}
+			},
 		};
 
 		// main loop
@@ -235,7 +254,8 @@ export class ASTVisitor {
 		if (!cause) {
 			cause = CacheResetCause.Manual;
 		}
-		let iFreedPaths = 0, iProtectedPaths = 0;  // used for statistics
+		let iFreedPaths = 0,
+			iProtectedPaths = 0; // used for statistics
 
 		for (let i = 0; i < this.allNodePaths.length; i++) {
 			const oPath = this.allNodePaths[i];
@@ -250,10 +270,9 @@ export class ASTVisitor {
 		this.newPaths = 0;
 
 		if (this.reporter) {
-			const sFullMsg = `AST Visitor cache reset Cause: ${cause} All: ${
-								 this.allNodePaths.length} ` +
-				`Prot: ${iProtectedPaths} "Freed ${iFreedPaths} New: ${
-								 this.newPaths}`;
+			const sFullMsg =
+				`AST Visitor cache reset Cause: ${cause} All: ${this.allNodePaths.length} ` +
+				`Prot: ${iProtectedPaths} "Freed ${iFreedPaths} New: ${this.newPaths}`;
 			this.reporter.report(ReportLevel.TRACE, sFullMsg, undefined);
 		}
 	}

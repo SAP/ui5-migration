@@ -2,13 +2,12 @@ import * as ESTree from "estree";
 
 import {SapUiDefineCall} from "./util/SapUiDefineCall";
 
-
 export const EMPTY_FINDER_RESULT: FinderResult = {
-	configName : ""
+	configName: "",
 };
 
 export function FOUND_RESULT(sConfigName): FinderResult {
-	return { configName : sConfigName };
+	return {configName: sConfigName};
 }
 
 /**
@@ -26,8 +25,11 @@ export interface Finder {
 	 * @returns {FinderResult} to indicate a finding
 	 */
 	find(
-		node: ESTree.Node, config: {}, sConfigName: string,
-		defineCall: SapUiDefineCall): FinderResult;
+		node: ESTree.Node,
+		config: {},
+		sConfigName: string,
+		defineCall: SapUiDefineCall
+	): FinderResult;
 }
 
 /**

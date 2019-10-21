@@ -37,7 +37,8 @@ export function isDirective(node: ESTree.Node) {
 		(node as ESTree.ExpressionStatement).expression.type ===
 			Syntax.Literal &&
 		((node as ESTree.ExpressionStatement).expression as ESTree.Literal)
-				.value === "use strict");
+			.value === "use strict"
+	);
 }
 
 /*
@@ -56,13 +57,14 @@ export function isMemberOf(node: ESTree.Node, identifier: string) {
 	return false;
 }
 
-export function getObjectName(node: ESTree.Node): string|undefined {
+export function getObjectName(node: ESTree.Node): string | undefined {
 	if (node.type === Syntax.MemberExpression) {
 		const oMemberExpression = node as ESTree.MemberExpression;
 		if (oMemberExpression.property.type === Syntax.Identifier) {
 			const oProperty = oMemberExpression.property as ESTree.Identifier;
-			return getObjectName(oMemberExpression.object) + "." +
-				oProperty.name;
+			return (
+				getObjectName(oMemberExpression.object) + "." + oProperty.name
+			);
 		}
 	} else if (node.type === Syntax.Identifier) {
 		const oIdentifier = node as ESTree.Identifier;
@@ -78,39 +80,50 @@ interface ShortcutExpressionObject {
 }
 
 export function checkForShortcutExpression(
-	defineCall: SapUiDefineCall, node: ESTree.Node): ShortcutExpressionObject|
-	undefined {
-	if (!node || node === null || node.type !== Syntax.MemberExpression ||
-		(node as ESTree.MemberExpression).property.type !== Syntax.Identifier) {
+	defineCall: SapUiDefineCall,
+	node: ESTree.Node
+): ShortcutExpressionObject | undefined {
+	if (
+		!node ||
+		node === null ||
+		node.type !== Syntax.MemberExpression ||
+		(node as ESTree.MemberExpression).property.type !== Syntax.Identifier
+	) {
 		return undefined;
 	}
 
 	let leftmost = node;
 	const propertyPath = [];
-	while (leftmost.type === Syntax.MemberExpression &&
-		   (leftmost as ESTree.MemberExpression).property.type ===
-			   Syntax.Identifier) {
-		propertyPath.unshift(((leftmost as ESTree.MemberExpression).property as
-							  ESTree.Identifier)
-								 .name);
+	while (
+		leftmost.type === Syntax.MemberExpression &&
+		(leftmost as ESTree.MemberExpression).property.type ===
+			Syntax.Identifier
+	) {
+		propertyPath.unshift(
+			((leftmost as ESTree.MemberExpression)
+				.property as ESTree.Identifier).name
+		);
 		leftmost = (leftmost as ESTree.MemberExpression).object;
 	}
 
-	if (leftmost.type === Syntax.Identifier && defineCall.paramNames &&
-		defineCall.paramNames.indexOf((leftmost as ESTree.Identifier).name) >=
-			0) {
-		const leftMostIdent = (leftmost as ESTree.Identifier);
+	if (
+		leftmost.type === Syntax.Identifier &&
+		defineCall.paramNames &&
+		defineCall.paramNames.indexOf((leftmost as ESTree.Identifier).name) >= 0
+	) {
+		const leftMostIdent = leftmost as ESTree.Identifier;
 		const oModuleNode =
-			defineCall.dependencyArray
-				.elements[defineCall.paramNames.indexOf(leftMostIdent.name)];
+			defineCall.dependencyArray.elements[
+				defineCall.paramNames.indexOf(leftMostIdent.name)
+			];
 		if (oModuleNode.type === Syntax.Literal) {
 			const oLiteral = oModuleNode as ESTree.Literal;
 			if (oLiteral.value) {
 				const module = oLiteral.value.toString();
 				return {
-					leftmostName : leftMostIdent.name,
-					propertyPath : propertyPath.join("."),
-					module
+					leftmostName: leftMostIdent.name,
+					propertyPath: propertyPath.join("."),
+					module,
 				};
 			}
 		}

@@ -14,17 +14,18 @@ const builders = recast.types.builders;
  * @returns {void}
  */
 const replaceable: ASTReplaceable = {
-
 	replace(
-		node: NodePath, name: string, fnName: string,
-		oldModuleCall: string) : void {
+		node: NodePath,
+		name: string,
+		fnName: string,
+		oldModuleCall: string
+	): void {
 		const oInsertionPoint = node.parentPath.parentPath.value;
 		const oInsertion = node.parentPath.value;
 
 		// CallExpression
 		if (oInsertion.type === Syntax.CallExpression) {
 			const aArgs = oInsertionPoint[node.parentPath.name].arguments;
-
 
 			/**
 			 * jQuery.sap.setObject(sName, vValue, oContext)
@@ -59,39 +60,48 @@ const replaceable: ASTReplaceable = {
 						const aGetObjectArguments = [];
 						aGetObjectArguments.push(oContext);
 						aGetObjectArguments.push(
-							builders.literal(aNames.join(".")));
+							builders.literal(aNames.join("."))
+						);
 						aGetObjectArguments.push(builders.identifier("true"));
 						oLeft = builders.memberExpression(
 							builders.callExpression(
-								builders.identifier(name), aGetObjectArguments),
-							builders.identifier(sObjName));
+								builders.identifier(name),
+								aGetObjectArguments
+							),
+							builders.identifier(sObjName)
+						);
 					} else if (aNames.length === 1) {
 						oLeft = builders.memberExpression(oContext, oArgument);
 					} else {
 						oInsertionPoint[node.parentPath.name] = undefined;
 					}
 					if (oLeft) {
-						const assi =
-							builders.assignmentExpression("=", oLeft, aArgs[1]);
+						const assi = builders.assignmentExpression(
+							"=",
+							oLeft,
+							aArgs[1]
+						);
 
 						oInsertionPoint[node.parentPath.name] = assi;
 					}
 				} else {
 					throw new Error(
-						"Failed to replace setObject. First parameter must be a literal");
+						"Failed to replace setObject. First parameter must be a literal"
+					);
 				}
-
 			} else {
 				throw new Error(
-					"Failed to replace setObject. Cannot determine 2nd or 3rd parameter");
+					"Failed to replace setObject. Cannot determine 2nd or 3rd parameter"
+				);
 			}
-
 		} else {
 			throw new Error(
-				"insertion is of type " + oInsertion.type +
-				"(supported are only Call-Expressions)");
+				"insertion is of type " +
+					oInsertion.type +
+					"(supported are only Call-Expressions)"
+			);
 		}
-	}
+	},
 };
 
 module.exports = replaceable;

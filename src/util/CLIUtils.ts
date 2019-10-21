@@ -9,8 +9,8 @@ import {NamespaceConfig} from "../index";
  ]
  */
 export function parseNamespaces(namespaceInput: string[]): NamespaceConfig[] {
-	return namespaceInput.map((sEntry) => {
+	return namespaceInput.map(sEntry => {
 		const aParts = sEntry.split(":");
-		return { namespace : aParts[0], filePath : aParts[1] };
+		return {namespace: aParts[0], filePath: aParts[1]};
 	});
 }

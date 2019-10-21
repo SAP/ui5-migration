@@ -32,10 +32,12 @@ interface RendererDefinition {
 //#region utilities
 function isRendererDefined(defineCall: SapUiDefineCall): RendererDefinition {
 	let exportName: string;
-	const classDefinitions: { [index: string]: ESTree.ObjectExpression } = {};
-	const classNames: { [index: string]: string } = {};
-	const rendererDefinedResult:
-		RendererDefinition = { rendererDefined : false, moduleName : "" };
+	const classDefinitions: {[index: string]: ESTree.ObjectExpression} = {};
+	const classNames: {[index: string]: string} = {};
+	const rendererDefinedResult: RendererDefinition = {
+		rendererDefined: false,
+		moduleName: "",
+	};
 	if (!defineCall.factory) {
 		return rendererDefinedResult;
 	}
@@ -43,9 +45,10 @@ function isRendererDefined(defineCall: SapUiDefineCall): RendererDefinition {
 	// Pass 1: determine shortcut variables and module export (return value)
 	defineCall.factory.body.body.forEach(stmt => {
 		if (stmt.type === Syntax.VariableDeclaration) {
-			// @ts-ignore
 			stmt.declarations.forEach(decl => {
-				if (decl.id.type === Syntax.Identifier && decl.init &&
+				if (
+					decl.id.type === Syntax.Identifier &&
+					decl.init &&
 					decl.init.type === Syntax.CallExpression &&
 					decl.init.callee.type === Syntax.MemberExpression &&
 					decl.init.callee.property.type === Syntax.Identifier &&
@@ -53,35 +56,38 @@ function isRendererDefined(defineCall: SapUiDefineCall): RendererDefinition {
 					decl.init.arguments.length > 0 &&
 					decl.init.arguments[0].type === Syntax.Literal &&
 					typeof (decl.init.arguments[0] as ESTree.Literal).value ===
-						"string") {
+						"string"
+				) {
 					// console.log("found potential class definition %s = %s",
 					// decl.id.name, decl.init.arguments[0].value);
 					const classId = (decl.id as ESTree.Identifier).name;
-					classNames[classId] =
-						(decl.init.arguments[0] as ESTree.Literal)
-							.value.toString();
-					classDefinitions[classId] =
-						decl.init.arguments[1] as ESTree.ObjectExpression;
+					classNames[classId] = (decl.init
+						.arguments[0] as ESTree.Literal).value.toString();
+					classDefinitions[classId] = decl.init
+						.arguments[1] as ESTree.ObjectExpression;
 				}
 			});
 		} else if (stmt.type === Syntax.ReturnStatement) {
-			// @ts-ignore
 			if (stmt.argument && stmt.argument.type === Syntax.Identifier) {
-				// @ts-ignore
 				exportName = stmt.argument.name;
-				if (classDefinitions[exportName] &&
-					classDefinitions[exportName].properties) {
+				if (
+					classDefinitions[exportName] &&
+					classDefinitions[exportName].properties
+				) {
 					rendererDefinedResult.classNode =
 						classDefinitions[exportName];
 
 					rendererDefinedResult.moduleName = classNames[exportName];
 
 					classDefinitions[exportName].properties.forEach(function(
-						prop) {
+						prop
+					) {
 						const oProp = prop as ESTree.Property;
-						if (oProp && oProp.key &&
-							(oProp.key as ESTree.Identifier).name ===
-								"renderer") {
+						if (
+							oProp &&
+							oProp.key &&
+							(oProp.key as ESTree.Identifier).name === "renderer"
+						) {
 							rendererDefinedResult.rendererDefined = true;
 						}
 					});
@@ -96,16 +102,20 @@ function isRendererDefined(defineCall: SapUiDefineCall): RendererDefinition {
 	// Pass 2: identify class methods
 	/* tslint:disable */
 	defineCall.factory.body.body.forEach(stmt => {
-		if (stmt.type === Syntax.ExpressionStatement &&
+		if (
+			stmt.type === Syntax.ExpressionStatement &&
 			stmt.expression.type === Syntax.AssignmentExpression &&
 			exportName &&
-			isPartOfMemberExpr(stmt.expression.left, exportName)) {
-			if (stmt.expression.left.type === Syntax.MemberExpression &&
+			isPartOfMemberExpr(stmt.expression.left, exportName)
+		) {
+			if (
+				stmt.expression.left.type === Syntax.MemberExpression &&
 				stmt.expression.left.object.type === Syntax.MemberExpression &&
 				stmt.expression.left.object.property.type ===
 					Syntax.Identifier &&
 				stmt.expression.left.object.property.name === "prototype" &&
-				stmt.expression.left.property.type === Syntax.Identifier) {
+				stmt.expression.left.property.type === Syntax.Identifier
+			) {
 				if (stmt.expression.left.property.name === "render") {
 					rendererDefinedResult.rendererDefined = true;
 				}
@@ -127,7 +137,9 @@ function isPartOfMemberExpr(node: ESTree.Node, identifier: string): boolean {
 }
 
 function hasProperty(
-	objectExpression: ESTree.ObjectExpression, propertyNames: string[]) {
+	objectExpression: ESTree.ObjectExpression,
+	propertyNames: string[]
+) {
 	return objectExpression.properties.some(keyValue => {
 		if (keyValue.key.type === Syntax.Literal) {
 			return propertyNames.indexOf(String(keyValue.key.value)) >= 0;
@@ -145,7 +157,9 @@ function lastPathElement(name: string): string {
 }
 
 async function doesModuleExist(
-	finder: Mod.FileFinder, moduleName: string): Promise<boolean> {
+	finder: Mod.FileFinder,
+	moduleName: string
+): Promise<boolean> {
 	return !!(await finder.findByPath(moduleName));
 }
 
@@ -157,34 +171,44 @@ interface AddRenderersResult {
 	classNode?: ESTree.ObjectExpression;
 }
 
-async function analyse(args: Mod.AnalyseArguments):
-	Promise<AddRenderersResult|undefined> {
+async function analyse(
+	args: Mod.AnalyseArguments
+): Promise<AddRenderersResult | undefined> {
 	const moduleName = args.file.getFileName();
 	let astDefineCall: ESTree.CallExpression;
 
 	const defineCalls = ASTUtils.findCalls(
-		args.file.getAST(), SapUiDefineCall.isValidRootPath,
-		args.visitor as ASTVisitor);
+		args.file.getAST(),
+		SapUiDefineCall.isValidRootPath,
+		args.visitor as ASTVisitor
+	);
 	if (defineCalls.length > 1) {
 		args.reporter.report(
 			Mod.ReportLevel.WARNING,
-			"can't handle files with multiple modules");
+			"can't handle files with multiple modules"
+		);
 		return undefined;
 	} else if (defineCalls.length === 1) {
 		astDefineCall = defineCalls[0].value;
 	} else {
 		args.reporter.report(
-			Mod.ReportLevel.WARNING, "could not find sap.ui.define call");
+			Mod.ReportLevel.WARNING,
+			"could not find sap.ui.define call"
+		);
 		return undefined;
 	}
 
-	const defineCall =
-		new SapUiDefineCall(astDefineCall, moduleName, args.reporter);
+	const defineCall = new SapUiDefineCall(
+		astDefineCall,
+		moduleName,
+		args.reporter
+	);
 
 	if (!defineCall.factory) {
 		args.reporter.report(
 			Mod.ReportLevel.WARNING,
-			"Invalid sap.ui.define call without factory");
+			"Invalid sap.ui.define call without factory"
+		);
 		return undefined;
 	}
 
@@ -192,34 +216,38 @@ async function analyse(args: Mod.AnalyseArguments):
 	// use Renderer filename if the module is not part of the input files
 	const rendererModuleName = moduleName + "Renderer.js";
 
-	const rendererExists =
-		await doesModuleExist(args.fileFinder, rendererModuleName);
-
+	const rendererExists = await doesModuleExist(
+		args.fileFinder,
+		rendererModuleName
+	);
 
 	const sRendererParamName = getRendererParameterName(args.file);
 
 	const sImportName = defineCall.getImportByParamName(sRendererParamName);
 	const potentialImportPaths: string[] = [];
-	potentialImportPaths.push(
-		"./" +
-		sRendererParamName);  // relative renderer path, e.g. "./MyRenderer"
+	potentialImportPaths.push("./" + sRendererParamName); // relative renderer path, e.g. "./MyRenderer"
 	if (embeddedRenderer.moduleName) {
 		potentialImportPaths.push(
-			embeddedRenderer.moduleName.replace(/\./g, "/") +
-			"Renderer");  // absolute renderer path, e.g. "test/MyRenderer"
+			embeddedRenderer.moduleName.replace(/\./g, "/") + "Renderer"
+		); // absolute renderer path, e.g. "test/MyRenderer"
 	}
 
 	const bRendererImportDefined = potentialImportPaths.includes(sImportName);
 
-	if (rendererExists && !embeddedRenderer.rendererDefined &&
-		!bRendererImportDefined) {
+	if (
+		rendererExists &&
+		!embeddedRenderer.rendererDefined &&
+		!bRendererImportDefined
+	) {
 		args.reporter.collect("missingRenderer", 1);
 		args.reporter.storeFinding(
-			"Missing Renderer", defineCall.node.callee.loc);
+			"Missing Renderer",
+			defineCall.node.callee.loc
+		);
 		return {
 			defineCall,
-			shouldAddRenderer : true,
-			classNode : embeddedRenderer.classNode
+			shouldAddRenderer: true,
+			classNode: embeddedRenderer.classNode,
 		};
 	} else {
 		return undefined;
@@ -237,17 +265,30 @@ async function migrate(args: Mod.MigrateArguments): Promise<boolean> {
 		if (result.defineCall.getImportByParamName(rendererModuleName)) {
 			args.reporter.report(
 				ReportLevel.WARNING,
-				"Renderer already defined for " + args.file.getFileName() +
-					". Renderer param name: " + rendererModuleName);
+				"Renderer already defined for " +
+					args.file.getFileName() +
+					". Renderer param name: " +
+					rendererModuleName
+			);
 			return false;
 		}
 		const bRendererAdded = result.defineCall.addDependency(
-			"./" + rendererModuleName, rendererModuleName);
-		if (bRendererAdded && result.classNode && args.config &&
-			args.config.addRendererField) {
-			result.classNode.properties.push(builders.property(
-				"init", builders.identifier("renderer"),
-				builders.identifier(rendererModuleName)));
+			"./" + rendererModuleName,
+			rendererModuleName
+		);
+		if (
+			bRendererAdded &&
+			result.classNode &&
+			args.config &&
+			args.config.addRendererField
+		) {
+			result.classNode.properties.push(
+				builders.property(
+					"init",
+					builders.identifier("renderer"),
+					builders.identifier(rendererModuleName)
+				)
+			);
 		}
 
 		return bRendererAdded;
@@ -259,16 +300,23 @@ async function migrate(args: Mod.MigrateArguments): Promise<boolean> {
  * Exports
  */
 const migration: Mod.Task = {
-	description : "Add control renderers",
-	keywords : [ "all", "add-renderer-dependencies" ],
-	priority : 5,
+	description: "Add control renderers",
+	keywords: ["all", "add-renderer-dependencies"],
+	priority: 5,
 	defaultConfig() {
-		return Promise.resolve(JSON.parse(fs.readFileSync(
-			path.join(
-				__dirname, "../../../defaultConfig/addRenderers.config.json"),
-			"utf8")));
+		return Promise.resolve(
+			JSON.parse(
+				fs.readFileSync(
+					path.join(
+						__dirname,
+						"../../../defaultConfig/addRenderers.config.json"
+					),
+					"utf8"
+				)
+			)
+		);
 	},
 	analyse,
-	migrate
+	migrate,
 };
 export = migration;

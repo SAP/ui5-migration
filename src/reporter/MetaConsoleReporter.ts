@@ -7,7 +7,7 @@ import {Finding, fromLoc, Reporter, ReportLevel} from "./Reporter";
  * Reporter which contains multiple ConsoleReporters
  */
 export class MetaConsoleReporter extends ConsoleReporter {
-	oReporters: { [index: string]: Reporter };
+	oReporters: {[index: string]: Reporter};
 	findings: Finding[];
 
 	constructor(level: ReportLevel) {
@@ -24,7 +24,7 @@ export class MetaConsoleReporter extends ConsoleReporter {
 		let oReporter = this.getReporter(sName);
 		if (!oReporter) {
 			oReporter = this.createReporter(this.sLevel);
-			oReporter.setContext({ taskName : sName });
+			oReporter.setContext({taskName: sName});
 			this.oReporters[sName] = oReporter;
 		}
 		return oReporter;
@@ -35,8 +35,7 @@ export class MetaConsoleReporter extends ConsoleReporter {
 	}
 
 	getReporters(): Reporter[] {
-		return Object.keys(this.oReporters)
-			.map((sKey) => this.oReporters[sKey]);
+		return Object.keys(this.oReporters).map(sKey => this.oReporters[sKey]);
 	}
 
 	storeFinding(message: string, loc?: ESTree.SourceLocation) {
@@ -48,7 +47,7 @@ export class MetaConsoleReporter extends ConsoleReporter {
 	 */
 	getFindings(): Finding[] {
 		let results = this.findings.slice();
-		this.getReporters().forEach((oReporter) => {
+		this.getReporters().forEach(oReporter => {
 			results = results.concat(oReporter.getFindings());
 		});
 		return results;
@@ -56,17 +55,19 @@ export class MetaConsoleReporter extends ConsoleReporter {
 
 	reportCollected(level: ReportLevel) {
 		super.reportCollected(level);
-		this.getReporters().forEach(
-			(oReporter) => oReporter.reportCollected(level));
+		this.getReporters().forEach(oReporter =>
+			oReporter.reportCollected(level)
+		);
 	}
 
-	collect(sKey: string, oValue: string|number) {
+	collect(sKey: string, oValue: string | number) {
 		super.collect(sKey, oValue);
-		this.getReporters().forEach(
-			(oReporter) => oReporter.collect(sKey, oValue));
+		this.getReporters().forEach(oReporter =>
+			oReporter.collect(sKey, oValue)
+		);
 	}
 
-	collectTopLevel(sKey: string, oValue: string|number) {
+	collectTopLevel(sKey: string, oValue: string | number) {
 		super.collect(sKey, oValue);
 	}
 
@@ -74,7 +75,8 @@ export class MetaConsoleReporter extends ConsoleReporter {
 		const that = this;
 		return super.finalize().then(function() {
 			return Promise.all(
-				that.getReporters().map((oReporter) => oReporter.finalize()));
+				that.getReporters().map(oReporter => oReporter.finalize())
+			);
 		});
 	}
 }

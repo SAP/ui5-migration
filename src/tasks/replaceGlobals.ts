@@ -57,39 +57,49 @@ function findVariableNames(ast: ESTree.Node, visitor: ASTVisitor): Set<string> {
 		visitIdentifier(identifierPath) {
 			const oParentPath = identifierPath.parentPath;
 
-			if (oParentPath.value.type !== "LabeledStatement" &&
+			if (
+				oParentPath.value.type !== "LabeledStatement" &&
 				(oParentPath.value.type !== "Property" ||
-				 (oParentPath.value as ESTree.Property).key ===
-					 identifierPath.value) &&
+					(oParentPath.value as ESTree.Property).key ===
+						identifierPath.value) &&
 				(oParentPath.value.type !== "MemberExpression" ||
-				 (oParentPath.value as ESTree.MemberExpression).object ===
-					 identifierPath.value)) {
+					(oParentPath.value as ESTree.MemberExpression).object ===
+						identifierPath.value)
+			) {
 				aResults.add((identifierPath.value as ESTree.Identifier).name);
 			}
 			this.traverse(identifierPath);
-		}
+		},
 	});
 
 	return aResults;
 }
 
 function findUniqueName(
-	favImportName: string, aExistingVariableNames: Set<string>): string {
+	favImportName: string,
+	aExistingVariableNames: Set<string>
+): string {
 	let sPotentialName = favImportName;
 	const iMaxIterations = 100;
 	let iCurIteration = 0;
-	while (aExistingVariableNames.has(sPotentialName) &&
-		   iCurIteration < iMaxIterations) {
-		sPotentialName = favImportName + (iCurIteration++);
+	while (
+		aExistingVariableNames.has(sPotentialName) &&
+		iCurIteration < iMaxIterations
+	) {
+		sPotentialName = favImportName + iCurIteration++;
 	}
 	return sPotentialName;
 }
 
 function getDefineCall(
-	oAst: ESTree.Node, sModuleName: string,
-	reporter: Reporter): SapUiDefineCall|null {
-	const defineCalls =
-		ASTUtils.findCalls(oAst, SapUiDefineCall.isValidRootPath);
+	oAst: ESTree.Node,
+	sModuleName: string,
+	reporter: Reporter
+): SapUiDefineCall | null {
+	const defineCalls = ASTUtils.findCalls(
+		oAst,
+		SapUiDefineCall.isValidRootPath
+	);
 	if (defineCalls.length !== 1) {
 		return null;
 	}
@@ -105,7 +115,7 @@ function getCalleeExprParts(oAST: ESTree.Node): string[] {
 	if (oAST.type === Syntax.MemberExpression) {
 		return ASTUtils.getMemberExprParts(oAST);
 	} else if (oAST.type === Syntax.Identifier) {
-		return [ oAST.name ];
+		return [oAST.name];
 	} else if (oAST.type === Syntax.CallExpression) {
 		return getCalleeExprParts(oAST.callee);
 	} else {
@@ -120,7 +130,9 @@ function getCalleeExprParts(oAST: ESTree.Node): string[] {
  * @returns {string} the call to replace, e.g. "jQuery.isArray" or undefined if not found
  */
 function isCalleeMatchingModulesToReplace(
-	oNode: ESTree.Node, oModuleTree: ModuleTree): string {
+	oNode: ESTree.Node,
+	oModuleTree: ModuleTree
+): string {
 	const memberExprParts = getCalleeExprParts(oNode);
 	if (!memberExprParts || memberExprParts.length === 0) {
 		return undefined;
@@ -148,7 +160,8 @@ function isGlobalContext(oNode: ESTree.Node): boolean {
 		} else if (oNode.type === Syntax.MemberExpression) {
 			if (oNode.property.type === "Identifier") {
 				oNode = oNode.object;
-			} else {  // e.g. arr[1].$() or map["something"].$()
+			} else {
+				// e.g. arr[1].$() or map["something"].$()
 				return false;
 			}
 		} else {
@@ -166,10 +179,11 @@ function isUsedAsExpression(oPath: TNodePath<ESTree.Identifier>): boolean {
 		(parentType === Syntax.VariableDeclarator && name === "init") ||
 		(parentType === Syntax.Property && name === "value") ||
 		(parentType === Syntax.AssignmentExpression && name === "value") ||
-		(parentType === Syntax.LogicalExpression) ||
-		(parentType === Syntax.BinaryExpression) ||
-		(parentType === Syntax.UnaryExpression) ||
-		(parentType === Syntax.ConditionalExpression));
+		parentType === Syntax.LogicalExpression ||
+		parentType === Syntax.BinaryExpression ||
+		parentType === Syntax.UnaryExpression ||
+		parentType === Syntax.ConditionalExpression
+	);
 }
 
 /**
@@ -190,14 +204,20 @@ interface ReplaceGlobalsFinding {
  * @param defineCall
  */
 function wouldReplaceCall(
-	moduleMapFromConfig: {}, callToReplace, defineCall: SapUiDefineCall) {
+	moduleMapFromConfig: {},
+	callToReplace,
+	defineCall: SapUiDefineCall
+) {
 	const configEntry = moduleMapFromConfig[callToReplace];
 	if (!configEntry) {
 		return false;
 	}
 	const callToReplaceInConfig = [
-		configEntry.newVariableName, configEntry.functionName
-	].filter(Boolean).join(".");
+		configEntry.newVariableName,
+		configEntry.functionName,
+	]
+		.filter(Boolean)
+		.join(".");
 
 	// special module LEAVE never triggers a replacement
 	if (configEntry.replacer && configEntry.replacer === "LEAVE") {
@@ -212,10 +232,11 @@ function wouldReplaceCall(
 	// 		"version": "^1.58.0"
 	// 	}
 	const alreadyPresent =
-		(callToReplaceInConfig === callToReplace &&
-		 defineCall.getNodeOfImport(configEntry.newModulePath)) &&
-		(!configEntry.replacer || configEntry.replacer === "Module" ||
-		 configEntry.replacer === "ModuleFunction");
+		callToReplaceInConfig === callToReplace &&
+		defineCall.getNodeOfImport(configEntry.newModulePath) &&
+		(!configEntry.replacer ||
+			configEntry.replacer === "Module" ||
+			configEntry.replacer === "ModuleFunction");
 
 	// if it is not already present the call would be replaced
 	return !alreadyPresent;
@@ -231,20 +252,29 @@ function wouldReplaceCall(
  * @returns the findings
  */
 function findCallsToReplace(
-	oAST: ESTree.Node, oModuleTree: ModuleTree, visitor: ASTVisitor,
-	defineCall: SapUiDefineCall, moduleMap: {}): ReplaceGlobalsFinding[] {
+	oAST: ESTree.Node,
+	oModuleTree: ModuleTree,
+	visitor: ASTVisitor,
+	defineCall: SapUiDefineCall,
+	moduleMap: {}
+): ReplaceGlobalsFinding[] {
 	const aFoundCalls: ReplaceGlobalsFinding[] = [];
 
 	visitor.visit(oAST, {
 		visitMemberExpression(oPath) {
 			if (isGlobalContext(oPath.value)) {
-				const result =
-					isCalleeMatchingModulesToReplace(oPath.value, oModuleTree);
+				const result = isCalleeMatchingModulesToReplace(
+					oPath.value,
+					oModuleTree
+				);
 				if (result) {
-					const wouldReplace =
-						wouldReplaceCall(moduleMap, result, defineCall);
+					const wouldReplace = wouldReplaceCall(
+						moduleMap,
+						result,
+						defineCall
+					);
 
-					aFoundCalls.push({ nodePath : oPath, wouldReplace });
+					aFoundCalls.push({nodePath: oPath, wouldReplace});
 					oPath.protect();
 					return false;
 				}
@@ -255,25 +285,31 @@ function findCallsToReplace(
 		// simple-identifier call (e.g. jQuery("xxx"))
 		visitIdentifier(oPath) {
 			if (isUsedAsExpression(oPath)) {
-				const result =
-					isCalleeMatchingModulesToReplace(oPath.value, oModuleTree);
+				const result = isCalleeMatchingModulesToReplace(
+					oPath.value,
+					oModuleTree
+				);
 				if (result) {
-					const wouldReplace =
-						wouldReplaceCall(moduleMap, result, defineCall);
+					const wouldReplace = wouldReplaceCall(
+						moduleMap,
+						result,
+						defineCall
+					);
 
-					aFoundCalls.push({ nodePath : oPath, wouldReplace });
+					aFoundCalls.push({nodePath: oPath, wouldReplace});
 					oPath.protect();
 				}
 			}
 			this.traverse(oPath);
-		}
+		},
 	});
 
 	return aFoundCalls;
 }
 
 function findImport(oObject: ImportMap, sName: string) {
-	let iLevel = 0, bFound = true;
+	let iLevel = 0,
+		bFound = true;
 
 	while (bFound) {
 		if (oObject[sName]) {
@@ -293,7 +329,7 @@ function findImport(oObject: ImportMap, sName: string) {
 		return undefined;
 	}
 
-	return { oldImportName : sName, import : oObject[sName], iLevel };
+	return {oldImportName: sName, import: oObject[sName], iLevel};
 }
 
 function findImportByCall(mImports: ImportMap, sName: string) {
@@ -307,9 +343,9 @@ function findImportByCall(mImports: ImportMap, sName: string) {
  */
 const GLOBALS = "GLOBALS";
 
-type ModuleTree = {
-	[name: string]: ModuleTree
-};
+interface ModuleTree {
+	[name: string]: ModuleTree;
+}
 
 interface ImportConfig {
 	newVariableName: string;
@@ -319,74 +355,87 @@ interface ImportConfig {
 
 interface ImportInfo {
 	// e.g. for sap.ui.define(["sap.encoder"], function (j) { j.func(); })
-	oldModule: string;		// jQuery.encoder
-	newModule?: string;		// sap.encoder
-	requireName?: string;   // j
-	functionName?: string;  // func
+	oldModule: string; // jQuery.encoder
+	newModule?: string; // sap.encoder
+	requireName?: string; // j
+	functionName?: string; // func
 	replacerName: string;
 	hasToBeRequired: boolean;
 	config: ImportConfig;
 	parentName?: string;
 	replacer?: string;
 }
-type ImportMap = {
-	[oldImport: string]: ImportInfo
-};
+interface ImportMap {
+	[oldImport: string]: ImportInfo;
+}
 
 interface ReplaceGlobalsAnalysis {
 	defineCall: SapUiDefineCall;
 	replaceCalls: Array<{
-		callPath : NodePath; iLevel : number; import : ImportInfo;
-		oldImportName : string;
+		callPath: NodePath;
+		iLevel: number;
+		import: ImportInfo;
+		oldImportName: string;
 	}>;
 	removeRequires: string[];
 	newRequires: Array<{
-		modulePath : string; requireName : string; origRequireName : string;
+		modulePath: string;
+		requireName: string;
+		origRequireName: string;
 	}>;
-	addComments: Array<{ nodePath : NodePath; comment : string; }>;
+	addComments: Array<{nodePath: NodePath; comment: string}>;
 }
 
-
-
 function calculateImportName(oConfig: ImportConfig) {
-	return oConfig.newVariableName ||
+	return (
+		oConfig.newVariableName ||
 		(oConfig.newModulePath &&
-		 oConfig.newModulePath.substring(
-			 oConfig.newModulePath.lastIndexOf("/") + 1));
+			oConfig.newModulePath.substring(
+				oConfig.newModulePath.lastIndexOf("/") + 1
+			))
+	);
 }
 
 async function analyse(args: Mod.AnalyseArguments): Promise<{}> {
 	if (!args.config) {
 		throw new Error("No configuration given");
 	}
-	const visitor = args.visitor as ASTVisitor || new ASTVisitor();
+	const visitor = (args.visitor as ASTVisitor) || new ASTVisitor();
 
 	const ast = args.file.getAST();
 
 	// if there is no define call where dependency could be added -> resolve and
 	// return
-	const defineCall =
-		getDefineCall(ast, args.file.getFileName(), args.reporter);
+	const defineCall = getDefineCall(
+		ast,
+		args.file.getFileName(),
+		args.reporter
+	);
 	if (!defineCall) {
 		args.reporter.report(
-			Mod.ReportLevel.TRACE, "could not find sap.ui.define call");
+			Mod.ReportLevel.TRACE,
+			"could not find sap.ui.define call"
+		);
 		return null;
 	}
 
 	if (!defineCall.factory) {
 		args.reporter.report(
 			Mod.ReportLevel.WARNING,
-			"invalid sap.ui.define call without factory");
+			"invalid sap.ui.define call without factory"
+		);
 		return null;
 	}
 
-
-	const oConfig = args.targetVersion !== "latest" ?
-		modifyModulesNotMatchingTargetVersion(
-			args.config, args.targetVersion, { replacer : "LEAVE" },
-			{ alias : "LEAVE", file : "tasks/helpers/replacers/LEAVE.js" }) :
-		args.config;
-
+	const oConfig =
+		args.targetVersion !== "latest"
+			? modifyModulesNotMatchingTargetVersion(
+					args.config,
+					args.targetVersion,
+					{replacer: "LEAVE"},
+					{alias: "LEAVE", file: "tasks/helpers/replacers/LEAVE.js"}
+			  )
+			: args.config;
 
 	const oModuleTree: ModuleTree = {};
 
@@ -405,12 +454,13 @@ async function analyse(args: Mod.AnalyseArguments): Promise<{}> {
 	const moduleMap = {};
 
 	// fill module tree
-	for (const sKeyOldModule in oConfig.modules) {  // jquery.sap.global
+	for (const sKeyOldModule in oConfig.modules) {
+		// jquery.sap.global
 		if (oConfig.modules.hasOwnProperty(sKeyOldModule)) {
 			const oldImports = oConfig.modules[sKeyOldModule];
 
-			for (const sOldImportName in
-				 oldImports) {  // "jQuery.sap._loadJSResourceAsync"
+			for (const sOldImportName in oldImports) {
+				// "jQuery.sap._loadJSResourceAsync"
 
 				if (oldImports.hasOwnProperty(sOldImportName)) {
 					const oldImport = oldImports[sOldImportName];
@@ -419,9 +469,9 @@ async function analyse(args: Mod.AnalyseArguments): Promise<{}> {
 
 					let replacerName = oldImport.replacer;
 					if (!replacerName) {
-						replacerName = oldImport.functionName ?
-							"Module" :
-							"ModuleFunction";
+						replacerName = oldImport.functionName
+							? "Module"
+							: "ModuleFunction";
 					}
 
 					// fill module tree
@@ -439,22 +489,30 @@ async function analyse(args: Mod.AnalyseArguments): Promise<{}> {
 			}
 		}
 	}
-	const aCallsToReplace =
-		findCallsToReplace(ast, oModuleTree, visitor, defineCall, moduleMap);
-	aCallsToReplace.forEach((oCallToReplace) => {
+	const aCallsToReplace = findCallsToReplace(
+		ast,
+		oModuleTree,
+		visitor,
+		defineCall,
+		moduleMap
+	);
+	aCallsToReplace.forEach(oCallToReplace => {
 		if (oCallToReplace.wouldReplace) {
 			args.reporter.storeFinding(
-				"found deprecated global", oCallToReplace.nodePath.value.loc);
+				"found deprecated global",
+				oCallToReplace.nodePath.value.loc
+			);
 		}
 	});
 	args.reporter.collect("callsToReplace", aCallsToReplace.length);
 
 	const mOldImports = {};
-	for (const sKeyOldModule in oConfig.modules) {  // jquery.sap.global
+	for (const sKeyOldModule in oConfig.modules) {
+		// jquery.sap.global
 		if (oConfig.modules.hasOwnProperty(sKeyOldModule)) {
 			const oldImports = oConfig.modules[sKeyOldModule];
-			for (const sOldImportName in
-				 oldImports) {  // "jQuery.sap._loadJSResourceAsync"
+			for (const sOldImportName in oldImports) {
+				// "jQuery.sap._loadJSResourceAsync"
 				if (oldImports.hasOwnProperty(sOldImportName)) {
 					mOldImports[sOldImportName] = oldImports[sOldImportName];
 					mOldImports[sOldImportName].parentName = sKeyOldModule;
@@ -472,11 +530,11 @@ async function analyse(args: Mod.AnalyseArguments): Promise<{}> {
 			}
 		});
 
-
 	// let aVariableNamesToKeep = new Set<string>();
 	for (const oCallPath of aCallsToReplace) {
-		const sCalleeName =
-			getCalleeExprParts(oCallPath.nodePath.value).join(".");
+		const sCalleeName = getCalleeExprParts(oCallPath.nodePath.value).join(
+			"."
+		);
 		const oResult = findImport(mOldImports, sCalleeName);
 		if (oResult) {
 			/*
@@ -493,8 +551,9 @@ async function analyse(args: Mod.AnalyseArguments): Promise<{}> {
 				// const sCalleeName =
 				// getCalleeExprParts(oCallPath.value).join(".").replace("$",
 				// "jQuery");
-				const sImportName =
-					defineCall.getParamNameByImport(oResult.import.parentName);
+				const sImportName = defineCall.getParamNameByImport(
+					oResult.import.parentName
+				);
 				if (sImportName) {
 					aVariableNamesToRemove.delete(sImportName);
 				}
@@ -507,13 +566,10 @@ async function analyse(args: Mod.AnalyseArguments): Promise<{}> {
 		aExistingVariableNames.delete(s);
 	});
 
-
 	// find calls which leave variable name intact -> LEAVE
 
-
 	const mImports: ImportMap = {};
-	const mImportRequireNames:
-		{ [newImport: string]: string } = {};  // new module to require name
+	const mImportRequireNames: {[newImport: string]: string} = {}; // new module to require name
 
 	// Parse config
 	for (const sKeyOldModule in oConfig.modules) {
@@ -533,18 +589,23 @@ async function analyse(args: Mod.AnalyseArguments): Promise<{}> {
 								mImportRequireNames[oldImport.newModulePath];
 						} else {
 							// check if module is already an import
-							const p = defineCall.dependencyArray ?
-								defineCall.dependencyArray.elements.findIndex(
-									oArg => (oArg as ESTree.Literal).value ===
-										oldImport.newModulePath) :
-								-1;
+							const p = defineCall.dependencyArray
+								? defineCall.dependencyArray.elements.findIndex(
+										oArg =>
+											(oArg as ESTree.Literal).value ===
+											oldImport.newModulePath
+								  )
+								: -1;
 							if (p < 0) {
 								// add new import
 								newImportName = findUniqueName(
-									newImportName, aExistingVariableNames);
+									newImportName,
+									aExistingVariableNames
+								);
 								aExistingVariableNames.add(newImportName);
-								mImportRequireNames[oldImport.newModulePath] =
-									newImportName;
+								mImportRequireNames[
+									oldImport.newModulePath
+								] = newImportName;
 							} else {
 								// reuse import
 								const sParamName = defineCall.paramNames[p];
@@ -559,18 +620,18 @@ async function analyse(args: Mod.AnalyseArguments): Promise<{}> {
 					// save all the import info
 					let replacerName = oldImport.replacer;
 					if (!replacerName) {
-						replacerName = oldImport.functionName ?
-							"Module" :
-							"ModuleFunction";
+						replacerName = oldImport.functionName
+							? "Module"
+							: "ModuleFunction";
 					}
 					mImports[sOldImportName] = {
-						oldModule : sKeyOldModule,
-						newModule : oldImport.newModulePath,
-						requireName : newImportName,
-						functionName : oldImport.functionName,
+						oldModule: sKeyOldModule,
+						newModule: oldImport.newModulePath,
+						requireName: newImportName,
+						functionName: oldImport.functionName,
 						replacerName,
 						hasToBeRequired,
-						config : oldImport
+						config: oldImport,
 					};
 				}
 			}
@@ -580,73 +641,81 @@ async function analyse(args: Mod.AnalyseArguments): Promise<{}> {
 	// replace with modules
 	const analysis: ReplaceGlobalsAnalysis = {
 		defineCall,
-		addComments : [],
-		newRequires : [],
-		removeRequires : Object.keys(oConfig.modules),
-		replaceCalls : []
+		addComments: [],
+		newRequires: [],
+		removeRequires: Object.keys(oConfig.modules),
+		replaceCalls: [],
 	};
 
 	for (const oCallPath of aCallsToReplace) {
-		const sCallPathName =
-			getCalleeExprParts(oCallPath.nodePath.value).join(".");
+		const sCallPathName = getCalleeExprParts(oCallPath.nodePath.value).join(
+			"."
+		);
 		const sCalleeName = sCallPathName.replace("$", "jQuery");
 		const oResult = findImportByCall(mImports, sCalleeName);
 
 		if (oResult) {
 			analysis.replaceCalls.push({
-				callPath : oCallPath.nodePath,
-				iLevel : oResult.iLevel,
-				oldImportName : sCalleeName,
-				import : oResult.import
+				callPath: oCallPath.nodePath,
+				iLevel: oResult.iLevel,
+				oldImportName: sCalleeName,
+				import: oResult.import,
 			});
 
 			// Format error message
 			let sInfoMsg;
 			if (oResult.import.newModule) {
-				sInfoMsg = `Replace global call with "${
-					oResult.import.newModule.replace(/\//g, ".")}"`;
+				sInfoMsg = `Replace global call with "${oResult.import.newModule.replace(
+					/\//g,
+					"."
+				)}"`;
 			} else if (oResult.import.functionName) {
-				sInfoMsg =
-					`Replace global call with "${oResult.import.functionName}"`;
+				sInfoMsg = `Replace global call with "${oResult.import.functionName}"`;
 			} else {
-				sInfoMsg =
-					`Deprecated call of type ${oResult.import.replacerName}`;
+				sInfoMsg = `Deprecated call of type ${oResult.import.replacerName}`;
 			}
 			args.reporter.report(
-				Mod.ReportLevel.TRACE, sInfoMsg, oCallPath.nodePath.value.loc);
+				Mod.ReportLevel.TRACE,
+				sInfoMsg,
+				oCallPath.nodePath.value.loc
+			);
 
 			const sActionMsg = `Found call to replace "${sCallPathName}"`;
 			args.reporter.report(
-				Mod.ReportLevel.TRACE, sActionMsg,
-				oCallPath.nodePath.value.loc);
+				Mod.ReportLevel.TRACE,
+				sActionMsg,
+				oCallPath.nodePath.value.loc
+			);
 
 			// schedule new module to be imported
 			if (oResult.import.newModule && oResult.import.hasToBeRequired) {
 				const p = analysis.newRequires.findIndex(
-					i => i.modulePath === oResult.import.newModule);
+					i => i.modulePath === oResult.import.newModule
+				);
 				if (p < 0) {
 					analysis.newRequires.push({
-						modulePath : oResult.import.newModule,
-						requireName : oResult.import.requireName,
-						origRequireName :
-							calculateImportName(oResult.import.config)
+						modulePath: oResult.import.newModule,
+						requireName: oResult.import.requireName,
+						origRequireName: calculateImportName(
+							oResult.import.config
+						),
 					});
 				}
 			}
 
 			// schedule old module to be deleted
 			if (oResult.import.oldModule !== GLOBALS) {
-				const p =
-					analysis.removeRequires.indexOf(oResult.import.oldModule);
+				const p = analysis.removeRequires.indexOf(
+					oResult.import.oldModule
+				);
 				if (p < 0) {
 					analysis.removeRequires.push(oResult.import.oldModule);
 				}
 			}
-
 		} else if (args.config.comments) {
 			analysis.addComments.push({
-				nodePath : oCallPath.nodePath,
-				comment : args.config.comments.unhandledReplacementComment
+				nodePath: oCallPath.nodePath,
+				comment: args.config.comments.unhandledReplacementComment,
 			});
 		}
 	}
@@ -659,20 +728,21 @@ async function migrate(args: Mod.MigrateArguments): Promise<boolean> {
 		return false;
 	}
 	const visitor = args.visitor || new ASTVisitor();
-	const analyseResult = (args.analyseResult) as ReplaceGlobalsAnalysis;
+	const analyseResult = args.analyseResult as ReplaceGlobalsAnalysis;
 
 	// Loader replacer functions
-	const mReplacerFuncs:
-		{ [name: string]:
-			  ASTReplaceable } = {};  // TODO: Add function interface
+	const mReplacerFuncs: {[name: string]: ASTReplaceable} = {}; // TODO: Add function interface
 	if (!args.config.replacers) {
 		throw new Error("No replacers configured");
 	}
 	for (const replacerName in args.config.replacers) {
 		if (args.config.replacers.hasOwnProperty(replacerName)) {
 			// TODO: Move and translate the replaceGlobals modules!
-			const modulePath =
-				path.join(__dirname, "..", args.config.replacers[replacerName]);
+			const modulePath = path.join(
+				__dirname,
+				"..",
+				args.config.replacers[replacerName]
+			);
 			mReplacerFuncs[replacerName] = require(modulePath);
 		}
 	}
@@ -693,22 +763,29 @@ async function migrate(args: Mod.MigrateArguments): Promise<boolean> {
 		try {
 			// if there is no replacer configured error out
 			if (!mReplacerFuncs[oReplace.import.replacerName]) {
-				throw Error(`replacement ignored, no replacer configured for ${
-					oReplace.oldImportName}`);
+				throw Error(
+					`replacement ignored, no replacer configured for ${oReplace.oldImportName}`
+				);
 			}
-			const oResult =
-				mReplacerFuncs[oReplace.import.replacerName].replace(
-					oNodePath, oReplace.import.requireName,
-					oReplace.import.functionName, oReplace.oldImportName,
-					oReplace.import.config);
+			const oResult = mReplacerFuncs[
+				oReplace.import.replacerName
+			].replace(
+				oNodePath,
+				oReplace.import.requireName,
+				oReplace.import.functionName,
+				oReplace.oldImportName,
+				oReplace.import.config
+			);
 
 			const wasFullyHandled = oResult && oResult.modified === true;
 			const skipDependency = oResult && oResult.addDependency === false;
 
 			const sCall = getCalleeExprParts(oNodePath.value).join(".");
 			// if new module to add matches old module to remove
-			if (oReplace.import.newModule === oReplace.import.oldModule &&
-				!skipDependency) {
+			if (
+				oReplace.import.newModule === oReplace.import.oldModule &&
+				!skipDependency
+			) {
 				aDoNotRemoveModules.add(oReplace.import.oldModule);
 				aUsedNewModules.add(oReplace.import.newModule);
 			} else if (wasFullyHandled) {
@@ -718,16 +795,22 @@ async function migrate(args: Mod.MigrateArguments): Promise<boolean> {
 				aUsedNewModules.add(oReplace.import.newModule);
 			}
 			args.reporter.report(
-				Mod.ReportLevel.TRACE, `Replaced call "${sCall}"`,
-				oNodePath.value.loc);
+				Mod.ReportLevel.TRACE,
+				`Replaced call "${sCall}"`,
+				oNodePath.value.loc
+			);
 
 			args.reporter.collect("replacementsPerformed", 1);
-			if (oNodePath.parentPath.value.type === Syntax.MemberExpression &&
+			if (
+				oNodePath.parentPath.value.type === Syntax.MemberExpression &&
 				oNodePath.parentPath.value.property.type ===
 					Syntax.Identifier &&
-				oNodePath.parentPath.value.property.name) {
+				oNodePath.parentPath.value.property.name
+			) {
 				args.reporter.collect(
-					oNodePath.parentPath.value.property.name, 1);
+					oNodePath.parentPath.value.property.name,
+					1
+				);
 			}
 
 			bFileModified = true;
@@ -735,18 +818,22 @@ async function migrate(args: Mod.MigrateArguments): Promise<boolean> {
 			args.reporter.report(
 				Mod.ReportLevel.DEBUG,
 				"ignored element: " + oReplace.oldImportName,
-				oNodePath.value.loc);
+				oNodePath.value.loc
+			);
 			args.reporter.report(
-				Mod.ReportLevel.ERROR, "Error: " + e.message,
-				oNodePath.value.loc);
+				Mod.ReportLevel.ERROR,
+				"Error: " + e.message,
+				oNodePath.value.loc
+			);
 			args.reporter.collect("replacementsIgnored", 1);
 			aDoNotRemoveModules.add(oReplace.import.oldModule);
 
 			bFileIgnored = true;
 
-			const sComment = oReplace.import.config.errorComment ||
+			const sComment =
+				oReplace.import.config.errorComment ||
 				(args.config.comments &&
-				 args.config.comments.failedReplacementComment);
+					args.config.comments.failedReplacementComment);
 			if (sComment) {
 				CommentUtils.addComment(oNodePath, sComment);
 				bFileModified = true;
@@ -762,37 +849,49 @@ async function migrate(args: Mod.MigrateArguments): Promise<boolean> {
 	}
 
 	// add/remove dependencies
-	const newRequires = analyseResult.newRequires.filter(
-		r => aUsedNewModules.has(r.modulePath));
-	const removeRequires =
-		analyseResult.removeRequires.filter(r => !aDoNotRemoveModules.has(r));
+	const newRequires = analyseResult.newRequires.filter(r =>
+		aUsedNewModules.has(r.modulePath)
+	);
+	const removeRequires = analyseResult.removeRequires.filter(
+		r => !aDoNotRemoveModules.has(r)
+	);
 
-
-	const aRequireNames = removeRequires.map(
-		s => analyseResult.defineCall.getParamNameByImport(s));
+	const aRequireNames = removeRequires.map(s =>
+		analyseResult.defineCall.getParamNameByImport(s)
+	);
 
 	for (const oRequire of newRequires) {
 		const bWillBeRemoved =
 			aRequireNames.indexOf(oRequire.origRequireName) > -1;
 		const iIndex = analyseResult.defineCall.paramNames.indexOf(
-			oRequire.origRequireName);
+			oRequire.origRequireName
+		);
 		if (bWillBeRemoved && iIndex > -1) {
-			if (analyseResult.defineCall.modifyDependency(
-					iIndex, oRequire.modulePath, oRequire.origRequireName)) {
+			if (
+				analyseResult.defineCall.modifyDependency(
+					iIndex,
+					oRequire.modulePath,
+					oRequire.origRequireName
+				)
+			) {
 				args.reporter.report(
 					Mod.ReportLevel.TRACE,
-					`Modify dependency "${oRequire.modulePath}" named "${
-						oRequire.origRequireName}"`,
-					analyseResult.defineCall.factory.loc);
+					`Modify dependency "${oRequire.modulePath}" named "${oRequire.origRequireName}"`,
+					analyseResult.defineCall.factory.loc
+				);
 				bFileModified = true;
 			}
-		} else if (analyseResult.defineCall.addDependency(
-					   oRequire.modulePath, oRequire.requireName)) {
+		} else if (
+			analyseResult.defineCall.addDependency(
+				oRequire.modulePath,
+				oRequire.requireName
+			)
+		) {
 			args.reporter.report(
 				Mod.ReportLevel.TRACE,
-				`Add dependency "${oRequire.modulePath}" named "${
-					oRequire.requireName}"`,
-				analyseResult.defineCall.factory.loc);
+				`Add dependency "${oRequire.modulePath}" named "${oRequire.requireName}"`,
+				analyseResult.defineCall.factory.loc
+			);
 			bFileModified = true;
 		}
 	}
@@ -800,8 +899,10 @@ async function migrate(args: Mod.MigrateArguments): Promise<boolean> {
 	for (const sModule of removeRequires) {
 		if (analyseResult.defineCall.removeDependency(sModule)) {
 			args.reporter.report(
-				Mod.ReportLevel.TRACE, `Remove dependency "${sModule}"`,
-				analyseResult.defineCall.factory.loc);
+				Mod.ReportLevel.TRACE,
+				`Remove dependency "${sModule}"`,
+				analyseResult.defineCall.factory.loc
+			);
 			bFileModified = true;
 		}
 	}
@@ -818,20 +919,27 @@ async function migrate(args: Mod.MigrateArguments): Promise<boolean> {
 }
 
 const replaceGlobals: Mod.Task = {
-	description :
+	description:
 		"Replaces usage of global jQuery functions with module imports",
-	keywords : [ "all", "replace-globals" ],
-	priority : 5,
+	keywords: ["all", "replace-globals"],
+	priority: 5,
 	defaultConfig() {
-		return Promise.resolve(JSON.parse(fs.readFileSync(
-			path.join(
-				__dirname, "../../../defaultConfig/replaceGlobals.config.json"),
-			"utf8")));
+		return Promise.resolve(
+			JSON.parse(
+				fs.readFileSync(
+					path.join(
+						__dirname,
+						"../../../defaultConfig/replaceGlobals.config.json"
+					),
+					"utf8"
+				)
+			)
+		);
 	},
-	postTasks : [ "variable-name-prettifier" ],
+	postTasks: ["variable-name-prettifier"],
 	// TODO: add config schema
 
 	analyse,
-	migrate
+	migrate,
 };
 export = replaceGlobals;

@@ -17,20 +17,25 @@ import {ASTReplaceable, NodePath} from "ui5-migration";
  * @returns {void}
  */
 const replaceable: ASTReplaceable = {
-
 	replace(
-		node: NodePath, name: string, fnName: string, oldModuleCall: string,
-		config: { newVariableName: string }) : void {
+		node: NodePath,
+		name: string,
+		fnName: string,
+		oldModuleCall: string,
+		config: {newVariableName: string}
+	): void {
 		const nodeValue = node.value;
 
 		if (node.value.type === Syntax.Identifier) {
 			node.value.name = config.newVariableName;
 		} else {
 			throw new Error(
-				"rename of " + node.value.type +
-				" (supported are only Identifiers)");
+				"rename of " +
+					node.value.type +
+					" (supported are only Identifiers)"
+			);
 		}
-	}
+	},
 };
 
 module.exports = replaceable;

@@ -12,13 +12,13 @@ const genRandomJS = require("../../test/genRandomJS");
  * @class ProxyVisitsCounter
  */
 class ProxyVisitsCounter {
-	private counts: { [index: string]: number };
+	private counts: {[index: string]: number};
 	constructor() {
 		this.counts = {};
 	}
 
 	has(target, key) {
-		return true;  // we have everything
+		return true; // we have everything
 	}
 
 	get(target, key, receiver) {
@@ -56,7 +56,7 @@ class ProxyVisitsOrder {
 	}
 
 	has(target, key) {
-		return true;  // we have everything
+		return true; // we have everything
 	}
 
 	get(target, key, receiver) {
@@ -86,7 +86,8 @@ describe("ASTVisitor", function() {
 		const oAst = recast.parse("(function abc() { return 1; })");
 		const oVisitor = new ASTVisitor();
 
-		let bVisitedFile = false, bVisitedProgram = false;
+		let bVisitedFile = false,
+			bVisitedProgram = false;
 		oVisitor.visit(oAst, {
 			visitFile(path) {
 				bVisitedFile = true;
@@ -108,7 +109,7 @@ describe("ASTVisitor", function() {
 				assert.strictEqual(path.name, "program");
 
 				return false;
-			}
+			},
 		});
 
 		assert.ok(bVisitedFile);
@@ -116,12 +117,13 @@ describe("ASTVisitor", function() {
 	});
 
 	it("should visit all nodes", function() {
-		const SOURCE_CODE_ALL_NODES = "function abc (def, ghi) {\n" +
+		const SOURCE_CODE_ALL_NODES =
+			"function abc (def, ghi) {\n" +
 			"	if (false)\n" +
 			"		def = ghi;\n" +
 			"	else\n" +
 			"		while (false);\n" +
-			"	return 3 + \"str\";\n" +
+			'	return 3 + "str";\n' +
 			"}\n" +
 			"const obj = {\n" +
 			"	prop: null,\n" +
@@ -135,41 +137,41 @@ describe("ASTVisitor", function() {
 		oVisitor.visit(oAst, new Proxy({}, oFncts));
 
 		assert.deepStrictEqual(oFncts.getCounts(), {
-			visitArrayExpression : 1,
-			visitAssignmentExpression : 1,
-			visitBinaryExpression : 1,
-			visitBlockStatement : 1,
-			visitBoolean : 4,
-			visitCallExpression : 1,
-			visitConditionalExpression : 1,
-			visitEmptyStatement : 1,
-			visitExpressionStatement : 2,
-			visitFile : 1,
-			visitFunctionDeclaration : 1,
-			visitIdentifier : 20,
-			visitIfStatement : 1,
-			visitKeyword : 7,
-			visitLiteral : 10,
-			visitMemberExpression : 1,
-			visitNull : 1,
-			visitNumeric : 4,
-			visitObjectExpression : 1,
-			visitProgram : 1,
-			visitProperty : 2,
-			visitPunctuator : 34,
-			visitReturnStatement : 1,
-			visitString : 1,
-			visitThisExpression : 1,
-			visitUnaryExpression : 1,
-			visitVariableDeclaration : 1,
-			visitVariableDeclarator : 1,
-			visitWhileStatement : 1
+			visitArrayExpression: 1,
+			visitAssignmentExpression: 1,
+			visitBinaryExpression: 1,
+			visitBlockStatement: 1,
+			visitBoolean: 4,
+			visitCallExpression: 1,
+			visitConditionalExpression: 1,
+			visitEmptyStatement: 1,
+			visitExpressionStatement: 2,
+			visitFile: 1,
+			visitFunctionDeclaration: 1,
+			visitIdentifier: 20,
+			visitIfStatement: 1,
+			visitKeyword: 7,
+			visitLiteral: 10,
+			visitMemberExpression: 1,
+			visitNull: 1,
+			visitNumeric: 4,
+			visitObjectExpression: 1,
+			visitProgram: 1,
+			visitProperty: 2,
+			visitPunctuator: 34,
+			visitReturnStatement: 1,
+			visitString: 1,
+			visitThisExpression: 1,
+			visitUnaryExpression: 1,
+			visitVariableDeclaration: 1,
+			visitVariableDeclarator: 1,
+			visitWhileStatement: 1,
 		});
 	});
 
 	it("should visit array nodes in order", function() {
-		const SOURCE_CODE_ORDER = "alert(5, 7, 9);\n" +
-			"const b = [3, abc, false];\n";
+		const SOURCE_CODE_ORDER =
+			"alert(5, 7, 9);\n" + "const b = [3, abc, false];\n";
 
 		const oAst = recast.parse(SOURCE_CODE_ORDER);
 		const oVisitor = new ASTVisitor();
@@ -177,23 +179,31 @@ describe("ASTVisitor", function() {
 
 		oFncts = new ProxyVisitsOrder();
 		oVisitor.visit(oAst.program.body, new Proxy({}, oFncts));
-		assert.deepStrictEqual(
-			oFncts.getVisits(),
-			[ "visitExpressionStatement", "visitVariableDeclaration" ]);
+		assert.deepStrictEqual(oFncts.getVisits(), [
+			"visitExpressionStatement",
+			"visitVariableDeclaration",
+		]);
 
 		oFncts = new ProxyVisitsOrder();
 		oVisitor.visit(
-			oAst.program.body[0].expression.arguments, new Proxy({}, oFncts));
-		assert.deepStrictEqual(
-			oFncts.getVisits(),
-			[ "visitLiteral - 5", "visitLiteral - 7", "visitLiteral - 9" ]);
+			oAst.program.body[0].expression.arguments,
+			new Proxy({}, oFncts)
+		);
+		assert.deepStrictEqual(oFncts.getVisits(), [
+			"visitLiteral - 5",
+			"visitLiteral - 7",
+			"visitLiteral - 9",
+		]);
 
 		oFncts = new ProxyVisitsOrder();
 		oVisitor.visit(
 			oAst.program.body[1].declarations[0].init.elements,
-			new Proxy({}, oFncts));
+			new Proxy({}, oFncts)
+		);
 		assert.deepStrictEqual(oFncts.getVisits(), [
-			"visitLiteral - 3", "visitIdentifier - abc", "visitLiteral - false"
+			"visitLiteral - 3",
+			"visitIdentifier - abc",
+			"visitLiteral - false",
 		]);
 	});
 
@@ -212,9 +222,11 @@ describe("ASTVisitor", function() {
 					visitFile(path) {
 						bVisited = true;
 						return false;
-					}
+					},
 				},
-				oFncts));
+				oFncts
+			)
+		);
 		assert.ok(bVisited);
 
 		bVisited = false;
@@ -225,9 +237,11 @@ describe("ASTVisitor", function() {
 				{
 					visitFile(path) {
 						bVisited = true;
-					}
+					},
 				},
-				oFncts));
+				oFncts
+			)
+		);
 		assert.ok(bVisited);
 
 		bVisited = false;
@@ -243,30 +257,33 @@ describe("ASTVisitor", function() {
 					visitProgram(path) {
 						bVisited = true;
 						return false;
-					}
+					},
 				},
-				oFncts));
+				oFncts
+			)
+		);
 		assert.ok(bVisited);
 	});
 
 	it("should not reuse protected paths", function() {
 		const oAst = recast.parse("(function abc() { return 1; })");
-		const oVisitor = new ASTVisitor(undefined, 8);  // very small cache size
+		const oVisitor = new ASTVisitor(undefined, 8); // very small cache size
 		let oTestPath = {
-			value : {},
-			parentPath : {},
-			name : "",
+			value: {},
+			parentPath: {},
+			name: "",
 		};
 		oVisitor.visit(oAst, {
-			visitProgram(path) {  // use program, so there is a parent path
+			visitProgram(path) {
+				// use program, so there is a parent path
 				oTestPath = path.protect();
 				return false;
-			}
+			},
 		});
 		const oTestPathCopy = Object.assign({}, oTestPath);
 
 		const oBigAst = recast.parse(genRandomJS(256));
-		oVisitor.visit(oBigAst, {});  // this should mess with the cache enough
+		oVisitor.visit(oBigAst, {}); // this should mess with the cache enough
 
 		assert.strictEqual(oTestPath.value, oTestPathCopy.value);
 		assert.strictEqual(oTestPath.parentPath, oTestPathCopy.parentPath);
