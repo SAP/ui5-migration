@@ -1,4 +1,4 @@
-const semver = require('semver');
+const semver = require("semver");
 
 /**
  * Validates if target version and min version matches.
@@ -9,14 +9,14 @@ const semver = require('semver');
  * @returns {boolean} true if affected, otherwise false
  */
 export function matchesVersion(targetVersion, version): boolean {
-  return (
-    !targetVersion ||
-    targetVersion === 'latest' ||
-    !version ||
-    (semver.valid(targetVersion) &&
-      (semver.valid(version) || semver.validRange(version)) &&
-      semver.satisfies(targetVersion, version))
-  );
+	return (
+		!targetVersion ||
+		targetVersion === "latest" ||
+		!version ||
+		(semver.valid(targetVersion) &&
+			(semver.valid(version) || semver.validRange(version)) &&
+			semver.satisfies(targetVersion, version))
+	);
 }
 
 /**
@@ -27,29 +27,29 @@ export function matchesVersion(targetVersion, version): boolean {
  * @returns {object}
  */
 export function filterVersionMatches(
-  oModules: object,
-  targetVersion: string
+	oModules: object,
+	targetVersion: string
 ): object {
-  const oModulesToApply = {};
+	const oModulesToApply = {};
 
-  Object.keys(oModules).forEach(sKey => {
-    const filteredModules = Object.keys(oModules[sKey])
-      .filter(
-        key =>
-          !oModules[sKey][key].version ||
-          matchesVersion(targetVersion, oModules[sKey][key].version)
-      )
-      .reduce((accumulator, key) => {
-        accumulator[key] = oModules[sKey][key];
-        return accumulator;
-      }, {});
+	Object.keys(oModules).forEach(sKey => {
+		const filteredModules = Object.keys(oModules[sKey])
+			.filter(
+				key =>
+					!oModules[sKey][key].version ||
+					matchesVersion(targetVersion, oModules[sKey][key].version)
+			)
+			.reduce((accumulator, key) => {
+				accumulator[key] = oModules[sKey][key];
+				return accumulator;
+			}, {});
 
-    if (Object.keys(filteredModules).length > 0) {
-      oModulesToApply[sKey] = filteredModules;
-    }
-  });
+		if (Object.keys(filteredModules).length > 0) {
+			oModulesToApply[sKey] = filteredModules;
+		}
+	});
 
-  return oModulesToApply;
+	return oModulesToApply;
 }
 
 /**
@@ -59,25 +59,25 @@ export function filterVersionMatches(
  * @param {string} targetVersion target version to check
  */
 export function filterMatchedModules(
-  oModules: object,
-  targetVersion: string
+	oModules: object,
+	targetVersion: string
 ): string[] {
-  const aModulesToApply = [];
-  Object.keys(oModules).forEach(sKey => {
-    const aMatchedReplacers = Object.keys(oModules[sKey])
-      .filter(
-        key =>
-          !oModules[sKey][key].version ||
-          matchesVersion(targetVersion, oModules[sKey][key].version)
-      )
-      .reduce((replacerAccumulator, key) => {
-        replacerAccumulator.push(oModules[sKey][key].functionName);
-        return replacerAccumulator;
-      }, []);
+	const aModulesToApply = [];
+	Object.keys(oModules).forEach(sKey => {
+		const aMatchedReplacers = Object.keys(oModules[sKey])
+			.filter(
+				key =>
+					!oModules[sKey][key].version ||
+					matchesVersion(targetVersion, oModules[sKey][key].version)
+			)
+			.reduce((replacerAccumulator, key) => {
+				replacerAccumulator.push(oModules[sKey][key].functionName);
+				return replacerAccumulator;
+			}, []);
 
-    aModulesToApply.push(...aMatchedReplacers);
-  });
-  return aModulesToApply;
+		aModulesToApply.push(...aMatchedReplacers);
+	});
+	return aModulesToApply;
 }
 
 /**
@@ -88,23 +88,26 @@ export function filterMatchedModules(
  * @param {object} targetObject which is merged with the matching modules
  */
 export function modifyNotMatchingModules(
-  oModule: object,
-  targetVersion: string,
-  targetObject: object
+	oModule: object,
+	targetVersion: string,
+	targetObject: object
 ): string[] {
-  const oModules = JSON.parse(JSON.stringify(oModule));
-  Object.keys(oModules).forEach(sKey => {
-    Object.keys(oModules[sKey])
-      .filter(
-        key =>
-          oModules[sKey][key].version &&
-          !matchesVersion(targetVersion, oModules[sKey][key].version)
-      )
-      .forEach(key => {
-        oModules[sKey][key] = Object.assign(oModules[sKey][key], targetObject);
-      });
-  });
-  return oModules;
+	const oModules = JSON.parse(JSON.stringify(oModule));
+	Object.keys(oModules).forEach(sKey => {
+		Object.keys(oModules[sKey])
+			.filter(
+				key =>
+					oModules[sKey][key].version &&
+					!matchesVersion(targetVersion, oModules[sKey][key].version)
+			)
+			.forEach(key => {
+				oModules[sKey][key] = Object.assign(
+					oModules[sKey][key],
+					targetObject
+				);
+			});
+	});
+	return oModules;
 }
 
 /**
@@ -115,21 +118,21 @@ export function modifyNotMatchingModules(
  * @returns {object} copy of the config with modules filtered by targetVersion
  */
 export function removeModulesNotMatchingTargetVersion(
-  oConfig: object,
-  targetVersion
+	oConfig: object,
+	targetVersion
 ) {
-  if (!oConfig) {
-    throw new Error('No config supplied for modification');
-  }
-  const oModifiedConfig = JSON.parse(JSON.stringify(oConfig));
-  if (Object.keys(oConfig).length === 0 || !targetVersion) {
-    return oModifiedConfig;
-  }
-  oModifiedConfig['modules'] = filterVersionMatches(
-    oModifiedConfig['modules'],
-    targetVersion
-  );
-  return oModifiedConfig;
+	if (!oConfig) {
+		throw new Error("No config supplied for modification");
+	}
+	const oModifiedConfig = JSON.parse(JSON.stringify(oConfig));
+	if (Object.keys(oConfig).length === 0 || !targetVersion) {
+		return oModifiedConfig;
+	}
+	oModifiedConfig["modules"] = filterVersionMatches(
+		oModifiedConfig["modules"],
+		targetVersion
+	);
+	return oModifiedConfig;
 }
 
 /**
@@ -142,25 +145,26 @@ export function removeModulesNotMatchingTargetVersion(
  * @returns {object} copy of the config with modules filtered by targetVersion
  */
 export function modifyModulesNotMatchingTargetVersion(
-  oConfig: object,
-  targetVersion,
-  targetModuleConfig: object,
-  targetReplacer?: { alias: string; file: string }
+	oConfig: object,
+	targetVersion,
+	targetModuleConfig: object,
+	targetReplacer?: {alias: string; file: string}
 ) {
-  if (!oConfig) {
-    throw new Error('No config supplied for modification');
-  }
-  const oModifiedConfig = JSON.parse(JSON.stringify(oConfig));
-  if (Object.keys(oConfig).length === 0 || !targetVersion) {
-    return oModifiedConfig;
-  }
-  oModifiedConfig['modules'] = modifyNotMatchingModules(
-    oModifiedConfig['modules'],
-    targetVersion,
-    targetModuleConfig
-  );
-  if (targetReplacer && !oModifiedConfig['replacers'][targetReplacer.alias]) {
-    oModifiedConfig['replacers'][targetReplacer.alias] = targetReplacer.file;
-  }
-  return oModifiedConfig;
+	if (!oConfig) {
+		throw new Error("No config supplied for modification");
+	}
+	const oModifiedConfig = JSON.parse(JSON.stringify(oConfig));
+	if (Object.keys(oConfig).length === 0 || !targetVersion) {
+		return oModifiedConfig;
+	}
+	oModifiedConfig["modules"] = modifyNotMatchingModules(
+		oModifiedConfig["modules"],
+		targetVersion,
+		targetModuleConfig
+	);
+	if (targetReplacer && !oModifiedConfig["replacers"][targetReplacer.alias]) {
+		oModifiedConfig["replacers"][targetReplacer.alias] =
+			targetReplacer.file;
+	}
+	return oModifiedConfig;
 }

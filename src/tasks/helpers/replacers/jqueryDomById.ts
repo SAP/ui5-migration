@@ -1,7 +1,7 @@
-import { Syntax } from 'esprima';
-import * as ESTree from 'estree';
-import * as recast from 'recast';
-import { ASTReplaceable, NodePath } from 'ui5-migration';
+import {Syntax} from "esprima";
+import * as ESTree from "estree";
+import * as recast from "recast";
+import {ASTReplaceable, NodePath} from "ui5-migration";
 
 const builders = recast.types.builders;
 
@@ -15,37 +15,40 @@ const builders = recast.types.builders;
  * @returns {void}
  */
 const replaceable: ASTReplaceable = {
-  replace(
-    node: NodePath,
-    name: string,
-    fnName: string,
-    oldModuleCall: string
-  ): void {
-    const oInsertionPoint = node.parentPath.parentPath.value;
-    const oInsertion = node.parentPath.value as ESTree.CallExpression;
+	replace(
+		node: NodePath,
+		name: string,
+		fnName: string,
+		oldModuleCall: string
+	): void {
+		const oInsertionPoint = node.parentPath.parentPath.value;
+		const oInsertion = node.parentPath.value as ESTree.CallExpression;
 
-    // CallExpression
-    if (oInsertion.type === Syntax.CallExpression) {
-      // jQuery(document.getElementById(args[0]))
-      const oNewCall = builders.callExpression(builders.identifier(name), [
-        builders.callExpression(
-          builders.memberExpression(
-            builders.identifier('document'),
-            builders.identifier('getElementById')
-          ),
-          [oInsertion.arguments[0]]
-        ),
-      ]);
+		// CallExpression
+		if (oInsertion.type === Syntax.CallExpression) {
+			// jQuery(document.getElementById(args[0]))
+			const oNewCall = builders.callExpression(
+				builders.identifier(name),
+				[
+					builders.callExpression(
+						builders.memberExpression(
+							builders.identifier("document"),
+							builders.identifier("getElementById")
+						),
+						[oInsertion.arguments[0]]
+					),
+				]
+			);
 
-      oInsertionPoint[node.parentPath.name] = oNewCall;
-    } else {
-      throw new Error(
-        'insertion is of type ' +
-          oInsertion.type +
-          '(supported are only Call-Expressions)'
-      );
-    }
-  },
+			oInsertionPoint[node.parentPath.name] = oNewCall;
+		} else {
+			throw new Error(
+				"insertion is of type " +
+					oInsertion.type +
+					"(supported are only Call-Expressions)"
+			);
+		}
+	},
 };
 
 module.exports = replaceable;

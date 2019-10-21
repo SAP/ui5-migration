@@ -1,7 +1,7 @@
-import { Syntax } from 'esprima';
-import * as recast from 'recast';
+import {Syntax} from "esprima";
+import * as recast from "recast";
 
-import { ASTReplaceable, NodePath } from 'ui5-migration';
+import {ASTReplaceable, NodePath} from "ui5-migration";
 
 const builders = recast.types.builders;
 
@@ -14,14 +14,14 @@ const builders = recast.types.builders;
  * @returns {void}
  */
 const replaceable: ASTReplaceable = {
-  replace(
-    node: NodePath,
-    name: string,
-    fnName: string,
-    oldModuleCall: string
-  ): void {
-    throw new Error('Ignore');
-  },
+	replace(
+		node: NodePath,
+		name: string,
+		fnName: string,
+		oldModuleCall: string
+	): void {
+		throw new Error("Ignore");
+	},
 };
 
 module.exports = replaceable;

@@ -1,6 +1,6 @@
-import { Syntax } from 'esprima';
-import * as recast from 'recast';
-import { ASTReplaceable, ASTReplaceableResult, NodePath } from 'ui5-migration';
+import {Syntax} from "esprima";
+import * as recast from "recast";
+import {ASTReplaceable, ASTReplaceableResult, NodePath} from "ui5-migration";
 
 const builders = recast.types.builders;
 
@@ -15,62 +15,62 @@ const builders = recast.types.builders;
  * @returns {void}
  */
 const replaceable: ASTReplaceable = {
-  replace(
-    node: NodePath,
-    name: string,
-    fnName: string,
-    oldModuleCall: string
-  ): ASTReplaceableResult | void {
-    const oInsertionPoint = node.parentPath.value;
-    const oInsertion = node.value;
-    const oNodeName = builders.identifier(name);
+	replace(
+		node: NodePath,
+		name: string,
+		fnName: string,
+		oldModuleCall: string
+	): ASTReplaceableResult | void {
+		const oInsertionPoint = node.parentPath.value;
+		const oInsertion = node.value;
+		const oNodeName = builders.identifier(name);
 
-    // arrays do not have a type
-    if (Array.isArray(oInsertionPoint)) {
-      oInsertionPoint[node.name] = oNodeName;
-      return;
-    }
+		// arrays do not have a type
+		if (Array.isArray(oInsertionPoint)) {
+			oInsertionPoint[node.name] = oNodeName;
+			return;
+		}
 
-    // CallExpression
-    if (oInsertion.type === Syntax.CallExpression) {
-      // e.g. jQuery(oElement).replaceWith(...);
-      oInsertion.callee = oNodeName;
-    } else if (oInsertionPoint.type === Syntax.CallExpression) {
-      oInsertionPoint.callee = oNodeName;
-    } else if (oInsertionPoint.type === Syntax.MemberExpression) {
-      oInsertionPoint.object = oNodeName;
-    } else if (oInsertionPoint.type === Syntax.VariableDeclarator) {
-      oInsertionPoint.init = oNodeName;
-    } else if (oInsertionPoint.type === Syntax.BinaryExpression) {
-      oInsertionPoint[node.name] = oNodeName;
-    } else if (oInsertionPoint.type === Syntax.AssignmentExpression) {
-      if (node.name === 'right') {
-        oInsertionPoint.right = oNodeName;
-      } else {
-        return {
-          modified: true,
-          addDependency: true,
-        }; // successfully handled, but do not remove dependency
-      }
-    } else if (oInsertionPoint.type === Syntax.NewExpression) {
-      oInsertionPoint.callee = oNodeName;
-    } else if (oInsertionPoint.type === Syntax.ConditionalExpression) {
-      oInsertionPoint[node.name] = oNodeName;
-    } else if (oInsertionPoint.type === Syntax.LogicalExpression) {
-      oInsertionPoint[node.name] = oNodeName;
-    } else if (oInsertionPoint.type === Syntax.UnaryExpression) {
-      oInsertionPoint[node.name] = oNodeName;
-    } else if (oInsertionPoint.type === Syntax.Property) {
-      oInsertionPoint[node.name] = oNodeName;
-    } else if (Array.isArray(oInsertionPoint)) {
-      oInsertionPoint[node.name] = oNodeName;
-    } else {
-      throw new Error(
-        'ModuleFunction: insertion is of an unsupported type ' +
-          oInsertionPoint.type
-      );
-    }
-  },
+		// CallExpression
+		if (oInsertion.type === Syntax.CallExpression) {
+			// e.g. jQuery(oElement).replaceWith(...);
+			oInsertion.callee = oNodeName;
+		} else if (oInsertionPoint.type === Syntax.CallExpression) {
+			oInsertionPoint.callee = oNodeName;
+		} else if (oInsertionPoint.type === Syntax.MemberExpression) {
+			oInsertionPoint.object = oNodeName;
+		} else if (oInsertionPoint.type === Syntax.VariableDeclarator) {
+			oInsertionPoint.init = oNodeName;
+		} else if (oInsertionPoint.type === Syntax.BinaryExpression) {
+			oInsertionPoint[node.name] = oNodeName;
+		} else if (oInsertionPoint.type === Syntax.AssignmentExpression) {
+			if (node.name === "right") {
+				oInsertionPoint.right = oNodeName;
+			} else {
+				return {
+					modified: true,
+					addDependency: true,
+				}; // successfully handled, but do not remove dependency
+			}
+		} else if (oInsertionPoint.type === Syntax.NewExpression) {
+			oInsertionPoint.callee = oNodeName;
+		} else if (oInsertionPoint.type === Syntax.ConditionalExpression) {
+			oInsertionPoint[node.name] = oNodeName;
+		} else if (oInsertionPoint.type === Syntax.LogicalExpression) {
+			oInsertionPoint[node.name] = oNodeName;
+		} else if (oInsertionPoint.type === Syntax.UnaryExpression) {
+			oInsertionPoint[node.name] = oNodeName;
+		} else if (oInsertionPoint.type === Syntax.Property) {
+			oInsertionPoint[node.name] = oNodeName;
+		} else if (Array.isArray(oInsertionPoint)) {
+			oInsertionPoint[node.name] = oNodeName;
+		} else {
+			throw new Error(
+				"ModuleFunction: insertion is of an unsupported type " +
+					oInsertionPoint.type
+			);
+		}
+	},
 };
 
 module.exports = replaceable;

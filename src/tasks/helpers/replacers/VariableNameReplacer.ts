@@ -1,7 +1,7 @@
-import { Syntax } from 'esprima';
-import * as ESTree from 'estree';
-import * as recast from 'recast';
-import { ASTReplaceable, NodePath } from 'ui5-migration';
+import {Syntax} from "esprima";
+import * as ESTree from "estree";
+import * as recast from "recast";
+import {ASTReplaceable, NodePath} from "ui5-migration";
 
 // const builders = recast.types.builders;
 
@@ -17,23 +17,25 @@ import { ASTReplaceable, NodePath } from 'ui5-migration';
  * @returns {void}
  */
 const replaceable: ASTReplaceable = {
-  replace(
-    node: NodePath,
-    name: string,
-    fnName: string,
-    oldModuleCall: string,
-    config: { newVariableName: string }
-  ): void {
-    const nodeValue = node.value;
+	replace(
+		node: NodePath,
+		name: string,
+		fnName: string,
+		oldModuleCall: string,
+		config: {newVariableName: string}
+	): void {
+		const nodeValue = node.value;
 
-    if (node.value.type === Syntax.Identifier) {
-      node.value.name = config.newVariableName;
-    } else {
-      throw new Error(
-        'rename of ' + node.value.type + ' (supported are only Identifiers)'
-      );
-    }
-  },
+		if (node.value.type === Syntax.Identifier) {
+			node.value.name = config.newVariableName;
+		} else {
+			throw new Error(
+				"rename of " +
+					node.value.type +
+					" (supported are only Identifiers)"
+			);
+		}
+	},
 };
 
 module.exports = replaceable;

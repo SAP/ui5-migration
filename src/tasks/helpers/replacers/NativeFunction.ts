@@ -1,6 +1,6 @@
-import { Syntax } from 'esprima';
-import * as recast from 'recast';
-import { ASTReplaceable, NodePath } from 'ui5-migration';
+import {Syntax} from "esprima";
+import * as recast from "recast";
+import {ASTReplaceable, NodePath} from "ui5-migration";
 
 const builders = recast.types.builders;
 
@@ -15,25 +15,25 @@ const builders = recast.types.builders;
  * @returns {void}
  */
 const replaceable: ASTReplaceable = {
-  replace(
-    node: NodePath,
-    name: string,
-    fnName: string,
-    oldModuleCall: string
-  ): void {
-    const oInsertionPoint = node.parentPath.value;
+	replace(
+		node: NodePath,
+		name: string,
+		fnName: string,
+		oldModuleCall: string
+	): void {
+		const oInsertionPoint = node.parentPath.value;
 
-    // CallExpression
-    if (oInsertionPoint.type === Syntax.CallExpression) {
-      oInsertionPoint.callee = builders.identifier(fnName);
-    } else {
-      throw new Error(
-        'insertion is of type ' +
-          oInsertionPoint.type +
-          '(supported are only Call-Expressions)'
-      );
-    }
-  },
+		// CallExpression
+		if (oInsertionPoint.type === Syntax.CallExpression) {
+			oInsertionPoint.callee = builders.identifier(fnName);
+		} else {
+			throw new Error(
+				"insertion is of type " +
+					oInsertionPoint.type +
+					"(supported are only Call-Expressions)"
+			);
+		}
+	},
 };
 
 module.exports = replaceable;

@@ -1,29 +1,29 @@
 {
-	"extends": "./node_modules/gts/tsconfig-google.json",
-	"compilerOptions": {
-		"module": "commonjs",
-		"allowUnreachableCode": false,
-		"outDir": "js",
-		"sourceMap": true,
-		"mapRoot": "js",
-		"target": "es2017",
-		"newLine": "lf",
-		"strict": false,
-		"noImplicitReturns": true,
-		"resolveJsonModule": true,
-		"typeRoots": [
-			"typings",
-			"node_modules/@types"
-		]
-	},
-	"include": [
-		"typings/*.ts",
-		"src/*.ts",
-		"src/**/*.ts",
-		"test/*.ts",
-		"test/**/*.ts"
-	],
-	"exclude": [
-		"node_modules"
-	]
+  "extends": "./node_modules/gts/tsconfig-google.json",
+  "compilerOptions": {
+    "module": "commonjs",
+    "allowUnreachableCode": false,
+    "outDir": "js",
+    "sourceMap": true,
+    "mapRoot": "js",
+    "target": "es2017",
+    "newLine": "lf",
+    "strict": false,
+    "noImplicitReturns": true,
+    "resolveJsonModule": true,
+    "typeRoots": [
+      "typings",
+      "node_modules/@types"
+    ]
+  },
+  "include": [
+    "typings/*.ts",
+    "src/*.ts",
+    "src/**/*.ts",
+    "test/*.ts",
+    "test/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }

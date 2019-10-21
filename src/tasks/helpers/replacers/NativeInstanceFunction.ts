@@ -1,8 +1,8 @@
-import { Syntax } from 'esprima';
-import * as ESTree from 'estree';
-import * as recast from 'recast';
+import {Syntax} from "esprima";
+import * as ESTree from "estree";
+import * as recast from "recast";
 
-import { ASTReplaceable, NodePath } from 'ui5-migration';
+import {ASTReplaceable, NodePath} from "ui5-migration";
 
 const builders = recast.types.builders;
 
@@ -18,40 +18,40 @@ const builders = recast.types.builders;
  * @returns {void}
  */
 const replaceable: ASTReplaceable = {
-  replace(
-    node: NodePath,
-    name: string,
-    fnName: string,
-    oldModuleCall: string
-  ): void {
-    const oNodeParent = node.parentPath;
-    const oInsertionPoint = oNodeParent.value;
-    const oInsertion = node.value;
+	replace(
+		node: NodePath,
+		name: string,
+		fnName: string,
+		oldModuleCall: string
+	): void {
+		const oNodeParent = node.parentPath;
+		const oInsertionPoint = oNodeParent.value;
+		const oInsertion = node.value;
 
-    // CallExpression
-    // MyModule.myFunction()
-    const bReplaced = false;
-    if (oInsertionPoint.type === Syntax.CallExpression) {
-      const aArgs = oInsertionPoint.arguments;
-      const name = aArgs[0] as ESTree.Expression;
-      const newCallee = builders.memberExpression(
-        name,
-        builders.identifier(fnName),
-        false
-      );
-      const arg = aArgs[1];
-      oInsertionPoint.callee = newCallee;
-      oInsertionPoint.arguments = aArgs.splice(1);
-      // MemberExpression
-      // MyModule.myField
-    } else {
-      throw new Error(
-        'insertion is of type ' +
-          oInsertionPoint.type +
-          '(supported are only Call-Expressions)'
-      );
-    }
-  },
+		// CallExpression
+		// MyModule.myFunction()
+		const bReplaced = false;
+		if (oInsertionPoint.type === Syntax.CallExpression) {
+			const aArgs = oInsertionPoint.arguments;
+			const name = aArgs[0] as ESTree.Expression;
+			const newCallee = builders.memberExpression(
+				name,
+				builders.identifier(fnName),
+				false
+			);
+			const arg = aArgs[1];
+			oInsertionPoint.callee = newCallee;
+			oInsertionPoint.arguments = aArgs.splice(1);
+			// MemberExpression
+			// MyModule.myField
+		} else {
+			throw new Error(
+				"insertion is of type " +
+					oInsertionPoint.type +
+					"(supported are only Call-Expressions)"
+			);
+		}
+	},
 };
 
 module.exports = replaceable;

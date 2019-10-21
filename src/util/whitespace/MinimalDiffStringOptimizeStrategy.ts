@@ -1,7 +1,7 @@
-import { Reporter } from '../../reporter/Reporter';
+import {Reporter} from "../../reporter/Reporter";
 
-import { AstStringOptimizeStrategy } from './AstStringOptimizeStrategy';
-import { DiffStringOptimizeStrategy } from './DiffStringOptimizeStrategy';
+import {AstStringOptimizeStrategy} from "./AstStringOptimizeStrategy";
+import {DiffStringOptimizeStrategy} from "./DiffStringOptimizeStrategy";
 
 /**
  * Greedy algorithm which focuses on the most minimal DIFF.
@@ -9,20 +9,20 @@ import { DiffStringOptimizeStrategy } from './DiffStringOptimizeStrategy';
  * function will not cause indentation
  */
 export class MinimalDiffStringOptimizeStrategy
-  implements StringOptimizeStrategy {
-  private reporter: Reporter;
+	implements StringOptimizeStrategy {
+	private reporter: Reporter;
 
-  constructor(reporter?: Reporter) {
-    this.reporter = reporter;
-  }
+	constructor(reporter?: Reporter) {
+		this.reporter = reporter;
+	}
 
-  async optimizeString(original: string, modified: string): Promise<string> {
-    const optimized = await new DiffStringOptimizeStrategy(
-      this.reporter
-    ).optimizeString(original, modified);
-    return new AstStringOptimizeStrategy(this.reporter).optimizeString(
-      original,
-      optimized
-    );
-  }
+	async optimizeString(original: string, modified: string): Promise<string> {
+		const optimized = await new DiffStringOptimizeStrategy(
+			this.reporter
+		).optimizeString(original, modified);
+		return new AstStringOptimizeStrategy(this.reporter).optimizeString(
+			original,
+			optimized
+		);
+	}
 }
