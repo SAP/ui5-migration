@@ -43,7 +43,6 @@ function isRendererDefined(defineCall: SapUiDefineCall): RendererDefinition {
 	// Pass 1: determine shortcut variables and module export (return value)
 	defineCall.factory.body.body.forEach(stmt => {
 		if (stmt.type === Syntax.VariableDeclaration) {
-			// @ts-ignore
 			stmt.declarations.forEach(decl => {
 				if (decl.id.type === Syntax.Identifier && decl.init &&
 					decl.init.type === Syntax.CallExpression &&
@@ -65,9 +64,7 @@ function isRendererDefined(defineCall: SapUiDefineCall): RendererDefinition {
 				}
 			});
 		} else if (stmt.type === Syntax.ReturnStatement) {
-			// @ts-ignore
 			if (stmt.argument && stmt.argument.type === Syntax.Identifier) {
-				// @ts-ignore
 				exportName = stmt.argument.name;
 				if (classDefinitions[exportName] &&
 					classDefinitions[exportName].properties) {

@@ -307,9 +307,9 @@ function findImportByCall(mImports: ImportMap, sName: string) {
  */
 const GLOBALS = "GLOBALS";
 
-type ModuleTree = {
-	[name: string]: ModuleTree
-};
+interface ModuleTree {
+	[name: string]: ModuleTree;
+}
 
 interface ImportConfig {
 	newVariableName: string;
@@ -329,8 +329,8 @@ interface ImportInfo {
 	parentName?: string;
 	replacer?: string;
 }
-type ImportMap = {
-	[oldImport: string]: ImportInfo
+interface ImportMap {
+	[oldImport: string]: ImportInfo;
 };
 
 interface ReplaceGlobalsAnalysis {

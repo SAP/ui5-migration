@@ -20,7 +20,7 @@ export class MinimalDiffStringOptimizeStrategy implements
 	async optimizeString(original: string, modified: string): Promise<string> {
 		const optimized = await new DiffStringOptimizeStrategy(this.reporter)
 							  .optimizeString(original, modified);
-		return await new AstStringOptimizeStrategy(this.reporter)
+		return new AstStringOptimizeStrategy(this.reporter)
 			.optimizeString(original, optimized);
 	}
 }
