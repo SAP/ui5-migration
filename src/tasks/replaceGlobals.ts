@@ -331,7 +331,7 @@ interface ImportInfo {
 }
 interface ImportMap {
 	[oldImport: string]: ImportInfo;
-};
+}
 
 interface ReplaceGlobalsAnalysis {
 	defineCall: SapUiDefineCall;
