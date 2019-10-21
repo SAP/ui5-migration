@@ -1,6 +1,6 @@
-import {Syntax} from "esprima";
-import * as recast from "recast";
-import {ASTReplaceable, NodePath} from "ui5-migration";
+import { Syntax } from 'esprima';
+import * as recast from 'recast';
+import { ASTReplaceable, NodePath } from 'ui5-migration';
 
 const builders = recast.types.builders;
 /**
@@ -13,29 +13,34 @@ const builders = recast.types.builders;
  * @returns {void}
  */
 const replaceable: ASTReplaceable = {
+  replace(
+    node: NodePath,
+    name: string,
+    fnName: string,
+    oldModuleCall: string
+  ): void {
+    const oInsertionPoint = node.parentPath.value;
+    const oInsertion = node.value;
 
-	replace(
-		node: NodePath, name: string, fnName: string, oldModuleCall: string) :
-		void {
-			const oInsertionPoint = node.parentPath.value;
-			const oInsertion = node.value;
-
-			// CallExpression
-			if (oInsertion.type === Syntax.MemberExpression) {
-				const oBinaryExpression = builders.binaryExpression(
-					">=",
-					builders.memberExpression(
-						builders.identifier("window"),
-						builders.identifier("devicePixelRatio")),
-					builders.literal(2));
-				oInsertionPoint[node.name] = oBinaryExpression;
-
-			} else {
-				throw new Error(
-					"insertion is of type " + oInsertion.type +
-					"(supported are only Call-Expressions)");
-			}
-		}
+    // CallExpression
+    if (oInsertion.type === Syntax.MemberExpression) {
+      const oBinaryExpression = builders.binaryExpression(
+        '>=',
+        builders.memberExpression(
+          builders.identifier('window'),
+          builders.identifier('devicePixelRatio')
+        ),
+        builders.literal(2)
+      );
+      oInsertionPoint[node.name] = oBinaryExpression;
+    } else {
+      throw new Error(
+        'insertion is of type ' +
+          oInsertion.type +
+          '(supported are only Call-Expressions)'
+      );
+    }
+  },
 };
 
 module.exports = replaceable;

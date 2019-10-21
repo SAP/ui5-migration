@@ -1,7 +1,7 @@
-import {Syntax} from "esprima";
-import * as ESTree from "estree";
-import * as recast from "recast";
-import {ASTReplaceable, NodePath} from "ui5-migration";
+import { Syntax } from 'esprima';
+import * as ESTree from 'estree';
+import * as recast from 'recast';
+import { ASTReplaceable, NodePath } from 'ui5-migration';
 
 const builders = recast.types.builders;
 
@@ -15,29 +15,38 @@ const builders = recast.types.builders;
  * @returns {void}
  */
 const replaceable: ASTReplaceable = {
+  replace(
+    node: NodePath,
+    name: string,
+    fnName: string,
+    oldModuleCall: string
+  ): void {
+    const oInsertionPoint = node.parentPath.value;
 
-	replace(
-		node: NodePath, name: string, fnName: string,
-		oldModuleCall: string) : void {
-		const oInsertionPoint = node.parentPath.value;
-
-		// CallExpression
-		if (oInsertionPoint.type === Syntax.CallExpression) {
-			oInsertionPoint.callee = builders.memberExpression(
-				builders.identifier(name), builders.identifier(fnName));
-			if (oInsertionPoint.arguments[0] &&
-				oInsertionPoint.arguments[0].type !== Syntax.ObjectExpression) {
-				oInsertionPoint.arguments[0] = builders.logicalExpression(
-					"||", oInsertionPoint.arguments[0] as ESTree.Expression,
-					builders.identifier("null"));
-			}
-
-		} else {
-			throw new Error(
-				"insertion is of type " + oInsertionPoint.type +
-				"(supported are only Call-Expressions)");
-		}
-	}
+    // CallExpression
+    if (oInsertionPoint.type === Syntax.CallExpression) {
+      oInsertionPoint.callee = builders.memberExpression(
+        builders.identifier(name),
+        builders.identifier(fnName)
+      );
+      if (
+        oInsertionPoint.arguments[0] &&
+        oInsertionPoint.arguments[0].type !== Syntax.ObjectExpression
+      ) {
+        oInsertionPoint.arguments[0] = builders.logicalExpression(
+          '||',
+          oInsertionPoint.arguments[0] as ESTree.Expression,
+          builders.identifier('null')
+        );
+      }
+    } else {
+      throw new Error(
+        'insertion is of type ' +
+          oInsertionPoint.type +
+          '(supported are only Call-Expressions)'
+      );
+    }
+  },
 };
 
 module.exports = replaceable;

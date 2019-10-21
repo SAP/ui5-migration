@@ -1,11 +1,14 @@
-import {Syntax} from "esprima";
-import * as ESTree from "estree";
-import * as recast from "recast";
-import {NodePath} from "ui5-migration";
+import { Syntax } from 'esprima';
+import * as ESTree from 'estree';
+import * as recast from 'recast';
+import { NodePath } from 'ui5-migration';
 
-import {EMPTY_FINDER_RESULT, Finder, FinderResult} from "../../../dependencies";
-import {SapUiDefineCall} from "../../../util/SapUiDefineCall";
-
+import {
+  EMPTY_FINDER_RESULT,
+  Finder,
+  FinderResult,
+} from '../../../dependencies';
+import { SapUiDefineCall } from '../../../util/SapUiDefineCall';
 
 /**
  * Finds the following 2 occurrences where: ":sapTabbable" is the first argument
@@ -17,17 +20,19 @@ import {SapUiDefineCall} from "../../../util/SapUiDefineCall";
  * </code>
  */
 class JQueryDOMVariableNameFinder implements Finder {
-	find(
-		node: ESTree.Node, config: { variableNameToFind: string },
-		sConfigName: string, defineCall: SapUiDefineCall): FinderResult {
-		const sNameToFind = config.variableNameToFind;
+  find(
+    node: ESTree.Node,
+    config: { variableNameToFind: string },
+    sConfigName: string,
+    defineCall: SapUiDefineCall
+  ): FinderResult {
+    const sNameToFind = config.variableNameToFind;
 
-
-		if (node.type === Syntax.Identifier && node.name === sNameToFind) {
-			return { configName : sConfigName };
-		}
-		return EMPTY_FINDER_RESULT;
-	}
+    if (node.type === Syntax.Identifier && node.name === sNameToFind) {
+      return { configName: sConfigName };
+    }
+    return EMPTY_FINDER_RESULT;
+  }
 }
 
 /**

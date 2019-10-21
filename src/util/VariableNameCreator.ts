@@ -1,39 +1,94 @@
-import * as globals from "globals";
+import * as globals from 'globals';
 
 const rAllowedStartCharacter = /^[A-Za-z_]/;
 const rInvalidChars = /[^A-Za-z0-9_]/g;
 const reservedJSLanguageKeywords = [
-	"abstract",		"arguments", "await",	"boolean",	"break",
-	"byte",			"case",		 "catch",	"char",	   "class",
-	"const",		"continue",  "debugger", "default",	"delete",
-	"do",			"double",	"else",	 "enum",	   "eval",
-	"export",		"extends",   "false",	"final",	  "finally",
-	"float",		"for",		 "function", "goto",	   "if",
-	"implements",   "import",	"in",		 "instanceof", "int",
-	"interface",	"let",		 "long",	 "native",	 "new",
-	"null",			"package",   "private",  "protected",  "public",
-	"return",		"short",	 "static",   "super",	  "switch",
-	"synchronized", "this",		 "throw",	"throws",	 "transient",
-	"true",			"try",		 "typeof",   "var",		   "void",
-	"volatile",		"while",	 "with",	 "yield"
+  'abstract',
+  'arguments',
+  'await',
+  'boolean',
+  'break',
+  'byte',
+  'case',
+  'catch',
+  'char',
+  'class',
+  'const',
+  'continue',
+  'debugger',
+  'default',
+  'delete',
+  'do',
+  'double',
+  'else',
+  'enum',
+  'eval',
+  'export',
+  'extends',
+  'false',
+  'final',
+  'finally',
+  'float',
+  'for',
+  'function',
+  'goto',
+  'if',
+  'implements',
+  'import',
+  'in',
+  'instanceof',
+  'int',
+  'interface',
+  'let',
+  'long',
+  'native',
+  'new',
+  'null',
+  'package',
+  'private',
+  'protected',
+  'public',
+  'return',
+  'short',
+  'static',
+  'super',
+  'switch',
+  'synchronized',
+  'this',
+  'throw',
+  'throws',
+  'transient',
+  'true',
+  'try',
+  'typeof',
+  'var',
+  'void',
+  'volatile',
+  'while',
+  'with',
+  'yield',
 ];
-const sapReservedKeywords = [ "sap" ];
+const sapReservedKeywords = ['sap'];
 
 const reservedBrowserTypes = Object.keys(globals.browser);
 const reservedNativeTypes = Object.keys(globals.builtin);
 
 export function getUniqueParameterName(
-	aUsedVariables: string[], sName: string) {
-	return getUniqueName(aUsedVariables, sName);
+  aUsedVariables: string[],
+  sName: string
+) {
+  return getUniqueName(aUsedVariables, sName);
 }
 
 const getUniqueNameDecapitalized = function(
-	aUsedVariables: string[], sName: string) {
-	return getUniqueName(aUsedVariables, sName, true);
+  aUsedVariables: string[],
+  sName: string
+) {
+  return getUniqueName(aUsedVariables, sName, true);
 };
 
 const isLowerCase = function(sChar) {
-	return sChar === sChar.toLowerCase();
+  return sChar === sChar.toLowerCase();
 };
 
 /**
@@ -42,7 +97,7 @@ const isLowerCase = function(sChar) {
  * @param sName
  */
 const isUnique = function(aUsedVariables: string[], sName: string): boolean {
-	return !aUsedVariables.includes(sName) && !isReservedWord(sName);
+  return !aUsedVariables.includes(sName) && !isReservedWord(sName);
 };
 
 /**
@@ -52,14 +107,15 @@ const isUnique = function(aUsedVariables: string[], sName: string): boolean {
  * @returns whether or not the name is a valid candidate
  */
 const isValidIdentifierName = function(
-	aUsedVariables: string[], sName: string) {
-	return rAllowedStartCharacter.test(sName) &&
-		isUnique(aUsedVariables, sName);
+  aUsedVariables: string[],
+  sName: string
+) {
+  return rAllowedStartCharacter.test(sName) && isUnique(aUsedVariables, sName);
 };
 
 const replaceInvalidCharacters = function(sName) {
-	sName = camelize(sName);
-	return sName.replace(rInvalidChars, "_");
+  sName = camelize(sName);
+  return sName.replace(rInvalidChars, '_');
 };
 
 /**
@@ -72,37 +128,39 @@ const replaceInvalidCharacters = function(sName) {
  * @returns unique variable name which is neither reserved nor taken
  */
 const getUniqueName = function(
-	aUsedVariables: string[], sName: string,
-	createLowercaseVariableName?: boolean): string {
-	// split the name and reverse, e.g. ["Date", "type", "model", "ui", "sap"]
-	const aNameSplitted = sName.split(".").reverse();
-	let sResultName = "";
-	const bCreateLowercaseVariableName =
-		createLowercaseVariableName || isLowerCase(aNameSplitted[0].charAt(0));
+  aUsedVariables: string[],
+  sName: string,
+  createLowercaseVariableName?: boolean
+): string {
+  // split the name and reverse, e.g. ["Date", "type", "model", "ui", "sap"]
+  const aNameSplitted = sName.split('.').reverse();
+  let sResultName = '';
+  const bCreateLowercaseVariableName =
+    createLowercaseVariableName || isLowerCase(aNameSplitted[0].charAt(0));
 
-	// make use of the whole namespace before applying prefix
-	for (let i = 0; i < aNameSplitted.length; i++) {
-		// concatenate name
-		sResultName = replaceInvalidCharacters(aNameSplitted[i]) +
-			capitalize(sResultName);
+  // make use of the whole namespace before applying prefix
+  for (let i = 0; i < aNameSplitted.length; i++) {
+    // concatenate name
+    sResultName =
+      replaceInvalidCharacters(aNameSplitted[i]) + capitalize(sResultName);
 
-		const candidate = bCreateLowercaseVariableName ?
-			decapitalize(sResultName) :
-			capitalize(sResultName);
+    const candidate = bCreateLowercaseVariableName
+      ? decapitalize(sResultName)
+      : capitalize(sResultName);
 
-		// check if candidate is valid
-		if (isValidIdentifierName(aUsedVariables, candidate)) {
-			return candidate;
-		}
-	}
+    // check if candidate is valid
+    if (isValidIdentifierName(aUsedVariables, candidate)) {
+      return candidate;
+    }
+  }
 
-	// add prefix to make it unique
-	const prefixCharacter = bCreateLowercaseVariableName ? "o" : "O";
-	while (!isValidIdentifierName(aUsedVariables, sResultName)) {
-		sResultName = prefixCharacter + capitalize(sResultName);
-	}
+  // add prefix to make it unique
+  const prefixCharacter = bCreateLowercaseVariableName ? 'o' : 'O';
+  while (!isValidIdentifierName(aUsedVariables, sResultName)) {
+    sResultName = prefixCharacter + capitalize(sResultName);
+  }
 
-	return sResultName;
+  return sResultName;
 };
 
 /**
@@ -115,14 +173,16 @@ const getUniqueName = function(
  * @returns A unique variable name starting with a lowercase character
  */
 export function getUniqueVariableName(aUsedVariables: string[], sName: string) {
-	return getUniqueNameDecapitalized(aUsedVariables, sName);
+  return getUniqueNameDecapitalized(aUsedVariables, sName);
 }
 
 const isReservedWord = function(sVariableName: string) {
-	return reservedJSLanguageKeywords.includes(sVariableName) ||
-		sapReservedKeywords.includes(sVariableName) ||
-		reservedBrowserTypes.includes(sVariableName) ||
-		reservedNativeTypes.includes(sVariableName);
+  return (
+    reservedJSLanguageKeywords.includes(sVariableName) ||
+    sapReservedKeywords.includes(sVariableName) ||
+    reservedBrowserTypes.includes(sVariableName) ||
+    reservedNativeTypes.includes(sVariableName)
+  );
 };
 
 /**
@@ -130,10 +190,10 @@ const isReservedWord = function(sVariableName: string) {
  * @returns {string} first character being upper case, e.g. "Asd"
  */
 const capitalize = function(str: string): string {
-	if (str.length < 1) {
-		return "";
-	}
-	return str[0].toUpperCase() + str.substring(1);
+  if (str.length < 1) {
+    return '';
+  }
+  return str[0].toUpperCase() + str.substring(1);
 };
 
 /**
@@ -141,13 +201,13 @@ const capitalize = function(str: string): string {
  * @returns {string} every character after the dash is uppercase and dash gets removed, e.g. "asdFgh"
  */
 const camelize = function(str: string): string {
-	if (str.includes("-")) {
-		const rCamelCase = /-(.)/ig;
-		return str.replace(rCamelCase, function(sMatch, sChar) {
-			return sChar.toUpperCase();
-		});
-	}
-	return str;
+  if (str.includes('-')) {
+    const rCamelCase = /-(.)/gi;
+    return str.replace(rCamelCase, function(sMatch, sChar) {
+      return sChar.toUpperCase();
+    });
+  }
+  return str;
 };
 
 /**
@@ -155,8 +215,8 @@ const camelize = function(str: string): string {
  * @returns {string} first character being lower case, e.g. "aSD"
  */
 const decapitalize = function(str: string): string {
-	if (str.length < 1) {
-		return "";
-	}
-	return str[0].toLowerCase() + str.substring(1);
+  if (str.length < 1) {
+    return '';
+  }
+  return str[0].toLowerCase() + str.substring(1);
 };

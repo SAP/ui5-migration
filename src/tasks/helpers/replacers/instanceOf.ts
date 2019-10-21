@@ -1,7 +1,7 @@
-import {Syntax} from "esprima";
-import * as ESTree from "estree";
-import * as recast from "recast";
-import {ASTReplaceable, NodePath} from "ui5-migration";
+import { Syntax } from 'esprima';
+import * as ESTree from 'estree';
+import * as recast from 'recast';
+import { ASTReplaceable, NodePath } from 'ui5-migration';
 
 const builders = recast.types.builders;
 
@@ -16,26 +16,33 @@ const builders = recast.types.builders;
  * @returns {void}
  */
 const replaceable: ASTReplaceable = {
+  replace(
+    node: NodePath,
+    name: string,
+    fnName: string,
+    oldModuleCall: string
+  ): void {
+    const oInsertionPoint = node.parentPath.parentPath.value;
+    const oInsertion = node.parentPath.value;
 
-	replace(
-		node: NodePath, name: string, fnName: string, oldModuleCall: string) :
-		void {
-			const oInsertionPoint = node.parentPath.parentPath.value;
-			const oInsertion = node.parentPath.value;
+    // CallExpression
+    if (oInsertion.type === Syntax.CallExpression) {
+      const aArgs = oInsertionPoint[node.parentPath.name].arguments;
+      const ident = builders.identifier(name);
 
-			// CallExpression
-			if (oInsertion.type === Syntax.CallExpression) {
-				const aArgs = oInsertionPoint[node.parentPath.name].arguments;
-				const ident = builders.identifier(name);
-
-				oInsertionPoint[node.parentPath.name] =
-					builders.binaryExpression("instanceof", aArgs[0], ident);
-			} else {
-				throw new Error(
-					"insertion is of type " + oInsertion.type +
-					"(supported are only Call-Expressions)");
-			}
-		}
+      oInsertionPoint[node.parentPath.name] = builders.binaryExpression(
+        'instanceof',
+        aArgs[0],
+        ident
+      );
+    } else {
+      throw new Error(
+        'insertion is of type ' +
+          oInsertion.type +
+          '(supported are only Call-Expressions)'
+      );
+    }
+  },
 };
 
 module.exports = replaceable;

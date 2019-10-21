@@ -1,5 +1,5 @@
-import * as recast from "recast";
-import {ASTReplaceable, NodePath} from "ui5-migration";
+import * as recast from 'recast';
+import { ASTReplaceable, NodePath } from 'ui5-migration';
 
 const builders = recast.types.builders;
 /**
@@ -12,14 +12,17 @@ const builders = recast.types.builders;
  * @returns {void}
  */
 const replaceable: ASTReplaceable = {
-
-	replace(
-		node: NodePath, name: string, fnName: string, oldModuleCall: string) :
-		void {
-			const sText = "(function() {})";
-			node.parentPath.value[node.name] =
-				recast.parse(sText).program.body["0"].expression;
-		}
+  replace(
+    node: NodePath,
+    name: string,
+    fnName: string,
+    oldModuleCall: string
+  ): void {
+    const sText = '(function() {})';
+    node.parentPath.value[node.name] = recast.parse(sText).program.body[
+      '0'
+    ].expression;
+  },
 };
 
 module.exports = replaceable;

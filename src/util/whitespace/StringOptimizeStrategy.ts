@@ -1,8 +1,8 @@
 interface StringOptimizeStrategy {
-	/**
-	 *
-	 * @param original
-	 * @param modified
-	 */
-	optimizeString(original: string, modified: string): Promise<string>;
+  /**
+   *
+   * @param original
+   * @param modified
+   */
+  optimizeString(original: string, modified: string): Promise<string>;
 }
