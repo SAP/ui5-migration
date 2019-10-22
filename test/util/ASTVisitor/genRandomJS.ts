@@ -34,19 +34,50 @@ export function genRandomJS(minNodes) {
 			"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_";
 		const ALPHABET = FIRST_ALPHABET + "0123456789";
 		const PROHIBITED = [
-			"var",		 "function", "while",   "do",	 "for",	   "let",
-			"const",	 "class",	"new",		"Array",  "return",	"switch",
-			"case",		 "if",		 "else",	"try",	"catch",	 "throw",
-			"break",	 "continue", "default", "delete", "false",	 "true",
-			"goto",		 "finally",  "in",		"typeof", "yield",	 "await",
-			"arguments", "volatile", "static",  "null",   "undefined", "eval"
+			"var",
+			"function",
+			"while",
+			"do",
+			"for",
+			"let",
+			"const",
+			"class",
+			"new",
+			"Array",
+			"return",
+			"switch",
+			"case",
+			"if",
+			"else",
+			"try",
+			"catch",
+			"throw",
+			"break",
+			"continue",
+			"default",
+			"delete",
+			"false",
+			"true",
+			"goto",
+			"finally",
+			"in",
+			"typeof",
+			"yield",
+			"await",
+			"arguments",
+			"volatile",
+			"static",
+			"null",
+			"undefined",
+			"eval",
 		];
 
 		minNodes--;
 		let candidate;
 		do {
-			candidate = randOfStr(FIRST_ALPHABET) +
-				randArr(0, 5, (i) => randOfStr(ALPHABET)).join("");
+			candidate =
+				randOfStr(FIRST_ALPHABET) +
+				randArr(0, 5, i => randOfStr(ALPHABET)).join("");
 		} while (PROHIBITED.indexOf(candidate) >= 0);
 		return candidate;
 	}
@@ -54,20 +85,22 @@ export function genRandomJS(minNodes) {
 	function genSimpleValue() {
 		minNodes--;
 		switch (randInt(0, 4)) {
-			case (0):
+			case 0:
 				return randInt(-1000000, 1000000).toString();
-			case (1):
-				return "\"" +
-					randArr(1, 5, (i) => String.fromCharCode(randInt(32, 127)))
-						.filter((a) => a !== "\"" && a !== "\\")
+			case 1:
+				return (
+					'"' +
+					randArr(1, 5, i => String.fromCharCode(randInt(32, 127)))
+						.filter(a => a !== '"' && a !== "\\")
 						.join("") +
-					"\"";
-			case (2):
+					'"'
+				);
+			case 2:
 				minNodes++;
 				return genIdentifier();
-			case (3):
+			case 3:
 				return "null";
-			case (4):
+			case 4:
 				return Math.random() > 0.5 ? "true" : "false";
 			default:
 				return "false";
@@ -80,7 +113,7 @@ export function genRandomJS(minNodes) {
 			return genSimpleValue();
 		} else {
 			// array
-			const aElements = randArr(0, 5, (i) => genSimpleValue());
+			const aElements = randArr(0, 5, i => genSimpleValue());
 			minNodes -= 2;
 			return "[" + aElements.join(", ") + "]";
 		}
@@ -88,24 +121,50 @@ export function genRandomJS(minNodes) {
 
 	function genExpression() {
 		const BIN_OPS = [
-			"+", "-", "*", "/", "%", "|", "||", "&", "&&",
-			"==", ">=", "<=", "<", ">", "<<", ">>", "!=", "===", "!=="
+			"+",
+			"-",
+			"*",
+			"/",
+			"%",
+			"|",
+			"||",
+			"&",
+			"&&",
+			"==",
+			">=",
+			"<=",
+			"<",
+			">",
+			"<<",
+			">>",
+			"!=",
+			"===",
+			"!==",
 		];
-		const UN_OPS = [ "!", "-", "~" ];
+		const UN_OPS = ["!", "-", "~"];
 		switch (randInt(0, 3)) {
-			case (0):
+			case 0:
 				return genValue();
-			case (1):
+			case 1:
 				minNodes--;
-				return genSimpleValue() + " " + randOf(BIN_OPS) + " " +
-					genSimpleValue();
-			case (2):
+				return (
+					genSimpleValue() +
+					" " +
+					randOf(BIN_OPS) +
+					" " +
+					genSimpleValue()
+				);
+			case 2:
 				minNodes--;
 				return randOf(UN_OPS) + genSimpleValue();
-			case (3):
+			case 3:
 				minNodes -= 2;
-				return genIdentifier() + "(" +
-					randArr(0, 5, (i) => genSimpleValue()).join(", ") + ")";
+				return (
+					genIdentifier() +
+					"(" +
+					randArr(0, 5, i => genSimpleValue()).join(", ") +
+					")"
+				);
 			default:
 				return genValue();
 		}
@@ -113,11 +172,12 @@ export function genRandomJS(minNodes) {
 
 	function genBlockStatement() {
 		minNodes -= 2;
-		return "{" + randArr(1, 5, (i) => genStatement()).join("\n") + "}";
+		return "{" + randArr(1, 5, i => genStatement()).join("\n") + "}";
 	}
 
 	function genStatement() {
-		if (Math.random() < 0.66) {  // Prefer shorter statements
+		if (Math.random() < 0.66) {
+			// Prefer shorter statements
 			if (Math.random() < 0.5) {
 				// Expression statements
 				minNodes--;
@@ -125,36 +185,41 @@ export function genRandomJS(minNodes) {
 			} else {
 				// variable declaration
 				minNodes--;
-				return "var " +
+				return (
+					"var " +
 					randArr(
-						1, 3,
-						(i) => genIdentifier() +
-							(Math.random() < 0.5 ? "" :
-												   " = " + genExpression()))
-						.join(", ") +
-					";";
+						1,
+						3,
+						i =>
+							genIdentifier() +
+							(Math.random() < 0.5 ? "" : " = " + genExpression())
+					).join(", ") +
+					";"
+				);
 			}
 		} else {
 			// the more complex statements
 			switch (randInt(0, 3)) {
-				case (0): {
+				case 0: {
 					// if statement
 					minNodes--;
 					return "if (" + genExpression() + ")\n  " + genStatement();
 				}
-				case (1): {
+				case 1: {
 					// while statement
 					minNodes--;
-					return "while (" + genExpression() + ")\n  " +
-						genStatement();
+					return (
+						"while (" + genExpression() + ")\n  " + genStatement()
+					);
 				}
-				case (2): {
+				case 2: {
 					// for statement
 					minNodes--;
-					return "for (;" + genExpression() + ";)\n  " +
-						genStatement();
+					return (
+						"for (;" + genExpression() + ";)\n  " + genStatement()
+					);
 				}
-				case (3):
+				case 3:
 					return genBlockStatement();
 				default:
 					return genBlockStatement();
@@ -162,7 +227,7 @@ export function genRandomJS(minNodes) {
 		}
 	}
 
-	minNodes -= 2;  // file and program
+	minNodes -= 2; // file and program
 	let result = "";
 	while (minNodes > 0) {
 		result += genStatement() + "\n";
