@@ -182,6 +182,19 @@
 				"extender": "AddUnusedImportWithComment",
 				"version": "^1.58.0"
 			}
+		},
+		"Replacement interim solution fix": {
+			"UriParameters": {
+				"newExpressionArgsLength": 1,
+				"newExpressionCalleeName": "UriParameters",
+				"newVariableName": "UriParameters",
+				"functionName": "fromURL",
+				"importPath": "sap/base/util/UriParameters",
+				"replacer": "Call",
+				"finder": "NewExpressionFinder",
+				"extender": "LeaveImport",
+				"version": "^1.58.0"
+			}
 		}
 	},
 	"finders": {
@@ -190,7 +203,8 @@
 		"JQueryFunctionExtensionFinder": "tasks/helpers/finders/JQueryFunctionExtensionFinder.js",
 		"JQueryFunctionExtensionFinderWithDependencyCheck": "tasks/helpers/finders/JQueryFunctionExtensionFinderWithDependencyCheck.js",
 		"CallWithArgumentFinder": "tasks/helpers/finders/CallWithArgumentFinder.js",
-		"CallWithArgumentFinderWithDependencyCheck": "tasks/helpers/finders/CallWithArgumentFinderWithDependencyCheck.js"
+		"CallWithArgumentFinderWithDependencyCheck": "tasks/helpers/finders/CallWithArgumentFinderWithDependencyCheck.js",
+		"NewExpressionFinder": "tasks/helpers/finders/NewExpressionFinder.js"
 	},
 	"extenders": {
 		"AddUnusedImport": "tasks/helpers/extenders/AddUnusedImport.js",
@@ -202,7 +216,8 @@
 		"Module": "tasks/helpers/replacers/Module.js",
 		"ModuleFunction": "tasks/helpers/replacers/ModuleFunction.js",
 		"NOOP": "tasks/helpers/replacers/NOOP.js",
-		"AddComment": "tasks/helpers/replacers/AddComment.js"
+		"AddComment": "tasks/helpers/replacers/AddComment.js",
+		"Call": "tasks/helpers/replacers/Call.js"
 	},
 	"comments": {
 		"unhandledReplacementComment": "TODO unhandled replacement"

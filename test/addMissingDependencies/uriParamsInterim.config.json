@@ -1,0 +1,30 @@
+{
+	"modules": {
+		"Replacement interim solution fix": {
+			"UriParameters": {
+				"newExpressionArgsLength": 1,
+				"newExpressionCalleeName": "UriParameters",
+				"newVariableName": "UriParameters",
+				"functionName": "fromURL",
+				"importPath": "sap/base/util/UriParameters",
+				"replacer": "Call",
+				"finder": "NewExpressionFinder",
+				"extender": "LeaveImport",
+				"version": "^1.58.0"
+			}
+		}
+	},
+	"finders": {
+		"NewExpressionFinder": "tasks/helpers/finders/NewExpressionFinder.js"
+	},
+	"extenders": {
+		"LeaveImport": "tasks/helpers/extenders/LeaveImport.js"
+	},
+	"replacers": {
+		"Call": "tasks/helpers/replacers/Call.js"
+	},
+	"comments": {
+		"unhandledReplacementComment": "TODO unhandled replacement"
+	},
+	"excludes": []
+}

@@ -135,6 +135,14 @@ function findCallsToReplace(
 				reporter,
 				defineCall
 			),
+			// new expression, e.g. new UriParameters()
+			visitNewExpression: visit(
+				analysis,
+				oModuleTree,
+				finders,
+				reporter,
+				defineCall
+			),
 			visitBinaryExpression: visit(
 				analysis,
 				oModuleTree,
