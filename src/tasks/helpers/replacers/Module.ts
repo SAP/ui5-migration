@@ -65,6 +65,9 @@ const replaceable: ASTReplaceable = {
 			case Syntax.BinaryExpression: // var1 + MyModule.myField
 				oInsertionPoint[node.name] = oNodeModule;
 				break;
+			case Syntax.ReturnStatement: // return MyModule.myField
+				oInsertionPoint[node.name] = oNodeModule;
+				break;
 			default:
 				throw new Error(
 					"Module: insertion is of an unsupported type " +

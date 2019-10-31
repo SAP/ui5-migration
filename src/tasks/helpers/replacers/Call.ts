@@ -24,7 +24,8 @@ const replaceable: ASTReplaceable = {
 		node: NodePath,
 		name: string,
 		fnName: string,
-		oldModuleCall: string
+		oldModuleCall: string,
+		config: {newArgs: string[]}
 	): void {
 		const oInsertionPoint = node.parentPath.value;
 		let oNewCall: ESTree.Expression = builders.identifier(name);
@@ -37,7 +38,11 @@ const replaceable: ASTReplaceable = {
 		}
 
 		let args = [];
-		if (
+		if (config.newArgs) {
+			args = config.newArgs.map(oEle => {
+				return evaluateExpressions(oEle);
+			});
+		} else if (
 			node.value.type === Syntax.NewExpression ||
 			node.value.type === Syntax.CallExpression
 		) {
@@ -80,6 +85,9 @@ const replaceable: ASTReplaceable = {
 			case Syntax.ReturnStatement: // return MyModule.myField
 				oInsertionPoint[node.name] = oNewCall;
 				break;
+			case Syntax.ExpressionStatement: // MyModule.myFunction()
+				oInsertionPoint[node.name] = oNewCall;
+				break;
 			default:
 				throw new Error(
 					"Module: insertion is of an unsupported type " +
@@ -88,5 +96,9 @@ const replaceable: ASTReplaceable = {
 		}
 	},
 };
+
+function evaluateExpressions(parameter) {
+	return recast.parse(parameter).program.body["0"].expression;
+}
 
 module.exports = replaceable;

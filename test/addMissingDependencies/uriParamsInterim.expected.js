@@ -19,7 +19,13 @@ sap.ui.define(["sap/base/util/UriParameters"],
 		 * @param oEvent
 		 */
 		A.x = function (oParam, oEvent) {
-			var x = UriParameters.fromURL(window.location.href);
+
+			UriParameters.fromURL(oEvent);
+			UriParameters.fromQuery(window.location.search);
+			UriParameters.fromQuery(window.location.search);
+			UriParameters.fromQuery(window.location.search);
+
+			var x = UriParameters.fromQuery(window.location.search);
 			return UriParameters.fromURL(window.location.href || oEvent);
 		};
 

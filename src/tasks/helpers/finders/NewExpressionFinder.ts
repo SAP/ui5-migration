@@ -29,6 +29,7 @@ class NewExpressionFinder implements Finder {
 		node: ESTree.Node,
 		config: {
 			newExpressionArgsLength: number;
+			newExpressionArgs: string[];
 			newExpressionCalleeName: string;
 			importPath: string;
 		},
@@ -57,16 +58,55 @@ class NewExpressionFinder implements Finder {
 			return EMPTY_FINDER_RESULT;
 		}
 
-		// check number of arguments
-		if (node.arguments.length === config.newExpressionArgsLength) {
-			return {configName: sConfigName};
-		} else if (
-			!config.newExpressionArgsLength ||
-			config.newExpressionArgsLength < 0
-		) {
-			return {configName: sConfigName};
+		// check content of each argument
+		if (config.newExpressionArgs) {
+			const newExpressionArgsAsts = [];
+			config.newExpressionArgs.forEach(expression => {
+				newExpressionArgsAsts.push(evaluateExpressions(expression));
+			});
+
+			if (compareAsts(node.arguments, newExpressionArgsAsts)) {
+				return {configName: sConfigName};
+			}
+		} else {
+			// check number of arguments
+			if (node.arguments.length === config.newExpressionArgsLength) {
+				return {configName: sConfigName};
+			} else if (
+				!config.newExpressionArgsLength ||
+				config.newExpressionArgsLength < 0
+			) {
+				return {configName: sConfigName};
+			}
 		}
+
 		return EMPTY_FINDER_RESULT;
+	}
+}
+
+function evaluateExpressions(parameter) {
+	return recast.parse(parameter).program.body["0"].expression;
+}
+
+function compareAsts(ast1, ast2) {
+	if (
+		Array.isArray(ast1) &&
+		Array.isArray(ast2) &&
+		ast1.length === ast2.length
+	) {
+		for (let i = 0; i < ast1.length; i++) {
+			const ast1Element = ast1[i];
+			const ast2Element = ast2[i];
+			if (!compareAsts(ast1Element, ast2Element)) {
+				return false;
+			}
+		}
+		return true;
+	}
+	try {
+		return recast.print(ast1).code === recast.print(ast2).code;
+	} catch (e) {
+		return false;
 	}
 }
 
