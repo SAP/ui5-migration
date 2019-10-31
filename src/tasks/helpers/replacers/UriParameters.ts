@@ -6,7 +6,7 @@ import {ASTReplaceable, NodePath} from "ui5-migration";
 const builders = recast.types.builders;
 
 /**
- * Creates a new instance with a logical or expression if there is one parameter
+ * Uses function #fromURL with a logical or expression if there is one parameter otherwise uses functionParameter
  *
  * @param {recast.NodePath} node The top node of the module reference
  * @param {string} name The name of the new module
@@ -19,7 +19,8 @@ const replaceable: ASTReplaceable = {
 		node: NodePath,
 		name: string,
 		fnName: string,
-		oldModuleCall: string
+		oldModuleCall: string,
+		config: {functionParameter: string}
 	): void {
 		const oInsertionPoint = node.parentPath.parentPath.value;
 		const oInsertion = node.parentPath.value;
@@ -28,42 +29,43 @@ const replaceable: ASTReplaceable = {
 		let bReplaced = false;
 		if (oInsertion.type === Syntax.CallExpression) {
 			const oldArgs = oInsertion.arguments;
+			const newArgs = [];
 			if (oldArgs.length === 0) {
-				let args = [];
-				if (fnName) {
-					const oAst = recast.parse(fnName).program.body["0"]
-						.expression;
-					args = [oAst];
-				}
-				oInsertionPoint[node.parentPath.name] = builders.newExpression(
-					builders.identifier(name),
-					args
-				);
-				bReplaced = true;
-			} else if (oldArgs.length === 1) {
-				if (fnName) {
-					const args: ESTree.Expression = recast.parse(fnName).program
+				if (config.functionParameter) {
+					const oAst = recast.parse(config.functionParameter).program
 						.body["0"].expression;
+					newArgs.push(oAst);
+				}
+			} else if (oldArgs.length === 1) {
+				if (config.functionParameter) {
+					const args: ESTree.Expression = recast.parse(
+						config.functionParameter
+					).program.body["0"].expression;
 					const oFirstArg = oldArgs[0] as ESTree.Expression;
 					const oLogicalExpression = builders.logicalExpression(
 						"||",
 						oFirstArg,
 						args
 					);
-					oInsertionPoint[
-						node.parentPath.name
-					] = builders.newExpression(builders.identifier(name), [
-						oLogicalExpression,
-					]);
-					bReplaced = true;
+					newArgs.push(oLogicalExpression);
 				} else {
-					oInsertionPoint[
-						node.parentPath.name
-					] = builders.newExpression(builders.identifier(name), [
-						oldArgs[0],
-					]);
-					bReplaced = true;
+					newArgs.push(oldArgs[0]);
 				}
+			}
+			if (oldArgs.length < 2) {
+				let oNodeModule: ESTree.Expression = builders.identifier(name);
+				if (fnName) {
+					oNodeModule = builders.memberExpression(
+						oNodeModule,
+						builders.identifier(fnName),
+						false
+					);
+				}
+				oInsertionPoint[node.parentPath.name] = builders.callExpression(
+					oNodeModule,
+					newArgs
+				);
+				bReplaced = true;
 			}
 		}
 		if (!bReplaced) {
