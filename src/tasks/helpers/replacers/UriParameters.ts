@@ -30,13 +30,40 @@ const replaceable: ASTReplaceable = {
 		if (oInsertion.type === Syntax.CallExpression) {
 			const oldArgs = oInsertion.arguments;
 			const newArgs = [];
-			if (oldArgs.length === 0) {
-				if (config.functionParameter) {
-					const oAst = recast.parse(config.functionParameter).program
-						.body["0"].expression;
-					newArgs.push(oAst);
-				}
+
+			const windowLocationSearch = builders.memberExpression(
+				builders.memberExpression(
+					builders.identifier("window"),
+					builders.identifier("location")
+				),
+				builders.identifier("search")
+			);
+			const fromQuery = builders.memberExpression(
+				builders.identifier(name),
+				builders.identifier("fromQuery")
+			);
+			const fromURL = builders.memberExpression(
+				builders.identifier(name),
+				builders.identifier("fromURL")
+			);
+
+			let oNodeModule;
+
+			// jQuery.sap.getUriParameters() --> UriParameters.fromQuery(window.location.search)
+			// jQuery.sap.getUriParameters(window.location.href) --> UriParameters.fromQuery(window.location.search)
+			// jQuery.sap.getUriParameters(window.location.search) --> UriParameters.fromQuery(window.location.search)
+			if (
+				oldArgs.length === 0 ||
+				((oldArgs.length === 1 &&
+					print(oldArgs[0]) === "window.location.href") ||
+					print(oldArgs[0]) === "window.location.search")
+			) {
+				oNodeModule = fromQuery;
+				newArgs.push(windowLocationSearch);
+
+				// jQuery.sap.getUriParameters(myParam) --> UriParameters.fromURL(myParam || window.location.href)
 			} else if (oldArgs.length === 1) {
+				oNodeModule = fromURL;
 				if (config.functionParameter) {
 					const args: ESTree.Expression = recast.parse(
 						config.functionParameter
@@ -53,14 +80,6 @@ const replaceable: ASTReplaceable = {
 				}
 			}
 			if (oldArgs.length < 2) {
-				let oNodeModule: ESTree.Expression = builders.identifier(name);
-				if (fnName) {
-					oNodeModule = builders.memberExpression(
-						oNodeModule,
-						builders.identifier(fnName),
-						false
-					);
-				}
 				oInsertionPoint[node.parentPath.name] = builders.callExpression(
 					oNodeModule,
 					newArgs
@@ -77,5 +96,9 @@ const replaceable: ASTReplaceable = {
 		}
 	},
 };
+
+function print(ast) {
+	return recast.print(ast).code;
+}
 
 module.exports = replaceable;
