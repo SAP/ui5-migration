@@ -25,6 +25,12 @@ sap.ui.define(["sap/base/util/UriParameters"],
 
 
 			A.b(UriParameters.fromQuery(window.location.search));
+			// window
+			A.w(UriParameters.fromQuery(window.location.search));
+			A.w(UriParameters.fromQuery(window.location.search));
+			// location
+			A.bl(UriParameters.fromQuery(window.location.search));
+			A.bl(UriParameters.fromQuery(window.location.search));
 
 
 			A.m = String(UriParameters.fromQuery(window.location.search));

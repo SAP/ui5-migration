@@ -52,11 +52,18 @@ const replaceable: ASTReplaceable = {
 			// jQuery.sap.getUriParameters() --> UriParameters.fromQuery(window.location.search)
 			// jQuery.sap.getUriParameters(window.location.href) --> UriParameters.fromQuery(window.location.search)
 			// jQuery.sap.getUriParameters(window.location.search) --> UriParameters.fromQuery(window.location.search)
+
+			const queryParams = [
+				"window.location.href",
+				"window.location.search",
+				"location.href",
+				"location.search",
+			];
+
 			if (
 				oldArgs.length === 0 ||
-				((oldArgs.length === 1 &&
-					print(oldArgs[0]) === "window.location.href") ||
-					print(oldArgs[0]) === "window.location.search")
+				(oldArgs.length === 1 &&
+					queryParams.includes(print(oldArgs[0])))
 			) {
 				oNodeModule = fromQuery;
 				newArgs.push(windowLocationSearch);
