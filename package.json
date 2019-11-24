@@ -99,7 +99,7 @@
   "dependencies": {
     "diff": "^4.0.1",
     "esprima": "^4.0.1",
-    "globals": "^12.2.0",
+    "globals": "^12.3.0",
     "graceful-fs": "^4.2.3",
     "ignore": "^5.1.4",
     "json5": "^2.1.1",
@@ -107,7 +107,7 @@
     "recast": "^0.18.5",
     "request": "^2.88.0",
     "semver": "^6.3.0",
-    "yargs": "^14.2.1"
+    "yargs": "^14.2.2"
   },
   "bin": {
     "ui5-migration": "./bin/cli.js"
@@ -120,9 +120,9 @@
     "@types/json5": "^0.0.30",
     "@types/minimatch": "^3.0.3",
     "@types/mocha": "^5.2.6",
-    "@types/node": "^12.12.8",
+    "@types/node": "^12.12.12",
     "@types/yargs": "^13.0.3",
-    "gts": "^1.1.0",
+    "gts": "^1.1.2",
     "mocha": "^6.2.2",
     "mocha-junit-reporter": "^1.23.0",
     "nyc": "^14.1.1",
