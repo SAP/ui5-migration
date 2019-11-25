@@ -6,9 +6,12 @@ import {ASTReplaceable, NodePath} from "ui5-migration";
 const builders = recast.types.builders;
 
 /**
- * represents a module which exposes several functions such as
+ * Creates a call expression as replacement
  * Module: log
- * Functions: warning, info
+ * Functions: info
+ * Old Arguments: [1, 2]
+ *
+ * --> will create call: Log.info(1, 2)
  *
  * @param {recast.NodePath} node The top node of the module reference
  * @param {string} name The name of the new module
@@ -21,52 +24,69 @@ const replaceable: ASTReplaceable = {
 		node: NodePath,
 		name: string,
 		fnName: string,
-		oldModuleCall: string
+		oldModuleCall: string,
+		config: {newArgs: string[]}
 	): void {
 		const oInsertionPoint = node.parentPath.value;
-		const oInsertion = node.value;
-		let oNodeModule: ESTree.Expression = builders.identifier(name);
+		let oNewCall: ESTree.Expression = builders.identifier(name);
 		if (fnName) {
-			oNodeModule = builders.memberExpression(
-				oNodeModule,
+			oNewCall = builders.memberExpression(
+				oNewCall,
 				builders.identifier(fnName),
 				false
 			);
 		}
 
+		let args = [];
+		if (config.newArgs) {
+			args = config.newArgs.map(oEle => {
+				return evaluateExpressions(oEle);
+			});
+		} else if (
+			node.value.type === Syntax.NewExpression ||
+			node.value.type === Syntax.CallExpression
+		) {
+			args = node.value.arguments;
+		}
+
+		oNewCall = builders.callExpression(oNewCall, args);
+
 		// arrays do not have a type
 		if (Array.isArray(oInsertionPoint)) {
-			oInsertionPoint[node.name] = oNodeModule;
+			oInsertionPoint[node.name] = oNewCall;
 			return;
 		}
 
 		switch (oInsertionPoint.type) {
 			case Syntax.CallExpression: // MyModule.myFunction()
-				oInsertionPoint.callee = oNodeModule;
+				oInsertionPoint.callee = oNewCall;
 				break;
 			case Syntax.NewExpression: // new MyModule.myFunction()
-				oInsertionPoint.callee = oNodeModule;
+				oInsertionPoint.callee = oNewCall;
 				break;
 			case Syntax.MemberExpression: // MyModule.myField
-				oInsertionPoint.object = oNodeModule;
+				oInsertionPoint.object = oNewCall;
 				break;
 			case Syntax.LogicalExpression: // value1 && MyModule.myField
-				oInsertionPoint[node.name] = oNodeModule;
+				oInsertionPoint[node.name] = oNewCall;
 				break;
 			case Syntax.UnaryExpression: // !MyModule.myField
-				oInsertionPoint.argument = oNodeModule;
+				oInsertionPoint.argument = oNewCall;
 				break;
 			case Syntax.VariableDeclarator: // var test = MyModule.myField
-				oInsertionPoint.init = oNodeModule;
+				oInsertionPoint.init = oNewCall;
 				break;
 			case Syntax.AssignmentExpression: // test = MyModule.myField
-				oInsertionPoint.right = oNodeModule;
+				oInsertionPoint.right = oNewCall;
 				break;
 			case Syntax.BinaryExpression: // var1 + MyModule.myField
-				oInsertionPoint[node.name] = oNodeModule;
+				oInsertionPoint[node.name] = oNewCall;
 				break;
 			case Syntax.ReturnStatement: // return MyModule.myField
-				oInsertionPoint[node.name] = oNodeModule;
+				oInsertionPoint[node.name] = oNewCall;
+				break;
+			case Syntax.ExpressionStatement: // MyModule.myFunction()
+				oInsertionPoint[node.name] = oNewCall;
 				break;
 			default:
 				throw new Error(
@@ -76,5 +96,9 @@ const replaceable: ASTReplaceable = {
 		}
 	},
 };
+
+function evaluateExpressions(parameter) {
+	return recast.parse(parameter).program.body["0"].expression;
+}
 
 module.exports = replaceable;

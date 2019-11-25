@@ -182,6 +182,57 @@
 				"extender": "AddUnusedImportWithComment",
 				"version": "^1.58.0"
 			}
+		},
+		"Replacement interim solution fix": {
+			"UriParameters with url param (fromQuery search)": {
+				"newExpressionArgsLength": 1,
+				"newExpressionArgs": ["window.location.href"],
+				"newExpressionCalleeName": "UriParameters",
+				"newVariableName": "UriParameters",
+				"functionName": "fromQuery",
+				"newArgs": ["window.location.search"],
+				"importPath": "sap/base/util/UriParameters",
+				"replacer": "Call",
+				"finder": "NewExpressionFinder",
+				"extender": "LeaveImport",
+				"version": "^1.58.0"
+			},
+			"UriParameters with url param (fromQuery href)": {
+				"newExpressionArgsLength": 1,
+				"newExpressionArgs": ["window.location.search"],
+				"newExpressionCalleeName": "UriParameters",
+				"newVariableName": "UriParameters",
+				"functionName": "fromQuery",
+				"newArgs": ["window.location.search"],
+				"importPath": "sap/base/util/UriParameters",
+				"replacer": "Call",
+				"finder": "NewExpressionFinder",
+				"extender": "LeaveImport",
+				"version": "^1.58.0"
+			},
+			"UriParameters with url param (fromQuery empty)": {
+				"newExpressionArgsLength": 0,
+				"newExpressionCalleeName": "UriParameters",
+				"newVariableName": "UriParameters",
+				"functionName": "fromQuery",
+				"newArgs": ["window.location.search"],
+				"importPath": "sap/base/util/UriParameters",
+				"replacer": "Call",
+				"finder": "NewExpressionFinder",
+				"extender": "LeaveImport",
+				"version": "^1.58.0"
+			},
+			"UriParameters with query param (fromURL)": {
+				"newExpressionArgsLength": 1,
+				"newExpressionCalleeName": "UriParameters",
+				"newVariableName": "UriParameters",
+				"functionName": "fromURL",
+				"importPath": "sap/base/util/UriParameters",
+				"replacer": "Call",
+				"finder": "UriParametersWithURLFinder",
+				"extender": "LeaveImport",
+				"version": "^1.58.0"
+			}
 		}
 	},
 	"finders": {
@@ -190,7 +241,9 @@
 		"JQueryFunctionExtensionFinder": "tasks/helpers/finders/JQueryFunctionExtensionFinder.js",
 		"JQueryFunctionExtensionFinderWithDependencyCheck": "tasks/helpers/finders/JQueryFunctionExtensionFinderWithDependencyCheck.js",
 		"CallWithArgumentFinder": "tasks/helpers/finders/CallWithArgumentFinder.js",
-		"CallWithArgumentFinderWithDependencyCheck": "tasks/helpers/finders/CallWithArgumentFinderWithDependencyCheck.js"
+		"CallWithArgumentFinderWithDependencyCheck": "tasks/helpers/finders/CallWithArgumentFinderWithDependencyCheck.js",
+		"NewExpressionFinder": "tasks/helpers/finders/NewExpressionFinder.js",
+		"UriParametersWithURLFinder": "tasks/helpers/finders/UriParametersWithURLFinder.js"
 	},
 	"extenders": {
 		"AddUnusedImport": "tasks/helpers/extenders/AddUnusedImport.js",
@@ -202,7 +255,8 @@
 		"Module": "tasks/helpers/replacers/Module.js",
 		"ModuleFunction": "tasks/helpers/replacers/ModuleFunction.js",
 		"NOOP": "tasks/helpers/replacers/NOOP.js",
-		"AddComment": "tasks/helpers/replacers/AddComment.js"
+		"AddComment": "tasks/helpers/replacers/AddComment.js",
+		"Call": "tasks/helpers/replacers/Call.js"
 	},
 	"comments": {
 		"unhandledReplacementComment": "TODO unhandled replacement"

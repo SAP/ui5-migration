@@ -60,6 +60,8 @@ const replaceable: ASTReplaceable = {
 			oInsertionPoint[node.name] = oNodeName;
 		} else if (oInsertionPoint.type === Syntax.UnaryExpression) {
 			oInsertionPoint[node.name] = oNodeName;
+		} else if (oInsertionPoint.type === Syntax.ReturnStatement) {
+			oInsertionPoint[node.name] = oNodeName;
 		} else if (oInsertionPoint.type === Syntax.Property) {
 			oInsertionPoint[node.name] = oNodeName;
 		} else if (Array.isArray(oInsertionPoint)) {

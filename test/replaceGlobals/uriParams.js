@@ -25,6 +25,12 @@ sap.ui.define(["jquery.sap.script"],
 
 
 			A.b(jQuery.sap.getUriParameters());
+			// window
+			A.w(jQuery.sap.getUriParameters(window.location.href));
+			A.w(jQuery.sap.getUriParameters(window.location.search));
+			// location
+			A.bl(jQuery.sap.getUriParameters(location.href));
+			A.bl(jQuery.sap.getUriParameters(location.search));
 
 
 			A.m = String(jQuery.sap.getUriParameters());

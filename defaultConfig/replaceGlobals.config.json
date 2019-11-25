@@ -917,10 +917,12 @@
 				"version": "^1.58.0"
 			},
 			"jQuery.sap.getUriParameters": {
-				"functionName": "window.location.href",
+				"functionName": "fromURL",
 				"newModulePath": "sap/base/util/UriParameters",
+				"newVariableName": "UriParameters",
 				"replacer": "UriParameters",
-				"version": "^1.58.0"
+				"functionParameter": "window.location.href",
+				"version": "^1.68.0"
 			},
 			"$.sap.uid": {
 				"newModulePath": "sap/base/util/uid",
@@ -986,10 +988,12 @@
 				"version": "^1.58.0"
 			},
 			"$.sap.getUriParameters": {
-				"functionName": "window.location.href",
+				"functionName": "fromURL",
 				"newModulePath": "sap/base/util/UriParameters",
+				"newVariableName": "UriParameters",
 				"replacer": "UriParameters",
-				"version": "^1.58.0"
+				"functionParameter": "window.location.href",
+				"version": "^1.68.0"
 			}
 		},
 		"jquery.sap.unicode": {

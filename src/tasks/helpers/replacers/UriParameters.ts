@@ -6,7 +6,7 @@ import {ASTReplaceable, NodePath} from "ui5-migration";
 const builders = recast.types.builders;
 
 /**
- * Creates a new instance with a logical or expression if there is one parameter
+ * Uses function #fromURL with a logical or expression if there is one parameter otherwise uses functionParameter
  *
  * @param {recast.NodePath} node The top node of the module reference
  * @param {string} name The name of the new module
@@ -19,7 +19,8 @@ const replaceable: ASTReplaceable = {
 		node: NodePath,
 		name: string,
 		fnName: string,
-		oldModuleCall: string
+		oldModuleCall: string,
+		config: {functionParameter: string}
 	): void {
 		const oInsertionPoint = node.parentPath.parentPath.value;
 		const oInsertion = node.parentPath.value;
@@ -28,42 +29,69 @@ const replaceable: ASTReplaceable = {
 		let bReplaced = false;
 		if (oInsertion.type === Syntax.CallExpression) {
 			const oldArgs = oInsertion.arguments;
-			if (oldArgs.length === 0) {
-				let args = [];
-				if (fnName) {
-					const oAst = recast.parse(fnName).program.body["0"]
-						.expression;
-					args = [oAst];
-				}
-				oInsertionPoint[node.parentPath.name] = builders.newExpression(
-					builders.identifier(name),
-					args
-				);
-				bReplaced = true;
+			const newArgs = [];
+
+			const windowLocationSearch = builders.memberExpression(
+				builders.memberExpression(
+					builders.identifier("window"),
+					builders.identifier("location")
+				),
+				builders.identifier("search")
+			);
+			const fromQuery = builders.memberExpression(
+				builders.identifier(name),
+				builders.identifier("fromQuery")
+			);
+			const fromURL = builders.memberExpression(
+				builders.identifier(name),
+				builders.identifier("fromURL")
+			);
+
+			let oNodeModule;
+
+			// jQuery.sap.getUriParameters() --> UriParameters.fromQuery(window.location.search)
+			// jQuery.sap.getUriParameters(window.location.href) --> UriParameters.fromQuery(window.location.search)
+			// jQuery.sap.getUriParameters(window.location.search) --> UriParameters.fromQuery(window.location.search)
+
+			const queryParams = [
+				"window.location.href",
+				"window.location.search",
+				"location.href",
+				"location.search",
+			];
+
+			if (
+				oldArgs.length === 0 ||
+				(oldArgs.length === 1 &&
+					queryParams.includes(print(oldArgs[0])))
+			) {
+				oNodeModule = fromQuery;
+				newArgs.push(windowLocationSearch);
+
+				// jQuery.sap.getUriParameters(myParam) --> UriParameters.fromURL(myParam || window.location.href)
 			} else if (oldArgs.length === 1) {
-				if (fnName) {
-					const args: ESTree.Expression = recast.parse(fnName).program
-						.body["0"].expression;
+				oNodeModule = fromURL;
+				if (config.functionParameter) {
+					const args: ESTree.Expression = recast.parse(
+						config.functionParameter
+					).program.body["0"].expression;
 					const oFirstArg = oldArgs[0] as ESTree.Expression;
 					const oLogicalExpression = builders.logicalExpression(
 						"||",
 						oFirstArg,
 						args
 					);
-					oInsertionPoint[
-						node.parentPath.name
-					] = builders.newExpression(builders.identifier(name), [
-						oLogicalExpression,
-					]);
-					bReplaced = true;
+					newArgs.push(oLogicalExpression);
 				} else {
-					oInsertionPoint[
-						node.parentPath.name
-					] = builders.newExpression(builders.identifier(name), [
-						oldArgs[0],
-					]);
-					bReplaced = true;
+					newArgs.push(oldArgs[0]);
 				}
+			}
+			if (oldArgs.length < 2) {
+				oInsertionPoint[node.parentPath.name] = builders.callExpression(
+					oNodeModule,
+					newArgs
+				);
+				bReplaced = true;
 			}
 		}
 		if (!bReplaced) {
@@ -75,5 +103,9 @@ const replaceable: ASTReplaceable = {
 		}
 	},
 };
+
+function print(ast) {
+	return recast.print(ast).code;
+}
 
 module.exports = replaceable;

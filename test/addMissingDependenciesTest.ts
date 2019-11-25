@@ -431,5 +431,27 @@ describe("addMissingDependencies", function() {
 				]
 			);
 		});
+
+		it("uriParamsInterim", function(done) {
+			const expectedContent = fs.readFileSync(
+				rootDir + "uriParamsInterim.expected.js",
+				"utf8"
+			);
+			const config = JSON.parse(
+				fs.readFileSync(
+					rootDir + "uriParamsInterim.config.json",
+					"utf8"
+				)
+			);
+			const module = new CustomFileInfo(rootDir + "uriParamsInterim.js");
+			analyseMigrateAndTest(
+				module,
+				true,
+				expectedContent,
+				config,
+				done,
+				[]
+			);
+		});
 	});
 });

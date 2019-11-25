@@ -1,0 +1,69 @@
+{
+	"modules": {
+		"Replacement interim solution fix": {
+			"UriParameters with url param (fromQuery search)": {
+				"newExpressionArgsLength": 1,
+				"newExpressionArgs": ["window.location.href"],
+				"newExpressionCalleeName": "UriParameters",
+				"newVariableName": "UriParameters",
+				"functionName": "fromQuery",
+				"newArgs": ["window.location.search"],
+				"importPath": "sap/base/util/UriParameters",
+				"replacer": "Call",
+				"finder": "NewExpressionFinder",
+				"extender": "LeaveImport",
+				"version": "^1.58.0"
+			},
+			"UriParameters with url param (fromQuery href)": {
+				"newExpressionArgsLength": 1,
+				"newExpressionArgs": ["window.location.search"],
+				"newExpressionCalleeName": "UriParameters",
+				"newVariableName": "UriParameters",
+				"functionName": "fromQuery",
+				"newArgs": ["window.location.search"],
+				"importPath": "sap/base/util/UriParameters",
+				"replacer": "Call",
+				"finder": "NewExpressionFinder",
+				"extender": "LeaveImport",
+				"version": "^1.58.0"
+			},
+			"UriParameters with url param (fromQuery empty)": {
+				"newExpressionArgsLength": 0,
+				"newExpressionCalleeName": "UriParameters",
+				"newVariableName": "UriParameters",
+				"functionName": "fromQuery",
+				"newArgs": ["window.location.search"],
+				"importPath": "sap/base/util/UriParameters",
+				"replacer": "Call",
+				"finder": "NewExpressionFinder",
+				"extender": "LeaveImport",
+				"version": "^1.58.0"
+			},
+			"UriParameters with query param (fromURL)": {
+				"newExpressionArgsLength": 1,
+				"newExpressionCalleeName": "UriParameters",
+				"newVariableName": "UriParameters",
+				"functionName": "fromURL",
+				"importPath": "sap/base/util/UriParameters",
+				"replacer": "Call",
+				"finder": "UriParametersWithURLFinder",
+				"extender": "LeaveImport",
+				"version": "^1.58.0"
+			}
+		}
+	},
+	"finders": {
+		"NewExpressionFinder": "tasks/helpers/finders/NewExpressionFinder.js",
+		"UriParametersWithURLFinder": "tasks/helpers/finders/UriParametersWithURLFinder.js"
+	},
+	"extenders": {
+		"LeaveImport": "tasks/helpers/extenders/LeaveImport.js"
+	},
+	"replacers": {
+		"Call": "tasks/helpers/replacers/Call.js"
+	},
+	"comments": {
+		"unhandledReplacementComment": "TODO unhandled replacement"
+	},
+	"excludes": []
+}

@@ -20,16 +20,22 @@ sap.ui.define(["sap/base/util/UriParameters"],
 		 */
 		A.x = function(oParam, sContent) {
 			if (oParam.iTest === 47) {
-				oParam.doIt("background-image", "url('" + new UriParameters(window.location.href) + "')");
+				oParam.doIt("background-image", "url('" + UriParameters.fromQuery(window.location.search) + "')");
 			}
 
 
-			A.b(new UriParameters(window.location.href));
+			A.b(UriParameters.fromQuery(window.location.search));
+			// window
+			A.w(UriParameters.fromQuery(window.location.search));
+			A.w(UriParameters.fromQuery(window.location.search));
+			// location
+			A.bl(UriParameters.fromQuery(window.location.search));
+			A.bl(UriParameters.fromQuery(window.location.search));
 
 
-			A.m = String(new UriParameters(window.location.href));
-			A.m2 = String(new UriParameters(window.location.href).get(2));
-			A.m3 = String(new UriParameters(sContent || window.location.href).get(2));
+			A.m = String(UriParameters.fromQuery(window.location.search));
+			A.m2 = String(UriParameters.fromQuery(window.location.search).get(2));
+			A.m3 = String(UriParameters.fromURL(sContent || window.location.href).get(2));
 		};
 
 		return A;
