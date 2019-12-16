@@ -258,13 +258,11 @@ export function mergeModulesWithMultipleVersions(
 	// create a copy of modules
 	const oModules = JSON.parse(JSON.stringify(oModifiedConfig["modules"]));
 	Object.keys(oModules).forEach(sModuleGroup => {
-
 		// get all keys with multiple versions
 		const multiVersionModuleKeys = Object.keys(
 			oModules[sModuleGroup]
 		).filter(sModule => sModule.includes("@"));
 		if (multiVersionModuleKeys.length > 0) {
-
 			// group multiple version modules by module
 			const groupByModule = {};
 			multiVersionModuleKeys.forEach(sKey => {
@@ -288,7 +286,10 @@ export function mergeModulesWithMultipleVersions(
 						matchesVersion(targetVersion, version)
 					) {
 						// get closest
-						if (!localClosest || hasHigherVersion(version, localClosest.version)) {
+						if (
+							!localClosest ||
+							hasHigherVersion(version, localClosest.version)
+						) {
 							localClosest = {
 								key: sKey,
 								sModule,
