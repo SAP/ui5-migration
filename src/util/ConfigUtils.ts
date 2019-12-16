@@ -20,6 +20,22 @@ export function matchesVersion(targetVersion, version): boolean {
 }
 
 /**
+ *
+ * @param version
+ * @param baselineVersion
+ * @returns {boolean} whether or not version is higher than baselineVersion
+ */
+export function hasHigherVersion(version: string, baselineVersion: string) {
+	if (version === "latest") {
+		return true;
+	}
+	return semver.gt(
+		semver.minVersion(version),
+		semver.minVersion(baselineVersion)
+	);
+}
+
+/**
  * Filters out modules with versions which don't match the target version
  *
  * @param {object} oModules - modules to filter e.g. {"jQuery modifiers": { "jQqery.sap.byId": {version: "1.2.x"} } }
@@ -146,7 +162,7 @@ export function removeModulesNotMatchingTargetVersion(
  */
 export function modifyModulesNotMatchingTargetVersion(
 	oConfig: object,
-	targetVersion,
+	targetVersion: string,
 	targetModuleConfig: object,
 	targetReplacer?: {alias: string; file: string}
 ) {
@@ -166,5 +182,132 @@ export function modifyModulesNotMatchingTargetVersion(
 		oModifiedConfig["replacers"][targetReplacer.alias] =
 			targetReplacer.file;
 	}
+	return oModifiedConfig;
+}
+
+/**
+ * Merges the same modules with different versions
+ *
+ * Before:
+ * "modules": {
+ *		"jquery.sap.script": {
+ *			"jQuery.sap.extend@1.58.0": {
+ *				"newModulePath": "sap/ui/thirdparty/jquery",
+ *				"newVariableName": "jQuery",
+ *				"functionName": "extend",
+ *				"replacer": "jQueryExtend",
+ *				"version": "^1.58.0"
+ *			},
+ *			"jQuery.sap.extend@1.60.0": {
+ *				"newModulePath": "sap/base/util/merge",
+ *				"newVariableName": "merge",
+ *				"replacer": "mergeOrObjectAssign",
+ *				"version": "1.60.0"
+ *			}
+ *		}
+ *	}
+ *
+ * E.g. when using version "latest"
+ * After:
+ * "modules": {
+ *		"jquery.sap.script": {
+ *			"jQuery.sap.extend": {
+ *				"newModulePath": "sap/base/util/merge",
+ *				"newVariableName": "merge",
+ *				"replacer": "mergeOrObjectAssign",
+ *				"version": "1.60.0"
+ *			},
+ *			"jQuery.sap.extend@1.58.0": {
+ *				"newModulePath": "sap/ui/thirdparty/jquery",
+ *				"newVariableName": "jQuery",
+ *				"functionName": "extend",
+ *				"replacer": "jQueryExtend",
+ *				"version": "^1.58.0"
+ *			},
+ *			"jQuery.sap.extend@1.60.0": {
+ *				"newModulePath": "sap/base/util/merge",
+ *				"newVariableName": "merge",
+ *				"replacer": "mergeOrObjectAssign",
+ *				"version": "1.60.0"
+ *			}
+ *		}
+ *	}
+ *
+ * @param {object} oConfig config to modify
+ * @param {string} targetVersion UI5 target version e.g. 1.58.0
+ * @returns {object} a copy of the config with closest versions to targetVersion of modules for
+ * keys which have an '@' in the name.
+ * E.g. keys ["jQuery.sap.extend@1.60.0", "jQuery.sap.extend@1.58.0"]
+ * will be ["jQuery.sap.extend@1.60.0", "jQuery.sap.extend@1.58.0", "jQuery.sap.extend"] where "jQuery.sap.extend" is a copy of the closest matching version,
+ * e.g. "1.60.0" for targetVersion "latest"
+ */
+export function mergeModulesWithMultipleVersions(
+	oConfig: object,
+	targetVersion: string
+) {
+	// validate input parameters
+	if (!oConfig) {
+		throw new Error("No config supplied for modification");
+	}
+
+	const oModifiedConfig = JSON.parse(JSON.stringify(oConfig));
+	if (Object.keys(oConfig).length === 0 || !targetVersion) {
+		return oModifiedConfig;
+	}
+
+	// create a copy of modules
+	const oModules = JSON.parse(JSON.stringify(oModifiedConfig["modules"]));
+	Object.keys(oModules).forEach(sModuleGroup => {
+
+		// get all keys with multiple versions
+		const multiVersionModuleKeys = Object.keys(
+			oModules[sModuleGroup]
+		).filter(sModule => sModule.includes("@"));
+		if (multiVersionModuleKeys.length > 0) {
+
+			// group multiple version modules by module
+			const groupByModule = {};
+			multiVersionModuleKeys.forEach(sKey => {
+				const sModule = sKey.split("@")[0];
+				if (!groupByModule[sModule]) {
+					groupByModule[sModule] = [];
+				}
+				groupByModule[sModule].push(sKey);
+			});
+
+			//get highest version
+			const closestModules = [];
+			Object.keys(groupByModule).forEach(sModule => {
+				let localClosest;
+
+				groupByModule[sModule].filter(sKey => {
+					const version = oModules[sModuleGroup][sKey].version;
+
+					if (
+						targetVersion === "latest" ||
+						matchesVersion(targetVersion, version)
+					) {
+						// get closest
+						if (!localClosest || hasHigherVersion(version, localClosest.version)) {
+							localClosest = {
+								key: sKey,
+								sModule,
+								version,
+							};
+						}
+					}
+				});
+				if (localClosest) {
+					closestModules.push(localClosest);
+				}
+			});
+			closestModules.forEach(high => {
+				oModules[sModuleGroup][high.sModule] =
+					oModules[sModuleGroup][high.key];
+			});
+		}
+	});
+	oModifiedConfig["modules"] = oModules;
+
 	return oModifiedConfig;
 }

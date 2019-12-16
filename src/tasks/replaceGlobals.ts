@@ -47,7 +47,10 @@ import {Reporter} from "../reporter/Reporter";
 import * as ASTUtils from "../util/ASTUtils";
 import {ASTVisitor, NodePath, TNodePath} from "../util/ASTVisitor";
 import * as CommentUtils from "../util/CommentUtils";
-import {modifyModulesNotMatchingTargetVersion} from "../util/ConfigUtils";
+import {
+	mergeModulesWithMultipleVersions,
+	modifyModulesNotMatchingTargetVersion,
+} from "../util/ConfigUtils";
 import {SapUiDefineCall} from "../util/SapUiDefineCall";
 
 function findVariableNames(ast: ESTree.Node, visitor: ASTVisitor): Set<string> {
@@ -427,7 +430,7 @@ async function analyse(args: Mod.AnalyseArguments): Promise<{}> {
 		return null;
 	}
 
-	const oConfig =
+	let oConfig =
 		args.targetVersion !== "latest"
 			? modifyModulesNotMatchingTargetVersion(
 					args.config,
@@ -436,6 +439,8 @@ async function analyse(args: Mod.AnalyseArguments): Promise<{}> {
 					{alias: "LEAVE", file: "tasks/helpers/replacers/LEAVE.js"}
 			  )
 			: args.config;
+
+	oConfig = mergeModulesWithMultipleVersions(oConfig, args.targetVersion);
 
 	const oModuleTree: ModuleTree = {};
 
