@@ -38,7 +38,7 @@ export function hasHigherVersion(version: string, baselineVersion: string) {
 /**
  * Filters out modules with versions which don't match the target version
  *
- * @param {object} oModules - modules to filter e.g. {"jQuery modifiers": { "jQqery.sap.byId": {version: "1.2.x"} } }
+ * @param {object} oModules - modules to filter e.g. {"jQuery modifiers": { "jQuery.sap.byId": {version: "1.2.x"} } }
  * @param {string} targetVersion - target version
  * @returns {object}
  */
@@ -215,7 +215,7 @@ export function modifyModulesNotMatchingTargetVersion(
  *				"newModulePath": "sap/base/util/merge",
  *				"newVariableName": "merge",
  *				"replacer": "mergeOrObjectAssign",
- *				"version": "1.60.0"
+ *				"version": "1.71.0"
  *			},
  *			"jQuery.sap.extend@1.58.0": {
  *				"newModulePath": "sap/ui/thirdparty/jquery",
@@ -264,6 +264,15 @@ export function mergeModulesWithMultipleVersions(
 		).filter(sModule => sModule.includes("@"));
 		if (multiVersionModuleKeys.length > 0) {
 			// group multiple version modules by module
+			/**
+			 *
+			 * {
+			 *     "jQuery.sap.extend": [
+			 *     		"jQuery.sap.extend@1.58.0",
+			 *     		"jQuery.sap.extend@1.60.0"
+			 *     	]
+			 * }
+			 */
 			const groupByModule = {};
 			multiVersionModuleKeys.forEach(sKey => {
 				const sModule = sKey.split("@")[0];
@@ -276,16 +285,19 @@ export function mergeModulesWithMultipleVersions(
 			//get highest version
 			const closestModules = [];
 			Object.keys(groupByModule).forEach(sModule => {
+				// sModule, e.g. "jQuery.sap.extend"
 				let localClosest;
 
-				groupByModule[sModule].filter(sKey => {
+				groupByModule[sModule].forEach(sKey => {
 					const version = oModules[sModuleGroup][sKey].version;
+					// e.g. ^1.58.0
 
+					// check if version is a valid candidate (e.g. is not bigger than targetVersion)
 					if (
 						targetVersion === "latest" ||
 						matchesVersion(targetVersion, version)
 					) {
-						// get closest
+						// get closest to the targetVersion
 						if (
 							!localClosest ||
 							hasHigherVersion(version, localClosest.version)
@@ -302,6 +314,8 @@ export function mergeModulesWithMultipleVersions(
 					closestModules.push(localClosest);
 				}
 			});
+
+			// replace modules with closest ones
 			closestModules.forEach(high => {
 				oModules[sModuleGroup][high.sModule] =
 					oModules[sModuleGroup][high.key];
