@@ -208,6 +208,8 @@ export function modifyModulesNotMatchingTargetVersion(
  *	}
  *
  * E.g. when using version "latest"
+ * the object "jQuery.sap.extend@1.60.0" is copied to "jQuery.sap.extend"
+ * which means that it is taken into account for replacements
  * After:
  * "modules": {
  *		"jquery.sap.script": {
@@ -215,7 +217,7 @@ export function modifyModulesNotMatchingTargetVersion(
  *				"newModulePath": "sap/base/util/merge",
  *				"newVariableName": "merge",
  *				"replacer": "mergeOrObjectAssign",
- *				"version": "1.71.0"
+ *				"version": "1.60.0"
  *			},
  *			"jQuery.sap.extend@1.58.0": {
  *				"newModulePath": "sap/ui/thirdparty/jquery",
