@@ -2498,5 +2498,99 @@ describe("replaceGlobals", function() {
 				[]
 			);
 		});
+
+		it("multiversion latest", function(done) {
+			const expectedContent = fs.readFileSync(
+				rootDir + "multiversion.expected.js",
+				"utf8"
+			);
+			const config = JSON.parse(
+				fs.readFileSync(rootDir + "multiversion.config.json", "utf8")
+			);
+			const module = new CustomFileInfo(rootDir + "multiversion.js");
+			analyseMigrateAndTest(module, true, expectedContent, config, done, [
+				'trace: 26: Replace global call with "sap.base.util.merge"',
+				'trace: 26: Found call to replace "jQuery.sap.extend"',
+				'trace: 28: Replace global call with "sap.base.util.merge"',
+				'trace: 28: Found call to replace "jQuery.sap.extend"',
+				'trace: 29: Replace global call with "sap.base.util.merge"',
+				'trace: 29: Found call to replace "jQuery.sap.extend"',
+				'trace: 30: Replace global call with "sap.base.util.merge"',
+				'trace: 30: Found call to replace "jQuery.sap.extend"',
+				'trace: 26: Replaced call "jQuery.sap.extend"',
+				'trace: 28: Replaced call "jQuery.sap.extend"',
+				'trace: 29: Replaced call "jQuery.sap.extend"',
+				'trace: 30: Replaced call "jQuery.sap.extend"',
+			]);
+		});
+
+		it("multiversion version 1.60.0", function(done) {
+			const expectedContent = fs.readFileSync(
+				rootDir + "multiversion.expected.js",
+				"utf8"
+			);
+			const config = JSON.parse(
+				fs.readFileSync(rootDir + "multiversion.config.json", "utf8")
+			);
+			const module = new CustomFileInfo(rootDir + "multiversion.js");
+			analyseMigrateAndTest(
+				module,
+				true,
+				expectedContent,
+				config,
+				done,
+				[
+					'trace: 26: Replace global call with "sap.base.util.merge"',
+					'trace: 26: Found call to replace "jQuery.sap.extend"',
+					'trace: 28: Replace global call with "sap.base.util.merge"',
+					'trace: 28: Found call to replace "jQuery.sap.extend"',
+					'trace: 29: Replace global call with "sap.base.util.merge"',
+					'trace: 29: Found call to replace "jQuery.sap.extend"',
+					'trace: 30: Replace global call with "sap.base.util.merge"',
+					'trace: 30: Found call to replace "jQuery.sap.extend"',
+					'trace: 26: Replaced call "jQuery.sap.extend"',
+					'trace: 28: Replaced call "jQuery.sap.extend"',
+					'trace: 29: Replaced call "jQuery.sap.extend"',
+					'trace: 30: Replaced call "jQuery.sap.extend"',
+				],
+				"trace",
+				"1.60.0"
+			);
+		});
+
+		it("multiversion version 1.58.0", function(done) {
+			const expectedContent = fs.readFileSync(
+				rootDir + "multiversion.1.58.0.expected.js",
+				"utf8"
+			);
+			const config = JSON.parse(
+				fs.readFileSync(rootDir + "multiversion.config.json", "utf8")
+			);
+			const module = new CustomFileInfo(rootDir + "multiversion.js");
+			analyseMigrateAndTest(
+				module,
+				true,
+				expectedContent,
+				config,
+				done,
+				[
+					'trace: 26: Replace global call with "sap.ui.thirdparty.jquery"',
+					'trace: 26: Found call to replace "jQuery.sap.extend"',
+					'trace: 28: Replace global call with "sap.ui.thirdparty.jquery"',
+					'trace: 28: Found call to replace "jQuery.sap.extend"',
+					'trace: 29: Replace global call with "sap.ui.thirdparty.jquery"',
+					'trace: 29: Found call to replace "jQuery.sap.extend"',
+					'trace: 30: Replace global call with "sap.ui.thirdparty.jquery"',
+					'trace: 30: Found call to replace "jQuery.sap.extend"',
+					'trace: 26: Replaced call "jQuery.sap.extend"',
+					'trace: 28: Replaced call "jQuery.sap.extend"',
+					'trace: 29: Replaced call "jQuery.sap.extend"',
+					'trace: 30: Replaced call "jQuery.sap.extend"',
+					'trace: 7: Add dependency "sap/ui/thirdparty/jquery" named "jQuery0"',
+				],
+				"trace",
+				"1.58.0"
+			);
+		});
 	});
 });
