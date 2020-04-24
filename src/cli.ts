@@ -59,6 +59,7 @@ export async function start(): Promise<void> {
 			choices: [
 				"all",
 				"replace-globals",
+				"add-i18n",
 				"fix-jquery-plugin-imports",
 				"apply-amd-syntax",
 				"add-renderer-dependencies",
