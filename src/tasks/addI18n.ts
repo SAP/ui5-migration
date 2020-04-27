@@ -17,9 +17,7 @@ import * as Mod from "../Migration";
 import * as ASTUtils from "../util/ASTUtils";
 import {ASTVisitor} from "../util/ASTVisitor";
 import {SapUiDefineCall} from "../util/SapUiDefineCall";
-import * as DiffOptimizer from "../util/whitespace/DiffOptimizer";
 import {ModifyJSONContent} from "../util/content/ModifyJSONContent";
-import {DiffStringOptimizeStrategy} from "../util/whitespace/DiffStringOptimizeStrategy";
 
 //#endregion
 
@@ -55,7 +53,9 @@ async function getFiles(sI18nFolder, fileName) {
 			})
 		);
 	}
-	const fallbackLocale: string = supportedLocales[0];
+	const fallbackLocale: string = supportedLocales.includes("en")
+		? "en"
+		: supportedLocales[0];
 	return {
 		supportedLocalesModels: supportedLocales,
 		fallbackLocaleModels: fallbackLocale,
