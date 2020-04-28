@@ -107,6 +107,12 @@ async function analyse(
 		"sap/ui/core/UIComponent"
 	);
 
+	const validComponentName = moduleName.endsWith("/Component");
+
+	const isCandidate = object => {
+		return object.name === sImportName || validComponentName;
+	};
+
 	const isReturnStatement = (stmt: ESTree.ReturnStatement): boolean => {
 		if (stmt.argument.type === Syntax.CallExpression) {
 			if (stmt.argument.callee.type === Syntax.MemberExpression) {
@@ -115,7 +121,7 @@ async function analyse(
 					stmt.argument.callee.property.type === Syntax.Identifier
 				) {
 					if (
-						stmt.argument.callee.object.name === sImportName &&
+						isCandidate(stmt.argument.callee.object) &&
 						stmt.argument.callee.property.name === "extend"
 					) {
 						return true;
@@ -139,7 +145,7 @@ async function analyse(
 					decl.init.callee.property.type === Syntax.Identifier &&
 					decl.init.callee.object.type === Syntax.Identifier &&
 					decl.init.callee.property.name === "extend" &&
-					decl.init.callee.object.name === sImportName
+					isCandidate(decl.init.callee.object)
 				) {
 					if (decl.init.arguments[0].type === Syntax.Literal) {
 						nameSpace = decl.init.arguments[0].value.toString();

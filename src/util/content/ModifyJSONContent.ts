@@ -27,6 +27,7 @@ export class ModifyJSONContent {
 	private oContent;
 	private contentLines: string[];
 	private eol: string;
+	private indent: string;
 
 	constructor(content) {
 		this.content = content;
@@ -35,6 +36,7 @@ export class ModifyJSONContent {
 
 	private init(content) {
 		this.eol = this.calculateEOL(content);
+		this.indent = this.calculateIndent(content);
 		this.contentLines = content.split(this.eol);
 		this.modifiedContent = content;
 		this.settings = {
@@ -50,6 +52,19 @@ export class ModifyJSONContent {
 		) === "N"
 			? "\n"
 			: "\r\n";
+	}
+
+	private calculateIndent(content) {
+		const indent = new CodeStyleAnalyzer(content).getMostCommon(
+			AnalyzeCharacter.INDENT
+		);
+		if (indent === true) {
+			return "\t";
+		}
+		if (typeof indent === "number") {
+			return " ".repeat(indent);
+		}
+		return "\t"; // default
 	}
 
 	private parse(content) {
@@ -155,7 +170,7 @@ export class ModifyJSONContent {
 	}
 
 	private extractContent(oContent) {
-		let newString = JSON.stringify(oContent, null, 2);
+		let newString = JSON.stringify(oContent, null, this.indent);
 		if (newString.startsWith("{") && newString.endsWith("}")) {
 			newString = newString.substring(1, newString.length - 1);
 		}
