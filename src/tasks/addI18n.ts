@@ -18,8 +18,8 @@ import * as ASTUtils from "../util/ASTUtils";
 import {ASTVisitor} from "../util/ASTVisitor";
 import {SapUiDefineCall} from "../util/SapUiDefineCall";
 import {ModifyJSONContent} from "../util/content/ModifyJSONContent";
+import {hasHigherVersion} from "../util/ConfigUtils";
 
-//#endregion
 
 interface AddI18nResult {
 	defineCall: SapUiDefineCall;
@@ -31,6 +31,8 @@ interface AddI18nResult {
 	manifestPath: string;
 	manifestContent: object;
 	manifestContentString: string;
+	manifestVersion: string;
+	createUI5ModelsSettings: boolean;
 }
 
 async function getFiles(sI18nFolder, fileName) {
@@ -39,18 +41,23 @@ async function getFiles(sI18nFolder, fileName) {
 	if (bI18nFolderExists) {
 		const listI18n = await FileUtils.fsReadDir(sI18nFolder);
 		supportedLocales = supportedLocales.concat(
-			listI18n.map(si18n => {
-				if (si18n.includes("_")) {
-					return si18n.substring(
-						fileName.length + "_".length,
-						si18n.lastIndexOf(".properties")
-					);
-				}
-				return si18n.substring(
-					fileName.length,
-					si18n.lastIndexOf(".properties")
-				);
-			})
+			listI18n
+				.map(si18n => {
+					if (si18n.startsWith(fileName)) {
+						if (si18n.includes("_")) {
+							return si18n.substring(
+								fileName.length + "_".length,
+								si18n.lastIndexOf(".properties")
+							);
+						}
+						return si18n.substring(
+							fileName.length,
+							si18n.lastIndexOf(".properties")
+						);
+					}
+					return undefined;
+				})
+				.filter(locale => locale !== undefined)
 		);
 	}
 	const fallbackLocale: string = supportedLocales.includes("en")
@@ -185,6 +192,7 @@ async function analyse(
 	let manifestContent;
 	let manifestContentString;
 	let i18nAppValue;
+	let createUI5ModelsSettings = false;
 	if (bManifestExists) {
 		manifestContentString = await FileUtils.fsReadFile(
 			manifestPath,
@@ -205,16 +213,20 @@ async function analyse(
 		]);
 		if (
 			i18nModelsConfig &&
-			i18nModelsConfig.type === "sap.ui.model.resource.ResourceModel" &&
-			i18nModelsConfig.settings
+			i18nModelsConfig.type === "sap.ui.model.resource.ResourceModel"
 		) {
-			const bundleName = i18nModelsConfig.settings.bundleName; // "sap.f.cardsVisualTests.i18n.i18n"
-			if (
-				bundleName.startsWith(nameSpace) &&
-				!i18nModelsConfig.settings.supportedLocales &&
-				!i18nModelsConfig.settings.fallbackLocale
-			) {
-				sI18nModelsFolder = bundleName.substring(nameSpace.length);
+			if (i18nModelsConfig.settings) {
+				const bundleName = i18nModelsConfig.settings.bundleName; // "sap.f.cardsVisualTests.i18n.i18n"
+				if (
+					bundleName.startsWith(nameSpace) &&
+					!i18nModelsConfig.settings.supportedLocales &&
+					!i18nModelsConfig.settings.fallbackLocale
+				) {
+					sI18nModelsFolder = bundleName.substring(nameSpace.length);
+				}
+			} else if (i18nModelsConfig.uri) {
+				createUI5ModelsSettings = true;
+				sI18nModelsFolder = i18nModelsConfig.uri;
 			}
 		}
 	} else {
@@ -230,14 +242,26 @@ async function analyse(
 		manifestPath,
 		manifestContent,
 		manifestContentString,
+		manifestVersion: manifestContent._version,
+		createUI5ModelsSettings,
 	};
 
 	if (sI18nModelsFolder) {
-		// sI18nFolder = i18n.i18n
-		const split = sI18nModelsFolder.split(".");
-		const fileName = split.pop();
-
-		sI18nModelsFolder = path.join(sFilePath, split.join("/"));
+		let fileName;
+		if (sI18nModelsFolder.endsWith(".properties")) {
+			sI18nModelsFolder = sI18nModelsFolder.substring(
+				0,
+				sI18nModelsFolder.lastIndexOf(".properties")
+			);
+			const split = sI18nModelsFolder.split("/");
+			fileName = split.pop();
+			sI18nModelsFolder = path.join(sFilePath, split.join("/"));
+		} else {
+			// sI18nFolder = i18n.i18n
+			const split = sI18nModelsFolder.split(".");
+			fileName = split.pop();
+			sI18nModelsFolder = path.join(sFilePath, split.join("/"));
+		}
 
 		const {supportedLocalesModels, fallbackLocaleModels} = await getFiles(
 			sI18nModelsFolder,
@@ -270,8 +294,10 @@ async function analyse(
 	if (
 		bAddI18n &&
 		manifestContent &&
-		(oResultObject.supportedLocalesModels.length > 0 ||
-			oResultObject.supportedLocalesApp.length > 0)
+		((oResultObject.supportedLocalesModels &&
+			oResultObject.supportedLocalesModels.length > 0) ||
+			(oResultObject.supportedLocalesApp &&
+				oResultObject.supportedLocalesApp.length > 0))
 	) {
 		args.reporter.collect("addI18n", 1);
 		args.reporter.storeFinding("Add i18n", defineCall.node.callee.loc);
@@ -302,10 +328,21 @@ async function migrate(args: Mod.MigrateArguments): Promise<boolean> {
 		result.supportedLocalesModels &&
 		result.supportedLocalesModels.length > 0
 	) {
-		manifestContent.add(["sap.ui5", "models", "i18n", "settings"], {
-			supportedLocales: result.supportedLocalesModels,
-			fallbackLocale: result.fallbackLocaleModels,
-		});
+		if (result.createUI5ModelsSettings) {
+			const aPath = ["sap.ui5", "models", "i18n"];
+			manifestContent.add(aPath, {
+				settings: {},
+			});
+			manifestContent.replace(["sap.ui5", "models", "i18n", "settings"], {
+				supportedLocales: result.supportedLocalesModels,
+				fallbackLocale: result.fallbackLocaleModels,
+			});
+		} else {
+			manifestContent.add(["sap.ui5", "models", "i18n", "settings"], {
+				supportedLocales: result.supportedLocalesModels,
+				fallbackLocale: result.fallbackLocaleModels,
+			});
+		}
 	}
 	if (result.supportedLocalesApp && result.supportedLocalesApp.length > 0) {
 		manifestContent.replace(["sap.app", "i18n"], {
@@ -314,6 +351,12 @@ async function migrate(args: Mod.MigrateArguments): Promise<boolean> {
 			fallbackLocale: result.fallbackLocaleApp,
 		});
 	}
+	if (result.manifestVersion) {
+		if (!hasHigherVersion(result.manifestVersion, "1.21.0")) {
+			manifestContent.replace(["_version"], "1.21.0");
+		}
+	}
+
 	await FileUtils.fsWriteFile(
 		result.manifestPath,
 		manifestContent.getContent(),

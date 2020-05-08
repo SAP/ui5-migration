@@ -111,7 +111,12 @@ export class ModifyJSONContent {
 		return resultChild;
 	}
 
-	replace(aPath, oContent) {
+	/**
+	 * Replaces a given element at path x
+	 * @param {string[]} aPath
+	 * @param {Object} oContent
+	 */
+	replace(aPath: string[], oContent) {
 		const contentLinesBackup = this.contentLines.slice();
 		const oElement = this.find(aPath);
 
@@ -134,29 +139,36 @@ export class ModifyJSONContent {
 				this.contentLines.splice(i, 1);
 			}
 		}
-		this.contentLines.splice(
-			startLine,
-			0,
-			targetIndent + '"' + lastElement + '": {'
-		);
 
-		const insertLine = startLine + 1;
-		// new content
-		const newString = this.extractContent(oContent);
+		let lineToStart = targetIndent + '"' + lastElement + '": ';
 
-		const aNewLines = newString.split("\n").filter(Boolean);
+		if (typeof oContent === "object") {
+			lineToStart += "{";
 
-		// insert
-		let lastPos = insertLine;
-		aNewLines.forEach(newLine => {
-			this.contentLines.splice(lastPos++, 0, targetIndent + newLine);
-		});
+			this.contentLines.splice(startLine, 0, lineToStart);
 
-		this.contentLines.splice(
-			lastPos,
-			0,
-			targetIndent + "}" + (commaRequired ? "," : "")
-		);
+			const insertLine = startLine + 1;
+			// new content
+			const newString = this.extractContent(oContent);
+
+			const aNewLines = newString.split("\n").filter(Boolean);
+
+			// insert
+			let lastPos = insertLine;
+			aNewLines.forEach(newLine => {
+				this.contentLines.splice(lastPos++, 0, targetIndent + newLine);
+			});
+
+			const lineToEnd = targetIndent + "}" + (commaRequired ? "," : "");
+
+			this.contentLines.splice(lastPos, 0, lineToEnd);
+		} else {
+			const newString = this.extractContent(oContent);
+
+			lineToStart += newString;
+			lineToStart += commaRequired ? "," : "";
+			this.contentLines.splice(startLine, 0, lineToStart);
+		}
 
 		// update content
 		try {

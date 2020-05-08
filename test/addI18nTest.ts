@@ -78,36 +78,143 @@ function analyseMigrateAndTest(
 }
 
 describe("addI18n", function() {
-	describe("#start()", function() {
-		let oStub;
-		beforeEach(function() {
-			oStub = sinon.stub(FileUtils, "fsWriteFile").resolves();
-		});
+	let oStub;
+	beforeEach(function() {
+		oStub = sinon.stub(FileUtils, "fsWriteFile").resolves();
+	});
 
-		afterEach(function() {
-			if (oStub) {
-				oStub.restore();
-			}
-		});
-		it("should addMissingDependencies", function(done) {
-			const expectedContent = fs.readFileSync(
-				rootDir + "project/manifest.expected.json",
-				"utf8"
-			);
-			const module = new CustomFileInfo(rootDir + "project/Component.js");
-			analyseMigrateAndTest(
-				module,
-				false,
-				expectedContent,
-				{},
-				{
-					getContent(): string {
-						return oStub.getCalls()[0].args[1];
-					},
+	afterEach(function() {
+		if (oStub) {
+			oStub.restore();
+		}
+	});
+	it("project", function(done) {
+		const expectedContent = fs.readFileSync(
+			rootDir + "project/manifest.expected.json",
+			"utf8"
+		);
+		const module = new CustomFileInfo(rootDir + "project/Component.js");
+		analyseMigrateAndTest(
+			module,
+			false,
+			expectedContent,
+			{},
+			{
+				getContent(): string {
+					return oStub.getCalls()[0].args[1];
 				},
-				done,
-				[]
-			);
-		});
+			},
+			done,
+			[]
+		);
+	});
+
+	it("project2", function(done) {
+		const expectedContent = fs.readFileSync(
+			rootDir + "project2/manifest.expected.json",
+			"utf8"
+		);
+		const module = new CustomFileInfo(rootDir + "project2/Component.js");
+		analyseMigrateAndTest(
+			module,
+			false,
+			expectedContent,
+			{},
+			{
+				getContent(): string {
+					return oStub.getCalls()[0].args[1];
+				},
+			},
+			done,
+			[]
+		);
+	});
+
+	it("project3", function(done) {
+		const expectedContent = fs.readFileSync(
+			rootDir + "project3/comp/manifest.expected.json",
+			"utf8"
+		);
+		const module = new CustomFileInfo(
+			rootDir + "project3/comp/Component.js"
+		);
+		analyseMigrateAndTest(
+			module,
+			false,
+			expectedContent,
+			{},
+			{
+				getContent(): string {
+					return oStub.getCalls()[0].args[1];
+				},
+			},
+			done,
+			[]
+		);
+	});
+
+	it("project4", function(done) {
+		const expectedContent = fs.readFileSync(
+			rootDir + "project4/manifest.expected.json",
+			"utf8"
+		);
+		const module = new CustomFileInfo(rootDir + "project4/Component.js");
+		analyseMigrateAndTest(
+			module,
+			false,
+			expectedContent,
+			{},
+			{
+				getContent(): string {
+					return oStub.getCalls()[0].args[1];
+				},
+			},
+			done,
+			[]
+		);
+	});
+
+	it("project5", function(done) {
+		const expectedContent = fs.readFileSync(
+			rootDir + "project5/manifest.expected.json",
+			"utf8"
+		);
+		const module = new CustomFileInfo(rootDir + "project5/Component.js");
+		analyseMigrateAndTest(
+			module,
+			false,
+			expectedContent,
+			{},
+			{
+				getContent(): string {
+					return oStub.getCalls()[0].args[1];
+				},
+			},
+			done,
+			[]
+		);
+	});
+
+	it("project6", function(done) {
+		const expectedContent = fs.readFileSync(
+			rootDir + "project6/app/manifest.expected.json",
+			"utf8"
+		);
+		const module = new CustomFileInfo(
+			rootDir + "project6/app/Component.js"
+		);
+		analyseMigrateAndTest(
+			module,
+			false,
+			expectedContent,
+			{},
+			{
+				getContent(): string {
+					return oStub.getCalls()[0].args[1];
+				},
+			},
+			done,
+			[]
+		);
 	});
 });

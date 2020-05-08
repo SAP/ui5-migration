@@ -1,0 +1,80 @@
+{
+	"_version": "1.21.0",
+	"sap.app": {
+		"_version": "1.0.0",
+		"id": "supi.testhelper.comp",
+		"type": "component",
+		"i18n": {
+			"bundleUrl": "../i18n/applicationUi.properties",
+			"supportedLocales": [
+				"",
+				"en",
+				"en_US"
+			],
+			"fallbackLocale": "en"
+		},
+		"title": "{{TestComponent}}",
+		"description": "Used for Testing",
+		"tags": {
+			"keywords": []
+		},
+		"applicationVersion": {
+			"version": "1"
+		},
+		"offline": false
+	},
+	"sap.ui5": {
+		"_version": "1.0.0",
+
+		"resources": {
+			"js": [],
+			"css": []
+		},
+		"dependencies": {
+			"minUI5Version": "${sap.ui5.dist.version}",
+			"libs": {
+				"sap.ui.core": {
+					"minVersion": "1.30.0"
+				},
+				"sap.suite.ui.commons": {
+					"minVersion": "1.30.0"
+				},
+				"sap.m": {
+					"minVersion": "1.30.0"
+				},
+				"sap.ui.layout": {
+					"minVersion": "1.30.0"
+				},
+				"sap.ushell": {
+					"minVersion": "1.30.0"
+				},
+				"sap.viz": {
+					"minVersion": "1.30.0"
+				}
+			}
+		},
+		"extends": {
+			"component": "supi.base.Component",
+			"minVersion": "1.0.0",
+			"extensions": {}
+		},
+		"models": {
+			"i18n": {
+				"type": "sap.ui.model.resource.ResourceModel",
+				"uri": "../i18n/applicationUi.properties",
+				"settings": {
+					"supportedLocales": [
+						"",
+						"en",
+						"en_US"
+					],
+					"fallbackLocale": "en"
+				}
+			}
+		},
+		"config": {
+			"fullWidth": true
+		}
+	}
+}
+
