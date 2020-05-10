@@ -120,7 +120,7 @@
     "@types/json5": "^0.0.30",
     "@types/minimatch": "^3.0.3",
     "@types/mocha": "^5.2.6",
-    "@types/node": "^13.13.4",
+    "@types/node": "^13.13.5",
     "@types/yargs": "^13.0.8",
     "gts": "^1.1.2",
     "mocha": "^6.2.3",
@@ -129,7 +129,7 @@
     "rimraf": "^3.0.2",
     "sinon": "^8.1.1",
     "source-map-support": "^0.5.19",
-    "ts-node": "^8.9.1",
+    "ts-node": "^8.10.1",
     "tslint": "^5.20.1",
     "typescript": "^3.8.3"
   }
