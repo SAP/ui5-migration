@@ -1,0 +1,87 @@
+{
+	"_version": "1.1.0",
+	"sap.app": {
+		"id": "supi",
+		"type": "application",
+		"i18n": "i18n/i18n.properties",
+		"applicationVersion": {
+			"version": "${project.version}"
+		},
+		"title": "{{title}}",
+		"description": "{{description}}",
+		"tags": {
+			"keywords": []
+		},
+		"ach": "ME",
+		"dataSources": {
+			"mainService": {
+				"uri": "/odata/v4/myservice/",
+				"type": "OData",
+				"settings": {
+					"annotations": ["localAnnotations"],
+					"odataVersion": "4.0",
+					"localUri": "localService/metadata.xml"
+				}
+			},
+			"localAnnotations": {
+				"uri": "annotations/annotations.xml",
+				"type": "ODataAnnotation",
+				"settings": {
+					"localUri": "annotations/annotations.xml"
+				}
+			}
+		},
+		"offline": false,
+		"resources": "resources.json",
+		"crossNavigation": {
+			"inbounds": {},
+			"outbounds": {}
+		}
+	},
+	"sap.ui": {
+		"technology": "UI5",
+		"icons": {
+			"icon": "",
+			"favIcon": "",
+			"phone": "",
+			"phone@2": "",
+			"tablet": "",
+			"tablet@2": ""
+		},
+		"deviceTypes": {
+			"desktop": true,
+			"tablet": true,
+			"phone": true
+		}
+	},
+	"sap.ui5": {
+		"resources": {
+			"js": [],
+			"css": []
+		},
+		"models": {
+			"i18n": {
+				"type": "sap.ui.model.resource.ResourceModel",
+				"uri": "i18n/i18n.properties"
+			},
+			"": {
+				"dataSource": "mainService",
+				"settings": {
+					"synchronizationMode": "None",
+					"operationMode": "Server",
+					"autoExpandSelect": true,
+					"earlyRequests": true,
+					"groupProperties": {
+						"default": {
+							"submit": "Auto"
+						}
+					}
+				}
+			}
+		}
+	},
+	"sap.fiori": {
+		"registrationIds": [],
+		"archeType": "transactional"
+	}
+}

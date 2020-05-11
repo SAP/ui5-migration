@@ -1,0 +1,59 @@
+{
+	"_version": "1.21.0",
+	"sap.app": {
+		"_version": "1.1.0",
+		"id": "supi.sample.basicSinglePanel",
+		"type": "application",
+		"i18n": {
+			"bundleUrl": "i18n/i18n.properties",
+			"supportedLocales": [
+				"",
+				"en"
+			],
+			"fallbackLocale": "en"
+		},
+		"title": "{{appTitle}}",
+		"description": "{{appDescription}}",
+		"applicationVersion": {
+			"version": "1.0.0"
+		}
+	},
+	"sap.ui": {
+		"_version": "1.1.0",
+		"technology": "UI5",
+		"deviceTypes": {
+			"desktop": true,
+			"tablet": false,
+			"phone": false
+		},
+		"supportedThemes": [
+			"sap_bluecrystal"
+		]
+	},
+	"sap.ui5": {
+		"_version": "1.1.0",
+		"rootView": {
+			"viewName": "supi.sample.basicSinglePanel.view.App",
+
+			"type": "XML",
+			"async": true,
+			"id": "app"
+		},
+		"dependencies": {
+			"minUI5Version": "1.60",
+			"libs": {
+				"sap.m": {},
+				"sap.ui.vk":{}
+			}
+		},
+		"models": {
+			"i18n": {
+				"type": "sap.ui.model.resource.ResourceModel",
+				"settings": {
+					"bundleName": "basicSinglePanel.i18n.i18n"
+				}
+			}
+		}
+	}
+
+}

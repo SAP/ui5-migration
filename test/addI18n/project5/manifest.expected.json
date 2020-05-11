@@ -1,0 +1,50 @@
+{
+    "_version": "1.21.0",
+    "sap.app": {
+        "_version": "1.1.0",
+        "i18n": {
+            "bundleUrl": "messagebundle.properties",
+            "supportedLocales": [
+                ""
+            ],
+            "fallbackLocale": ""
+        },
+        "id": "mydemo.MyApp",
+        "type": "component",
+        "embeddedBy": "",
+        "title": "{{title}}",
+        "description": "{{description}}",
+        "applicationVersion": {
+            "version": "1.1.0"
+        },
+        "ach": "ME"
+    },
+    "sap.ui": {
+        "_version": "1.1.0",
+        "technology": "UI5",
+        "deviceTypes": {
+            "desktop": true,
+            "tablet": true,
+            "phone": true
+        }
+    },
+    "sap.ui5": {
+        "componentName": "mydemo.MyApp",
+        "dependencies": {
+            "minUI5Version":"1.28",
+            "libs": {
+                "sap.m": {
+                    "minVersion": "1.28"
+                }
+            }
+        },
+        "contentDensities": {
+            "compact": true,
+            "cozy": true
+        }
+    },
+    "sap.flp": {
+        "type": "plugin"
+    }
+}
+
