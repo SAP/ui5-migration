@@ -24,7 +24,7 @@
     "test-azure": "npm run lint && npm run check && npm run coverage-junit",
     "coverage": "nyc npm run unit",
     "coverage-junit": "nyc --reporter=text --reporter=text-summary --reporter=cobertura npm run unit-junit",
-    "unit": "mocha ./js/test/*Test.js ./js/test/**/*Test.js ./js/test/**/**/*Test.js --timeout 5000",
+    "unit": "mocha './js/test/*Test.js' './js/test/**/*Test.js' --timeout 5000",
     "unit-junit": "npm run unit -- --reporter mocha-junit-reporter",
     "unit-watch": "npm run unit -- -w",
     "check": "gts check",
