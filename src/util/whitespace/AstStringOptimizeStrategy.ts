@@ -343,6 +343,20 @@ export class AstStringOptimizeStrategy implements StringOptimizeStrategy {
 
 	/**
 	 *
+	 * @param {string} jsString
+	 * @returns {boolean} whether or not given input string can be parsed to JS
+	 */
+	private static isStringValidJs(jsString) {
+		try {
+			esprima.parseScript(jsString);
+			return true;
+		} catch (e) {
+			return false;
+		}
+	}
+
+	/**
+	 *
 	 * @param {string[]} aOptimizedContent the array to modify
 	 * @param {number} iIndex
 	 * @param {string} whitespaceToRemove
@@ -356,42 +370,73 @@ export class AstStringOptimizeStrategy implements StringOptimizeStrategy {
 		whitespaceToAdd: string,
 		direction: PROCESS_DIRECTION
 	) {
-		let lastDeletedIndex = iIndex;
-		if (direction === PROCESS_DIRECTION.PRECEDING) {
-			for (let i = whitespaceToRemove.length - 1; i >= 0; i--) {
-				const sWhitespaceChar = whitespaceToRemove[i];
-				const iIndexToDelete =
-					iIndex - (whitespaceToRemove.length - 1 - i);
-				const sCharInMod = aOptimizedContent[iIndexToDelete];
-				if (sCharInMod === sWhitespaceChar) {
-					aOptimizedContent[iIndexToDelete] = "";
-					lastDeletedIndex = iIndexToDelete;
-				}
-			}
-		} else {
-			for (let i = 0; i < whitespaceToRemove.length; i++) {
-				const sWhitespaceChar = whitespaceToRemove[i];
-				const iIndexToDelete = iIndex + i;
-				if (aOptimizedContent[iIndexToDelete] === sWhitespaceChar) {
-					aOptimizedContent[iIndexToDelete] = "";
-				}
-			}
-		}
-		if (
-			!aOptimizedContent[lastDeletedIndex] ||
-			StringWhitespaceUtils.isWhitespace(
-				aOptimizedContent[lastDeletedIndex]
-			)
-		) {
-			aOptimizedContent[lastDeletedIndex] = whitespaceToAdd;
-		} else {
+		const aOptimizedContentBackup = aOptimizedContent.slice();
+
+		const getActions = aContent => {
+			const aActions = [];
+			let lastDeletedIndex = iIndex;
 			if (direction === PROCESS_DIRECTION.PRECEDING) {
-				aOptimizedContent[lastDeletedIndex] =
-					aOptimizedContent[lastDeletedIndex] + whitespaceToAdd;
+				for (let i = whitespaceToRemove.length - 1; i >= 0; i--) {
+					const sWhitespaceChar = whitespaceToRemove[i];
+					const iIndexToDelete =
+						iIndex - (whitespaceToRemove.length - 1 - i);
+					const sCharInMod = aContent[iIndexToDelete];
+					if (sCharInMod === sWhitespaceChar) {
+						aActions.push(aOptimizedContent => {
+							aOptimizedContent[iIndexToDelete] = "";
+						});
+						lastDeletedIndex = iIndexToDelete;
+					}
+				}
 			} else {
-				aOptimizedContent[lastDeletedIndex] =
-					whitespaceToAdd + aOptimizedContent[lastDeletedIndex];
+				for (let i = 0; i < whitespaceToRemove.length; i++) {
+					const sWhitespaceChar = whitespaceToRemove[i];
+					const iIndexToDelete = iIndex + i;
+					if (aContent[iIndexToDelete] === sWhitespaceChar) {
+						aActions.push(aOptimizedContent => {
+							aOptimizedContent[iIndexToDelete] = "";
+						});
+					}
+				}
 			}
+			if (
+				!aContent[lastDeletedIndex] ||
+				StringWhitespaceUtils.isWhitespace(aContent[lastDeletedIndex])
+			) {
+				aActions.push(aOptimizedContent => {
+					aOptimizedContent[lastDeletedIndex] = whitespaceToAdd;
+				});
+			} else {
+				if (direction === PROCESS_DIRECTION.PRECEDING) {
+					aActions.push(aOptimizedContent => {
+						aOptimizedContent[lastDeletedIndex] =
+							aOptimizedContent[lastDeletedIndex] +
+							whitespaceToAdd;
+					});
+				} else {
+					aActions.push(aOptimizedContent => {
+						aOptimizedContent[lastDeletedIndex] =
+							whitespaceToAdd +
+							aOptimizedContent[lastDeletedIndex];
+					});
+				}
+			}
+			return aActions;
+		};
+
+		const aActions = getActions(aOptimizedContent);
+
+		// execute actions on backup content
+		aActions.forEach(action => {
+			action(aOptimizedContentBackup);
+		});
+
+		// check if modification causes the JS to become invalid
+		// if it is valid perform actions on actual array
+		if (this.isStringValidJs(aOptimizedContentBackup.join(""))) {
+			aActions.forEach(action => {
+				action(aOptimizedContent);
+			});
 		}
 	}
 

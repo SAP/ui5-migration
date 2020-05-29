@@ -162,7 +162,7 @@ describe("FsFilterFactory", function() {
 			function(fsFilter) {
 				oStub.restore();
 				oStubIsDir.restore();
-				assert.equal(fsFilter.getDir(), resolve("srcd"));
+				assert.equal(fsFilter.getDir(), resolve("srcd/util"));
 				assert.ok(
 					fsFilter.match(resolve("srcd/util/MyUtil.js")),
 					"matches the file"
