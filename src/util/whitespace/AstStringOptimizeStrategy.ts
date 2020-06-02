@@ -372,6 +372,12 @@ export class AstStringOptimizeStrategy implements StringOptimizeStrategy {
 	) {
 		const aOptimizedContentBackup = aOptimizedContent.slice();
 
+		/**
+		 * collects actions to perform
+		 * to simulate a modification and test it (it must not break)
+		 * before applying it to the source code
+		 * @param {string[]} aContent js content
+		 */
 		const getActions = aContent => {
 			const aActions = [];
 			let lastDeletedIndex = iIndex;
