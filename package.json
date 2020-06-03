@@ -21,7 +21,7 @@
     "prepare": "rimraf js && npm run build",
     "lint": "tslint -p tsconfig.json -c tslint.json",
     "test": "npm run lint && npm run check && npm run coverage",
-    "test-azure": "npm run lint && npm run check && npm run coverage-junit",
+    "test-azure": "npm run lint && npm run check && npm run unit && npm run coverage-junit",
     "coverage": "nyc npm run unit",
     "coverage-junit": "nyc --reporter=text --reporter=text-summary --reporter=cobertura npm run unit-junit",
     "unit": "mocha ./js/test/*Test.js ./js/test/**/*Test.js ./js/test/**/*/**Test.js --timeout 6000",
