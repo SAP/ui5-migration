@@ -342,7 +342,7 @@ export class AstStringOptimizeStrategy implements StringOptimizeStrategy {
 	}
 
 	/**
-	 *
+	 * Modifies the content
 	 * @param {string[]} aOptimizedContent the array to modify
 	 * @param {number} iIndex
 	 * @param {string} whitespaceToRemove
