@@ -350,7 +350,7 @@ export class AstStringOptimizeStrategy implements StringOptimizeStrategy {
 	/**
 	 * Validates the given string by parsing it as JS.
 	 * - invalid: if parsing fails
-	 * - valid: if it can be parsed
+	 * - valid: if parsing succeeds
 	 * @param {string} jsString string which contains javascript source code, e.g. 'var x = 5;'
 	 * @returns {boolean} whether or not given input string can be parsed to JS
 	 */
