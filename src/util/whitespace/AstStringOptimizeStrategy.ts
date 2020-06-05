@@ -17,6 +17,12 @@ enum PROCESS_DIRECTION {
 
 const filterAstAttributes = ["type", "range", "loc"];
 
+/**
+ * Replacement function which performs a modification of the jsContent
+ * @param jsContent javascript content, each js string character has a position in the array
+ */
+type ModifyArrayContentAction = (jsContent: string[]) => void;
+
 export interface NodeFilter {
 	isValid(node);
 }
@@ -342,8 +348,10 @@ export class AstStringOptimizeStrategy implements StringOptimizeStrategy {
 	}
 
 	/**
-	 *
-	 * @param {string} jsString
+	 * Validates the given string by parsing it as JS.
+	 * - invalid: if parsing fails
+	 * - valid: if it can be parsed
+	 * @param {string} jsString string which contains javascript source code, e.g. 'var x = 5;'
 	 * @returns {boolean} whether or not given input string can be parsed to JS
 	 */
 	private static isStringValidJs(jsString) {
@@ -374,12 +382,12 @@ export class AstStringOptimizeStrategy implements StringOptimizeStrategy {
 
 		/**
 		 * collects actions to perform
-		 * to simulate a modification and test it (it must not break)
+		 * a simulation of a modification and test it
 		 * before applying it to the source code
-		 * @param {string[]} aContent js content
+		 * @param {string[]} aContent js content, each js string character has a position in the array
 		 */
-		const getActions = aContent => {
-			const aActions = [];
+		const getActions = (aContent): ModifyArrayContentAction[] => {
+			const aActions:ModifyArrayContentAction[] = [];
 			let lastDeletedIndex = iIndex;
 			if (direction === PROCESS_DIRECTION.PRECEDING) {
 				for (let i = whitespaceToRemove.length - 1; i >= 0; i--) {
