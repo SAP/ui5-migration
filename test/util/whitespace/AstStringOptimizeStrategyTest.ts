@@ -8,6 +8,24 @@ const rootDir = "./test/util/whitespace/astresources/";
 const EOL_REGEXP = /\r?\n/g;
 
 describe("AstStringOptimizeStrategy", function() {
+	it("Should optimize comment", async function() {
+		const source = fs.readFileSync(rootDir + "comment.source.js", "UTF-8");
+		const modified = fs.readFileSync(
+			rootDir + "comment.modified.js",
+			"UTF-8"
+		);
+		const expected = fs.readFileSync(
+			rootDir + "comment.expected.js",
+			"UTF-8"
+		);
+		const astStringOptimizeStrategy = new AstStringOptimizeStrategy();
+		const sOptimized = await astStringOptimizeStrategy.optimizeString(
+			source,
+			modified
+		);
+		assert.deepStrictEqual(sOptimized, expected, "content matches");
+	});
+
 	it("Should optimize batch", async function() {
 		const source = fs.readFileSync(rootDir + "batch.source.js", "UTF-8");
 		const modified = fs.readFileSync(
@@ -23,11 +41,7 @@ describe("AstStringOptimizeStrategy", function() {
 			source,
 			modified
 		);
-		assert.deepStrictEqual(
-			sOptimized,
-			expected,
-			"Target version and given version range match"
-		);
+		assert.deepStrictEqual(sOptimized, expected, "content matches");
 	});
 
 	it("Should optimize list", async function() {
@@ -39,11 +53,7 @@ describe("AstStringOptimizeStrategy", function() {
 			source,
 			modified
 		);
-		assert.deepStrictEqual(
-			sOptimized,
-			expected,
-			"Target version and given version range match"
-		);
+		assert.deepStrictEqual(sOptimized, expected, "content matches");
 	});
 
 	it("Should optimize actions", async function() {
@@ -67,13 +77,9 @@ describe("AstStringOptimizeStrategy", function() {
 		assert.deepStrictEqual(
 			reports,
 			["trace: Performing AstStringOptimizeStrategy"],
-			"Target version and given version range match"
+			"content matches"
 		);
-		assert.deepStrictEqual(
-			sOptimized,
-			expected,
-			"Target version and given version range match"
-		);
+		assert.deepStrictEqual(sOptimized, expected, "content matches");
 	});
 
 	it("Should optimize abap", async function() {
@@ -93,11 +99,7 @@ describe("AstStringOptimizeStrategy", function() {
 			source,
 			modified
 		);
-		assert.deepStrictEqual(
-			sOptimized,
-			expected,
-			"Target version and given version range match"
-		);
+		assert.deepStrictEqual(sOptimized, expected, "content matches");
 		assert.deepStrictEqual(
 			reports,
 			[
@@ -115,7 +117,7 @@ describe("AstStringOptimizeStrategy", function() {
 				"trace: AST: add '[\\r][\\n]'",
 				"trace: AST: index: 141",
 			],
-			"Target version and given version range match"
+			"content matches"
 		);
 	});
 
@@ -136,11 +138,7 @@ describe("AstStringOptimizeStrategy", function() {
 			source,
 			modified
 		);
-		assert.deepStrictEqual(
-			sOptimized,
-			expected,
-			"Target version and given version range match"
-		);
+		assert.deepStrictEqual(sOptimized, expected, "content matches");
 		assert.deepStrictEqual(
 			reports,
 			[
@@ -162,7 +160,7 @@ describe("AstStringOptimizeStrategy", function() {
 				"trace: AST: add '[]'",
 				"trace: AST: index: 863",
 			],
-			"Target version and given version range match"
+			"content matches"
 		);
 	});
 
@@ -184,15 +182,11 @@ describe("AstStringOptimizeStrategy", function() {
 			source,
 			modified
 		);
-		assert.deepStrictEqual(
-			sOptimized,
-			expected,
-			"Target version and given version range match"
-		);
+		assert.deepStrictEqual(sOptimized, expected, "content matches");
 		assert.deepStrictEqual(
 			reports,
 			["trace: Performing AstStringOptimizeStrategy"],
-			"Target version and given version range match"
+			"content matches"
 		);
 	});
 });

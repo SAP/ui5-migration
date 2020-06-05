@@ -17,6 +17,12 @@ enum PROCESS_DIRECTION {
 
 const filterAstAttributes = ["type", "range", "loc"];
 
+/**
+ * Replacement function which performs a modification of the jsContent
+ * @param jsContent javascript content, each js string character has a position in the array
+ */
+type ModifyArrayContentAction = (jsContent: string[]) => void;
+
 export interface NodeFilter {
 	isValid(node);
 }
@@ -342,6 +348,22 @@ export class AstStringOptimizeStrategy implements StringOptimizeStrategy {
 	}
 
 	/**
+	 * Validates the given string by parsing it as JS.
+	 * - invalid: if parsing fails
+	 * - valid: if parsing succeeds
+	 * @param {string} jsString string which contains javascript source code, e.g. 'var x = 5;'
+	 * @returns {boolean} whether or not given input string can be parsed to JS
+	 */
+	private static isStringValidJs(jsString) {
+		try {
+			esprima.parseScript(jsString);
+			return true;
+		} catch (e) {
+			return false;
+		}
+	}
+
+	/**
 	 *
 	 * @param {string[]} aOptimizedContent the array to modify
 	 * @param {number} iIndex
@@ -356,42 +378,91 @@ export class AstStringOptimizeStrategy implements StringOptimizeStrategy {
 		whitespaceToAdd: string,
 		direction: PROCESS_DIRECTION
 	) {
-		let lastDeletedIndex = iIndex;
-		if (direction === PROCESS_DIRECTION.PRECEDING) {
-			for (let i = whitespaceToRemove.length - 1; i >= 0; i--) {
-				const sWhitespaceChar = whitespaceToRemove[i];
-				const iIndexToDelete =
-					iIndex - (whitespaceToRemove.length - 1 - i);
-				const sCharInMod = aOptimizedContent[iIndexToDelete];
-				if (sCharInMod === sWhitespaceChar) {
-					aOptimizedContent[iIndexToDelete] = "";
-					lastDeletedIndex = iIndexToDelete;
-				}
-			}
-		} else {
-			for (let i = 0; i < whitespaceToRemove.length; i++) {
-				const sWhitespaceChar = whitespaceToRemove[i];
-				const iIndexToDelete = iIndex + i;
-				if (aOptimizedContent[iIndexToDelete] === sWhitespaceChar) {
-					aOptimizedContent[iIndexToDelete] = "";
-				}
-			}
-		}
-		if (
-			!aOptimizedContent[lastDeletedIndex] ||
-			StringWhitespaceUtils.isWhitespace(
-				aOptimizedContent[lastDeletedIndex]
-			)
-		) {
-			aOptimizedContent[lastDeletedIndex] = whitespaceToAdd;
-		} else {
+		const aOptimizedContentCopy = aOptimizedContent.slice();
+
+		/**
+		 * Collects actions to perform on a js string
+		 * It is used for a simulation of a string modification and test it
+		 * before applying it to the source code
+		 * @param {string[]} aContent js content, each js string character has a position in the array
+		 */
+		const getActions = (aContent): ModifyArrayContentAction[] => {
+			const aActions: ModifyArrayContentAction[] = [];
+			let lastDeletedIndex = iIndex;
 			if (direction === PROCESS_DIRECTION.PRECEDING) {
-				aOptimizedContent[lastDeletedIndex] =
-					aOptimizedContent[lastDeletedIndex] + whitespaceToAdd;
+				for (let i = whitespaceToRemove.length - 1; i >= 0; i--) {
+					const sWhitespaceChar = whitespaceToRemove[i];
+					const iIndexToDelete =
+						iIndex - (whitespaceToRemove.length - 1 - i);
+					const sCharInMod = aContent[iIndexToDelete];
+					if (sCharInMod === sWhitespaceChar) {
+						aActions.push(aOptimizedContent => {
+							aOptimizedContent[iIndexToDelete] = "";
+						});
+						lastDeletedIndex = iIndexToDelete;
+					}
+				}
 			} else {
-				aOptimizedContent[lastDeletedIndex] =
-					whitespaceToAdd + aOptimizedContent[lastDeletedIndex];
+				for (let i = 0; i < whitespaceToRemove.length; i++) {
+					const sWhitespaceChar = whitespaceToRemove[i];
+					const iIndexToDelete = iIndex + i;
+					if (aContent[iIndexToDelete] === sWhitespaceChar) {
+						aActions.push(aOptimizedContent => {
+							aOptimizedContent[iIndexToDelete] = "";
+						});
+					}
+				}
 			}
+			if (
+				!aContent[lastDeletedIndex] ||
+				StringWhitespaceUtils.isWhitespace(aContent[lastDeletedIndex])
+			) {
+				aActions.push(aOptimizedContent => {
+					aOptimizedContent[lastDeletedIndex] = whitespaceToAdd;
+				});
+			} else {
+				if (direction === PROCESS_DIRECTION.PRECEDING) {
+					aActions.push(aOptimizedContent => {
+						aOptimizedContent[lastDeletedIndex] =
+							aOptimizedContent[lastDeletedIndex] +
+							whitespaceToAdd;
+					});
+				} else {
+					aActions.push(aOptimizedContent => {
+						aOptimizedContent[lastDeletedIndex] =
+							whitespaceToAdd +
+							aOptimizedContent[lastDeletedIndex];
+					});
+				}
+			}
+			return aActions;
+		};
+
+		/*
+		 * Collect actions which modify a js string.
+		 * Each modification might break the code represented by the js string
+		 *
+		 * E.g. whitespace modification, removal of a newline character ('\n')
+		 * js string:	'// my comment\nvar x = function() {\n};\nvar y = 47;'
+		 * mod string:	'// my commentvar x = function() {\n};\nvar y = 47;'
+		 *
+		 * after the modification the js string becomes invalid.
+		 * Therefore each modification of the js string is first performed on a copy.
+		 * Afterwards it is validated, before applying it to the original js string
+		 */
+		const aActions = getActions(aOptimizedContent);
+
+		// execute actions on backup content
+		aActions.forEach(action => {
+			action(aOptimizedContentCopy);
+		});
+
+		// check if modification causes the JS to become invalid
+		// if it is valid perform actions on actual array
+		if (this.isStringValidJs(aOptimizedContentCopy.join(""))) {
+			aActions.forEach(action => {
+				action(aOptimizedContent);
+			});
 		}
 	}
 

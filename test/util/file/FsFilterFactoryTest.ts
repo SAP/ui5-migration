@@ -156,13 +156,15 @@ describe("FsFilterFactory", function() {
 			.returns(Promise.resolve(undefined));
 		const oStubIsDir = sinon.stub(FileUtils, "isDir");
 		oStubIsDir.withArgs("srcd").returns(Promise.resolve(true));
-		oStubIsDir.withArgs("srcd/util").returns(Promise.resolve(true));
+		oStubIsDir
+			.withArgs(path.normalize("srcd/util"))
+			.returns(Promise.resolve(true));
 		oStubIsDir.returns(Promise.resolve(false));
 		return FsFilterFactory.createFilter("srcd/util/**/*Util.js").then(
 			function(fsFilter) {
 				oStub.restore();
 				oStubIsDir.restore();
-				assert.equal(fsFilter.getDir(), resolve("srcd"));
+				assert.equal(fsFilter.getDir(), resolve("srcd/util"));
 				assert.ok(
 					fsFilter.match(resolve("srcd/util/MyUtil.js")),
 					"matches the file"
