@@ -1,6 +1,6 @@
 {
   "name": "@ui5/migration",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "description": "Tooling to support the migration of UI5 projects by adapting code for new UI5 framework versions",
   "author": "SAP SE (https://www.sap.com)",
   "license": "Apache-2.0",
