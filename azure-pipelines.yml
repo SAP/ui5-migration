@@ -34,6 +34,7 @@ steps:
     displayName: 'Install Node.js'
 
   - script: npm ci
+  - script: npm run build
   - script: npm run test-azure
 
   - task: PublishTestResults@2

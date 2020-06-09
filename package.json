@@ -16,9 +16,8 @@
     "node": ">=8.5"
   },
   "scripts": {
-    "build": "tsc -p .",
-    "build-watch": "tsc -w -p .",
-    "prepare": "rimraf js && npm run build",
+    "build": "rimraf js && tsc -p .",
+    "build-watch": "rimraf js && tsc -w -p .",
     "lint": "tslint -p tsconfig.json -c tslint.json",
     "test": "npm run lint && npm run check && npm run coverage",
     "test-azure": "npm run lint && npm run check && npm run unit && npm run coverage-junit",
@@ -32,9 +31,8 @@
     "fix": "gts fix",
     "preversion": "npm test",
     "version": "git-chglog --next-tag v$npm_package_version -o CHANGELOG.md && git add CHANGELOG.md",
-    "postversion": "git push --follow-tags",
-    "release-note": "git-chglog -c .chglog/release-config.yml v$npm_package_version",
-    "compile": "tsc -p ."
+    "prepublishOnly": "git push --follow-tags",
+    "release-note": "git-chglog -c .chglog/release-config.yml v$npm_package_version"
   },
   "types": "typings/index.d.ts",
   "files": [
