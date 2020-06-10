@@ -9,20 +9,20 @@ trigger:
 strategy:
   matrix:
     linux_node_8:
-      imageName: 'ubuntu-16.04'
+      imageName: 'ubuntu-18.04'
       node_version: 8.x
     linux_node_10:
-      imageName: 'ubuntu-16.04'
+      imageName: 'ubuntu-18.04'
       node_version: 10.x
     linux_node_latest:
-      imageName: 'ubuntu-16.04'
-      node_version: 11.x
+      imageName: 'ubuntu-18.04'
+      node_version: 12.x
     mac_node_latest:
-      imageName: 'macos-10.14'
-      node_version: 11.x
+      imageName: 'macos-10.15'
+      node_version: 12.x
     windows_node_latest:
-      imageName: 'vs2017-win2016'
-      node_version: 11.x
+      imageName: 'windows-2019'
+      node_version: 12.x
 
 pool:
   vmImage: $(imageName)
