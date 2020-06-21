@@ -1517,9 +1517,9 @@
       }
     },
     "globals": {
-      "version": "12.4.0",
-      "resolved": "https://registry.npmjs.org/globals/-/globals-12.4.0.tgz",
-      "integrity": "sha512-BWICuzzDvDoH54NHKCseDanAhE3CeDorgDL5MT6LMXXj2WCnd9UC2szdk4AWLfjdgNBCXLUanXYcpBBKOSWGwg==",
+      "version": "13.1.0",
+      "resolved": "https://registry.npmjs.org/globals/-/globals-13.1.0.tgz",
+      "integrity": "sha512-4N8AdK8YMcr4nLOUsCP62jhMVAaJVdrEevrmuqHQ/TTXCXVL8ywhd/whKrufcp1zGtKBqw4DHcvsokQ60khOJA==",
       "requires": {
         "type-fest": "^0.8.1"
       }
