@@ -445,9 +445,9 @@
       "dev": true
     },
     "@types/yargs": {
-      "version": "13.0.9",
-      "resolved": "https://registry.npmjs.org/@types/yargs/-/yargs-13.0.9.tgz",
-      "integrity": "sha512-xrvhZ4DZewMDhoH1utLtOAwYQy60eYFoXeje30TzM3VOvQlBwQaEpKFq5m34k1wOw2AKIi2pwtiAjdmhvlBUzg==",
+      "version": "15.0.5",
+      "resolved": "https://registry.npmjs.org/@types/yargs/-/yargs-15.0.5.tgz",
+      "integrity": "sha512-Dk/IDOPtOgubt/IaevIUbTgV7doaKkoorvOyYM2CMwuDyP89bekI7H4xLIwunNYiK9jhCkmc6pUrJk3cj2AB9w==",
       "dev": true,
       "requires": {
         "@types/yargs-parser": "*"
