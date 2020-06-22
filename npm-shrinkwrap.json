@@ -3201,9 +3201,9 @@
       }
     },
     "recast": {
-      "version": "0.18.10",
-      "resolved": "https://registry.npmjs.org/recast/-/recast-0.18.10.tgz",
-      "integrity": "sha512-XNvYvkfdAN9QewbrxeTOjgINkdY/odTgTS56ZNEWL9Ml0weT4T3sFtvnTuF+Gxyu46ANcRm1ntrF6F5LAJPAaQ==",
+      "version": "0.19.1",
+      "resolved": "https://registry.npmjs.org/recast/-/recast-0.19.1.tgz",
+      "integrity": "sha512-8FCjrBxjeEU2O6I+2hyHyBFH1siJbMBLwIRvVr1T3FD2cL754sOaJDsJ/8h3xYltasbJ8jqWRIhMuDGBSiSbjw==",
       "requires": {
         "ast-types": "0.13.3",
         "esprima": "~4.0.0",
