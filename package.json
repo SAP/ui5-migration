@@ -105,7 +105,7 @@
     "recast": "^0.19.1",
     "request": "^2.88.2",
     "semver": "^7.3.2",
-    "yargs": "^15.3.1"
+    "yargs": "^15.4.0"
   },
   "bin": {
     "ui5-migration": "./bin/cli.js"
@@ -129,6 +129,6 @@
     "source-map-support": "^0.5.19",
     "ts-node": "^8.10.2",
     "tslint": "^6.1.2",
-    "typescript": "^3.9.5"
+    "typescript": "^3.9.6"
   }
 }
