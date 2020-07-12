@@ -105,7 +105,7 @@
     "recast": "^0.19.1",
     "request": "^2.88.2",
     "semver": "^7.3.2",
-    "yargs": "^15.4.0"
+    "yargs": "^15.4.1"
   },
   "bin": {
     "ui5-migration": "./bin/cli.js"
@@ -118,7 +118,7 @@
     "@types/json5": "^0.0.30",
     "@types/minimatch": "^3.0.3",
     "@types/mocha": "^7.0.2",
-    "@types/node": "^13.13.12",
+    "@types/node": "^13.13.14",
     "@types/yargs": "^15.0.5",
     "gts": "^1.1.2",
     "mocha": "^6.2.3",
