@@ -121,7 +121,7 @@
     "@types/node": "^13.13.15",
     "@types/yargs": "^15.0.5",
     "gts": "^1.1.2",
-    "mocha": "^6.2.3",
+    "mocha": "^8.1.0",
     "mocha-junit-reporter": "^1.23.3",
     "nyc": "^15.1.0",
     "rimraf": "^3.0.2",
