@@ -41,7 +41,9 @@
     "npm-shrinkwrap.json",
     "bin/**",
     "defaultConfig/**",
-    "js/src/**/*.js"
+    "js/src/**/*.js",
+    "LICENSES/**",
+    ".reuse/**"
   ],
   "nyc": {
     "extends": "@istanbuljs/nyc-config-typescript",

@@ -52,6 +52,3 @@ Please check our [Contribution Guidelines](https://github.com/SAP/ui5-migration/
 
 ## Support
 Please follow our [Contribution Guidelines](https://github.com/SAP/ui5-migration/blob/master/CONTRIBUTING.md#report-an-issue) on how to report an issue.
-
-## License
-This project is licensed under the Apache Software License, Version 2.0 except as noted otherwise in the [LICENSE](https://github.com/SAP/ui5-migration/blob/master/LICENSE.txt) file.
