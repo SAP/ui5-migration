@@ -785,9 +785,9 @@ describe("AmdCleaner ui52amd", function() {
 			sourceCodeFileName: "amdCleanup/jsdocDeclare.js",
 			expectedCodeFileName: "amdCleanup/jsdocDeclare.expected.js",
 			logs: [
-				"debug: 10: remove jQuery.sap.declare(myfn)",
+				"debug: 9: remove jQuery.sap.declare(myfn)",
 				"debug: 1: Create empty define call",
-				"debug: 10: remove jQuery.sap.declare(myfn)",
+				"debug: 9: remove jQuery.sap.declare(myfn)",
 			],
 			modified: true,
 			amdSettings: {
