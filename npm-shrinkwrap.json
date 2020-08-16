@@ -374,9 +374,9 @@
       }
     },
     "@sinonjs/samsam": {
-      "version": "5.0.3",
-      "resolved": "https://registry.npmjs.org/@sinonjs/samsam/-/samsam-5.0.3.tgz",
-      "integrity": "sha512-QucHkc2uMJ0pFGjJUDP3F9dq5dx8QIaqISl9QgwLOh6P9yv877uONPGXh/OH/0zmM3tW1JjuJltAZV2l7zU+uQ==",
+      "version": "5.1.0",
+      "resolved": "https://registry.npmjs.org/@sinonjs/samsam/-/samsam-5.1.0.tgz",
+      "integrity": "sha512-42nyaQOVunX5Pm6GRJobmzbS7iLI+fhERITnETXzzwDZh+TtDr/Au3yAvXVjFmZ4wEUaE4Y3NFZfKv0bV0cbtg==",
       "dev": true,
       "requires": {
         "@sinonjs/commons": "^1.6.0",
@@ -486,9 +486,9 @@
       }
     },
     "ajv": {
-      "version": "6.12.3",
-      "resolved": "https://registry.npmjs.org/ajv/-/ajv-6.12.3.tgz",
-      "integrity": "sha512-4K0cK3L1hsqk9xIb2z9vs/XU+PGJZ9PNpJRDS9YLzmNdX6jmVPfamLvTJr0aDAusnHyCHO6MjzlkAsgtqp9teA==",
+      "version": "6.12.4",
+      "resolved": "https://registry.npmjs.org/ajv/-/ajv-6.12.4.tgz",
+      "integrity": "sha512-eienB2c9qVQs2KWexhkrdMLVDoIQCz5KSeLxwg9Lzk4DOfBtIK9PQwwufcsn1jjGuf9WZmqPMbGxOzfcuphJCQ==",
       "requires": {
         "fast-deep-equal": "^3.1.1",
         "fast-json-stable-stringify": "^2.0.0",
@@ -653,9 +653,9 @@
       "integrity": "sha1-tG6JCTSpWR8tL2+G1+ap8bP+dqg="
     },
     "aws4": {
-      "version": "1.10.0",
-      "resolved": "https://registry.npmjs.org/aws4/-/aws4-1.10.0.tgz",
-      "integrity": "sha512-3YDiu347mtVtjpyV3u5kVqQLP242c06zwDOgpeRnybmXlYYsLbtTrUBUm8i8srONt+FWobl5aibnU1030PeeuA=="
+      "version": "1.10.1",
+      "resolved": "https://registry.npmjs.org/aws4/-/aws4-1.10.1.tgz",
+      "integrity": "sha512-zg7Hz2k5lI8kb7U32998pRRFin7zJlkfezGJjUc2heaD4Pw2wObakCDVzkKztTm/Ln7eiVvYsjqak0Ed4LkMDA=="
     },
     "balanced-match": {
       "version": "1.0.0",
@@ -825,9 +825,9 @@
       },
       "dependencies": {
         "get-stream": {
-          "version": "5.1.0",
-          "resolved": "https://registry.npmjs.org/get-stream/-/get-stream-5.1.0.tgz",
-          "integrity": "sha512-EXr1FOzrzTfGeL0gQdeFEvOMm2mzMOglyiOXSTpPC+iAjAKftbr3jpCMWynogwYnM+eSj9sHGc6wjIcDvYiygw==",
+          "version": "5.2.0",
+          "resolved": "https://registry.npmjs.org/get-stream/-/get-stream-5.2.0.tgz",
+          "integrity": "sha512-nBF+F1rAZVCu/p7rjzgA+Yb4lfYXrpl7a6VmJrU8wF9I1CKvP/QwPNZHnOlwbTkY6dvtFIzFMSyQXbLoTQPRpA==",
           "dev": true,
           "requires": {
             "pump": "^3.0.0"
@@ -2272,9 +2272,9 @@
       }
     },
     "lodash": {
-      "version": "4.17.19",
-      "resolved": "https://registry.npmjs.org/lodash/-/lodash-4.17.19.tgz",
-      "integrity": "sha512-JNvd8XER9GQX0v2qJgsaN/mzFCNA5BRe/j8JN9d+tWyGLSodKQHKFicdwNYzWwI3wjRnaKPsGj1XkBjx/F96DQ==",
+      "version": "4.17.20",
+      "resolved": "https://registry.npmjs.org/lodash/-/lodash-4.17.20.tgz",
+      "integrity": "sha512-PlhdFcillOINfeV7Ni6oF1TAEayyZBoZ8bcshTHqOYJYlrqzRK5hagpagky5o4HfCzzd1TRkXPMFq6cKk9rGmA==",
       "dev": true
     },
     "lodash.flattendeep": {
@@ -2979,9 +2979,9 @@
       }
     },
     "onetime": {
-      "version": "5.1.1",
-      "resolved": "https://registry.npmjs.org/onetime/-/onetime-5.1.1.tgz",
-      "integrity": "sha512-ZpZpjcJeugQfWsfyQlshVoowIIQ1qBGSVll4rfDq6JJVO//fesjoX808hXWfBjY+ROZgpKDI5TRSRBSoJiZ8eg==",
+      "version": "5.1.2",
+      "resolved": "https://registry.npmjs.org/onetime/-/onetime-5.1.2.tgz",
+      "integrity": "sha512-kbpaSSGJTWdAY5KPVeMOKXSrPtr8C8C7wodJbcsd51jRnmD+GZu8Y0VoU6Dm5Z4vWr0Ig/1NKuWRKf7j5aaYSg==",
       "dev": true,
       "requires": {
         "mimic-fn": "^2.1.0"
@@ -3493,17 +3493,17 @@
       "dev": true
     },
     "sinon": {
-      "version": "9.0.2",
-      "resolved": "https://registry.npmjs.org/sinon/-/sinon-9.0.2.tgz",
-      "integrity": "sha512-0uF8Q/QHkizNUmbK3LRFqx5cpTttEVXudywY9Uwzy8bTfZUhljZ7ARzSxnRHWYWtVTeh4Cw+tTb3iU21FQVO9A==",
+      "version": "9.0.3",
+      "resolved": "https://registry.npmjs.org/sinon/-/sinon-9.0.3.tgz",
+      "integrity": "sha512-IKo9MIM111+smz9JGwLmw5U1075n1YXeAq8YeSFlndCLhAL5KGn6bLgu7b/4AYHTV/LcEMcRm2wU2YiL55/6Pg==",
       "dev": true,
       "requires": {
         "@sinonjs/commons": "^1.7.2",
         "@sinonjs/fake-timers": "^6.0.1",
         "@sinonjs/formatio": "^5.0.1",
-        "@sinonjs/samsam": "^5.0.3",
+        "@sinonjs/samsam": "^5.1.0",
         "diff": "^4.0.2",
-        "nise": "^4.0.1",
+        "nise": "^4.0.4",
         "supports-color": "^7.1.0"
       }
     },
