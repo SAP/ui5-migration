@@ -465,9 +465,9 @@
       "dev": true
     },
     "@types/yargs": {
-      "version": "15.0.5",
-      "resolved": "https://registry.npmjs.org/@types/yargs/-/yargs-15.0.5.tgz",
-      "integrity": "sha512-Dk/IDOPtOgubt/IaevIUbTgV7doaKkoorvOyYM2CMwuDyP89bekI7H4xLIwunNYiK9jhCkmc6pUrJk3cj2AB9w==",
+      "version": "15.0.7",
+      "resolved": "https://registry.npmjs.org/@types/yargs/-/yargs-15.0.7.tgz",
+      "integrity": "sha512-Gf4u3EjaPNcC9cTu4/j2oN14nSVhr8PQ+BvBcBQHAhDZfl0bVIiLgvnRXv/dn58XhTm9UXvBpvJpDlwV65QxOA==",
       "dev": true,
       "requires": {
         "@types/yargs-parser": "*"
@@ -1878,9 +1878,9 @@
       "dev": true
     },
     "is-callable": {
-      "version": "1.2.1",
-      "resolved": "https://registry.npmjs.org/is-callable/-/is-callable-1.2.1.tgz",
-      "integrity": "sha512-wliAfSzx6V+6WfMOmus1xy0XvSgf/dlStkvTfq7F0g4bOIW0PSUbnyse3NhDwdyYS1ozfUtAAySqTws3z9Eqgg==",
+      "version": "1.2.2",
+      "resolved": "https://registry.npmjs.org/is-callable/-/is-callable-1.2.2.tgz",
+      "integrity": "sha512-dnMqspv5nU3LoewK2N/y7KLtxtakvTuaCsU9FU50/QDmdbHNy/4/JuRtMHqRU22o3q+W89YQndQEeCVwK+3qrA==",
       "dev": true
     },
     "is-ci": {
