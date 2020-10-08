@@ -847,9 +847,9 @@ describe("AmdCleaner ui52amd", function() {
 			},
 		},
 		{
-			title: "reserved modules (blacklisted)",
-			sourceCodeFileName: "amdCleanup/blackListed.js",
-			expectedCodeFileName: "amdCleanup/blackListed.expected.js",
+			title: "reserved modules (excludes)",
+			sourceCodeFileName: "amdCleanup/excludes.js",
+			expectedCodeFileName: "amdCleanup/excludes.expected.js",
 			logs: [
 				"debug: found define call at position 0",
 				"debug: found define call at position 0",
@@ -862,12 +862,11 @@ describe("AmdCleaner ui52amd", function() {
 			amdSettings: {
 				addTodoForUnsafeReplacements: true,
 				onlySafeReplacements: false,
-				blacklist: ["sap.ui.loader", "sap.ushell"],
+				excludes: ["sap.ui.loader", "sap.ushell"],
 			},
 			api: {
-				"sap.ui.core": rootDir + "amdCleanup/blackListed.api.json",
-				"sap.ushell":
-					rootDir + "amdCleanup/blackListed.ushell.api.json",
+				"sap.ui.core": rootDir + "amdCleanup/excludes.api.json",
+				"sap.ushell": rootDir + "amdCleanup/excludes.ushell.api.json",
 			},
 			apiVersion: {
 				name: "SAPUI5 Distribution",
