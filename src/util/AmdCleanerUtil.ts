@@ -63,7 +63,7 @@ async function fillApiInfo(ast, that, reporter: Reporter, config, apiInfo) {
 					return false;
 				}
 
-				if (config.blacklist && config.blacklist.indexOf(name) >= 0) {
+				if (config.excludes && config.excludes.indexOf(name) >= 0) {
 					// do not traverse as the MemberExpression is fully handled
 					// this.traverse(path);
 					return false;
@@ -475,7 +475,7 @@ function visitCode(
 					return false;
 				}
 
-				if (config.blacklist && config.blacklist.indexOf(name) >= 0) {
+				if (config.excludes && config.excludes.indexOf(name) >= 0) {
 					// do not traverse as the MemberExpression is fully handled
 					// this.traverse(path);
 					return false;

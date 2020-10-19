@@ -3,6 +3,6 @@
 	"amd": {
 		"addTodoForUnsafeReplacements": false,
 		"onlySafeReplacements": false,
-		"blacklist": ["sap.ui.loader", "sap.ui.define", "sap.ui.require", "sap.ushell"]
+		"excludes": ["sap.ui.loader", "sap.ui.define", "sap.ui.require", "sap.ushell"]
 	}
 }
