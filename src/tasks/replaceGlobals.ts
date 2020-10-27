@@ -858,7 +858,7 @@ async function migrate(args: Mod.MigrateArguments): Promise<boolean> {
 		aUsedNewModules.has(r.modulePath)
 	);
 	const removeRequires = analyseResult.removeRequires.filter(
-		r => !aDoNotRemoveModules.has(r)
+		r => !aDoNotRemoveModules.has(r) && !aUsedNewModules.has(r)
 	);
 
 	const aRequireNames = removeRequires.map(s =>

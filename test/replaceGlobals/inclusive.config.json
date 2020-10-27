@@ -1,0 +1,117 @@
+{
+	"modules": {
+		"jquery.sap.encoder": {
+			"jQuery.sap.clearUrlWhitelist@1.58.0": {
+				"newModulePath": "sap/base/security/URLWhitelist",
+				"functionName": "clear",
+				"version": "^1.58.0"
+			},
+			"jQuery.sap.removeUrlWhitelist@1.58.0": {
+				"newModulePath": "sap/base/security/URLWhitelist",
+				"replacer": "RemoveUrlWhitelist",
+				"version": "^1.58.0"
+			},
+			"jQuery.sap.addUrlWhitelist@1.58.0": {
+				"newModulePath": "sap/base/security/URLWhitelist",
+				"functionName": "add",
+				"version": "^1.58.0"
+			},
+			"jQuery.sap.getUrlWhitelist@1.58.0": {
+				"newModulePath": "sap/base/security/URLWhitelist",
+				"functionName": "entries",
+				"version": "^1.58.0"
+			},
+			"jQuery.sap.validateUrl@1.58.0": {
+				"newModulePath": "sap/base/security/URLWhitelist",
+				"functionName": "validate",
+				"version": "^1.58.0"
+			},
+			"jQuery.sap.clearUrlWhitelist@1.85.0": {
+				"newModulePath": "sap/base/security/URLListValidator",
+				"functionName": "clear",
+				"version": "^1.85.0"
+			},
+			"jQuery.sap.removeUrlWhitelist@1.85.0": {
+				"newModulePath": "LEAVE",
+				"replacer": "LEAVE",
+				"version": "^1.85.0",
+				"errorComment": " TODO: migration not possible. jQuery.sap.encoder is deprecated. Please use <code>sap.base.security.URLListValidator</code>"
+			},
+			"jQuery.sap.addUrlWhitelist@1.85.0": {
+				"newModulePath": "sap/base/security/URLListValidator",
+				"functionName": "add",
+				"version": "^1.85.0"
+			},
+			"jQuery.sap.getUrlWhitelist@1.85.0": {
+				"newModulePath": "sap/base/security/URLListValidator",
+				"functionName": "entries",
+				"version": "^1.85.0"
+			},
+			"jQuery.sap.validateUrl@1.85.0": {
+				"newModulePath": "sap/base/security/URLListValidator",
+				"functionName": "validate",
+				"version": "^1.85.0"
+			}
+		},
+		"sap/base/security/URLWhitelist": {
+			"URLWhitelist.clear@1.85.0": {
+				"newModulePath": "sap/base/security/URLListValidator",
+				"newVariableName": "URLListValidator",
+				"version": "^1.85.0"
+			},
+			"URLWhitelist.add@1.85.0": {
+				"newModulePath": "sap/base/security/URLListValidator",
+				"newVariableName": "URLListValidator",
+				"version": "^1.85.0"
+			},
+			"URLWhitelist.entries@1.85.0": {
+				"newModulePath": "sap/base/security/URLListValidator",
+				"newVariableName": "URLListValidator",
+				"version": "^1.85.0"
+			},
+			"URLWhitelist.validate@1.85.0": {
+				"newModulePath": "sap/base/security/URLListValidator",
+				"newVariableName": "URLListValidator",
+				"version": "^1.85.0"
+			},
+			"URLWhitelist.delete@1.85.0": {
+				"newModulePath": "LEAVE",
+				"replacer": "LEAVE",
+				"version": "^1.85.0",
+				"errorComment": " TODO: migration not possible. Use sap/base/security/URLListValidator.clear and sap/base/security/URLListValidator.add instead."
+			},
+			"URLWhitelist.clear@1.58.0": {
+				"newModulePath": "LEAVE",
+				"replacer": "LEAVE",
+				"version": "^1.58.0"
+			},
+			"URLWhitelist.add@1.58.0": {
+				"newModulePath": "LEAVE",
+				"replacer": "LEAVE",
+				"version": "^1.58.0"
+			},
+			"URLWhitelist.entries@1.58.0": {
+				"newModulePath": "LEAVE",
+				"replacer": "LEAVE",
+				"version": "^1.58.0"
+			},
+			"URLWhitelist.validate@1.58.0": {
+				"newModulePath": "LEAVE",
+				"replacer": "LEAVE",
+				"version": "^1.58.0"
+			},
+			"URLWhitelist.delete@1.58.0": {
+				"newModulePath": "LEAVE",
+				"replacer": "LEAVE",
+				"version": "^1.58.0"
+			}
+		}
+	},
+	"replacers": {
+		"Module": "tasks/helpers/replacers/Module.js",
+		"ModuleFunction": "tasks/helpers/replacers/ModuleFunction.js",
+		"LEAVE": "tasks/helpers/replacers/LEAVE.js",
+		"RemoveUrlWhitelist": "tasks/helpers/replacers/RemoveUrlWhitelist.js"
+	},
+	"excludes": []
+}
