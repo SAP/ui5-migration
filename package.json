@@ -107,7 +107,7 @@
     "recast": "^0.19.1",
     "request": "^2.88.2",
     "semver": "^7.3.2",
-    "yargs": "^15.4.1"
+    "yargs": "^16.1.0"
   },
   "bin": {
     "ui5-migration": "./bin/cli.js"
