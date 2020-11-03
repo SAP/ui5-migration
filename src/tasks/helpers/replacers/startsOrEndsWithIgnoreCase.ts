@@ -38,7 +38,7 @@ function isWithinIfStatement(node: NodePath) {
  * pattern)</code> with
  * <code>value.toLowerCase().startsWith(pattern.toLowerCase())</code> The
  * parameter config.startsOrEndsWithFunction is used to switch between the
- * replacments.
+ * replacements.
  *
  * @param {recast.NodePath} node The top node of the module reference
  * @param {string} name The name of the new module

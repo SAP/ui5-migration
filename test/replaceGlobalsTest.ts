@@ -701,6 +701,126 @@ describe("replaceGlobals", function() {
 			]);
 		});
 
+		it("should replaceGlobals inclusive version 1.58.0: jQuery.sap.*Whitelist -> URLWhitelist", function(done) {
+			const expectedContent = fs.readFileSync(
+				rootDir + "inclusive158.expected.js",
+				"utf8"
+			);
+			const config = JSON.parse(
+				fs.readFileSync(rootDir + "inclusive.config.json", "utf8")
+			);
+			const module = new CustomFileInfo(rootDir + "inclusive158.js");
+			analyseMigrateAndTest(
+				module,
+				true,
+				expectedContent,
+				config,
+				done,
+				[
+					'trace: 26: Replace global call with "sap.base.security.URLWhitelist"',
+					'trace: 26: Found call to replace "jQuery.sap.clearUrlWhitelist"',
+					'trace: 28: Replace global call with "sap.base.security.URLWhitelist"',
+					'trace: 28: Found call to replace "jQuery.sap.removeUrlWhitelist"',
+					'trace: 30: Replace global call with "sap.base.security.URLWhitelist"',
+					'trace: 30: Found call to replace "jQuery.sap.addUrlWhitelist"',
+					'trace: 32: Replace global call with "sap.base.security.URLWhitelist"',
+					'trace: 32: Found call to replace "jQuery.sap.getUrlWhitelist"',
+					'trace: 33: Replace global call with "sap.base.security.URLWhitelist"',
+					'trace: 33: Found call to replace "jQuery.sap.validateUrl"',
+					'trace: 26: Replaced call "jQuery.sap.clearUrlWhitelist"',
+					'trace: 28: Replaced call "jQuery.sap.removeUrlWhitelist"',
+					'trace: 30: Replaced call "jQuery.sap.addUrlWhitelist"',
+					'trace: 32: Replaced call "jQuery.sap.getUrlWhitelist"',
+					'trace: 33: Replaced call "jQuery.sap.validateUrl"',
+					'trace: 7: Add dependency "sap/base/security/URLWhitelist" named "URLWhitelist"',
+					'trace: 7: Remove dependency "jquery.sap.encoder"',
+				],
+				"trace",
+				"1.58.0"
+			);
+		});
+
+		it("should replaceGlobals inclusive version to 1.85.0: jQuery.sap.*Whitelist -> URLListValidator", function(done) {
+			const expectedContent = fs.readFileSync(
+				rootDir + "inclusive185.expected.js",
+				"utf8"
+			);
+			const config = JSON.parse(
+				fs.readFileSync(rootDir + "inclusive.config.json", "utf8")
+			);
+			const module = new CustomFileInfo(rootDir + "inclusive185.js");
+			analyseMigrateAndTest(
+				module,
+				true,
+				expectedContent,
+				config,
+				done,
+				[
+					'trace: 26: Replace global call with "sap.base.security.URLListValidator"',
+					'trace: 26: Found call to replace "jQuery.sap.clearUrlWhitelist"',
+					'trace: 28: Replace global call with "LEAVE"',
+					'trace: 28: Found call to replace "jQuery.sap.removeUrlWhitelist"',
+					'trace: 30: Replace global call with "sap.base.security.URLListValidator"',
+					'trace: 30: Found call to replace "jQuery.sap.addUrlWhitelist"',
+					'trace: 32: Replace global call with "sap.base.security.URLListValidator"',
+					'trace: 32: Found call to replace "jQuery.sap.getUrlWhitelist"',
+					'trace: 33: Replace global call with "sap.base.security.URLListValidator"',
+					'trace: 33: Found call to replace "jQuery.sap.validateUrl"',
+					'trace: 26: Replaced call "jQuery.sap.clearUrlWhitelist"',
+					"debug: 28: ignored element: jQuery.sap.removeUrlWhitelist",
+					"error: 28: Error: Ignore",
+					'trace: 30: Replaced call "jQuery.sap.addUrlWhitelist"',
+					'trace: 32: Replaced call "jQuery.sap.getUrlWhitelist"',
+					'trace: 33: Replaced call "jQuery.sap.validateUrl"',
+					'trace: 7: Add dependency "sap/base/security/URLListValidator" named "URLListValidator"',
+				],
+				"trace",
+				"1.85.0"
+			);
+		});
+
+		it("should replaceGlobals inclusive version to 1.90.0: URLWhitelist -> URLListValidator", function(done) {
+			const expectedContent = fs.readFileSync(
+				rootDir + "inclusive190.expected.js",
+				"utf8"
+			);
+			const config = JSON.parse(
+				fs.readFileSync(rootDir + "inclusive.config.json", "utf8")
+			);
+			const module = new CustomFileInfo(rootDir + "inclusive190.js");
+			analyseMigrateAndTest(
+				module,
+				true,
+				expectedContent,
+				config,
+				done,
+				[
+					'trace: 26: Replace global call with "sap.base.security.URLListValidator"',
+					'trace: 26: Found call to replace "URLWhitelist.clear"',
+					'trace: 28: Replace global call with "sap.base.security.URLListValidator"',
+					'trace: 28: Found call to replace "URLWhitelist.entries"',
+					'trace: 28: Replace global call with "LEAVE"',
+					'trace: 28: Found call to replace "URLWhitelist.delete"',
+					'trace: 30: Replace global call with "sap.base.security.URLListValidator"',
+					'trace: 30: Found call to replace "URLWhitelist.add"',
+					'trace: 32: Replace global call with "sap.base.security.URLListValidator"',
+					'trace: 32: Found call to replace "URLWhitelist.entries"',
+					'trace: 33: Replace global call with "sap.base.security.URLListValidator"',
+					'trace: 33: Found call to replace "URLWhitelist.validate"',
+					'trace: 26: Replaced call "URLWhitelist.clear"',
+					'trace: 28: Replaced call "URLWhitelist.entries"',
+					"debug: 28: ignored element: URLWhitelist.delete",
+					"error: 28: Error: Ignore",
+					'trace: 30: Replaced call "URLWhitelist.add"',
+					'trace: 32: Replaced call "URLWhitelist.entries"',
+					'trace: 33: Replaced call "URLWhitelist.validate"',
+					'trace: 7: Add dependency "sap/base/security/URLListValidator" named "URLListValidator"',
+				],
+				"trace",
+				"1.90.0"
+			);
+		});
+
 		it("should replaceGlobals intervalCall", function(done) {
 			const expectedContent = fs.readFileSync(
 				rootDir + "interval.expected.js",
