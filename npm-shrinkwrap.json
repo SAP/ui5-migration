@@ -455,9 +455,9 @@
       "dev": true
     },
     "@types/node": {
-      "version": "13.13.33",
-      "resolved": "https://registry.npmjs.org/@types/node/-/node-13.13.33.tgz",
-      "integrity": "sha512-1B3GM1yuYsFyEvBb+ljBqWBOylsWDYioZ5wpu8AhXdIhq20neXS7eaSC8GkwHE0yQYGiOIV43lMsgRYTgKZefQ==",
+      "version": "14.14.16",
+      "resolved": "https://registry.npmjs.org/@types/node/-/node-14.14.16.tgz",
+      "integrity": "sha512-naXYePhweTi+BMv11TgioE2/FXU4fSl29HAH1ffxVciNsH3rYXjNP2yM8wqmSm7jS20gM8TIklKiTen+1iVncw==",
       "dev": true
     },
     "@types/yargs": {
