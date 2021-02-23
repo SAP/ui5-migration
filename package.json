@@ -117,7 +117,7 @@
     "@types/esprima": "^4.0.2",
     "@types/estree": "0.0.41",
     "@types/graceful-fs": "^4.1.4",
-    "@types/json5": "^0.0.30",
+    "@types/json5": "^2.2.0",
     "@types/minimatch": "^3.0.3",
     "@types/mocha": "^8.2.1",
     "@types/node": "^14.14.27",
