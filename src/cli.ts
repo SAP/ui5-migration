@@ -95,9 +95,10 @@ export async function start(): Promise<void> {
 			default: ".gitignore",
 		})
 		.check(function(argv) {
+			const commandArgument = argv._[0] as string;
 			const bValid =
 				argv._.length >= 1 &&
-				["migrate", "analyze"].includes(argv._[0]);
+				["migrate", "analyze"].includes(commandArgument);
 
 			if (!bValid) {
 				throw new Error(
@@ -114,7 +115,7 @@ export async function start(): Promise<void> {
 	// const bMigrate = argv._[0] === "migrate";
 	const bAnalyze = argv._[0] === "analyze";
 
-	const aPlainArguments = argv._.slice(1);
+	const aPlainArguments = argv._.slice(1) as string[];
 
 	const namespaces: string[] = argv["namespaces"];
 	const tasks: string[] = argv["task"];
