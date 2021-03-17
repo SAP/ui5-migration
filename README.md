@@ -19,7 +19,7 @@ The UI5 migration tool is node.js-based and performs source code replacements an
 ## Installation
 
 ### Requirements
-- [Node.js](https://nodejs.org/) (**version 8.5 or higher** ⚠️)
+- [Node.js](https://nodejs.org/) (**version 10 or higher** ⚠️)
 
 The migration tool is currently available for early usage. It can be installed with npm.
 ```cli
