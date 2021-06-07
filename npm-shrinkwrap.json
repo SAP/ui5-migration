@@ -497,9 +497,9 @@
       }
     },
     "@types/estree": {
-      "version": "0.0.41",
-      "resolved": "https://registry.npmjs.org/@types/estree/-/estree-0.0.41.tgz",
-      "integrity": "sha512-rIAmXyJlqw4KEBO7+u9gxZZSQHaCNnIzYrnNmYVpgfJhxTqO0brCX0SYpqUTkVI5mwwUwzmtspLBGBKroMeynA==",
+      "version": "0.0.48",
+      "resolved": "https://registry.npmjs.org/@types/estree/-/estree-0.0.48.tgz",
+      "integrity": "sha512-LfZwXoGUDo0C3me81HXgkBg5CTQYb6xzEl+fNmbO4JdRiSKQ8A0GD1OBBvKAIsbCUgoyAty7m99GqqMQe784ew==",
       "dev": true
     },
     "@types/graceful-fs": {
