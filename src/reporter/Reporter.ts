@@ -1,5 +1,10 @@
 import * as ESTree from "estree";
 
+/**
+ * Report Level similar to Log level. Used to narrow down reported information.
+ * TRACE is the most verbose level while ERROR is the most strict level.
+ * This means that the TRACE level also includes the ERROR logs
+ */
 export enum ReportLevel {
 	ERROR = "error",
 	WARNING = "warning",
@@ -19,10 +24,14 @@ const reportLevels: ReportLevel[] = [
 
 /**
  *
- * @param {ReportLevel} currentLevel TRACE
- * @param {ReportLevel} requiredLevel INFO
- * @returns {number} -1 if
- * @constructor
+ * Compares two ReportLevels to find out if the currentLevel is at least as
+ * verbose as the requiredLevel.
+ *
+ * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort
+ *
+ * @param {ReportLevel} currentLevel the current level e.g. TRACE
+ * @param {ReportLevel} requiredLevel the minimal level required e.g. INFO
+ * @returns {number} -1 if the current level is more verbose than the required level, 1 otherwise
  */
 export function CompareReportLevel(
 	currentLevel: ReportLevel,
@@ -118,6 +127,9 @@ export interface Reporter {
 	 */
 	reportCollected(level: ReportLevel): void;
 
+	/**
+	 * finalizes the report
+	 */
 	finalize(): Promise<{}>;
 
 	setContext(oContext: ReportContext): void;

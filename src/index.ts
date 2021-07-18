@@ -1,5 +1,4 @@
 import * as ESTree from "estree";
-import * as fs from "graceful-fs";
 
 import {JSONReporter, Reporter, ReportLevel} from "./Migration";
 import {JSONReporterResult} from "./reporter/JSONReporter";
