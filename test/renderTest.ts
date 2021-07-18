@@ -1,6 +1,5 @@
 import {analyse, migrate} from "../src/tasks/addRenderers";
 
-import * as assertEqualNormalized from "./assertEqualNormalized";
 import {
 	CustomFileFinder,
 	CustomFileInfo,
