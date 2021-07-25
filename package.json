@@ -104,7 +104,7 @@
     "ignore": "^5.1.8",
     "json5": "^2.2.0",
     "minimatch": "^3.0.4",
-    "recast": "^0.20.4",
+    "recast": "^0.20.5",
     "request": "^2.88.2",
     "semver": "^7.3.5",
     "yargs": "^16.2.0"
@@ -120,7 +120,7 @@
     "@types/json5": "^2.2.0",
     "@types/minimatch": "^3.0.5",
     "@types/mocha": "^8.2.3",
-    "@types/node": "^14.17.5",
+    "@types/node": "^14.17.6",
     "@types/yargs": "^16.0.4",
     "gts": "^1.1.2",
     "mocha": "^6.2.3",
