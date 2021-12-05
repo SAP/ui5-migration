@@ -543,9 +543,9 @@
       "dev": true
     },
     "@types/node": {
-      "version": "14.17.34",
-      "resolved": "https://registry.npmjs.org/@types/node/-/node-14.17.34.tgz",
-      "integrity": "sha512-USUftMYpmuMzeWobskoPfzDi+vkpe0dvcOBRNOscFrGxVp4jomnRxWuVohgqBow2xyIPC0S3gjxV/5079jhmDg==",
+      "version": "14.18.0",
+      "resolved": "https://registry.npmjs.org/@types/node/-/node-14.18.0.tgz",
+      "integrity": "sha512-0GeIl2kmVMXEnx8tg1SlG6Gg8vkqirrW752KqolYo1PHevhhZN3bhJ67qHj+bQaINhX0Ra3TlWwRvMCd9iEfNQ==",
       "dev": true
     },
     "@types/yargs": {
@@ -975,9 +975,9 @@
       }
     },
     "caniuse-lite": {
-      "version": "1.0.30001283",
-      "resolved": "https://registry.npmjs.org/caniuse-lite/-/caniuse-lite-1.0.30001283.tgz",
-      "integrity": "sha512-9RoKo841j1GQFSJz/nCXOj0sD7tHBtlowjYlrqIUS812x9/emfBLBt6IyMz1zIaYc/eRL8Cs6HPUVi2Hzq4sIg==",
+      "version": "1.0.30001284",
+      "resolved": "https://registry.npmjs.org/caniuse-lite/-/caniuse-lite-1.0.30001284.tgz",
+      "integrity": "sha512-t28SKa7g6kiIQi6NHeOcKrOrGMzCRrXvlasPwWC26TH2QNdglgzQIRUuJ0cR3NeQPH+5jpuveeeSFDLm2zbkEw==",
       "dev": true
     },
     "caseless": {
@@ -1325,9 +1325,9 @@
       }
     },
     "electron-to-chromium": {
-      "version": "1.4.4",
-      "resolved": "https://registry.npmjs.org/electron-to-chromium/-/electron-to-chromium-1.4.4.tgz",
-      "integrity": "sha512-teHtgwcmVcL46jlFvAaqjyiTLWuMrUQO1JqV303JKB4ysXG6m8fXSFhbjal9st0r9mNskI22AraJZorb1VcLVg==",
+      "version": "1.4.11",
+      "resolved": "https://registry.npmjs.org/electron-to-chromium/-/electron-to-chromium-1.4.11.tgz",
+      "integrity": "sha512-2OhsaYgsWGhWjx2et8kaUcdktPbBGjKM2X0BReUCKcSCPttEY+hz2zie820JLbttU8jwL92+JJysWwkut3wZgA==",
       "dev": true
     },
     "emoji-regex": {
@@ -2426,9 +2426,9 @@
       }
     },
     "istanbul-reports": {
-      "version": "3.0.5",
-      "resolved": "https://registry.npmjs.org/istanbul-reports/-/istanbul-reports-3.0.5.tgz",
-      "integrity": "sha512-5+19PlhnGabNWB7kOFnuxT8H3T/iIyQzIbQMxXsURmmvKg86P2sbkrGOT77VnHw0Qr0gc2XzRaRfMZYYbSQCJQ==",
+      "version": "3.1.1",
+      "resolved": "https://registry.npmjs.org/istanbul-reports/-/istanbul-reports-3.1.1.tgz",
+      "integrity": "sha512-q1kvhAXWSsXfMjCdNHNPKZZv94OlspKnoGv+R9RGbnqOOQ0VbNfLFgQDVgi7hHenKsndGq3/o0OBdzDXthWcNw==",
       "dev": true,
       "requires": {
         "html-escaper": "^2.0.0",
@@ -2475,9 +2475,9 @@
       "dev": true
     },
     "json-schema": {
-      "version": "0.2.3",
-      "resolved": "https://registry.npmjs.org/json-schema/-/json-schema-0.2.3.tgz",
-      "integrity": "sha1-tIDIkuWaLwWVTOcnvT8qTogvnhM="
+      "version": "0.4.0",
+      "resolved": "https://registry.npmjs.org/json-schema/-/json-schema-0.4.0.tgz",
+      "integrity": "sha512-es94M3nTIfsEPisRafak+HDLfHXnKBhV3vU5eqPcS3flIWqcxJWgXHXiey3YrpaNsanY5ei1VoYEbOzijuq9BA=="
     },
     "json-schema-traverse": {
       "version": "0.4.1",
@@ -2498,13 +2498,13 @@
       }
     },
     "jsprim": {
-      "version": "1.4.1",
-      "resolved": "https://registry.npmjs.org/jsprim/-/jsprim-1.4.1.tgz",
-      "integrity": "sha1-MT5mvB5cwG5Di8G3SZwuXFastqI=",
+      "version": "1.4.2",
+      "resolved": "https://registry.npmjs.org/jsprim/-/jsprim-1.4.2.tgz",
+      "integrity": "sha512-P2bSOMAc/ciLz6DzgjVlGJP9+BrJWu5UDGK70C2iweC5QBIeFf0ZXRvGjEj2uYgrY2MkAAhsSWHDWlFtEroZWw==",
       "requires": {
         "assert-plus": "1.0.0",
         "extsprintf": "1.3.0",
-        "json-schema": "0.2.3",
+        "json-schema": "0.4.0",
         "verror": "1.10.0"
       }
     },
