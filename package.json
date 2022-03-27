@@ -102,7 +102,7 @@
     "globals": "^13.13.0",
     "graceful-fs": "^4.2.9",
     "ignore": "^5.2.0",
-    "json5": "^2.2.0",
+    "json5": "^2.2.1",
     "minimatch": "^3.1.2",
     "recast": "^0.20.5",
     "request": "^2.88.2",
