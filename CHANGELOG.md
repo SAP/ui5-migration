@@ -2,7 +2,13 @@
 All notable changes to this project will be documented in this file.  
 This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-A list of unreleased changes can be found [here](https://github.com/SAP/ui5-migration/compare/v0.2.0...HEAD).
+A list of unreleased changes can be found [here](https://github.com/SAP/ui5-migration/compare/v0.3.0...HEAD).
+
+<a name="v0.3.0"></a>
+## [v0.3.0] - 2022-01-25
+### Features
+- Replace insensitive terms with inclusive language ([#156](https://github.com/SAP/ui5-migration/issues/156)) [`d161262`](https://github.com/SAP/ui5-migration/commit/d1612623d1e941143e502fbf65dfee75f1954421)
+
 
 <a name="v0.2.0"></a>
 ## [v0.2.0] - 2020-06-19
@@ -32,6 +38,7 @@ A list of unreleased changes can be found [here](https://github.com/SAP/ui5-migr
 - Replacement for native JS types ([#12](https://github.com/SAP/ui5-migration/issues/12)) [`c72c26b`](https://github.com/SAP/ui5-migration/commit/c72c26bc7bbf096a153b009165dedbc9d92cc082)
 
 
+[v0.3.0]: https://github.com/SAP/ui5-migration/compare/v0.2.0...v0.3.0
 [v0.2.0]: https://github.com/SAP/ui5-migration/compare/v0.1.2...v0.2.0
 [v0.1.2]: https://github.com/SAP/ui5-migration/compare/v0.1.1...v0.1.2
 [v0.1.1]: https://github.com/SAP/ui5-migration/compare/v0.1.0...v0.1.1
