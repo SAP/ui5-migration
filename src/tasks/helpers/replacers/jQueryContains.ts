@@ -126,6 +126,7 @@ function objectExpressionWithoutUndefinedValues(
 ) {
 	return objectExpression.properties.every(prop => {
 		return !(
+			prop.type === Syntax.Property &&
 			prop.value.type === Syntax.Identifier &&
 			(prop.value as ESTree.Identifier).name === "undefined"
 		);
