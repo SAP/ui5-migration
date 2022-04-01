@@ -82,10 +82,16 @@ const replaceable: ASTReplaceable = {
 				aModuleArgs[1] &&
 				aModuleArgs[1].type === Syntax.Literal
 			) {
+				const literal = aModuleArgs[1] as ESTree.Literal;
+				const value = literal.value as
+					| string
+					| number
+					| boolean
+					| RegExp;
 				return builders.binaryExpression(
 					"+",
 					oExpressionWithoutSuffix,
-					builders.literal((aModuleArgs[1] as ESTree.Literal).value)
+					builders.literal(value)
 				);
 			} else if (aModuleArgs[1]) {
 				sSuffix = recast.print(aModuleArgs[1]).code;

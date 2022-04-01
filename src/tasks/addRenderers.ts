@@ -141,11 +141,13 @@ function hasProperty(
 	propertyNames: string[]
 ) {
 	return objectExpression.properties.some(keyValue => {
-		if (keyValue.key.type === Syntax.Literal) {
-			return propertyNames.indexOf(String(keyValue.key.value)) >= 0;
-		}
-		if (keyValue.key.type === Syntax.Identifier) {
-			return propertyNames.indexOf(keyValue.key.name) >= 0;
+		if (keyValue.type === Syntax.Property) {
+			if (keyValue.key.type === Syntax.Literal) {
+				return propertyNames.indexOf(String(keyValue.key.value)) >= 0;
+			}
+			if (keyValue.key.type === Syntax.Identifier) {
+				return propertyNames.indexOf(keyValue.key.name) >= 0;
+			}
 		}
 		return false;
 	});
