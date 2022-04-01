@@ -48,7 +48,7 @@ describe("DiffAndAstStringOptimizeStrategy", function() {
 		"trace: DIFF Skipped 541:  '[ ][ ][ ][ ]'",
 		"trace: DIFF Added 578:  '[\\t]'",
 		"trace: DIFF Skipped 579:  '[ ][ ][ ][ ]'",
-		"trace: DIFF Added 651:  '[ ]'"
+		"trace: DIFF Added 651:  '[ ]'",
 	];
 
 	const commonLogs = (begin, end) => {
@@ -219,7 +219,7 @@ describe("DiffAndAstStringOptimizeStrategy", function() {
 				"trace: DIFF Added 81:  '[\\r][\\n]'",
 				"trace: DIFF Added 93:  '[\\r][\\n]'",
 				"trace: DIFF Added 98:  '[\\r][\\n]'",
-				"trace: Performing AstStringOptimizeStrategy"
+				"trace: Performing AstStringOptimizeStrategy",
 			],
 		},
 		{
@@ -409,7 +409,7 @@ describe("DiffAndAstStringOptimizeStrategy", function() {
 				"trace: AST: whitespace diff for succeeding element",
 				"trace: AST: remove '[\\r][\\n]'",
 				"trace: AST: add '[]'",
-				"trace: AST: index: 828"
+				"trace: AST: index: 828",
 			],
 		},
 	].forEach(oTestConfig => {

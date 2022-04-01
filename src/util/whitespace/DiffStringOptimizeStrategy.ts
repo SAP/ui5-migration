@@ -77,7 +77,7 @@ export class DiffStringOptimizeStrategy implements StringOptimizeStrategy {
 						);
 					}
 				} else {
-				// add non-whitespace changes
+					// add non-whitespace changes
 					sIgnoreWhitespaceChanges += oChange.value;
 				}
 			} else if (oChange.removed && oChange.added === undefined) {

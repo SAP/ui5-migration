@@ -48,7 +48,7 @@ describe("DiffStringOptimizeStrategy", function() {
 		"trace: DIFF Skipped 541:  '[ ][ ][ ][ ]'",
 		"trace: DIFF Added 578:  '[\\t]'",
 		"trace: DIFF Skipped 579:  '[ ][ ][ ][ ]'",
-		"trace: DIFF Added 651:  '[ ]'"
+		"trace: DIFF Added 651:  '[ ]'",
 	];
 
 	const commonLogs = (begin, end) => {
@@ -58,7 +58,8 @@ describe("DiffStringOptimizeStrategy", function() {
 	};
 
 	[
-		{baseName: "batch",
+		{
+			baseName: "batch",
 			fileEOL: "\r\n",
 			logs: [
 				...commonLogs(76171, 76259),
@@ -142,7 +143,7 @@ describe("DiffStringOptimizeStrategy", function() {
 				"trace: DIFF Added 869:  '[ ]'",
 				"trace: DIFF Skipped 870:  '[\\r][\\n][\\t]'",
 				"trace: DIFF Added 884:  '[ ]'",
-				"trace: DIFF Skipped 885:  '[\\r][\\n][\\t]'"
+				"trace: DIFF Skipped 885:  '[\\r][\\n][\\t]'",
 			],
 		},
 		{
@@ -199,7 +200,7 @@ describe("DiffStringOptimizeStrategy", function() {
 				"trace: DIFF Skipped 181:  '[\\t][\\t][\\t]'",
 				"trace: DIFF Added 252:  '[\\t]'",
 				"trace: DIFF Skipped 253:  '[\\t][\\t]'",
-				"trace: DIFF Skipped 269:  '[\\t]'"
+				"trace: DIFF Skipped 269:  '[\\t]'",
 			],
 		},
 	].forEach(oTestConfig => {
