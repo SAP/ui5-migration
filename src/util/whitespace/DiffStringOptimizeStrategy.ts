@@ -58,12 +58,12 @@ export class DiffStringOptimizeStrategy implements StringOptimizeStrategy {
 		aResult.forEach(oChange => {
 			iIndex = sIgnoreWhitespaceChanges.length;
 			if (oChange.removed === undefined && oChange.added === undefined) {
+				// neither added nor removed
+				// safely apply the changes
 				sIgnoreWhitespaceChanges += oChange.value;
 			} else if (oChange.added && oChange.removed === undefined) {
-				// add non-whitespace changes
-				if (!StringWhitespaceUtils.isWhitespace(oChange.value)) {
-					sIgnoreWhitespaceChanges += oChange.value;
-				} else {
+				// skip whitespaces
+				if (StringWhitespaceUtils.isWhitespace(oChange.value)) {
 					if (this.reporter) {
 						this.reporter.collect(
 							"DiffStringOptimizeStrategy.skipped",
@@ -76,6 +76,9 @@ export class DiffStringOptimizeStrategy implements StringOptimizeStrategy {
 							)}`
 						);
 					}
+				} else {
+					// add non-whitespace changes
+					sIgnoreWhitespaceChanges += oChange.value;
 				}
 			} else if (oChange.removed && oChange.added === undefined) {
 				// add whitespace change if it was removed

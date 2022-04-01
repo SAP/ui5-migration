@@ -9,5 +9,5 @@ function suite() {
 		sContextPath = window.location.pathname.split("test-resources")[0];
 
 	return oSuite;
-	}
+}
 });
