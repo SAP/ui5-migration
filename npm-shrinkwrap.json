@@ -512,9 +512,9 @@
       }
     },
     "@types/estree": {
-      "version": "0.0.41",
-      "resolved": "https://registry.npmjs.org/@types/estree/-/estree-0.0.41.tgz",
-      "integrity": "sha512-rIAmXyJlqw4KEBO7+u9gxZZSQHaCNnIzYrnNmYVpgfJhxTqO0brCX0SYpqUTkVI5mwwUwzmtspLBGBKroMeynA==",
+      "version": "0.0.51",
+      "resolved": "https://registry.npmjs.org/@types/estree/-/estree-0.0.51.tgz",
+      "integrity": "sha512-CuPgU6f3eT/XgKKPqKd/gLZV1Xmvf1a2R5POBOGQa6uv82xpls89HU5zKeVoyR8XzHd1RGNOlQlvUe3CFkjWNQ==",
       "dev": true
     },
     "@types/graceful-fs": {
