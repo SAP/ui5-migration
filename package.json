@@ -97,7 +97,7 @@
     "url": "git@github.com:SAP/ui5-migration.git"
   },
   "dependencies": {
-    "diff": "^4.0.2",
+    "diff": "^5.0.0",
     "esprima": "^4.0.1",
     "globals": "^13.13.0",
     "graceful-fs": "^4.2.9",
