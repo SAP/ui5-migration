@@ -103,7 +103,7 @@
     "graceful-fs": "^4.2.9",
     "ignore": "^5.2.0",
     "json5": "^2.2.1",
-    "minimatch": "^3.1.2",
+    "minimatch": "^5.0.1",
     "recast": "^0.20.5",
     "request": "^2.88.2",
     "semver": "^7.3.5",
