@@ -1,0 +1,6 @@
+bin/
+js/
+src/**/*.js
+test/**/*.js
+typings/
+index.js

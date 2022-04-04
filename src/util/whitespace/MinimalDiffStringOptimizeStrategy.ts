@@ -2,6 +2,7 @@ import {Reporter} from "../../reporter/Reporter";
 
 import {AstStringOptimizeStrategy} from "./AstStringOptimizeStrategy";
 import {DiffStringOptimizeStrategy} from "./DiffStringOptimizeStrategy";
+import {StringOptimizeStrategy} from "./StringOptimizeStrategy";
 
 /**
  * Greedy algorithm which focuses on the most minimal DIFF.
@@ -9,7 +10,8 @@ import {DiffStringOptimizeStrategy} from "./DiffStringOptimizeStrategy";
  * function will not cause indentation
  */
 export class MinimalDiffStringOptimizeStrategy
-	implements StringOptimizeStrategy {
+	implements StringOptimizeStrategy
+{
 	private reporter: Reporter;
 
 	constructor(reporter?: Reporter) {

@@ -102,11 +102,10 @@ const replaceable: ASTReplaceable = {
 				}
 
 				if (bHasParams) {
-					oNodeSetInterval.arguments[
-						"0"
-					].arguments = oNodeSetInterval.arguments[
-						"0"
-					].arguments.concat(aArrayToAdd); // oObject
+					oNodeSetInterval.arguments["0"].arguments =
+						oNodeSetInterval.arguments["0"].arguments.concat(
+							aArrayToAdd
+						); // oObject
 				}
 
 				if (oNodeSetInterval.arguments["0"].arguments.length > 0) {
@@ -157,11 +156,10 @@ const replaceable: ASTReplaceable = {
 				oNodeSetInterval.arguments["0"].arguments = []; // oObject
 				oNodeSetInterval.arguments["0"].arguments = [].concat(aArgs[1]); // oObject
 				if (bHasParams) {
-					oNodeSetInterval.arguments[
-						"0"
-					].arguments = oNodeSetInterval.arguments[
-						"0"
-					].arguments.concat(aArrayToAdd); // oObject
+					oNodeSetInterval.arguments["0"].arguments =
+						oNodeSetInterval.arguments["0"].arguments.concat(
+							aArrayToAdd
+						); // oObject
 				}
 				oInsertionPoint[node.parentPath.name] = oNodeSetInterval;
 			} else if (aArgs[2]) {
@@ -208,9 +206,8 @@ const replaceable: ASTReplaceable = {
 					containsThis(aArgs[3]);
 
 				if (bContainsThis) {
-					oNodeSetInterval.arguments["0"].arguments[
-						"0"
-					] = builders.identifier("this");
+					oNodeSetInterval.arguments["0"].arguments["0"] =
+						builders.identifier("this");
 				} else {
 					oNodeSetInterval.arguments["0"].arguments["0"] = aArgs[1];
 				}

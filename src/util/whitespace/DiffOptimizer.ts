@@ -4,6 +4,7 @@
 import {Reporter} from "../../reporter/Reporter";
 
 import {DiffAndAstStringOptimizeStrategy} from "./DiffAndAstStringOptimizeStrategy";
+import {StringOptimizeStrategy} from "./StringOptimizeStrategy";
 
 export async function optimizeString(
 	original: string,

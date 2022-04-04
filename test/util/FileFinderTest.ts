@@ -4,9 +4,9 @@ const assert = require("assert");
 const sinon = require("sinon");
 const path = require("path");
 
-describe("FileFinder", function() {
-	describe("should build FileFinder with namespaces)", function() {
-		it("Should use the correct namespaces", async function() {
+describe("FileFinder", () => {
+	describe("should build FileFinder with namespaces)", () => {
+		it("Should use the correct namespaces", async () => {
 			const aNamespaces = [
 				{namespace: "a.b.c", filePath: "src/x"},
 				{namespace: "d.e.f", filePath: "src"},

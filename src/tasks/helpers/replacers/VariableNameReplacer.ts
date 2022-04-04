@@ -1,9 +1,5 @@
 import {Syntax} from "esprima";
-import * as ESTree from "estree";
-import * as recast from "recast";
 import {ASTReplaceable, NodePath} from "ui5-migration";
-
-// const builders = recast.types.builders;
 
 /**
  * represents a module function which exposes itself as function
@@ -26,12 +22,12 @@ const replaceable: ASTReplaceable = {
 	): void {
 		const nodeValue = node.value;
 
-		if (node.value.type === Syntax.Identifier) {
-			node.value.name = config.newVariableName;
+		if (nodeValue.type === Syntax.Identifier) {
+			nodeValue.name = config.newVariableName;
 		} else {
 			throw new Error(
 				"rename of " +
-					node.value.type +
+					nodeValue.type +
 					" (supported are only Identifiers)"
 			);
 		}

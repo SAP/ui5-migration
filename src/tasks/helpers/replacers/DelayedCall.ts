@@ -1,7 +1,7 @@
 import {Syntax} from "esprima";
 import * as ESTree from "estree";
 import * as recast from "recast";
-import {ASTReplaceable, ASTReplaceableResult, NodePath} from "ui5-migration";
+import {ASTReplaceable, NodePath} from "ui5-migration";
 
 import {ASTVisitor} from "../../../util/ASTVisitor";
 
@@ -101,11 +101,10 @@ const replaceable: ASTReplaceable = {
 				}
 
 				if (bHasParams) {
-					oNodeSetTimeout.arguments[
-						"0"
-					].arguments = oNodeSetTimeout.arguments[
-						"0"
-					].arguments.concat(aArrayToAdd); // oObject
+					oNodeSetTimeout.arguments["0"].arguments =
+						oNodeSetTimeout.arguments["0"].arguments.concat(
+							aArrayToAdd
+						); // oObject
 				}
 
 				if (oNodeSetTimeout.arguments["0"].arguments.length > 0) {
@@ -142,10 +141,10 @@ const replaceable: ASTReplaceable = {
 
 				oNodeSetTimeout.arguments["1"] = aArgs[0];
 
-				const oObjectCall = ((oNodeSetTimeout.arguments[
-					"0"
-				] as ESTree.CallExpression).callee as ESTree.MemberExpression)
-					.object as ESTree.MemberExpression;
+				const oObjectCall = (
+					(oNodeSetTimeout.arguments["0"] as ESTree.CallExpression)
+						.callee as ESTree.MemberExpression
+				).object as ESTree.MemberExpression;
 
 				// this -> args 1
 				oObjectCall.object = aArgs[1];
@@ -157,11 +156,10 @@ const replaceable: ASTReplaceable = {
 				oNodeSetTimeout.arguments["0"].arguments = []; // oObject
 				oNodeSetTimeout.arguments["0"].arguments = [].concat(aArgs[1]); // oObject
 				if (bHasParams) {
-					oNodeSetTimeout.arguments[
-						"0"
-					].arguments = oNodeSetTimeout.arguments[
-						"0"
-					].arguments.concat(aArrayToAdd); // oObject
+					oNodeSetTimeout.arguments["0"].arguments =
+						oNodeSetTimeout.arguments["0"].arguments.concat(
+							aArrayToAdd
+						); // oObject
 				}
 				oInsertionPoint[node.parentPath.name] = oNodeSetTimeout;
 			} else if (aArgs[2]) {
@@ -207,9 +205,8 @@ const replaceable: ASTReplaceable = {
 					containsThis(aArgs[3]);
 
 				if (bContainsThis) {
-					oNodeSetTimeout.arguments["0"].arguments[
-						"0"
-					] = builders.identifier("this");
+					oNodeSetTimeout.arguments["0"].arguments["0"] =
+						builders.identifier("this");
 				} else {
 					oNodeSetTimeout.arguments["0"].arguments["0"] = aArgs[1];
 				}

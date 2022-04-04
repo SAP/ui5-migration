@@ -1,12 +1,10 @@
-import * as ASTUtils from "../../src/util/ASTUtils";
 import * as NamespaceUtils from "../../src/util/NamespaceUtils";
-import {SapUiDefineCall} from "../../src/util/SapUiDefineCall";
 
 const recast = require("recast");
 const assert = require("assert");
 
-describe("NamespaceUtils", function() {
-	it("Should get the common part", function() {
+describe("NamespaceUtils", () => {
+	it("Should get the common part", () => {
 		assert.equal(
 			NamespaceUtils.getCommonPart("a.b.c.d", "a.b.x.y"),
 			"a.b",
@@ -32,7 +30,7 @@ describe("NamespaceUtils", function() {
 		);
 	});
 
-	it("findNamespaceUsage", function() {
+	it("findNamespaceUsage", () => {
 		const src = `sap.ui.define(["a/b/c", "d/x/f", "./x"], function(c, f, x){
 			a.g.blah = "fu";
 			return null;
@@ -46,7 +44,7 @@ describe("NamespaceUtils", function() {
 		);
 	});
 
-	it("findNamespaceUsage fail", function() {
+	it("findNamespaceUsage fail", () => {
 		const src = `sap.ui.define(["a/b/c", "d/x/f", "./x"], function(c, f, x){
 			a.g.blah = "fu";
 			return null;

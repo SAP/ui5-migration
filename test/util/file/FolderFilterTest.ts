@@ -2,8 +2,8 @@ import {FolderFilter} from "../../../src/util/file/FolderFilter";
 
 const assert = require("assert");
 
-describe("FolderFilter", function() {
-	it("should be possible to filter using FilderFilter", function() {
+describe("FolderFilter", () => {
+	it("should be possible to filter using FilderFilter", () => {
 		const fsFilter = FolderFilter.create("myfolder");
 		assert.equal(fsFilter.getDir(), "myfolder");
 		assert.ok(fsFilter.match("myfolder"), "matches the file");

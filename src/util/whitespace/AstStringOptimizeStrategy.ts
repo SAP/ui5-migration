@@ -1,8 +1,7 @@
-import * as ESTree from "estree";
-
 import {Reporter, ReportLevel} from "../../reporter/Reporter";
 
 import * as StringWhitespaceUtils from "./StringWhitespaceUtils";
+import {StringOptimizeStrategy} from "./StringOptimizeStrategy";
 
 const esprima = require("esprima");
 
@@ -51,14 +50,14 @@ export class AstStringOptimizeStrategy implements StringOptimizeStrategy {
 		if (targetIndent !== modifiedIndent) {
 			AstStringOptimizeStrategy.log(
 				reporter,
-				`AST: whitespace diff for preceding element`
+				"AST: whitespace diff for preceding element"
 			);
 			AstStringOptimizeStrategy.log(
 				reporter,
-				`AST: remove`,
+				"AST: remove",
 				modifiedIndent
 			);
-			AstStringOptimizeStrategy.log(reporter, `AST: add`, targetIndent);
+			AstStringOptimizeStrategy.log(reporter, "AST: add", targetIndent);
 			AstStringOptimizeStrategy.log(
 				reporter,
 				`AST: index: ${oModifiedNodeElement.range[0] - 1}`
@@ -86,14 +85,14 @@ export class AstStringOptimizeStrategy implements StringOptimizeStrategy {
 		if (targetOutdent !== modifiedOutdent) {
 			AstStringOptimizeStrategy.log(
 				reporter,
-				`AST: whitespace diff for succeeding element`
+				"AST: whitespace diff for succeeding element"
 			);
 			AstStringOptimizeStrategy.log(
 				reporter,
-				`AST: remove`,
+				"AST: remove",
 				modifiedOutdent
 			);
-			AstStringOptimizeStrategy.log(reporter, `AST: add`, targetOutdent);
+			AstStringOptimizeStrategy.log(reporter, "AST: add", targetOutdent);
 			AstStringOptimizeStrategy.log(
 				reporter,
 				`AST: index: ${oModifiedNodeElement.range[1]}`
@@ -255,14 +254,13 @@ export class AstStringOptimizeStrategy implements StringOptimizeStrategy {
 				return;
 			}
 		}
-		const that = this;
-		Object.keys(oSourceNode).forEach(function(sSourceNodeKey) {
+		Object.keys(oSourceNode).forEach(sSourceNodeKey => {
 			if (
 				!filterAstAttributes.includes(sSourceNodeKey) &&
 				oSourceNode[sSourceNodeKey] &&
 				oModifiedNode[sSourceNodeKey]
 			) {
-				that.iterateAstNode(
+				this.iterateAstNode(
 					oSourceNode[sSourceNodeKey],
 					oModifiedNode[sSourceNodeKey],
 					onDiff,
@@ -546,9 +544,8 @@ export class AstStringOptimizeStrategy implements StringOptimizeStrategy {
 					if (AstStringOptimizeStrategy.isUseStrict(oChild)) {
 						oUseStrict = oChild;
 					} else {
-						oUseStrict = AstStringOptimizeStrategy.findUseStrict(
-							oChild
-						);
+						oUseStrict =
+							AstStringOptimizeStrategy.findUseStrict(oChild);
 					}
 				}
 			}
@@ -596,7 +593,7 @@ export class AstStringOptimizeStrategy implements StringOptimizeStrategy {
 		if (this.reporter) {
 			this.reporter.report(
 				ReportLevel.TRACE,
-				`Performing AstStringOptimizeStrategy`
+				"Performing AstStringOptimizeStrategy"
 			);
 		}
 
@@ -604,30 +601,30 @@ export class AstStringOptimizeStrategy implements StringOptimizeStrategy {
 		const oParsedOriginal = esprima.parseScript(original, oOptions);
 		const oParsedModified = esprima.parseScript(modified, oOptions);
 		const aOptimizedContent = modified.split("");
-		const that = this;
 
-		const oUseStrictModifiedNode = AstStringOptimizeStrategy.findUseStrict(
-			oParsedModified
-		);
+		const oUseStrictModifiedNode =
+			AstStringOptimizeStrategy.findUseStrict(oParsedModified);
 		if (oUseStrictModifiedNode) {
-			const useStrictPrec = AstStringOptimizeStrategy.getPrecedingNodeWhitespaces(
-				modified,
-				oUseStrictModifiedNode
-			);
-			let targetIndent;
-			const oUseStrictOrigNode = AstStringOptimizeStrategy.findUseStrict(
-				oParsedOriginal
-			);
-			if (oUseStrictOrigNode) {
-				targetIndent = AstStringOptimizeStrategy.getPrecedingNodeWhitespaces(
-					original,
-					oUseStrictOrigNode
-				);
-			} else {
-				const useStrictSucc = AstStringOptimizeStrategy.getSucceedingNodeWhitespaces(
+			const useStrictPrec =
+				AstStringOptimizeStrategy.getPrecedingNodeWhitespaces(
 					modified,
 					oUseStrictModifiedNode
 				);
+			let targetIndent;
+			const oUseStrictOrigNode =
+				AstStringOptimizeStrategy.findUseStrict(oParsedOriginal);
+			if (oUseStrictOrigNode) {
+				targetIndent =
+					AstStringOptimizeStrategy.getPrecedingNodeWhitespaces(
+						original,
+						oUseStrictOrigNode
+					);
+			} else {
+				const useStrictSucc =
+					AstStringOptimizeStrategy.getSucceedingNodeWhitespaces(
+						modified,
+						oUseStrictModifiedNode
+					);
 				targetIndent =
 					AstStringOptimizeStrategy.getEOL(useStrictSucc) +
 					AstStringOptimizeStrategy.getIndent(useStrictSucc);
@@ -637,12 +634,14 @@ export class AstStringOptimizeStrategy implements StringOptimizeStrategy {
 				targetIndent,
 				useStrictPrec,
 				oUseStrictModifiedNode,
-				that.reporter
+				this.reporter
 			);
 		}
+		const localNodeFilter = this.nodeFilter;
+		const localReporter = this.reporter;
 
 		// check each node which was modified (from ORIG to MOD)
-		const onDiff = function(oSourceNode, oModifiedNode, oOptions) {
+		const onDiff = function (oSourceNode, oModifiedNode, oOptions) {
 			// address only additions
 			if (
 				!oOptions.added &&
@@ -661,7 +660,7 @@ export class AstStringOptimizeStrategy implements StringOptimizeStrategy {
 				return;
 			}
 
-			if (!that.nodeFilter.isValid(oOptions.parent)) {
+			if (!localNodeFilter.isValid(oOptions.parent)) {
 				return;
 			}
 
@@ -676,27 +675,31 @@ export class AstStringOptimizeStrategy implements StringOptimizeStrategy {
 
 				// first element indent of orig
 				// first element outdent of orig
-				const firstTargetIndent = AstStringOptimizeStrategy.getPrecedingNodeWhitespaces(
-					original,
-					oSourceNode[0]
-				);
+				const firstTargetIndent =
+					AstStringOptimizeStrategy.getPrecedingNodeWhitespaces(
+						original,
+						oSourceNode[0]
+					);
 				// TODO find most common outdent instead of first one
-				let firstTargetOutdent = AstStringOptimizeStrategy.getSucceedingNodeWhitespaces(
-					original,
-					oSourceNode[0]
-				);
+				let firstTargetOutdent =
+					AstStringOptimizeStrategy.getSucceedingNodeWhitespaces(
+						original,
+						oSourceNode[0]
+					);
 
 				// last element indent of orig
 				// last element outdent of orig
 				// TODO find most common indent instead of last one
-				let lastTargetIndent = AstStringOptimizeStrategy.getPrecedingNodeWhitespaces(
-					original,
-					oSourceNode[oSourceNode.length - 1]
-				);
-				const lastTargetOutdent = AstStringOptimizeStrategy.getSucceedingNodeWhitespaces(
-					original,
-					oSourceNode[oSourceNode.length - 1]
-				);
+				let lastTargetIndent =
+					AstStringOptimizeStrategy.getPrecedingNodeWhitespaces(
+						original,
+						oSourceNode[oSourceNode.length - 1]
+					);
+				const lastTargetOutdent =
+					AstStringOptimizeStrategy.getSucceedingNodeWhitespaces(
+						original,
+						oSourceNode[oSourceNode.length - 1]
+					);
 
 				if (oSourceNode.length === 1) {
 					lastTargetIndent = " ";
@@ -709,23 +712,24 @@ export class AstStringOptimizeStrategy implements StringOptimizeStrategy {
 				const styles = [];
 				if (oSourceNode.length > 1) {
 					oSourceNode.slice(1).forEach(oCurrentNode => {
-						const currentModifiedIndent = AstStringOptimizeStrategy.getPrecedingNodeWhitespaces(
-							original,
-							oCurrentNode
-						);
+						const currentModifiedIndent =
+							AstStringOptimizeStrategy.getPrecedingNodeWhitespaces(
+								original,
+								oCurrentNode
+							);
 						if (currentModifiedIndent !== lastTargetIndent) {
 							const previousNode =
 								oSourceNode[
 									oSourceNode.indexOf(oCurrentNode) - 1
 								];
 							styles.push({
-								lineLength: AstStringOptimizeStrategy.calculateLineLengths(
-									original,
-									previousNode
-								),
-								lineBreakIndex: oSourceNode.indexOf(
-									oCurrentNode
-								),
+								lineLength:
+									AstStringOptimizeStrategy.calculateLineLengths(
+										original,
+										previousNode
+									),
+								lineBreakIndex:
+									oSourceNode.indexOf(oCurrentNode),
 								lineBreakStyle: currentModifiedIndent,
 							});
 						}
@@ -734,41 +738,42 @@ export class AstStringOptimizeStrategy implements StringOptimizeStrategy {
 
 				// this is the target style!
 
-				const firstModifiedIndent = AstStringOptimizeStrategy.getPrecedingNodeWhitespaces(
-					modified,
-					oModifiedNode[0]
-				);
+				const firstModifiedIndent =
+					AstStringOptimizeStrategy.getPrecedingNodeWhitespaces(
+						modified,
+						oModifiedNode[0]
+					);
 				AstStringOptimizeStrategy.keepPrecedingWhitespace(
 					aOptimizedContent,
 					firstTargetIndent,
 					firstModifiedIndent,
 					oModifiedNode[0],
-					that.reporter
+					localReporter
 				);
 
 				// indent each node but the first one
 				oModifiedNode.slice(1).forEach(oCurrentNode => {
 					let targetIndent = lastTargetIndent;
 					if (styles.length > 0) {
-						const currentNodeIndex = oModifiedNode.indexOf(
-							oCurrentNode
-						);
+						const currentNodeIndex =
+							oModifiedNode.indexOf(oCurrentNode);
 						const style = styles[0];
 						if (currentNodeIndex === style.lineBreakIndex) {
 							styles.splice(0, 1);
 							targetIndent = style.lineBreakStyle;
 						}
 					}
-					const currentModifiedIndent = AstStringOptimizeStrategy.getPrecedingNodeWhitespaces(
-						modified,
-						oCurrentNode
-					);
+					const currentModifiedIndent =
+						AstStringOptimizeStrategy.getPrecedingNodeWhitespaces(
+							modified,
+							oCurrentNode
+						);
 					AstStringOptimizeStrategy.keepPrecedingWhitespace(
 						aOptimizedContent,
 						targetIndent,
 						currentModifiedIndent,
 						oCurrentNode,
-						that.reporter
+						localReporter
 					);
 				});
 
@@ -776,36 +781,38 @@ export class AstStringOptimizeStrategy implements StringOptimizeStrategy {
 				oModifiedNode
 					.slice(0, oModifiedNode.length - 1)
 					.forEach(oCurrentNode => {
-						const currentModifiedOutdent = AstStringOptimizeStrategy.getSucceedingNodeWhitespaces(
-							modified,
-							oCurrentNode
-						);
+						const currentModifiedOutdent =
+							AstStringOptimizeStrategy.getSucceedingNodeWhitespaces(
+								modified,
+								oCurrentNode
+							);
 						AstStringOptimizeStrategy.keepSucceedingWhitespace(
 							aOptimizedContent,
 							firstTargetOutdent,
 							currentModifiedOutdent,
 							oCurrentNode,
-							that.reporter
+							localReporter
 						);
 					});
 
-				const lastModifiedOutdent = AstStringOptimizeStrategy.getSucceedingNodeWhitespaces(
-					modified,
-					oModifiedNode[oModifiedNode.length - 1]
-				);
+				const lastModifiedOutdent =
+					AstStringOptimizeStrategy.getSucceedingNodeWhitespaces(
+						modified,
+						oModifiedNode[oModifiedNode.length - 1]
+					);
 				AstStringOptimizeStrategy.keepSucceedingWhitespace(
 					aOptimizedContent,
 					lastTargetOutdent,
 					lastModifiedOutdent,
 					oModifiedNode[oModifiedNode.length - 1],
-					that.reporter
+					localReporter
 				);
 			}
 
 			// use formatting for each element in the array
 
 			// AstStringOptimizeStrategy.modifyArray(oOptions, modified,
-			// oModifiedNode, that, aOptimizedContent, original, oSourceNode);
+			// oModifiedNode, this, aOptimizedContent, original, oSourceNode);
 		};
 		this.iterateAstNode(oParsedOriginal, oParsedModified, onDiff);
 

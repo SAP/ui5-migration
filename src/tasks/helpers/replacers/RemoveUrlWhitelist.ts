@@ -1,11 +1,8 @@
 import {Syntax} from "esprima";
-import * as ESTree from "estree";
 import * as recast from "recast";
 import {ASTReplaceable, NodePath} from "ui5-migration";
 
 import * as CommentUtils from "../../../util/CommentUtils";
-
-const builders = recast.types.builders;
 
 /**
  * From:

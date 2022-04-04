@@ -1,4 +1,3 @@
-import * as esprima from "esprima";
 import {Syntax} from "esprima";
 import * as ESTree from "estree";
 import * as recast from "recast";
@@ -33,19 +32,19 @@ const replaceable: ASTReplaceable = {
 		let aArgs = [];
 		let oNewExpression: ESTree.Expression;
 		let oNewExpressionWithoutSuffix: ESTree.Expression;
-		const rOrginalSubTypes = /\.(?:(?:(?:view\.|fragment\.|controller\.|designtime\.)?js)|(?:(?:view\.|fragment\.)?xml)|(?:(?:view\.|fragment\.)?json)|(?:(?:view\.|fragment\.)?html)|[^.]+)$/;
+		const rOrginalSubTypes =
+			/\.(?:(?:(?:view\.|fragment\.|controller\.|designtime\.)?js)|(?:(?:view\.|fragment\.)?xml)|(?:(?:view\.|fragment\.)?json)|(?:(?:view\.|fragment\.)?html)|[^.]+)$/;
 		const oSapUi: ESTree.MemberExpression = builders.memberExpression(
 			builders.identifier("sap"),
 			builders.identifier("ui")
 		);
-		const oSapUiRequire: ESTree.MemberExpression = builders.memberExpression(
-			oSapUi,
-			builders.identifier("require")
-		);
-		const oSapUiRequireToUrl: ESTree.MemberExpression = builders.memberExpression(
-			oSapUiRequire,
-			builders.identifier("toUrl")
-		);
+		const oSapUiRequire: ESTree.MemberExpression =
+			builders.memberExpression(oSapUi, builders.identifier("require"));
+		const oSapUiRequireToUrl: ESTree.MemberExpression =
+			builders.memberExpression(
+				oSapUiRequire,
+				builders.identifier("toUrl")
+			);
 
 		if (oInsertion.type === Syntax.CallExpression) {
 			aArgs = oInsertionPoint[node.parentPath.name].arguments;
@@ -179,7 +178,7 @@ const replaceable: ASTReplaceable = {
 					sReplacement =
 						"sap.ui.require.toUrl(" + sResourceCode + ")";
 				} else {
-					const sReplacement: string =
+					sReplacement =
 						"(function(){" +
 						"var aParts = (" +
 						sResourceCode +

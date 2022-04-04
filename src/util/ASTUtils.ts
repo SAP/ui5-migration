@@ -1,8 +1,7 @@
 import {Syntax} from "esprima";
 import * as ESTree from "estree";
-import * as recast from "recast";
 
-import {ASTVisitor, NodePath, TNodePath} from "./ASTVisitor";
+import {ASTVisitor, TNodePath} from "./ASTVisitor";
 
 export type CallCondition = (call: TNodePath<ESTree.CallExpression>) => boolean;
 

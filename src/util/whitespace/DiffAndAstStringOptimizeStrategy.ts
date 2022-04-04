@@ -6,9 +6,11 @@ import {
 	NodeFilter,
 } from "./AstStringOptimizeStrategy";
 import {DiffStringOptimizeStrategy} from "./DiffStringOptimizeStrategy";
+import {StringOptimizeStrategy} from "./StringOptimizeStrategy";
 
 export class DiffAndAstStringOptimizeStrategy
-	implements StringOptimizeStrategy {
+	implements StringOptimizeStrategy
+{
 	private reporter: Reporter;
 
 	constructor(reporter?: Reporter) {

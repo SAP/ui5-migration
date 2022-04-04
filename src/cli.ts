@@ -94,7 +94,7 @@ export async function start(): Promise<void> {
 			describe: "Use ignore file.",
 			default: ".gitignore",
 		})
-		.check(function(argv) {
+		.check(argv => {
 			const commandArgument = argv._[0] as string;
 			const bValid =
 				argv._.length >= 1 &&
@@ -132,7 +132,7 @@ export async function start(): Promise<void> {
 		ignoreFile: argv["ignore-file"],
 		namespaces: parseNamespaces(namespaces),
 		tasks,
-	}).then(function() {
+	}).then(() => {
 		return undefined;
 	});
 }

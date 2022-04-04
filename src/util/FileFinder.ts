@@ -136,25 +136,22 @@ export class FileFinder implements Mod.FileFinder {
 	 * @returns {Promise<string[]>}
 	 */
 	async getFiles(): Promise<string[]> {
-		const that = this;
 		// gather working directories
 
 		const aFilePromises: Array<Promise<string[]>> = [];
-		this.builder.getAddFilters().forEach(function(oIncludeFilter) {
+		this.builder.getAddFilters().forEach(oIncludeFilter => {
 			const wd = oIncludeFilter.getDir();
-			const pFilePromise = FileUtils.getFilesRecursive(wd, function(
-				sFile
-			) {
+			const pFilePromise = FileUtils.getFilesRecursive(wd, sFile => {
 				// there should not be one exclude filter match
-				return !that.builder
+				return !this.builder
 					.getExcludeFilters()
-					.some(function(oExcludeFilter) {
+					.some(oExcludeFilter => {
 						return oExcludeFilter.match(sFile);
 					});
 			});
 			aFilePromises.push(
-				pFilePromise.then(function(aFiles) {
-					const fnReducer = function(
+				pFilePromise.then(aFiles => {
+					const fnReducer = function (
 						aPrevious: string[],
 						sFile: string
 					) {
@@ -167,14 +164,14 @@ export class FileFinder implements Mod.FileFinder {
 				})
 			);
 		});
-		return Promise.all(aFilePromises).then(function(aResults) {
+		return Promise.all(aFilePromises).then(aResults => {
 			let aResultFiles: string[] = [];
-			aResults.forEach(function(aResult) {
+			aResults.forEach(aResult => {
 				aResultFiles = aResultFiles.concat(
-					aResult.filter(function(sResult) {
-						return that.builder
+					aResult.filter(sResult => {
+						return this.builder
 							.getPostFilters()
-							.every(function(oPostFilter) {
+							.every(oPostFilter => {
 								return oPostFilter.match(sResult);
 							});
 					})
@@ -228,23 +225,21 @@ export class FileFinder implements Mod.FileFinder {
 	}
 
 	private async convertToFileInfoMapping() {
-		const that = this;
-
 		// cache
 		if (Object.keys(this.mModules).length > 0) {
 			return Promise.resolve(this.mModules);
 		}
 		const files = await this.getFiles();
-		files.forEach(function(sFile) {
+		files.forEach(sFile => {
 			const sModuleName = FileFinder.getModuleName(sFile);
 			const sNamespace = FileFinder.getNamespace(
 				sModuleName,
-				that.builder.getNameSpaces()
+				this.builder.getNameSpaces()
 			);
 
-			that.mModules[sModuleName] = new FileInfo(
-				that.builder.getWd(),
-				path.relative(that.builder.getWd(), sFile),
+			this.mModules[sModuleName] = new FileInfo(
+				this.builder.getWd(),
+				path.relative(this.builder.getWd(), sFile),
 				sModuleName,
 				sNamespace
 			);
@@ -254,7 +249,7 @@ export class FileFinder implements Mod.FileFinder {
 
 	async getFileInfoArray(): Promise<FileInfo[]> {
 		const mModules = await this.convertToFileInfoMapping();
-		return Object.keys(mModules).map(function(sKey) {
+		return Object.keys(mModules).map(sKey => {
 			return mModules[sKey];
 		});
 	}

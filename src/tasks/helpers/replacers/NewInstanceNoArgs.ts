@@ -31,8 +31,8 @@ const replaceable: ASTReplaceable = {
 			if (oldArgs.length === 0) {
 				let args = [];
 				if (fnName) {
-					const oAst = recast.parse(fnName).program.body["0"]
-						.expression;
+					const oAst =
+						recast.parse(fnName).program.body["0"].expression;
 					args = [oAst];
 				}
 				oInsertionPoint[node.parentPath.name] = builders.newExpression(

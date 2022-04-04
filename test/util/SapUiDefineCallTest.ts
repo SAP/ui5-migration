@@ -4,8 +4,8 @@ import {SapUiDefineCall} from "../../src/util/SapUiDefineCall";
 const recast = require("recast");
 const assert = require("assert");
 
-describe("SapUiDefineCall", function() {
-	it("create SapUiDefineCall with relative imports", function() {
+describe("SapUiDefineCall", () => {
+	it("create SapUiDefineCall with relative imports", () => {
 		const src = `sap.ui.define(["a/b/c", "d/x/f", "./x"], function(c, f, x){
 			return null;
 		});`;
@@ -36,7 +36,7 @@ describe("SapUiDefineCall", function() {
 		);
 	});
 
-	it("should check exportToGlobal flag", function() {
+	it("should check exportToGlobal flag", () => {
 		const src = `sap.ui.define(["a/b/c", "d/x/f", "./x"], function(c, f, x){
 			return null;
 		}, true);`;

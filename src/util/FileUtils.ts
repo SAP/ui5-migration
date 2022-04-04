@@ -55,7 +55,7 @@ export function normalize(sPath: string, sSep = ""): string {
 	if (!sSep) {
 		sSep = path.sep;
 	}
-	sPath = path.normalize(sPath).replace(/[\/\\]+/g, sSep);
+	sPath = path.normalize(sPath).replace(/[/\\]+/g, sSep);
 	if (sPath.lastIndexOf(sSep) === sPath.length - 1) {
 		sPath = sPath.slice(0, -1);
 	}
@@ -64,7 +64,7 @@ export function normalize(sPath: string, sSep = ""): string {
 
 export type FileMatcher = (sPath: string) => boolean;
 
-const allFilesMatcher = function() {
+const allFilesMatcher = function () {
 	return true;
 };
 
@@ -97,7 +97,7 @@ async function parseDir(
 			}
 		}
 	}
-	return Promise.all(aPromises).then(function() {
+	return Promise.all(aPromises).then(() => {
 		return undefined;
 	});
 }

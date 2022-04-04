@@ -24,7 +24,6 @@ const replaceable: ASTReplaceable = {
 		oldModuleCall: string
 	): void {
 		const oInsertionPoint = node.parentPath.value;
-		const oInsertion = node.value;
 		let oNodeModule: ESTree.Expression = builders.identifier(name);
 		if (fnName) {
 			oNodeModule = builders.memberExpression(

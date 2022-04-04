@@ -1,8 +1,8 @@
 const assert = require("assert");
 import {CompareReportLevel, ReportLevel} from "../../src/reporter/Reporter";
 
-describe("Reporter", function() {
-	it("CompareReportLevel", function() {
+describe("Reporter", () => {
+	it("CompareReportLevel", () => {
 		assert.equal(
 			CompareReportLevel(ReportLevel.TRACE, ReportLevel.INFO),
 			-1

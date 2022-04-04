@@ -1,5 +1,3 @@
-import * as ESTree from "estree";
-
 import {ASTVisitor} from "../src/util/ASTVisitor";
 
 const assert = require("assert");
@@ -22,11 +20,12 @@ class ProxyVisitsCounter {
 	}
 
 	get(target, key, receiver) {
+		// eslint-disable-next-line @typescript-eslint/no-this-alias
 		const that = this;
 		if (key in target) {
 			return target[key];
 		} else {
-			return function(path) {
+			return function (path) {
 				if (key in that.counts) {
 					that.counts[key]++;
 				} else {
@@ -60,8 +59,9 @@ class ProxyVisitsOrder {
 	}
 
 	get(target, key, receiver) {
+		// eslint-disable-next-line @typescript-eslint/no-this-alias
 		const that = this;
-		return function(path) {
+		return function (path) {
 			let add = "";
 			if (key === "visitLiteral") {
 				add = ` - ${path.value.raw}`;
@@ -81,8 +81,8 @@ class ProxyVisitsOrder {
 /**
  * The actual ASTVisitor tests
  */
-describe("ASTVisitor", function() {
-	it("should create valid NodePath instances", function() {
+describe("ASTVisitor", () => {
+	it("should create valid NodePath instances", () => {
 		const oAst = recast.parse("(function abc() { return 1; })");
 		const oVisitor = new ASTVisitor();
 
@@ -94,8 +94,8 @@ describe("ASTVisitor", function() {
 
 				assert.strictEqual(typeof path, "object");
 				assert.strictEqual(typeof path.value, "object");
-				assert.strictEqual(path.parentPath, null),
-					assert.strictEqual(path.name, null);
+				assert.strictEqual(path.parentPath, null);
+				assert.strictEqual(path.name, null);
 
 				this.traverse(path);
 			},
@@ -116,7 +116,7 @@ describe("ASTVisitor", function() {
 		assert.ok(bVisitedProgram);
 	});
 
-	it("should visit all nodes", function() {
+	it("should visit all nodes", () => {
 		const SOURCE_CODE_ALL_NODES =
 			"function abc (def, ghi) {\n" +
 			"	if (false)\n" +
@@ -169,7 +169,7 @@ describe("ASTVisitor", function() {
 		});
 	});
 
-	it("should visit array nodes in order", function() {
+	it("should visit array nodes in order", () => {
 		const SOURCE_CODE_ORDER =
 			"alert(5, 7, 9);\n" + "const b = [3, abc, false];\n";
 
@@ -207,7 +207,7 @@ describe("ASTVisitor", function() {
 		]);
 	});
 
-	it("should not visit children unless explicitly stated", function() {
+	it("should not visit children unless explicitly stated", () => {
 		const oAst = recast.parse("(function abc() { return 1; })");
 		const oVisitor = new ASTVisitor();
 		let oFncts;
@@ -265,7 +265,7 @@ describe("ASTVisitor", function() {
 		assert.ok(bVisited);
 	});
 
-	it("should not reuse protected paths", function() {
+	it("should not reuse protected paths", () => {
 		const oAst = recast.parse("(function abc() { return 1; })");
 		const oVisitor = new ASTVisitor(undefined, 8); // very small cache size
 		let oTestPath = {

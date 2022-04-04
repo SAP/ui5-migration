@@ -26,11 +26,9 @@ const replaceable: ASTReplaceable = {
 	): void {
 		const oNodeParent = node.parentPath;
 		const oInsertionPoint = oNodeParent.value;
-		const oInsertion = node.value;
 
 		// CallExpression
 		// MyModule.myFunction()
-		const bReplaced = false;
 		if (oInsertionPoint.type === Syntax.CallExpression) {
 			const aArgs = oInsertionPoint.arguments;
 			const name = aArgs[0] as ESTree.Expression;
@@ -39,7 +37,6 @@ const replaceable: ASTReplaceable = {
 				builders.identifier(fnName),
 				false
 			);
-			const arg = aArgs[1];
 			oInsertionPoint.callee = newCallee;
 			oInsertionPoint.arguments = aArgs.splice(1);
 			// MemberExpression

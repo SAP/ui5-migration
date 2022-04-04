@@ -20,35 +20,36 @@ interface ConfigObject {
 	replacers: {[index: string]: string};
 }
 
-const parseConfig = function(sConfigFile: string): Promise<ConfigObject> {
+const parseConfig = function (sConfigFile: string): Promise<ConfigObject> {
 	const sNormalizedConfigFile = path.normalize(
 		rootDir + "defaultConfig/" + sConfigFile
 	);
-	return new Promise(function(resolve, reject) {
-		fs.readFile(sNormalizedConfigFile, "utf8", function(
-			err: string,
-			data: string
-		) {
-			if (err) {
-				reject(err);
-				return;
+	return new Promise((resolve, reject) => {
+		fs.readFile(
+			sNormalizedConfigFile,
+			"utf8",
+			(err: string, data: string) => {
+				if (err) {
+					reject(err);
+					return;
+				}
+				resolve(JSON.parse(data));
 			}
-			resolve(JSON.parse(data));
-		});
+		);
 	});
 };
 
-describe("Config validation", function() {
-	it("should validate the config replaceGlobals", function() {
+describe("Config validation", () => {
+	it("should validate the config replaceGlobals", () => {
 		// load config
 
 		// check existence of each replacer
 		// check existence of each replacer file
 		const sConfigFile = "replaceGlobals.config.json";
-		return parseConfig(sConfigFile).then(function(oJsonObj: ConfigObject) {
-			Object.keys(oJsonObj.modules).forEach(function(sKey: string) {
+		return parseConfig(sConfigFile).then((oJsonObj: ConfigObject) => {
+			Object.keys(oJsonObj.modules).forEach((sKey: string) => {
 				const oModule = oJsonObj.modules[sKey];
-				Object.keys(oModule).forEach(function(sModuleKey: string) {
+				Object.keys(oModule).forEach((sModuleKey: string) => {
 					const sReplacer = oModule[sModuleKey].replacer;
 					if (sReplacer) {
 						let sReplacerFile = oJsonObj.replacers[sReplacer];
@@ -67,16 +68,16 @@ describe("Config validation", function() {
 		});
 	});
 
-	it("should validate the config addMissingDependencies", function() {
+	it("should validate the config addMissingDependencies", () => {
 		// load config
 
 		// check existence of each replacer
 		// check existence of each replacer file
 		const sConfigFile = "addMissingDependencies.config.json";
-		return parseConfig(sConfigFile).then(function(oJsonObj) {
-			Object.keys(oJsonObj.modules).forEach(function(sKey: string) {
+		return parseConfig(sConfigFile).then(oJsonObj => {
+			Object.keys(oJsonObj.modules).forEach((sKey: string) => {
 				const oModule = oJsonObj.modules[sKey];
-				Object.keys(oModule).forEach(function(sModuleKey: string) {
+				Object.keys(oModule).forEach((sModuleKey: string) => {
 					const sReplacer = oModule[sModuleKey].replacer;
 					if (sReplacer) {
 						const sReplacerFile = oJsonObj.replacers[sReplacer];

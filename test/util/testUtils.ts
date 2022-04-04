@@ -1,5 +1,5 @@
 import * as ESTree from "estree";
-import {Node, SourceLocation} from "estree";
+import {Node} from "estree";
 
 import * as Mod from "../../src/Migration";
 import {
@@ -9,7 +9,7 @@ import {
 } from "../../src/Migration";
 import {BaseReporter} from "../../src/reporter/BaseReporter";
 import {MetaConsoleReporter} from "../../src/reporter/MetaConsoleReporter";
-import {Finding, ReportContext, Reporter} from "../../src/reporter/Reporter";
+import {Reporter} from "../../src/reporter/Reporter";
 import {MigrationTask} from "../../src/taskRunner";
 import {FileInfo} from "../../src/util/FileInfo";
 
@@ -139,7 +139,7 @@ export class CustomMigrationTask implements MigrationTask {
 	}
 
 	analyse(args: AnalyseArguments): Promise<{}> {
-		this.aFnAnalyze.forEach(function(fnAnalyze) {
+		this.aFnAnalyze.forEach(fnAnalyze => {
 			if (fnAnalyze) {
 				fnAnalyze(args);
 			}
@@ -147,13 +147,13 @@ export class CustomMigrationTask implements MigrationTask {
 		return Promise.resolve({});
 	}
 	config = {};
-	defaultConfig = function() {
+	defaultConfig = function () {
 		return Promise.resolve({});
 	};
 	description = "";
 	keywords: string[] = [];
 	migrate(args: MigrateArguments): Promise<boolean> {
-		this.aFnMigrate.forEach(function(fnMigrate) {
+		this.aFnMigrate.forEach(fnMigrate => {
 			fnMigrate(args);
 		});
 		return Promise.resolve(true);
@@ -188,7 +188,6 @@ export class CustomLocalFileInfo extends FileInfo {
 			useTabs: true,
 			lineTerminator: "\n",
 		}).code;
-		const that = this;
 
 		// mkdir operation should be async
 		await new Promise((resolve, reject) => {
@@ -204,8 +203,8 @@ export class CustomLocalFileInfo extends FileInfo {
 				reject("Unloaded before save was called!");
 				return;
 			}
-			this.aFnSave.forEach(function(fnSave) {
-				fnSave(that.bWasModified, that.sSourceCode);
+			this.aFnSave.forEach(fnSave => {
+				fnSave(this.bWasModified, this.sSourceCode);
 			});
 			resolve();
 		});

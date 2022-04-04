@@ -1,6 +1,10 @@
+bin/
 # test files
 test/**/*.js
 # generated files
-js/**/*.js
-
+js/
+# js files in source
+src/**/*.js
+typings/
 coverage
+index.js

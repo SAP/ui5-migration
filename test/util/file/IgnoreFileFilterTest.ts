@@ -2,8 +2,8 @@ import {IgnoreFileFilter} from "../../../src/util/file/IgnoreFileFilter";
 
 const assert = require("assert");
 
-describe("IgnoreFileFilter", function() {
-	it("should be possible to filter using IgnoreFileFilter", function() {
+describe("IgnoreFileFilter", () => {
+	it("should be possible to filter using IgnoreFileFilter", () => {
 		const fsFilter = IgnoreFileFilter.create("myfolder", ["ax", "bx"]);
 		assert.ok(fsFilter.match("myfolder/ax/myfile.js"), "matches the file");
 		assert.ok(
@@ -16,7 +16,7 @@ describe("IgnoreFileFilter", function() {
 		);
 	});
 
-	it("createFromContent from string with \\n", function() {
+	it("createFromContent from string with \\n", () => {
 		const fsFilter = IgnoreFileFilter.createFromContent(
 			"myfolder",
 			"ax\n# asd\nbx\n"
@@ -32,7 +32,7 @@ describe("IgnoreFileFilter", function() {
 		);
 	});
 
-	it("createFromContent from string with \\r\\n", function() {
+	it("createFromContent from string with \\r\\n", () => {
 		const fsFilter = IgnoreFileFilter.createFromContent(
 			"myfolder",
 			"ax\r\n# asd\r\nbx\r\n"

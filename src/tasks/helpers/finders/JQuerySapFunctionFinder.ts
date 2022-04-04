@@ -1,42 +1,8 @@
 import {Syntax} from "esprima";
 import * as ESTree from "estree";
-import {Literal} from "estree";
-import * as recast from "recast";
-import {NodePath} from "ui5-migration";
 
 import {EMPTY_FINDER_RESULT, Finder, FinderResult} from "../../../dependencies";
 import {SapUiDefineCall} from "../../../util/SapUiDefineCall";
-
-/**
- * DRAFT
- * @param node
- * @param aList
- * @returns {boolean}
- */
-const fnNestedMember = function(node: ESTree.Node, aList: string[]): boolean {
-	const sLast = aList.pop();
-	if (
-		sLast &&
-		node.type === Syntax.MemberExpression &&
-		(node as ESTree.MemberExpression).property.type === Syntax.Identifier &&
-		((node as ESTree.MemberExpression).property as ESTree.Identifier).name
-	) {
-		const prop = (node as ESTree.MemberExpression)
-			.property as ESTree.Identifier;
-		const objProp = (node as ESTree.MemberExpression)
-			.object as ESTree.Identifier;
-		if (aList.length === 2) {
-			return prop.name === sLast && objProp.name === aList.pop();
-		}
-		if (prop.name === sLast) {
-			return fnNestedMember(node, aList);
-		} else {
-			return false;
-		}
-	} else {
-		return false;
-	}
-};
 
 /**
  * Finds the following 2 occurrences where: ":sapTabbable" is the first argument
@@ -54,8 +20,6 @@ class JQuerySapFunctionFinder implements Finder {
 		sConfigName: string,
 		defineCall: SapUiDefineCall
 	): FinderResult {
-		const aObject = sConfigName.split("."); // jQuery.sap.extend
-
 		if (node.type === Syntax.CallExpression) {
 			if (
 				node.arguments.length > 0 &&

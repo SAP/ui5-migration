@@ -1,5 +1,4 @@
 import * as ESTree from "estree";
-import * as fs from "graceful-fs";
 
 import {JSONReporter, Reporter, ReportLevel} from "./Migration";
 import {JSONReporterResult} from "./reporter/JSONReporter";
@@ -109,7 +108,7 @@ export async function migrateString(
 	let aFilteredTasksToUse: MigrationTask[];
 	let aProcessModuleResults: ProcessModuleResult[];
 	return getFilteredTasks(tasks)
-		.then(function(aTasksToUse: MigrationTask[]) {
+		.then((aTasksToUse: MigrationTask[]) => {
 			aFilteredTasksToUse = aTasksToUse;
 			return TaskRunner.processModules(
 				aTasksToUse,
@@ -124,7 +123,9 @@ export async function migrateString(
 		.then((aResults: ProcessModuleResult[]) => {
 			aProcessModuleResults = aResults;
 			oTaskRunnerReporter.setContext(
-				Object.assign(oTaskRunnerReporter.getContext(), {fileName: ""})
+				Object.assign(oTaskRunnerReporter.getContext(), {
+					fileName: "",
+				})
 			);
 			oTaskRunnerReporter.report(ReportLevel.INFO, "Finished");
 			oTaskRunnerReporter.reportCollected(ReportLevel.INFO);
@@ -234,15 +235,13 @@ export async function migrate(oArgs: IndexArgs): Promise<{}> {
 
 	const aFilterPromises: Array<Promise<void>> = [];
 	if (Array.isArray(aExcludedPaths)) {
-		aExcludedPaths.forEach(function(sExcludePath) {
+		aExcludedPaths.forEach(sExcludePath => {
 			oTaskRunnerReporter.report(
 				ReportLevel.DEBUG,
 				"Ignoring folder '" + sExcludePath + "'"
 			);
 			aFilterPromises.push(
-				FsFilterFactory.createFilter(sExcludePath).then(function(
-					oFilter
-				) {
+				FsFilterFactory.createFilter(sExcludePath).then(oFilter => {
 					builder.excludeFilesFromFilter([oFilter]);
 				})
 			);
@@ -256,7 +255,7 @@ export async function migrate(oArgs: IndexArgs): Promise<{}> {
 		);
 		aFilterPromises.push(
 			FsFilterFactory.createIgnoreFileFilter(oArgs.ignoreFile).then(
-				function(oFilter) {
+				oFilter => {
 					builder.excludeFilesFromFilter([oFilter]);
 				}
 			)
@@ -269,15 +268,13 @@ export async function migrate(oArgs: IndexArgs): Promise<{}> {
 	}
 
 	if (Array.isArray(aIncludedPaths)) {
-		aIncludedPaths.forEach(function(sIncludePath) {
+		aIncludedPaths.forEach(sIncludePath => {
 			oTaskRunnerReporter.report(
 				ReportLevel.INFO,
 				"Searching in folder '" + sIncludePath + "'"
 			);
 			aFilterPromises.push(
-				FsFilterFactory.createFilter(sIncludePath).then(function(
-					oFilter
-				) {
+				FsFilterFactory.createFilter(sIncludePath).then(oFilter => {
 					builder.addFilesFromFilter([oFilter]);
 				})
 			);
@@ -289,7 +286,7 @@ export async function migrate(oArgs: IndexArgs): Promise<{}> {
 			"Searching current folder"
 		);
 		aFilterPromises.push(
-			FsFilterFactory.createFilter(process.cwd()).then(function(oFilter) {
+			FsFilterFactory.createFilter(process.cwd()).then(oFilter => {
 				builder.addFilesFromFilter([oFilter]);
 			})
 		);
@@ -348,7 +345,7 @@ export async function migrate(oArgs: IndexArgs): Promise<{}> {
 		let aArray = [];
 		let chain = Promise.resolve(aArray);
 		for (let i = 0; i < nrOfChunks; i++) {
-			chain = chain.then(o => {
+			chain = chain.then(() => {
 				oTaskRunnerReporter.report(
 					ReportLevel.INFO,
 					`Processing ${i * fileLimit} chunk`

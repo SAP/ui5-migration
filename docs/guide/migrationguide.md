@@ -33,7 +33,7 @@ You might have some modules with comments in the `sap.ui.define` call, e.g.
     Control,
     ShellLayoutRenderer
     /* , jQueryDom, jQueryScript */,
-    containsOrEquals,
+    containsOrEquals
 ) {
 ```
 

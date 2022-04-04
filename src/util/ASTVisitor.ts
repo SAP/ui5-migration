@@ -56,6 +56,7 @@ class NodePathImpl implements NodePath {
 	}
 
 	protect(): this {
+		// eslint-disable-next-line @typescript-eslint/no-this-alias
 		let oCurNode: NodePathImpl = this;
 		while (oCurNode) {
 			oCurNode.protected++;
@@ -66,6 +67,7 @@ class NodePathImpl implements NodePath {
 
 	unprotect(): this {
 		if (this.protected > 0) {
+			// eslint-disable-next-line @typescript-eslint/no-this-alias
 			let oCurNode: NodePathImpl = this;
 			while (oCurNode) {
 				if (oCurNode.protected > 0) {
@@ -203,13 +205,14 @@ export class ASTVisitor {
 		const stack: NodePathImpl[] = [
 			this._createPath(rootNode, null, null).protect(),
 		];
-		const me = this;
+		// eslint-disable-next-line @typescript-eslint/no-this-alias
+		const that = this;
 
 		// the context used to call the visitor functions
 		const visitorObject = {
 			pushChild(path, node, key) {
-				if (me._checkChild(node, key)) {
-					const oNewPath = me._createPath(node[key], key, path);
+				if (that._checkChild(node, key)) {
+					const oNewPath = that._createPath(node[key], key, path);
 					oNewPath.protect(); // keep it protected until we pop it
 					// off the stack
 					stack.push(oNewPath);
@@ -224,6 +227,7 @@ export class ASTVisitor {
 					}
 				} else {
 					for (const sKey in oNode) {
+						// eslint-disable-next-line no-prototype-builtins
 						if (oNode.hasOwnProperty(sKey)) {
 							this.pushChild(path, oNode, sKey);
 						}

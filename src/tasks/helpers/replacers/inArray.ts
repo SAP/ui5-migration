@@ -67,12 +67,11 @@ const replaceable: ASTReplaceable = {
 				// -1; should result in:			var i = a &&
 				// Array.prototype.indexOf.call(a, o) > -1;
 				if (oInsertionPoint.type === Syntax.BinaryExpression) {
-					oInsertionPoint[
-						node.parentPath.name
-					] = builders.callExpression(
-						oNodeIndexOfCall,
-						oInsertion.arguments
-					);
+					oInsertionPoint[node.parentPath.name] =
+						builders.callExpression(
+							oNodeIndexOfCall,
+							oInsertion.arguments
+						);
 					const oLogicalExpression = builders.logicalExpression(
 						"&&",
 						aArray,
@@ -87,18 +86,22 @@ const replaceable: ASTReplaceable = {
 					// --> aElements ? Array.prototype.indexOf.call(aElements,
 					// oElement) : -1
 
-					const oConditionalExpression = builders.conditionalExpression(
-						aArray,
-						builders.callExpression(
-							oNodeIndexOfCall,
-							oInsertion.arguments
-						),
-						builders.unaryExpression("-", builders.literal(1), true)
-					);
+					const oConditionalExpression =
+						builders.conditionalExpression(
+							aArray,
+							builders.callExpression(
+								oNodeIndexOfCall,
+								oInsertion.arguments
+							),
+							builders.unaryExpression(
+								"-",
+								builders.literal(1),
+								true
+							)
+						);
 
-					oInsertionPoint[
-						node.parentPath.name
-					] = oConditionalExpression;
+					oInsertionPoint[node.parentPath.name] =
+						oConditionalExpression;
 				}
 			}
 		} else {

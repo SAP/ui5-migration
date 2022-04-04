@@ -1,5 +1,3 @@
-import {Syntax} from "esprima";
-import * as ESTree from "estree";
 import * as recast from "recast";
 
 import {Extender} from "../../../dependencies";
@@ -23,7 +21,7 @@ class AddUnusedImportWithComment implements Extender {
 			const node = defineCall.getNodeOfImport(
 				config.newModulePath
 			) as NodeWithComments;
-			if (node.comments == null) {
+			if (!node.comments) {
 				node.comments = [builders.commentLine(config.commentText)];
 			}
 			return true;

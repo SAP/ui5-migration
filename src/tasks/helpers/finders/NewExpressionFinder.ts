@@ -1,7 +1,6 @@
 import {Syntax} from "esprima";
 import * as ESTree from "estree";
 import * as recast from "recast";
-import {NodePath} from "ui5-migration";
 
 import {EMPTY_FINDER_RESULT, Finder, FinderResult} from "../../../dependencies";
 import {SapUiDefineCall} from "../../../util/SapUiDefineCall";

@@ -7,7 +7,7 @@ const rootDir = "./test/util/whitespace/diffandastresources/";
 
 const EOL_REGEXP = /\r?\n/g;
 
-describe("DiffAndAstStringOptimizeStrategy", function() {
+describe("DiffAndAstStringOptimizeStrategy", () => {
 	const aCommonLogs = [
 		"trace: DIFF: Found 125 diffs",
 		"trace: DIFF Added 103:  '[\\t]'",
@@ -419,7 +419,7 @@ describe("DiffAndAstStringOptimizeStrategy", function() {
 				(oTestConfig.description
 					? " (" + oTestConfig.description + ")"
 					: ""),
-			async function() {
+			async () => {
 				let source = fs.readFileSync(
 					rootDir + oTestConfig.baseName + ".source.js",
 					"UTF-8"
@@ -446,13 +446,15 @@ describe("DiffAndAstStringOptimizeStrategy", function() {
 				}
 
 				const reports = [];
-				const diffAndAstStringOptimizeStrategy = new DiffAndAstStringOptimizeStrategy(
-					new CustomReporter(reports, "trace")
-				);
-				const sOptimized = await diffAndAstStringOptimizeStrategy.optimizeString(
-					source,
-					modified
-				);
+				const diffAndAstStringOptimizeStrategy =
+					new DiffAndAstStringOptimizeStrategy(
+						new CustomReporter(reports, "trace")
+					);
+				const sOptimized =
+					await diffAndAstStringOptimizeStrategy.optimizeString(
+						source,
+						modified
+					);
 
 				assert.deepStrictEqual(
 					sOptimized,

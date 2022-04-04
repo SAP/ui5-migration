@@ -1,6 +1,5 @@
 import {analyse, migrate} from "../src/tasks/addRenderers";
 
-import * as assertEqualNormalized from "./assertEqualNormalized";
 import {
 	CustomFileFinder,
 	CustomFileInfo,
@@ -15,62 +14,62 @@ const rootDir = "./test/";
 const fileFinder = new CustomFileFinder();
 const reporter = new CustomReporter([], "debug");
 
-describe("addRenderer tests", function() {
-	it("should add metadata renderers", function(done) {
+describe("addRenderer tests", () => {
+	it("should add metadata renderers", done => {
 		const module = new CustomFileInfo(
 			rootDir + "addRenderers/myTestControlMetaRenderer.js"
 		);
 
 		analyse({file: module, fileFinder, reporter})
-			.then(function(analyseResult) {
+			.then(analyseResult => {
 				if (analyseResult) {
 					done("No renderer should be added");
 				} else {
 					done();
 				}
 			})
-			.catch(function(e) {
+			.catch(e => {
 				done(e);
 			});
 	});
 
-	it("should add proto renderers", function(done) {
+	it("should add proto renderers", done => {
 		const module = new CustomFileInfo(
 			rootDir + "addRenderers/myTestControlProtoRenderer.js"
 		);
 
 		analyse({file: module, fileFinder, reporter})
-			.then(function(analyseResult) {
+			.then(analyseResult => {
 				if (analyseResult) {
 					done("No renderer should be added");
 				} else {
 					done();
 				}
 			})
-			.catch(function(e) {
+			.catch(e => {
 				done(e);
 			});
 	});
 
-	it("should add no renderers as already defined", function(done) {
+	it("should add no renderers as already defined", done => {
 		const module = new CustomFileInfo(
 			rootDir + "addRenderers/myControl.js"
 		);
 
 		analyse({file: module, fileFinder, reporter})
-			.then(function(analyseResult) {
+			.then(analyseResult => {
 				if (analyseResult) {
 					done("No renderer should be added");
 				} else {
 					done();
 				}
 			})
-			.catch(function(e) {
+			.catch(e => {
 				done(e);
 			});
 	});
 
-	it("should add no renderers", function(done) {
+	it("should add no renderers", done => {
 		const module = new CustomFileInfo(
 			rootDir + "addRenderers/myTestControlNoRenderer.js"
 		);
@@ -85,7 +84,7 @@ describe("addRenderer tests", function() {
 			reporter,
 			config: {addRendererField: true},
 		})
-			.then(function(analyseResult) {
+			.then(analyseResult => {
 				if (!analyseResult || !migrate) {
 					throw new Error("A renderer should be added");
 				}
@@ -97,7 +96,7 @@ describe("addRenderer tests", function() {
 					config: {addRendererField: true},
 				});
 			})
-			.then(function(didModify) {
+			.then(didModify => {
 				assert.ok(didModify, "Migration should add the renderer");
 				const actualContent = recast.print(module.getAST(), {
 					lineTerminator: "\n",
@@ -105,28 +104,28 @@ describe("addRenderer tests", function() {
 				}).code;
 				assert.equal(actualContent, expectedContent);
 			})
-			.then(function() {
+			.then(() => {
 				done();
 			})
-			.catch(function(e) {
+			.catch(e => {
 				done(e);
 			});
 	});
 
-	it("should ignore invalid define", function(done) {
+	it("should ignore invalid define", done => {
 		const module = new CustomFileInfo(
 			rootDir + "addRenderers/invalidDefine.js"
 		);
 
 		analyse({file: module, fileFinder, reporter})
-			.then(function(analyseResult) {
+			.then(analyseResult => {
 				if (analyseResult) {
 					done("No renderer should be added");
 				} else {
 					done();
 				}
 			})
-			.catch(function(e) {
+			.catch(e => {
 				done(e);
 			});
 	});

@@ -41,7 +41,6 @@ const replaceable: ASTReplaceable = {
 	): void {
 		const oNodeParent = node.parentPath;
 		const oInsertionPoint = oNodeParent.value;
-		const oInsertion = node.value;
 
 		// CallExpression
 		// MyModule.myFunction()

@@ -1,3 +1,4 @@
+/* eslint no-prototype-builtins: "off" */
 /**
  * Uses a configuration object to find global jquery and jquery.sap functions.
  * Replaces these functions with the appropriate module such as:
@@ -529,7 +530,7 @@ async function analyse(args: Mod.AnalyseArguments): Promise<{}> {
 	const aVariableNamesToRemove = new Set<string>();
 	Object.keys(oConfig.modules)
 		.map(o => defineCall.getParamNameByImport(o))
-		.forEach(function(s) {
+		.forEach(s => {
 			if (typeof s === "string") {
 				aVariableNamesToRemove.add(s);
 			}
@@ -567,7 +568,7 @@ async function analyse(args: Mod.AnalyseArguments): Promise<{}> {
 	}
 
 	const aExistingVariableNames = findVariableNames(ast, visitor);
-	aVariableNamesToRemove.forEach(function(s) {
+	aVariableNamesToRemove.forEach(s => {
 		aExistingVariableNames.delete(s);
 	});
 
@@ -608,9 +609,8 @@ async function analyse(args: Mod.AnalyseArguments): Promise<{}> {
 									aExistingVariableNames
 								);
 								aExistingVariableNames.add(newImportName);
-								mImportRequireNames[
-									oldImport.newModulePath
-								] = newImportName;
+								mImportRequireNames[oldImport.newModulePath] =
+									newImportName;
 							} else {
 								// reuse import
 								const sParamName = defineCall.paramNames[p];

@@ -20,7 +20,7 @@ const builders = recast.types.builders;
  * @return {Promise<object|undefined>} resolves with the symbol if it is a module within a library otherwise <code>undefined</code>
  */
 async function getModuleDefinedInLibrary(name: string, apiInfo: APIInfo) {
-	return apiInfo.getSymbol(name).then(function(oApiSymbol) {
+	return apiInfo.getSymbol(name).then(oApiSymbol => {
 		// check if enum is within apiInfo
 		// check the resource if it is coming from a library
 		// --> import path und resource
@@ -126,14 +126,14 @@ export async function fixTypeDependency(
 		return Promise.resolve({modified: false});
 	}
 	const aPromises: Array<Promise<{}>> = [];
-	defineCall.dependencyArray.elements.slice().forEach(function(depObj) {
+	defineCall.dependencyArray.elements.slice().forEach(depObj => {
 		if (depObj.type === Syntax.Literal) {
 			const dep = (depObj as ESTree.Literal).value.toString();
 			const sDepInvocationName = dep.replace(/\//g, ".");
 			const pAddPromise = getModuleDefinedInLibrary(
 				sDepInvocationName,
 				apiInfo
-			).then(function(oSymbol) {
+			).then(oSymbol => {
 				if (!oSymbol) {
 					return false;
 				}
@@ -207,9 +207,9 @@ export async function fixTypeDependency(
 	if (mode === ProcessingMode.PARALLEL) {
 		oRePromise = Promise.all(aPromises);
 	} else if (mode === ProcessingMode.SEQUENTIAL) {
-		aPromises.forEach(function(oPromise) {
-			oRePromise = oRePromise.then(function(aResults) {
-				return oPromise.then(function(oResult) {
+		aPromises.forEach(oPromise => {
+			oRePromise = oRePromise.then(aResults => {
+				return oPromise.then(oResult => {
 					aResults.push(oResult);
 					return aResults;
 				});
@@ -217,8 +217,8 @@ export async function fixTypeDependency(
 		});
 	}
 
-	return oRePromise.then(function(aResults) {
-		const bFileWasModified = aResults.some(function(oResult) {
+	return oRePromise.then(aResults => {
+		const bFileWasModified = aResults.some(oResult => {
 			return oResult;
 		});
 		const oAnalysisResult = Object.create(null);

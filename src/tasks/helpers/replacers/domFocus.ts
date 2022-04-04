@@ -35,9 +35,8 @@ const replaceable: ASTReplaceable = {
 					oInsertionPoint.type === Syntax.VariableDeclarator ||
 					oInsertionPoint.type === Syntax.AssignmentExpression
 				) {
-					oInsertionPoint[sInsertionKey] = builders.identifier(
-						"undefined"
-					);
+					oInsertionPoint[sInsertionKey] =
+						builders.identifier("undefined");
 				}
 			} else if (oFunctionCall.arguments.length > 0) {
 				const oArg = oFunctionCall.arguments[0];
@@ -73,17 +72,16 @@ const replaceable: ASTReplaceable = {
 					] = ifStatament;
 					return;
 				} else if (hasConstantValue(oArg)) {
-					oInsertionPoint[
-						sInsertionKey
-					] = builders.conditionalExpression(
-						oArg,
-						builders.logicalExpression(
-							"||",
-							oFunctionCall,
-							builders.identifier("true")
-						),
-						builders.identifier("undefined")
-					);
+					oInsertionPoint[sInsertionKey] =
+						builders.conditionalExpression(
+							oArg,
+							builders.logicalExpression(
+								"||",
+								oFunctionCall,
+								builders.identifier("true")
+							),
+							builders.identifier("undefined")
+						);
 				} else {
 					oInsertionPoint[sInsertionKey] = builders.identifier(
 						"(function(o){return o ? o.focus() || true : undefined;}(" +
