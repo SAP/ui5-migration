@@ -1,4 +1,4 @@
-interface StringOptimizeStrategy {
+export interface StringOptimizeStrategy {
 	/**
 	 *
 	 * @param original

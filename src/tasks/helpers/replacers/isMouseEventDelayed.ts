@@ -20,7 +20,6 @@ const replaceable: ASTReplaceable = {
 		oldModuleCall: string
 	): void {
 		const oInsertionPoint = node.parentPath.value;
-		const oInsertion = node.value;
 		const oNodeCall = builders.callExpression(
 			builders.identifier(name),
 			[]

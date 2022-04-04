@@ -18,15 +18,14 @@
   "scripts": {
     "build": "rimraf js && tsc -p .",
     "build-watch": "rimraf js && tsc -w -p .",
-    "lint": "tslint -p tsconfig.json -c tslint.json",
-    "test": "npm run lint && npm run check && npm run coverage",
-    "test-azure": "npm run lint && npm run check && npm run unit && npm run coverage-junit",
+    "lint": "gts lint",
+    "test": "npm run lint && npm run coverage",
+    "test-azure": "npm run lint && npm run unit && npm run coverage-junit",
     "coverage": "nyc npm run unit",
     "coverage-junit": "nyc --reporter=text --reporter=text-summary --reporter=cobertura npm run unit-junit",
     "unit": "mocha ./js/test/*Test.js ./js/test/**/*Test.js ./js/test/**/*/**Test.js --timeout 6000",
     "unit-junit": "npm run unit -- --reporter mocha-junit-reporter",
     "unit-watch": "npm run unit -- -w",
-    "check": "gts check",
     "clean": "gts clean",
     "fix": "gts fix",
     "preversion": "npm run build && npm test",
@@ -130,7 +129,6 @@
     "sinon": "^13.0.1",
     "source-map-support": "^0.5.21",
     "ts-node": "^9.1.1",
-    "tslint": "^6.1.3",
     "typescript": "^3.9.10"
   }
 }

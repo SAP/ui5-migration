@@ -1,9 +1,4 @@
-import {Syntax} from "esprima";
-import * as recast from "recast";
-
 import {ASTReplaceable, NodePath} from "ui5-migration";
-
-const builders = recast.types.builders;
 
 /**
  *

@@ -88,12 +88,11 @@ export class JSONReporter extends BaseReporter {
 	}
 
 	reportCollected(level: ReportLevel) {
-		const that = this;
-		this.oMap.forEach(function(value, key, map) {
+		this.oMap.forEach((value, key) => {
 			if (typeof value === "number") {
-				that.report(level, "value: " + key + ": " + value);
+				this.report(level, "value: " + key + ": " + value);
 			} else {
-				that.report(
+				this.report(
 					level,
 					"value: " + key + ": entries: " + value.length
 				);

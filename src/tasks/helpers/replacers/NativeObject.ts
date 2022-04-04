@@ -27,15 +27,12 @@ const replaceable: ASTReplaceable = {
 
 		const oNativeObject = aObjectParts
 			.slice(2)
-			.reduce(function(oNativeObject, sProperty) {
+			.reduce((oNativeObject, sProperty) => {
 				return builders.memberExpression(
 					oNativeObject,
 					builders.identifier(sProperty)
 				);
-			}, builders.memberExpression(
-				builders.identifier(aObjectParts[0]),
-				builders.identifier(aObjectParts[1])
-			));
+			}, builders.memberExpression(builders.identifier(aObjectParts[0]), builders.identifier(aObjectParts[1])));
 
 		if (oInsertionPoint.type === Syntax.IfStatement) {
 			oInsertionPoint.test = oNativeObject;

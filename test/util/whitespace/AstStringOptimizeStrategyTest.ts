@@ -7,8 +7,8 @@ const rootDir = "./test/util/whitespace/astresources/";
 
 const EOL_REGEXP = /\r?\n/g;
 
-describe("AstStringOptimizeStrategy", function() {
-	it("Should optimize comment", async function() {
+describe("AstStringOptimizeStrategy", () => {
+	it("Should optimize comment", async () => {
 		const source = fs.readFileSync(rootDir + "comment.source.js", "UTF-8");
 		const modified = fs.readFileSync(
 			rootDir + "comment.modified.js",
@@ -26,7 +26,7 @@ describe("AstStringOptimizeStrategy", function() {
 		assert.deepStrictEqual(sOptimized, expected, "content matches");
 	});
 
-	it("Should optimize batch", async function() {
+	it("Should optimize batch", async () => {
 		const source = fs.readFileSync(rootDir + "batch.source.js", "UTF-8");
 		const modified = fs.readFileSync(
 			rootDir + "batch.modified.js",
@@ -44,7 +44,7 @@ describe("AstStringOptimizeStrategy", function() {
 		assert.deepStrictEqual(sOptimized, expected, "content matches");
 	});
 
-	it("Should optimize list", async function() {
+	it("Should optimize list", async () => {
 		const source = fs.readFileSync(rootDir + "list.source.js", "UTF-8");
 		const modified = fs.readFileSync(rootDir + "list.modified.js", "UTF-8");
 		const expected = fs.readFileSync(rootDir + "list.expected.js", "UTF-8");
@@ -56,7 +56,7 @@ describe("AstStringOptimizeStrategy", function() {
 		assert.deepStrictEqual(sOptimized, expected, "content matches");
 	});
 
-	it("Should optimize actions", async function() {
+	it("Should optimize actions", async () => {
 		const source = fs.readFileSync(rootDir + "actions.source.js", "UTF-8");
 		const modified = fs.readFileSync(
 			rootDir + "actions.modified.js",
@@ -82,7 +82,7 @@ describe("AstStringOptimizeStrategy", function() {
 		assert.deepStrictEqual(sOptimized, expected, "content matches");
 	});
 
-	it("Should optimize abap", async function() {
+	it("Should optimize abap", async () => {
 		let source = fs.readFileSync(rootDir + "abap.source.js", "UTF-8");
 		let modified = fs.readFileSync(rootDir + "abap.modified.js", "UTF-8");
 		let expected = fs.readFileSync(rootDir + "abap.expected.js", "UTF-8");
@@ -121,7 +121,7 @@ describe("AstStringOptimizeStrategy", function() {
 		);
 	});
 
-	it("Should optimize custom", async function() {
+	it("Should optimize custom", async () => {
 		let source = fs.readFileSync(rootDir + "custom.source.js", "UTF-8");
 		let modified = fs.readFileSync(rootDir + "custom.modified.js", "UTF-8");
 		let expected = fs.readFileSync(rootDir + "custom.expected.js", "UTF-8");
@@ -164,7 +164,7 @@ describe("AstStringOptimizeStrategy", function() {
 		);
 	});
 
-	it("Should optimize breaking", async function() {
+	it("Should optimize breaking", async () => {
 		const source = fs.readFileSync(rootDir + "breaking.source.js", "UTF-8");
 		const modified = fs.readFileSync(
 			rootDir + "breaking.modified.js",

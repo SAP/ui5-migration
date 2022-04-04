@@ -61,8 +61,9 @@ function isRendererDefined(defineCall: SapUiDefineCall): RendererDefinition {
 					// console.log("found potential class definition %s = %s",
 					// decl.id.name, decl.init.arguments[0].value);
 					const classId = (decl.id as ESTree.Identifier).name;
-					classNames[classId] = (decl.init
-						.arguments[0] as ESTree.Literal).value.toString();
+					classNames[classId] = (
+						decl.init.arguments[0] as ESTree.Literal
+					).value.toString();
 					classDefinitions[classId] = decl.init
 						.arguments[1] as ESTree.ObjectExpression;
 				}
@@ -79,9 +80,7 @@ function isRendererDefined(defineCall: SapUiDefineCall): RendererDefinition {
 
 					rendererDefinedResult.moduleName = classNames[exportName];
 
-					classDefinitions[exportName].properties.forEach(function(
-						prop
-					) {
+					classDefinitions[exportName].properties.forEach(prop => {
 						const oProp = prop as ESTree.Property;
 						if (
 							oProp &&
@@ -134,23 +133,6 @@ function isPartOfMemberExpr(node: ESTree.Node, identifier: string): boolean {
 		return isPartOfMemberExpr(node.object, identifier);
 	}
 	return false;
-}
-
-function hasProperty(
-	objectExpression: ESTree.ObjectExpression,
-	propertyNames: string[]
-) {
-	return objectExpression.properties.some(keyValue => {
-		if (keyValue.type === Syntax.Property) {
-			if (keyValue.key.type === Syntax.Literal) {
-				return propertyNames.indexOf(String(keyValue.key.value)) >= 0;
-			}
-			if (keyValue.key.type === Syntax.Identifier) {
-				return propertyNames.indexOf(keyValue.key.name) >= 0;
-			}
-		}
-		return false;
-	});
 }
 
 function lastPathElement(name: string): string {

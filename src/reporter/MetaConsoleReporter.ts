@@ -1,7 +1,7 @@
 import * as ESTree from "estree";
 
 import {ConsoleReporter} from "./ConsoleReporter";
-import {Finding, fromLoc, Reporter, ReportLevel} from "./Reporter";
+import {Finding, Reporter, ReportLevel} from "./Reporter";
 
 /**
  * Reporter which contains multiple ConsoleReporters
@@ -72,10 +72,9 @@ export class MetaConsoleReporter extends ConsoleReporter {
 	}
 
 	async finalize(): Promise<{}> {
-		const that = this;
-		return super.finalize().then(function() {
+		return super.finalize().then(() => {
 			return Promise.all(
-				that.getReporters().map(oReporter => oReporter.finalize())
+				this.getReporters().map(oReporter => oReporter.finalize())
 			);
 		});
 	}

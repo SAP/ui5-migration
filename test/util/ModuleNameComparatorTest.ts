@@ -2,8 +2,8 @@ import * as ModuleNameComparator from "../../src/util/ModuleNameComparator";
 
 const assert = require("assert");
 
-describe("ConfigUtilsTest", function() {
-	it("Should succeed if valid version range was given", function() {
+describe("ConfigUtilsTest", () => {
+	it("Should succeed if valid version range was given", () => {
 		assert.ok(
 			ModuleNameComparator.compare("window.a", "a"),
 			"window prefix is ignored"

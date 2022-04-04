@@ -1,0 +1,18 @@
+{
+  "extends": "./node_modules/gts/",
+  "env": {
+    "node": true
+  },
+  "rules": {
+    "no-debugger": 2,
+    "no-irregular-whitespace": 2,
+    "linebreak-style": [2, "unix"],
+    "no-console": 2,
+    "curly": 2,
+    "no-prototype-builtins": 1,
+    "quotes": [0, "double"],
+    "@typescript-eslint/no-explicit-any": 1,
+    "@typescript-eslint/no-this-alias": 2,
+    "@typescript-eslint/no-unused-vars": [2, {"args": "none"}]
+  }
+}

@@ -1,4 +1,3 @@
-const url = require("url");
 const fs = require("fs");
 const request = require("request");
 
@@ -35,31 +34,33 @@ export async function fetchResource(
 		}
 
 		let fetchResourcePromise: Promise<object>;
-		const oParsedUrl = url.parse(vResourceLocation);
-		if (oParsedUrl.protocol && oParsedUrl.host) {
-			fetchResourcePromise = new Promise(function(resolve, reject) {
-				request.get(vResourceLocation, function(
-					error: string,
-					response: string,
-					body: string
-				) {
-					if (error) {
-						reject(error);
-					} else {
-						try {
-							resolve(JSON.parse(body));
-						} catch (e) {
-							reject(e);
+		let hasProtocolAndHost = false;
+		try {
+			const oParsedUrl = new URL(vResourceLocation);
+			hasProtocolAndHost = !!oParsedUrl.protocol && !!oParsedUrl.host;
+		} catch (e) {
+			// ignore error
+		}
+		if (hasProtocolAndHost) {
+			fetchResourcePromise = new Promise((resolve, reject) => {
+				request.get(
+					vResourceLocation,
+					(error: string, response: string, body: string) => {
+						if (error) {
+							reject(error);
+						} else {
+							try {
+								resolve(JSON.parse(body));
+							} catch (e) {
+								reject(e);
+							}
 						}
 					}
-				});
+				);
 			});
 		} else {
-			fetchResourcePromise = new Promise(function(resolve, reject) {
-				fs.readFile(vResourceLocation, function(
-					err: string,
-					data: string
-				) {
+			fetchResourcePromise = new Promise((resolve, reject) => {
+				fs.readFile(vResourceLocation, (err: string, data: string) => {
 					if (err) {
 						reject(err);
 					} else {

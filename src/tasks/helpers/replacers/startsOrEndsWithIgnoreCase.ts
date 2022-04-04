@@ -85,10 +85,11 @@ const replaceable: ASTReplaceable = {
 					oValue.value.toString().toLowerCase()
 				);
 			} else {
-				const oMemberExpressiontoLowerCaseForValue = builders.memberExpression(
-					oValue,
-					builders.identifier("toLowerCase")
-				);
+				const oMemberExpressiontoLowerCaseForValue =
+					builders.memberExpression(
+						oValue,
+						builders.identifier("toLowerCase")
+					);
 				oCallExpressiontoLowerCase = builders.callExpression(
 					oMemberExpressiontoLowerCaseForValue,
 					[]
@@ -106,10 +107,11 @@ const replaceable: ASTReplaceable = {
 					oPattern.value.toString().toLowerCase()
 				);
 			} else {
-				const oMemberExpressiontoLowerCaseForPattern = builders.memberExpression(
-					oPattern,
-					builders.identifier("toLowerCase")
-				);
+				const oMemberExpressiontoLowerCaseForPattern =
+					builders.memberExpression(
+						oPattern,
+						builders.identifier("toLowerCase")
+					);
 				oCallExpressiontoLowerCaseForPattern = builders.callExpression(
 					oMemberExpressiontoLowerCaseForPattern,
 					[]
@@ -144,11 +146,12 @@ const replaceable: ASTReplaceable = {
 					typeOfUnaryExpression,
 					builders.literal("string")
 				);
-				const typeOfStringAndExistenceLogicalExpression = builders.logicalExpression(
-					"&&",
-					typeOfStringBinaryExpression,
-					oPattern
-				);
+				const typeOfStringAndExistenceLogicalExpression =
+					builders.logicalExpression(
+						"&&",
+						typeOfStringBinaryExpression,
+						oPattern
+					);
 
 				// check if we are within an if expression
 				if (isWithinIfStatement(node)) {

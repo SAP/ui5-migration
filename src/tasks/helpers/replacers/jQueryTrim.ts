@@ -41,16 +41,17 @@ const replaceable: ASTReplaceable = {
 				[]
 			);
 
-			const trimCallForString: ESTree.Expression = builders.callExpression(
-				builders.memberExpression(
-					builders.callExpression(builders.identifier("String"), [
-						arg0,
-					]),
-					builders.identifier("trim"),
-					false
-				),
-				[]
-			);
+			const trimCallForString: ESTree.Expression =
+				builders.callExpression(
+					builders.memberExpression(
+						builders.callExpression(builders.identifier("String"), [
+							arg0,
+						]),
+						builders.identifier("trim"),
+						false
+					),
+					[]
+				);
 
 			const typeOfString = builders.binaryExpression(
 				"===",

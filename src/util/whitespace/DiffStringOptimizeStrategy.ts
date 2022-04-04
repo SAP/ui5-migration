@@ -2,6 +2,7 @@ import {Reporter, ReportLevel} from "../../reporter/Reporter";
 import {Range} from "../Range";
 
 import * as StringWhitespaceUtils from "./StringWhitespaceUtils";
+import {StringOptimizeStrategy} from "./StringOptimizeStrategy";
 
 const diff = require("diff");
 

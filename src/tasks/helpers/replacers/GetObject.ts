@@ -1,5 +1,4 @@
 import {Syntax} from "esprima";
-import * as ESTree from "estree";
 import * as recast from "recast";
 import {ASTReplaceable, NodePath} from "ui5-migration";
 
@@ -69,9 +68,8 @@ const replaceable: ASTReplaceable = {
 					oNoCreates.type === Syntax.Identifier &&
 					oNoCreates.name === "undefined")
 			) {
-				oInsertionPoint[
-					node.parentPath.name
-				].callee = builders.identifier("ObjectPath.get");
+				oInsertionPoint[node.parentPath.name].callee =
+					builders.identifier("ObjectPath.get");
 				oInsertionPoint[node.parentPath.name].arguments = oContext
 					? [oPath, oContext]
 					: [oPath];

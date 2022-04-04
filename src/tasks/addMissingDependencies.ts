@@ -1,3 +1,4 @@
+/* eslint no-prototype-builtins: "off" */
 /**
  *  Will check each source file (*.js) for using global jquery functions
  * replaces these functions with the appropriate module such as,
@@ -20,7 +21,7 @@ import {
 import * as Mod from "../Migration";
 import {Reporter} from "../reporter/Reporter";
 import * as ASTUtils from "../util/ASTUtils";
-import {ASTVisitor, NodePath, TNodePath} from "../util/ASTVisitor";
+import {ASTVisitor, NodePath} from "../util/ASTVisitor";
 import * as CommentUtils from "../util/CommentUtils";
 import {removeModulesNotMatchingTargetVersion} from "../util/ConfigUtils";
 import {SapUiDefineCall} from "../util/SapUiDefineCall";
@@ -62,14 +63,14 @@ function mapToFound(oPath: NodePath, oFound: FoundReplacement): FoundCall {
 	};
 }
 
-const visit = function(
+const visit = function (
 	analysis: Analysis,
 	oModuleTree: {},
 	finders: {[name: string]: Finder},
 	reporter: Reporter,
 	defineCall: SapUiDefineCall
 ) {
-	return function(oPath) {
+	return function (oPath) {
 		const aFound = isFoundInConfig(
 			oPath.value,
 			oPath,
@@ -88,7 +89,7 @@ const visit = function(
 			);
 
 			analysis.newRequires = analysis.newRequires.concat(
-				aFound.map(function(oFound: FoundReplacement) {
+				aFound.map((oFound: FoundReplacement) => {
 					return {modulePath: oFound.newModulePath};
 				})
 			);
@@ -224,31 +225,6 @@ function isFoundInConfig(
 		}
 	}
 	return aCalls;
-}
-
-/**
- * global variable to indicate that this replacement does not belong to a
- * module, e.g. jQuery.inArray
- * @type {string}
- */
-const GLOBALS = "GLOBALS";
-
-interface ModuleTree {
-	[name: string]: ModuleTree;
-}
-
-interface ImportInfo {
-	// e.g. for sap.ui.define(["sap.encoder"], function (j) { j.func(); })
-	oldModule: string; // jQuery.encoder
-	newModule?: string; // sap.encoder
-	requireName?: string; // j
-	functionName?: string; // func
-	replacerName: string;
-	hasToBeRequired: boolean;
-}
-
-interface ImportMap {
-	[oldImport: string]: ImportInfo;
 }
 
 interface FoundReplacement {

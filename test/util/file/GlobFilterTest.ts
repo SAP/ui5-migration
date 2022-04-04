@@ -2,8 +2,8 @@ import {GlobFilter} from "../../../src/util/file/GlobFilter";
 
 const assert = require("assert");
 
-describe("GlobFilter", function() {
-	it("should be possible to filter using GlobFilter", function() {
+describe("GlobFilter", () => {
+	it("should be possible to filter using GlobFilter", () => {
 		const fsFilter = GlobFilter.create("myfolder", "myfolder/**/*.js");
 		assert.equal(fsFilter.getDir(), "myfolder");
 		assert.ok(fsFilter.match("myfolder/myfile.js"), "matches the file");

@@ -80,14 +80,14 @@ export function getUniqueParameterName(
 	return getUniqueName(aUsedVariables, sName);
 }
 
-const getUniqueNameDecapitalized = function(
+const getUniqueNameDecapitalized = function (
 	aUsedVariables: string[],
 	sName: string
 ) {
 	return getUniqueName(aUsedVariables, sName, true);
 };
 
-const isLowerCase = function(sChar) {
+const isLowerCase = function (sChar) {
 	return sChar === sChar.toLowerCase();
 };
 
@@ -96,7 +96,7 @@ const isLowerCase = function(sChar) {
  * @param aUsedVariables
  * @param sName
  */
-const isUnique = function(aUsedVariables: string[], sName: string): boolean {
+const isUnique = function (aUsedVariables: string[], sName: string): boolean {
 	return !aUsedVariables.includes(sName) && !isReservedWord(sName);
 };
 
@@ -106,7 +106,7 @@ const isUnique = function(aUsedVariables: string[], sName: string): boolean {
  * @param sName, e.g. Date
  * @returns whether or not the name is a valid candidate
  */
-const isValidIdentifierName = function(
+const isValidIdentifierName = function (
 	aUsedVariables: string[],
 	sName: string
 ) {
@@ -115,7 +115,7 @@ const isValidIdentifierName = function(
 	);
 };
 
-const replaceInvalidCharacters = function(sName) {
+const replaceInvalidCharacters = function (sName) {
 	sName = camelize(sName);
 	return sName.replace(rInvalidChars, "_");
 };
@@ -129,7 +129,7 @@ const replaceInvalidCharacters = function(sName) {
  * starting with a lowercase character
  * @returns unique variable name which is neither reserved nor taken
  */
-const getUniqueName = function(
+const getUniqueName = function (
 	aUsedVariables: string[],
 	sName: string,
 	createLowercaseVariableName?: boolean
@@ -179,7 +179,7 @@ export function getUniqueVariableName(aUsedVariables: string[], sName: string) {
 	return getUniqueNameDecapitalized(aUsedVariables, sName);
 }
 
-const isReservedWord = function(sVariableName: string) {
+const isReservedWord = function (sVariableName: string) {
 	return (
 		reservedJSLanguageKeywords.includes(sVariableName) ||
 		sapReservedKeywords.includes(sVariableName) ||
@@ -192,7 +192,7 @@ const isReservedWord = function(sVariableName: string) {
  * @param str input string, e.g. "asd"
  * @returns {string} first character being upper case, e.g. "Asd"
  */
-const capitalize = function(str: string): string {
+const capitalize = function (str: string): string {
 	if (str.length < 1) {
 		return "";
 	}
@@ -203,10 +203,10 @@ const capitalize = function(str: string): string {
  * @param str input string, e.g. "asd-fgh"
  * @returns {string} every character after the dash is uppercase and dash gets removed, e.g. "asdFgh"
  */
-const camelize = function(str: string): string {
+const camelize = function (str: string): string {
 	if (str.includes("-")) {
 		const rCamelCase = /-(.)/gi;
-		return str.replace(rCamelCase, function(sMatch, sChar) {
+		return str.replace(rCamelCase, (sMatch, sChar) => {
 			return sChar.toUpperCase();
 		});
 	}
@@ -217,7 +217,7 @@ const camelize = function(str: string): string {
  * @param str input string, e.g. "ASD"
  * @returns {string} first character being lower case, e.g. "aSD"
  */
-const decapitalize = function(str: string): string {
+const decapitalize = function (str: string): string {
 	if (str.length < 1) {
 		return "";
 	}

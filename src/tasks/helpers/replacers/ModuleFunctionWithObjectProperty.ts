@@ -44,9 +44,8 @@ const replaceable: ASTReplaceable = {
 		}
 
 		functionNames.forEach((functionName, iIndex) => {
-			const oNodeIdentifier: ESTree.Identifier = builders.identifier(
-				name
-			);
+			const oNodeIdentifier: ESTree.Identifier =
+				builders.identifier(name);
 			let oNodeModule: ESTree.Expression = oNodeIdentifier;
 			if (config.objectProperty[iIndex]) {
 				oNodeModule = builders.memberExpression(

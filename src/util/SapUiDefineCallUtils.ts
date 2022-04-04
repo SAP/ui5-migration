@@ -100,8 +100,10 @@ export function checkForShortcutExpression(
 			Syntax.Identifier
 	) {
 		propertyPath.unshift(
-			((leftmost as ESTree.MemberExpression)
-				.property as ESTree.Identifier).name
+			(
+				(leftmost as ESTree.MemberExpression)
+					.property as ESTree.Identifier
+			).name
 		);
 		leftmost = (leftmost as ESTree.MemberExpression).object;
 	}

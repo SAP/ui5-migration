@@ -28,7 +28,7 @@ function analyseMigrateAndTest(
 ) {
 	const reporter = new CustomReporter([], level);
 	analyse({file: module, fileFinder, reporter, config})
-		.then(function(analyseResult) {
+		.then(analyseResult => {
 			if (migrate && analyseResult) {
 				return migrate({
 					file: module,
@@ -41,7 +41,7 @@ function analyseMigrateAndTest(
 				return false;
 			}
 		})
-		.then(function(didModify) {
+		.then(didModify => {
 			assert.strictEqual(
 				didModify,
 				expectedModification,
@@ -51,26 +51,28 @@ function analyseMigrateAndTest(
 				{useTabs: true, lineTerminator: "\n"},
 				oOutputFormat
 			);
-			const actualContent = recast.print(module.getAST(), oOutputFormat)
-				.code;
+			const actualContent = recast.print(
+				module.getAST(),
+				oOutputFormat
+			).code;
 			assert.equal(actualContent, expectedContent);
 
 			assert.deepStrictEqual(reporter.getReports(), expectedReports);
 		})
-		.then(function() {
+		.then(() => {
 			done();
 		})
-		.catch(function(e) {
+		.catch(e => {
 			done(e);
 		});
 }
 
-describe("AmdCleaner ui52amd", function() {
-	before(function() {
+describe("AmdCleaner ui52amd", () => {
+	before(() => {
 		LoaderUtils.resetCache();
 	});
 
-	after(function() {
+	after(() => {
 		LoaderUtils.resetCache();
 	});
 
@@ -105,8 +107,7 @@ describe("AmdCleaner ui52amd", function() {
 			},
 		},
 		{
-			title:
-				"Should not include already included relative dependency (avoid duplicate dependencies)",
+			title: "Should not include already included relative dependency (avoid duplicate dependencies)",
 			sourceCodeFileName: "amdCleanup/relative.js",
 			expectedCodeFileName: "amdCleanup/relative.expected.js",
 			apiFileName: "amdCleanup/relative.api.json",
@@ -127,8 +128,7 @@ describe("AmdCleaner ui52amd", function() {
 			},
 		},
 		{
-			title:
-				"Should not include self as dependency (avoid circular dependency)",
+			title: "Should not include self as dependency (avoid circular dependency)",
 			sourceCodeFileName: "amdCleanup/library.js",
 			expectedCodeFileName: "amdCleanup/library.expected.js",
 			apiFileName: "amdCleanup/library.api.json",
@@ -1005,14 +1005,14 @@ describe("AmdCleaner ui52amd", function() {
 				quote: "double",
 			},
 		},
-	].forEach(function(fixture) {
+	].forEach(fixture => {
 		const pathToApiJSON =
 			rootDir +
 			(fixture.apiFileName
 				? fixture.apiFileName
 				: "amdCleanup/_generic.api.json");
 
-		it(fixture.title, function(done) {
+		it(fixture.title, done => {
 			const sourceCodeFile = rootDir + fixture.sourceCodeFileName;
 			const expectedContent = fs.readFileSync(
 				rootDir + fixture.expectedCodeFileName,

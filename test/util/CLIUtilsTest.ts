@@ -2,9 +2,9 @@ import {parseNamespaces} from "../../src/util/CLIUtils";
 
 const assert = require("assert");
 
-describe("ConfigUtilsTest", function() {
-	describe("matchesVersion: (happy path)", function() {
-		it("Should succeed if valid version range was given", function() {
+describe("ConfigUtilsTest", () => {
+	describe("matchesVersion: (happy path)", () => {
+		it("Should succeed if valid version range was given", () => {
 			assert.deepEqual(
 				parseNamespaces(["a.b.c:src/x", "d.e.f:../"]),
 				[

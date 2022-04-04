@@ -2,8 +2,8 @@ import * as VariableNameCreator from "../../src/util/VariableNameCreator";
 
 const assert = require("assert");
 
-describe("VariableNameCreator", function() {
-	it("getUniqueVariableName special chars", function() {
+describe("VariableNameCreator", () => {
+	it("getUniqueVariableName special chars", () => {
 		assert.strictEqual(
 			VariableNameCreator.getUniqueVariableName([], "myVariable"),
 			"myVariable",
@@ -51,7 +51,7 @@ describe("VariableNameCreator", function() {
 		);
 	});
 
-	it("getUniqueVariableName", function() {
+	it("getUniqueVariableName", () => {
 		assert.strictEqual(
 			VariableNameCreator.getUniqueVariableName(["yoo"], "yoo"),
 			"oYoo",
@@ -98,7 +98,7 @@ describe("VariableNameCreator", function() {
 		);
 	});
 
-	it("getUniqueParameterName", function() {
+	it("getUniqueParameterName", () => {
 		assert.strictEqual(
 			VariableNameCreator.getUniqueParameterName(["yoo"], "yoo"),
 			"oYoo",

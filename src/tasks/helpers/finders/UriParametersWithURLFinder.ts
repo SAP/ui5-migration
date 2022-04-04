@@ -1,7 +1,6 @@
 import {Syntax} from "esprima";
 import * as ESTree from "estree";
 import * as recast from "recast";
-import {NodePath} from "ui5-migration";
 
 import {EMPTY_FINDER_RESULT, Finder, FinderResult} from "../../../dependencies";
 import {SapUiDefineCall} from "../../../util/SapUiDefineCall";
@@ -44,14 +43,6 @@ class UriParametersWithURLFinder implements Finder {
 
 		return EMPTY_FINDER_RESULT;
 	}
-}
-
-function evaluateExpressions(parameter) {
-	return recast.parse(parameter).program.body["0"].expression;
-}
-
-function compareAsts(ast1, ast2) {
-	return print(ast1) === print(ast2);
 }
 
 function print(ast) {

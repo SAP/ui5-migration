@@ -5,7 +5,7 @@ import {flattenTaskArray, clearCache} from "../../src/util/FlattenTaskArray";
 import * as TaskRunner from "../../src/taskRunner";
 import {CustomMigrationTask} from "./testUtils";
 
-describe("FlattenTaskArray", function() {
+describe("FlattenTaskArray", () => {
 	const task1 = new CustomMigrationTask();
 	task1.keywords.push("task1");
 	const task11 = new CustomMigrationTask();
@@ -26,10 +26,10 @@ describe("FlattenTaskArray", function() {
 	task32.keywords.push("task32");
 	task3["postTasks"] = ["task31", "task32"];
 
-	before(function() {
+	before(() => {
 		// Clear the cache to remove the cached standard tasks
 		clearCache();
-		sinon.stub(TaskRunner, "getSupportedTasks").callsFake(function() {
+		sinon.stub(TaskRunner, "getSupportedTasks").callsFake(() => {
 			return Promise.resolve([
 				task1,
 				task2,
@@ -41,11 +41,11 @@ describe("FlattenTaskArray", function() {
 			]);
 		});
 	});
-	after(function() {
+	after(() => {
 		sinon.restore();
 	});
 
-	it("Flatten all tasks", async function() {
+	it("Flatten all tasks", async () => {
 		const aFlattenTasks = await flattenTaskArray([task1, task2, task3]);
 		assert.deepEqual(aFlattenTasks, [
 			task1,
@@ -58,7 +58,7 @@ describe("FlattenTaskArray", function() {
 		]);
 	});
 
-	it("Unknown post task doesn't lead to error", async function() {
+	it("Unknown post task doesn't lead to error", async () => {
 		task2["postTasks"] = ["unknown_postTask"];
 
 		const aFlattenTasks = await flattenTaskArray([task2, task3]);

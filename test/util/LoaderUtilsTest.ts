@@ -6,16 +6,16 @@ const fs = require("fs");
 
 import * as LoaderUtils from "../../src/util/LoaderUtils";
 
-describe("LoaderUtils", function() {
-	beforeEach(function() {
+describe("LoaderUtils", () => {
+	beforeEach(() => {
 		LoaderUtils.resetCache();
 	});
 
-	afterEach(function() {
+	afterEach(() => {
 		LoaderUtils.resetCache();
 	});
 
-	it("resource fs cache", function() {
+	it("resource fs cache", () => {
 		const dataObject = {num: 47};
 		const oStub = sinon.stub(fs, "readFile");
 		oStub.callsArgWith(1, false, JSON.stringify(dataObject));
@@ -34,7 +34,7 @@ describe("LoaderUtils", function() {
 		});
 	});
 
-	it("resource request cache", function() {
+	it("resource request cache", () => {
 		const dataObject = {num: 47};
 		const oStub = sinon.stub(request, "get");
 		oStub.callsArgWith(1, "", "", JSON.stringify(dataObject));
@@ -52,22 +52,22 @@ describe("LoaderUtils", function() {
 		});
 	});
 
-	it("fetch resource with empty string", function(done) {
-		LoaderUtils.fetchResource("").then(function(data) {
+	it("fetch resource with empty string", done => {
+		LoaderUtils.fetchResource("").then(data => {
 			assert.deepEqual(data, {}, "empty object");
 			done();
 		});
 	});
 
-	it("fetch resource with file string", function(done) {
+	it("fetch resource with file string", done => {
 		const oStub = sinon.stub(fs, "readFile");
 		oStub.callsArgWith(1, "file does not exist", "");
 		LoaderUtils.fetchResource("./asd.asd").then(
-			function(data) {
+			data => {
 				assert.fail("should not exist");
 				oStub.restore();
 			},
-			function(err) {
+			err => {
 				assert.ok(err, "file should not exist");
 				oStub.restore();
 				done();
@@ -75,26 +75,24 @@ describe("LoaderUtils", function() {
 		);
 	});
 
-	it("fetch resource with http string", function(done) {
+	it("fetch resource with http string", done => {
 		const oStub = sinon.stub(request, "get");
 		oStub.callsArgWith(1, "", "", "{}");
-		LoaderUtils.fetchResource("http://myurl/myfile.json").then(function(
-			data
-		) {
+		LoaderUtils.fetchResource("http://myurl/myfile.json").then(data => {
 			assert.deepEqual(data, {}, "empty object");
 			oStub.restore();
 			done();
 		});
 	});
 
-	it("fetch resource with erroneous http string", function(done) {
+	it("fetch resource with erroneous http string", done => {
 		const oStub = sinon.stub(request, "get");
 		oStub.callsArgWith(1, "file does not exist", "", "");
 		LoaderUtils.fetchResource("http://myurl/myfile.json").then(
-			function(data) {
+			data => {
 				assert.fail("should not exist");
 			},
-			function(err) {
+			err => {
 				assert.ok(err, "file should not exist");
 				oStub.restore();
 				done();

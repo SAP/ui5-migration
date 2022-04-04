@@ -30,7 +30,7 @@ function analyseMigrateAndTest(
 		taskName: "replaceGlobals",
 	});
 	analyse({file: module, fileFinder, reporter, config, targetVersion})
-		.then(function(analyseResult) {
+		.then(analyseResult => {
 			if (findings) {
 				assert.deepStrictEqual(
 					reporter.getFindings(),
@@ -51,7 +51,7 @@ function analyseMigrateAndTest(
 				return false;
 			}
 		})
-		.then(function(didModify) {
+		.then(didModify => {
 			assert.strictEqual(
 				didModify,
 				expectedModification,
@@ -65,17 +65,17 @@ function analyseMigrateAndTest(
 
 			assert.deepStrictEqual(reporter.getReports(), expectedReports);
 		})
-		.then(function() {
+		.then(() => {
 			done();
 		})
-		.catch(function(e) {
+		.catch(e => {
 			done(e);
 		});
 }
 
-describe("replaceGlobals", function() {
-	describe("#start()", function() {
-		it("should replaceGlobals encodeXML", function(done) {
+describe("replaceGlobals", () => {
+	describe("#start()", () => {
+		it("should replaceGlobals encodeXML", done => {
 			const expectedContent = fs.readFileSync(
 				rootDir + "encodeXML.expected.js",
 				"utf8"
@@ -114,7 +114,7 @@ describe("replaceGlobals", function() {
 			]);
 		});
 
-		it("should replaceGlobals but with jQuery usage", function(done) {
+		it("should replaceGlobals but with jQuery usage", done => {
 			const expectedContent = fs.readFileSync(
 				rootDir + "jQ.expected.js",
 				"utf8"
@@ -168,7 +168,7 @@ describe("replaceGlobals", function() {
 			]);
 		});
 
-		it("should replaceGlobals and use unique names duplicateVars", function(done) {
+		it("should replaceGlobals and use unique names duplicateVars", done => {
 			const expectedContent = fs.readFileSync(
 				rootDir + "duplicateVars.expected.js",
 				"utf8"
@@ -204,7 +204,7 @@ describe("replaceGlobals", function() {
 			]);
 		});
 
-		it("should replaceGlobals and use existing imports reuseVars", function(done) {
+		it("should replaceGlobals and use existing imports reuseVars", done => {
 			const expectedContent = fs.readFileSync(
 				rootDir + "reuseVar.expected.js",
 				"utf8"
@@ -243,7 +243,7 @@ describe("replaceGlobals", function() {
 			);
 		});
 
-		it("should replaceGlobals unusedGlobals", function(done) {
+		it("should replaceGlobals unusedGlobals", done => {
 			const expectedContent = fs.readFileSync(
 				rootDir + "unusedGlobals.expected.js",
 				"utf8"
@@ -268,7 +268,7 @@ describe("replaceGlobals", function() {
 			);
 		});
 
-		it("should replaceGlobals asterisk", function(done) {
+		it("should replaceGlobals asterisk", done => {
 			const expectedContent = fs.readFileSync(
 				rootDir + "asterisk.expected.js",
 				"utf8"
@@ -307,7 +307,7 @@ describe("replaceGlobals", function() {
 			);
 		});
 
-		it("should replaceGlobals startsWith", function(done) {
+		it("should replaceGlobals startsWith", done => {
 			const expectedContent = fs.readFileSync(
 				rootDir + "endsWith.expected.js",
 				"utf8"
@@ -361,7 +361,7 @@ describe("replaceGlobals", function() {
 			]);
 		});
 
-		it("should replaceGlobals isEqualNode", function(done) {
+		it("should replaceGlobals isEqualNode", done => {
 			const expectedContent = fs.readFileSync(
 				rootDir + "isEqualNode.expected.js",
 				"utf8"
@@ -405,7 +405,7 @@ describe("replaceGlobals", function() {
 			]);
 		});
 
-		it("should replaceGlobals uriParams", function(done) {
+		it("should replaceGlobals uriParams", done => {
 			const expectedContent = fs.readFileSync(
 				rootDir + "uriParams.expected.js",
 				"utf8"
@@ -447,7 +447,7 @@ describe("replaceGlobals", function() {
 			]);
 		});
 
-		it("should replaceGlobals padding", function(done) {
+		it("should replaceGlobals padding", done => {
 			const expectedContent = fs.readFileSync(
 				rootDir + "padding.expected.js",
 				"utf8"
@@ -473,7 +473,7 @@ describe("replaceGlobals", function() {
 			]);
 		});
 
-		it("should replaceGlobals delay", function(done) {
+		it("should replaceGlobals delay", done => {
 			const expectedContent = fs.readFileSync(
 				rootDir + "delay.expected.js",
 				"utf8"
@@ -550,7 +550,7 @@ describe("replaceGlobals", function() {
 			]);
 		});
 
-		it("should replaceGlobals isMouseEventDelayed", function(done) {
+		it("should replaceGlobals isMouseEventDelayed", done => {
 			const expectedContent = fs.readFileSync(
 				rootDir + "isMouseEventDelayed.expected.js",
 				"utf8"
@@ -585,7 +585,7 @@ describe("replaceGlobals", function() {
 			]);
 		});
 
-		it("should replaceGlobals domById", function(done) {
+		it("should replaceGlobals domById", done => {
 			const expectedContent = fs.readFileSync(
 				rootDir + "domById.expected.js",
 				"utf8"
@@ -617,7 +617,7 @@ describe("replaceGlobals", function() {
 			]);
 		});
 
-		it("should replaceGlobals removeUrlWhitelist", function(done) {
+		it("should replaceGlobals removeUrlWhitelist", done => {
 			const expectedContent = fs.readFileSync(
 				rootDir + "removeUrlWhitelist.expected.js",
 				"utf8"
@@ -646,7 +646,7 @@ describe("replaceGlobals", function() {
 			]);
 		});
 
-		it("should replaceGlobals jqueryDomById", function(done) {
+		it("should replaceGlobals jqueryDomById", done => {
 			const expectedContent = fs.readFileSync(
 				rootDir + "jqueryDom.expected.js",
 				"utf8"
@@ -670,7 +670,7 @@ describe("replaceGlobals", function() {
 			]);
 		});
 
-		it("should replaceGlobals inArray", function(done) {
+		it("should replaceGlobals inArray", done => {
 			const expectedContent = fs.readFileSync(
 				rootDir + "inArray.expected.js",
 				"utf8"
@@ -701,7 +701,7 @@ describe("replaceGlobals", function() {
 			]);
 		});
 
-		it("should replaceGlobals inclusive version 1.58.0: jQuery.sap.*Whitelist -> URLWhitelist", function(done) {
+		it("should replaceGlobals inclusive version 1.58.0: jQuery.sap.*Whitelist -> URLWhitelist", done => {
 			const expectedContent = fs.readFileSync(
 				rootDir + "inclusive158.expected.js",
 				"utf8"
@@ -740,7 +740,7 @@ describe("replaceGlobals", function() {
 			);
 		});
 
-		it("should replaceGlobals inclusive version to 1.85.0: jQuery.sap.*Whitelist -> URLListValidator", function(done) {
+		it("should replaceGlobals inclusive version to 1.85.0: jQuery.sap.*Whitelist -> URLListValidator", done => {
 			const expectedContent = fs.readFileSync(
 				rootDir + "inclusive185.expected.js",
 				"utf8"
@@ -779,7 +779,7 @@ describe("replaceGlobals", function() {
 			);
 		});
 
-		it("should replaceGlobals inclusive version to 1.90.0: URLWhitelist -> URLListValidator", function(done) {
+		it("should replaceGlobals inclusive version to 1.90.0: URLWhitelist -> URLListValidator", done => {
 			const expectedContent = fs.readFileSync(
 				rootDir + "inclusive190.expected.js",
 				"utf8"
@@ -821,7 +821,7 @@ describe("replaceGlobals", function() {
 			);
 		});
 
-		it("should replaceGlobals intervalCall", function(done) {
+		it("should replaceGlobals intervalCall", done => {
 			const expectedContent = fs.readFileSync(
 				rootDir + "interval.expected.js",
 				"utf8"
@@ -868,7 +868,7 @@ describe("replaceGlobals", function() {
 			]);
 		});
 
-		it("should replaceGlobals moduleWithInvocation", function(done) {
+		it("should replaceGlobals moduleWithInvocation", done => {
 			const expectedContent = fs.readFileSync(
 				rootDir + "moduleWithInvoc.expected.js",
 				"utf8"
@@ -898,7 +898,7 @@ describe("replaceGlobals", function() {
 			]);
 		});
 
-		it("should replaceGlobals moduleWithWindowScopedInvocation", function(done) {
+		it("should replaceGlobals moduleWithWindowScopedInvocation", done => {
 			const expectedContent = fs.readFileSync(
 				rootDir + "moduleWithScopedInvoc.expected.js"
 			);
@@ -932,7 +932,7 @@ describe("replaceGlobals", function() {
 			]);
 		});
 
-		it("should replaceGlobals nativeFunction", function(done) {
+		it("should replaceGlobals nativeFunction", done => {
 			const expectedContent = fs.readFileSync(
 				rootDir + "nativeFunction.expected.js",
 				"utf8"
@@ -985,7 +985,7 @@ describe("replaceGlobals", function() {
 			);
 		});
 
-		it("should replaceGlobals nativeFunction with argument check", function(done) {
+		it("should replaceGlobals nativeFunction with argument check", done => {
 			const expectedContent = fs.readFileSync(
 				rootDir + "nativeFunctionArgCheck.expected.js"
 			);
@@ -1012,7 +1012,7 @@ describe("replaceGlobals", function() {
 			]);
 		});
 
-		it("should replaceGlobals nativeObject", function(done) {
+		it("should replaceGlobals nativeObject", done => {
 			const expectedContent = fs.readFileSync(
 				rootDir + "/nativeObject.expected.js",
 				"utf8"
@@ -1034,7 +1034,7 @@ describe("replaceGlobals", function() {
 			]);
 		});
 
-		it("should replaceGlobals getObject", function(done) {
+		it("should replaceGlobals getObject", done => {
 			const expectedContent = fs.readFileSync(
 				rootDir + "getObject.expected.js",
 				"utf8"
@@ -1086,7 +1086,7 @@ describe("replaceGlobals", function() {
 			]);
 		});
 
-		it("should replaceGlobals domFocus", function(done) {
+		it("should replaceGlobals domFocus", done => {
 			const expectedContent = fs.readFileSync(
 				rootDir + "domFocus.expected.js",
 				"utf8"
@@ -1124,7 +1124,7 @@ describe("replaceGlobals", function() {
 			]);
 		});
 
-		it("should replaceGlobals comments", function(done) {
+		it("should replaceGlobals comments", done => {
 			const expectedContent = fs.readFileSync(
 				rootDir + "comments.expected.js",
 				"utf8"
@@ -1173,7 +1173,7 @@ describe("replaceGlobals", function() {
 			]);
 		});
 
-		it("should ignore non-root sap.ui.define calls", function(done) {
+		it("should ignore non-root sap.ui.define calls", done => {
 			const expectedContent = fs.readFileSync(
 				rootDir + "nonRoot.expected.js",
 				"utf8"
@@ -1193,7 +1193,7 @@ describe("replaceGlobals", function() {
 			);
 		});
 
-		it("should replace measure calls", function(done) {
+		it("should replace measure calls", done => {
 			const expectedContent = fs.readFileSync(
 				rootDir + "measure.expected.js",
 				"utf8"
@@ -1217,7 +1217,7 @@ describe("replaceGlobals", function() {
 			]);
 		});
 
-		it("should replace old storage api", function(done) {
+		it("should replace old storage api", done => {
 			const expectedContent = fs.readFileSync(
 				rootDir + "storage.expected.js",
 				"utf8"
@@ -1257,7 +1257,7 @@ describe("replaceGlobals", function() {
 			]);
 		});
 
-		it("should replace version calls", function(done) {
+		it("should replace version calls", done => {
 			const expectedContent = fs.readFileSync(
 				rootDir + "version.expected.js",
 				"utf8"
@@ -1278,7 +1278,7 @@ describe("replaceGlobals", function() {
 			]);
 		});
 
-		it("should replace log Level calls calls", function(done) {
+		it("should replace log Level calls calls", done => {
 			const expectedContent = fs.readFileSync(
 				rootDir + "loglevel.expected.js",
 				"utf8"
@@ -1308,7 +1308,7 @@ describe("replaceGlobals", function() {
 			]);
 		});
 
-		it("jquery should be left as is", function(done) {
+		it("jquery should be left as is", done => {
 			const expectedContent = fs.readFileSync(
 				rootDir + "jquery.expected.js",
 				"utf8"
@@ -1328,7 +1328,7 @@ describe("replaceGlobals", function() {
 			]);
 		});
 
-		it("jquery ThirdParty should be left as is", function(done) {
+		it("jquery ThirdParty should be left as is", done => {
 			const expectedContent = fs.readFileSync(
 				rootDir + "jqueryThirdParty.expected.js",
 				"utf8"
@@ -1348,7 +1348,7 @@ describe("replaceGlobals", function() {
 			]);
 		});
 
-		it("ResourceBundle is Bundle should be left as is", function(done) {
+		it("ResourceBundle is Bundle should be left as is", done => {
 			const expectedContent = fs.readFileSync(
 				rootDir + "RisBundle.expected.js",
 				"utf8"
@@ -1372,7 +1372,7 @@ describe("replaceGlobals", function() {
 			]);
 		});
 
-		it("jquery support retina", function(done) {
+		it("jquery support retina", done => {
 			const expectedContent = fs.readFileSync(
 				rootDir + "retina.expected.js",
 				"utf8"
@@ -1392,7 +1392,7 @@ describe("replaceGlobals", function() {
 			]);
 		});
 
-		it("jquery os", function(done) {
+		it("jquery os", done => {
 			const expectedContent = fs.readFileSync(
 				rootDir + "jqueryos.expected.js",
 				"utf8"
@@ -1416,7 +1416,7 @@ describe("replaceGlobals", function() {
 			]);
 		});
 
-		it("jquery os require", function(done) {
+		it("jquery os require", done => {
 			const expectedContent = fs.readFileSync(
 				rootDir + "jqueryos.require.expected.js",
 				"utf8"
@@ -1440,7 +1440,7 @@ describe("replaceGlobals", function() {
 			]);
 		});
 
-		it("jquery os invalid require", function(done) {
+		it("jquery os invalid require", done => {
 			const expectedContent = fs.readFileSync(
 				rootDir + "jqueryos.invalid.require.expected.js"
 			);
@@ -1463,7 +1463,7 @@ describe("replaceGlobals", function() {
 			);
 		});
 
-		it("jquery os name", function(done) {
+		it("jquery os name", done => {
 			const expectedContent = fs.readFileSync(
 				rootDir + "jqueryosname.expected.js",
 				"utf8"
@@ -1487,7 +1487,7 @@ describe("replaceGlobals", function() {
 			]);
 		});
 
-		it("jquery device is standalone", function(done) {
+		it("jquery device is standalone", done => {
 			const expectedContent = fs.readFileSync(
 				rootDir + "jquerydeviceisstandalone.expected.js"
 			);
@@ -1512,7 +1512,7 @@ describe("replaceGlobals", function() {
 			]);
 		});
 
-		it("jquery device is iphone", function(done) {
+		it("jquery device is iphone", done => {
 			const expectedContent = fs.readFileSync(
 				rootDir + "jquerydeviceisiphone.expected.js",
 				"utf8"
@@ -1537,7 +1537,7 @@ describe("replaceGlobals", function() {
 			]);
 		});
 
-		it("should AddComment", function(done) {
+		it("should AddComment", done => {
 			const expectedContent = fs.readFileSync(
 				rootDir + "addcomment.expected.js",
 				"utf8"
@@ -1556,7 +1556,7 @@ describe("replaceGlobals", function() {
 			]);
 		});
 
-		it("should not remove dependency when assigning", function(done) {
+		it("should not remove dependency when assigning", done => {
 			const expectedContent = fs.readFileSync(
 				rootDir + "assignmodfunc.expected.js",
 				"utf8"
@@ -1594,7 +1594,7 @@ describe("replaceGlobals", function() {
 			);
 		});
 
-		it("should be able to replace it as part of the arguments (array)", function(done) {
+		it("should be able to replace it as part of the arguments (array)", done => {
 			const expectedContent = fs.readFileSync(
 				rootDir + "mock.expected.js",
 				"utf8"
@@ -1634,7 +1634,7 @@ describe("replaceGlobals", function() {
 			);
 		});
 
-		it("should set import names if necessary", function(done) {
+		it("should set import names if necessary", done => {
 			const expectedContent = fs.readFileSync(
 				rootDir + "unset_global.expected.js",
 				"utf8"
@@ -1661,7 +1661,7 @@ describe("replaceGlobals", function() {
 			]);
 		});
 
-		it("should generate Getter", function(done) {
+		it("should generate Getter", done => {
 			const expectedContent = fs.readFileSync(
 				rootDir + "getter.expected.js",
 				"utf8"
@@ -1687,7 +1687,7 @@ describe("replaceGlobals", function() {
 			]);
 		});
 
-		it("jstokenizer replacement with new", function(done) {
+		it("jstokenizer replacement with new", done => {
 			const expectedContent = fs.readFileSync(
 				rootDir + "jstokenizer.expected.js",
 				"utf8"
@@ -1717,7 +1717,7 @@ describe("replaceGlobals", function() {
 			]);
 		});
 
-		it("should generate noop functions", function(done) {
+		it("should generate noop functions", done => {
 			const expectedContent = fs.readFileSync(
 				rootDir + "gennoop.expected.js",
 				"utf8"
@@ -1741,7 +1741,7 @@ describe("replaceGlobals", function() {
 			]);
 		});
 
-		it("should generate no duplicate jquery parameters", function(done) {
+		it("should generate no duplicate jquery parameters", done => {
 			const expectedContent = fs.readFileSync(
 				rootDir + "duplication.expected.js",
 				"utf8"
@@ -1766,7 +1766,7 @@ describe("replaceGlobals", function() {
 			]);
 		});
 
-		it("should replace each calls", function(done) {
+		it("should replace each calls", done => {
 			const expectedContent = fs.readFileSync(
 				rootDir + "each.expected.js",
 				"utf8"
@@ -1790,7 +1790,7 @@ describe("replaceGlobals", function() {
 			]);
 		});
 
-		it("should handle missing dependencies", function(done) {
+		it("should handle missing dependencies", done => {
 			const expectedContent = fs.readFileSync(
 				rootDir + "missingDependency.expected.js",
 				"utf8"
@@ -1824,7 +1824,7 @@ describe("replaceGlobals", function() {
 			]);
 		});
 
-		it("should replace setObject", function(done) {
+		it("should replace setObject", function (done) {
 			// increase test timeout since this test is long running
 			this.timeout(5000);
 
@@ -1857,7 +1857,7 @@ describe("replaceGlobals", function() {
 			]);
 		});
 
-		it("should replace endsWithIgnoreCase", function(done) {
+		it("should replace endsWithIgnoreCase", done => {
 			const expectedContent = fs.readFileSync(
 				rootDir + "endsWithIgnoreCase.expected.js",
 				"utf8"
@@ -1896,7 +1896,7 @@ describe("replaceGlobals", function() {
 			]);
 		});
 
-		it("should replace startsWithIgnoreCase", function(done) {
+		it("should replace startsWithIgnoreCase", done => {
 			const expectedContent = fs.readFileSync(
 				rootDir + "startsWithIgnoreCase.expected.js",
 				"utf8"
@@ -1947,7 +1947,7 @@ describe("replaceGlobals", function() {
 			]);
 		});
 
-		it("resourceModulePaths", function(done) {
+		it("resourceModulePaths", done => {
 			const expectedContent = fs.readFileSync(
 				rootDir + "resourceModulePaths.expected.js",
 				"utf8"
@@ -2070,7 +2070,7 @@ describe("replaceGlobals", function() {
 			]);
 		});
 
-		it("ModuleSystem", function(done) {
+		it("ModuleSystem", done => {
 			const expectedContent = fs.readFileSync(
 				rootDir + "ModuleSystem.expected.js",
 				"utf8"
@@ -2107,7 +2107,7 @@ describe("replaceGlobals", function() {
 			]);
 		});
 
-		it("isPlainObject", function(done) {
+		it("isPlainObject", done => {
 			const expectedContent = fs.readFileSync(
 				rootDir + "isPlainObject.expected.js",
 				"utf8"
@@ -2161,7 +2161,7 @@ describe("replaceGlobals", function() {
 			);
 		});
 
-		it("isPlainObject with other jQuery", function(done) {
+		it("isPlainObject with other jQuery", done => {
 			const expectedContent = fs.readFileSync(
 				rootDir + "isPlainObject2.expected.js",
 				"utf8"
@@ -2184,7 +2184,7 @@ describe("replaceGlobals", function() {
 			]);
 		});
 
-		it("sap.ui.define is after another call", function(done) {
+		it("sap.ui.define is after another call", done => {
 			const expectedContent = fs.readFileSync(
 				rootDir + "laterSapDefine.expected.js",
 				"utf8"
@@ -2211,7 +2211,7 @@ describe("replaceGlobals", function() {
 			]);
 		});
 
-		it("should replace jquery.extend", function(done) {
+		it("should replace jquery.extend", done => {
 			const expectedContent = fs.readFileSync(
 				rootDir + "jqueryExtend.expected.js",
 				"utf8"
@@ -2242,7 +2242,7 @@ describe("replaceGlobals", function() {
 			]);
 		});
 
-		it("should replace jquery.extend SkipImport", function(done) {
+		it("should replace jquery.extend SkipImport", done => {
 			const expectedContent = fs.readFileSync(
 				rootDir + "jqueryExtendSkipImport.expected.js",
 				"utf8"
@@ -2283,7 +2283,7 @@ describe("replaceGlobals", function() {
 			);
 		});
 
-		it("should replace and add dependency for extend", function(done) {
+		it("should replace and add dependency for extend", done => {
 			const expectedContent = fs.readFileSync(
 				rootDir + "extend.expected.js",
 				"utf8"
@@ -2303,7 +2303,7 @@ describe("replaceGlobals", function() {
 			]);
 		});
 
-		it("should replace and add dependency for sap extend", function(done) {
+		it("should replace and add dependency for sap extend", done => {
 			const expectedContent = fs.readFileSync(
 				rootDir + "sapextend.expected.js",
 				"utf8"
@@ -2331,7 +2331,7 @@ describe("replaceGlobals", function() {
 			);
 		});
 
-		it("should replace and leave dependency for assign", function(done) {
+		it("should replace and leave dependency for assign", done => {
 			const expectedContent = fs.readFileSync(
 				rootDir + "assign.expected.js",
 				"utf8"
@@ -2356,7 +2356,7 @@ describe("replaceGlobals", function() {
 			]);
 		});
 
-		it("should replace only matching version replacement", function(done) {
+		it("should replace only matching version replacement", done => {
 			const expectedContent = fs.readFileSync(
 				rootDir + "versionReplacement.expected.js",
 				"utf8"
@@ -2385,7 +2385,7 @@ describe("replaceGlobals", function() {
 			);
 		});
 
-		it("should replace and leave dependency for assign and add dependency for merge extendAndAssign", function(done) {
+		it("should replace and leave dependency for assign and add dependency for merge extendAndAssign", done => {
 			const expectedContent = fs.readFileSync(
 				rootDir + "extendAndAssign.expected.js",
 				"utf8"
@@ -2417,7 +2417,7 @@ describe("replaceGlobals", function() {
 			]);
 		});
 
-		it("should replace jQuery.trim()", function(done) {
+		it("should replace jQuery.trim()", done => {
 			const expectedContent = fs.readFileSync(
 				rootDir + "jqueryTrim.expected.js",
 				"utf8"
@@ -2470,7 +2470,7 @@ describe("replaceGlobals", function() {
 			);
 		});
 
-		it("should replace jQuery.contains", function(done) {
+		it("should replace jQuery.contains", done => {
 			const expectedContent = fs.readFileSync(
 				rootDir + "jQueryContains.expected.js",
 				"utf8"
@@ -2487,7 +2487,7 @@ describe("replaceGlobals", function() {
 			]);
 		});
 
-		it("should replace spy and stub calls from sinon", function(done) {
+		it("should replace spy and stub calls from sinon", done => {
 			const expectedContent = fs.readFileSync(
 				rootDir + "testSpies.expected.js",
 				"utf8"
@@ -2508,7 +2508,7 @@ describe("replaceGlobals", function() {
 			]);
 		});
 
-		it("should replace variable assignments", function(done) {
+		it("should replace variable assignments", done => {
 			const expectedContent = fs.readFileSync(
 				rootDir + "variableAssignment.expected.js",
 				"utf8"
@@ -2530,7 +2530,7 @@ describe("replaceGlobals", function() {
 			]);
 		});
 
-		it("should replace jQuery.extend properly", function(done) {
+		it("should replace jQuery.extend properly", done => {
 			const expectedContent = fs.readFileSync(
 				rootDir + "jqueryExtendVars.expected.js",
 				"utf8"
@@ -2550,7 +2550,7 @@ describe("replaceGlobals", function() {
 			]);
 		});
 
-		it("extendImport", function(done) {
+		it("extendImport", done => {
 			const expectedContent = fs.readFileSync(
 				rootDir + "extendImport.expected.js",
 				"utf8"
@@ -2570,7 +2570,7 @@ describe("replaceGlobals", function() {
 			]);
 		});
 
-		it("invalidDefine", function(done) {
+		it("invalidDefine", done => {
 			const expectedContent = fs.readFileSync(
 				rootDir + "invalidDefine.expected.js",
 				"utf8"
@@ -2592,7 +2592,7 @@ describe("replaceGlobals", function() {
 			);
 		});
 
-		it("leave with comment", function(done) {
+		it("leave with comment", done => {
 			const expectedContent = fs.readFileSync(
 				rootDir + "leave.expected.js",
 				"utf8"
@@ -2619,7 +2619,7 @@ describe("replaceGlobals", function() {
 			);
 		});
 
-		it("multiversion latest", function(done) {
+		it("multiversion latest", done => {
 			const expectedContent = fs.readFileSync(
 				rootDir + "multiversion.expected.js",
 				"utf8"
@@ -2644,7 +2644,7 @@ describe("replaceGlobals", function() {
 			]);
 		});
 
-		it("multiversion version 1.60.0", function(done) {
+		it("multiversion version 1.60.0", done => {
 			const expectedContent = fs.readFileSync(
 				rootDir + "multiversion.expected.js",
 				"utf8"
@@ -2678,7 +2678,7 @@ describe("replaceGlobals", function() {
 			);
 		});
 
-		it("multiversion version 1.58.0", function(done) {
+		it("multiversion version 1.58.0", done => {
 			const expectedContent = fs.readFileSync(
 				rootDir + "multiversion.1.58.0.expected.js",
 				"utf8"

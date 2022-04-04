@@ -6,9 +6,6 @@ import {Reporter, ReportLevel} from "../reporter/Reporter";
 import * as LoaderUtils from "../util/LoaderUtils";
 import {ConsoleReporter} from "../reporter/ConsoleReporter";
 
-const fs = require("graceful-fs");
-const path = require("path");
-
 interface MetaObject {
 	defaultAggregation: {};
 }
@@ -124,8 +121,6 @@ export class APIInfo {
 	}
 
 	async findLibrary(sEntityName: string): Promise<string> {
-		const that = this;
-
 		// TODO resolve this o0
 		if (this.oApiVersion && Object.keys(this.oApiVersion).length > 0) {
 			return Promise.resolve(
@@ -136,14 +131,14 @@ export class APIInfo {
 				this.rootPath,
 				"resources/sap-ui-version.json"
 			).then(
-				function(oObject: {}) {
-					that.oApiVersion = oObject as VersionInfo;
+				(oObject: {}) => {
+					this.oApiVersion = oObject as VersionInfo;
 					return APIInfo.findLibraryName(
 						sEntityName,
-						that.oApiVersion
+						this.oApiVersion
 					);
 				},
-				function() {
+				() => {
 					return "sap.ui.core";
 				}
 			);
@@ -234,7 +229,7 @@ export class APIInfo {
 		let defaultExport: string;
 		for (n in modules) {
 			if (Object.prototype.hasOwnProperty.call(modules, n)) {
-				symbols = modules[n].sort(function(a, b) {
+				symbols = modules[n].sort((a, b) => {
 					if (a.name === b.name) {
 						return 0;
 					}
@@ -255,7 +250,7 @@ export class APIInfo {
 						.replace(/\/library$/, "")
 						.replace(/\//g, ".");
 					if (
-						symbols.some(function(symbol) {
+						symbols.some(symbol => {
 							return symbol.name === defaultExport;
 						})
 					) {
@@ -265,7 +260,7 @@ export class APIInfo {
 						symbols.forEach(guessExport.bind(null, defaultExport));
 					} else {
 						// otherwise, we don't know how to map it to an export
-						symbols.forEach(function(symbol) {
+						symbols.forEach(symbol => {
 							symbol.symbol.export = symbol.name;
 							reporter.report(
 								ReportLevel.TRACE,
@@ -281,7 +276,7 @@ export class APIInfo {
 					// name)
 					defaultExport = n.replace(/\//g, ".");
 					if (
-						symbols.some(function(symbol) {
+						symbols.some(symbol => {
 							return symbol.name === defaultExport;
 						})
 					) {
@@ -296,7 +291,7 @@ export class APIInfo {
 						// TODO (which maybe better should be fixed in the
 						// JSDoc) symbols[0].symbol.export = '';
 					} else {
-						symbols.forEach(function(symbol) {
+						symbols.forEach(symbol => {
 							symbol.symbol.export = undefined;
 							reporter.report(
 								ReportLevel.TRACE,
@@ -377,19 +372,16 @@ export class APIInfo {
 	}
 
 	async getSymbol(sEntityName: string): Promise<LibDocSymbol> {
-		const that = this;
 		this.mEntityToSymbol = this.mEntityToSymbol || new Map();
 		let result = this.mEntityToSymbol.get(sEntityName);
 		if (result) {
 			return result;
 		}
 
-		result = this.findLibrary(sEntityName).then(function(sLibrary) {
-			return that
-				.getLibraryMetaInformation(sLibrary)
-				.then(function(oLibDoc) {
-					return that.findSymbol(oLibDoc, sEntityName);
-				});
+		result = this.findLibrary(sEntityName).then(sLibrary => {
+			return this.getLibraryMetaInformation(sLibrary).then(oLibDoc => {
+				return this.findSymbol(oLibDoc, sEntityName);
+			});
 		});
 		this.mEntityToSymbol.set(sEntityName, result);
 		return result;
@@ -409,7 +401,7 @@ export class APIInfo {
 			const r1 = meta[name];
 			const r2 = meta2[name];
 			if (r1 && r1.length && r2 && r2.length) {
-				r2.forEach(function(item) {
+				r2.forEach(item => {
 					if (!r1.some(candidate => candidate.name === item.name)) {
 						r1.push(item);
 					}
@@ -418,34 +410,31 @@ export class APIInfo {
 				meta[name] = r2;
 			}
 		}
-		const that = this;
 
-		return this.getSymbol(sEntityName).then(function(symbol: LibDocSymbol) {
+		return this.getSymbol(sEntityName).then((symbol: LibDocSymbol) => {
 			let meta = symbol && symbol["ui5-metadata"];
 			if (meta) {
 				// TODO implement merge on symbol, not on metadata
 				meta = JSON.parse(JSON.stringify(meta));
 				if (resolveInheritance && symbol.extends) {
-					return that
-						.getMeta(symbol.extends, true)
-						.then(function(meta2) {
-							if (meta2) {
-								meta.defaultAggregation =
-									meta.defaultAggregation ||
-									meta2.defaultAggregation;
-								merge("specialSettings", meta, meta2);
-								merge("properties", meta, meta2);
-								merge("aggregations", meta, meta2);
-								merge("associations", meta, meta2);
-								merge("events", meta, meta2);
-							} else {
-								that.reporter.report(
-									ReportLevel.ERROR,
-									"couldn't find base class " + symbol.extends
-								);
-							}
-							return undefined;
-						});
+					return this.getMeta(symbol.extends, true).then(meta2 => {
+						if (meta2) {
+							meta.defaultAggregation =
+								meta.defaultAggregation ||
+								meta2.defaultAggregation;
+							merge("specialSettings", meta, meta2);
+							merge("properties", meta, meta2);
+							merge("aggregations", meta, meta2);
+							merge("associations", meta, meta2);
+							merge("events", meta, meta2);
+						} else {
+							this.reporter.report(
+								ReportLevel.ERROR,
+								"couldn't find base class " + symbol.extends
+							);
+						}
+						return undefined;
+					});
 				}
 			}
 			return meta;
@@ -478,11 +467,12 @@ export class APIInfo {
 			return Promise.resolve(oLibraryDoc);
 		}
 
+		// eslint-disable-next-line @typescript-eslint/no-this-alias
 		const that = this;
 
-		const fnEnrichLibraryDoc = function(oResources, oLibraryDoc: LibDoc) {
+		const fnEnrichLibraryDoc = function (oResources, oLibraryDoc: LibDoc) {
 			if (Array.isArray(oResources.resources)) {
-				oResources.resources.forEach(function(resource) {
+				oResources.resources.forEach(resource => {
 					if (
 						/\.js$/.test(resource.module) &&
 						!resource.isDebug &&
@@ -518,7 +508,7 @@ export class APIInfo {
 							sLibrary.replace(/\./g, "/") +
 							"/designtime/api.json"
 					).then(
-						function(oRes: LibDoc): LibDoc {
+						(oRes: LibDoc): LibDoc => {
 							oLibraryDoc = {
 								// make a copy of the symbols from the
 								// response
@@ -528,17 +518,16 @@ export class APIInfo {
 								// modified
 								symbols: oRes.symbols.slice(),
 							};
-							that.oLibraryDocumentation[sLibrary] = oLibraryDoc;
+							this.oLibraryDocumentation[sLibrary] = oLibraryDoc;
 							return oLibraryDoc;
 						},
-						function() {
-							that.reporter.report(
+						() => {
+							this.reporter.report(
 								ReportLevel.TRACE,
 								`Failed to load library ${sLibrary}`
 							);
-							that.oLibraryDocumentation[
-								sLibrary
-							] = EMPTY_LIB_DOC;
+							this.oLibraryDocumentation[sLibrary] =
+								EMPTY_LIB_DOC;
 							oLibraryDoc = EMPTY_LIB_DOC;
 							return EMPTY_LIB_DOC;
 						}
@@ -558,8 +547,8 @@ export class APIInfo {
 						"resources/" +
 							sLibrary.replace(/\./g, "/") +
 							"/resources.json"
-					).catch(function() {
-						that.reporter.report(
+					).catch(() => {
+						this.reporter.report(
 							ReportLevel.TRACE,
 							`Failed to load resources for ${sLibrary}`
 						);
@@ -568,20 +557,20 @@ export class APIInfo {
 				);
 			}
 
-			return Promise.all(aLoadLibraryApiJson).then(function(aResults) {
-				oLibraryDoc = that.postProcessAPIJSON(
+			return Promise.all(aLoadLibraryApiJson).then(aResults => {
+				oLibraryDoc = this.postProcessAPIJSON(
 					oLibraryDoc || EMPTY_LIB_DOC,
-					that.reporter
+					this.reporter
 				);
 				if (aResults.length > 1) {
 					fnEnrichLibraryDoc(aResults[1], oLibraryDoc);
 				}
-				that.oLibraryDocumentation[sLibrary] = oLibraryDoc;
+				this.oLibraryDocumentation[sLibrary] = oLibraryDoc;
 				return oLibraryDoc;
 			});
 		} catch (e) {
 			oLibraryDoc = this.oLibraryDocumentation[sLibrary] = null; // avoid future tries to load this file
-			that.reporter.report(
+			this.reporter.report(
 				ReportLevel.ERROR,
 				"failed to loaded api.json for " + sLibrary + ": " + e
 			);

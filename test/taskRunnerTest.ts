@@ -1,7 +1,6 @@
 import * as taskRunner from "../src/taskRunner";
 import {MigrationTask} from "../src/taskRunner";
 import * as replaceGlobals from "../src/tasks/replaceGlobals";
-const recast = require("recast");
 const fs = require("graceful-fs");
 
 import {
@@ -9,25 +8,24 @@ import {
 	CustomLocalFileInfo,
 	CustomMetaReporter,
 	CustomMigrationTask,
-	CustomReporter,
 } from "./util/testUtils";
 
 const rootDir = "./test/taskRunner/";
 
 const assert = require("assert");
 
-describe("taskRunner", function() {
-	it("should run tasks and modify files one after the other", function() {
+describe("taskRunner", () => {
+	it("should run tasks and modify files one after the other", () => {
 		const fileSaved: string[] = [];
 		const fileMigrated: string[] = [];
 		const aTasks: MigrationTask[] = [];
 		const customMigrationTask1 = new CustomMigrationTask();
-		customMigrationTask1.addOnMigrateListener(function(args) {
+		customMigrationTask1.addOnMigrateListener(args => {
 			fileMigrated.push("task1:" + args.file.getFileName());
 		});
 		aTasks.push(customMigrationTask1);
 		const customMigrationTask2 = new CustomMigrationTask();
-		customMigrationTask2.addOnMigrateListener(function(args) {
+		customMigrationTask2.addOnMigrateListener(args => {
 			fileMigrated.push("task2:" + args.file.getFileName());
 		});
 		aTasks.push(customMigrationTask2);
@@ -37,14 +35,14 @@ describe("taskRunner", function() {
 			"file1.js"
 		);
 
-		customLocalFileInfo1.addOnSaveListener(function() {
+		customLocalFileInfo1.addOnSaveListener(() => {
 			fileSaved.push("file1");
 		});
 		const customLocalFileInfo2 = new CustomLocalFileInfo(
 			rootDir,
 			"file2.js"
 		);
-		customLocalFileInfo2.addOnSaveListener(function() {
+		customLocalFileInfo2.addOnSaveListener(() => {
 			fileSaved.push("file2");
 		});
 		aFileInfos.push(customLocalFileInfo1);
@@ -61,7 +59,7 @@ describe("taskRunner", function() {
 				null,
 				false
 			)
-			.then(function() {
+			.then(() => {
 				assert.deepEqual(
 					fileSaved,
 					["file1", "file2"],
@@ -80,23 +78,23 @@ describe("taskRunner", function() {
 			});
 	});
 
-	it("should run migrate right after migrate before executing the next task", function() {
+	it("should run migrate right after migrate before executing the next task", () => {
 		const fileMigrated: string[] = [];
 
 		const aTasks: MigrationTask[] = [];
 		const customMigrationTask1 = new CustomMigrationTask();
-		customMigrationTask1.addOnMigrateListener(function(args) {
+		customMigrationTask1.addOnMigrateListener(args => {
 			fileMigrated.push("migrate task1");
 		});
-		customMigrationTask1.addOnAnalyzeListener(function(args) {
+		customMigrationTask1.addOnAnalyzeListener(args => {
 			fileMigrated.push("analyze task1");
 		});
 		aTasks.push(customMigrationTask1);
 		const customMigrationTask2 = new CustomMigrationTask();
-		customMigrationTask2.addOnMigrateListener(function(args) {
+		customMigrationTask2.addOnMigrateListener(args => {
 			fileMigrated.push("migrate task2");
 		});
-		customMigrationTask2.addOnAnalyzeListener(function(args) {
+		customMigrationTask2.addOnAnalyzeListener(args => {
 			fileMigrated.push("analyze task2");
 		});
 		aTasks.push(customMigrationTask2);
@@ -114,7 +112,7 @@ describe("taskRunner", function() {
 				null,
 				false
 			)
-			.then(function() {
+			.then(() => {
 				assert.deepEqual(
 					fileMigrated,
 					[
@@ -128,7 +126,7 @@ describe("taskRunner", function() {
 			});
 	});
 
-	it("should run post task after main task", function() {
+	it("should run post task after main task", () => {
 		const replaceGlobalsTask = replaceGlobals as MigrationTask;
 		const config = JSON.parse(
 			fs.readFileSync(rootDir + "jquery0.config.json", "utf8")
@@ -160,7 +158,7 @@ describe("taskRunner", function() {
 				null,
 				false
 			)
-			.then(function(aResult) {
+			.then(aResult => {
 				assert.equal(aResult.length, 1, "The file is modified");
 				assert.equal(aResult[0].modifiedCode, expectedContent);
 			});

@@ -7,29 +7,38 @@ import {
 
 const assert = require("assert");
 
-describe("ConfigUtilsTest", function() {
-	describe("matchesVersion: (happy path)", function() {
-		it("Should succeed if valid version range was given", function() {
+describe("ConfigUtilsTest", () => {
+	describe("matchesVersion: (happy path)", () => {
+		it("Should succeed if valid version range was given", () => {
 			assert(
 				matchesVersion("1.3.1", "1.3.x"),
 				"Target version and given version range match"
 			);
 		});
 
-		it("Should succeed if valid version was given", function() {
+		it("Should succeed if valid version was given", () => {
 			assert(
 				matchesVersion("1.4.0", "^1.3.1"),
 				"Target version and given version match"
 			);
 		});
 	});
-	describe("filterVersionMatches: (happy path)", function() {
-		it("Should filter out modules for matching target version", function() {
+	describe("filterVersionMatches: (happy path)", () => {
+		it("Should filter out modules for matching target version", () => {
 			const oModules = {
 				"Module Root": {
-					"Module A": {functionName: "functionA", version: "^1.58.0"},
-					"Module B": {functionName: "functionB", version: "^1.40.0"},
-					"Module C": {functionName: "functionC", version: "^1.44.0"},
+					"Module A": {
+						functionName: "functionA",
+						version: "^1.58.0",
+					},
+					"Module B": {
+						functionName: "functionB",
+						version: "^1.40.0",
+					},
+					"Module C": {
+						functionName: "functionC",
+						version: "^1.44.0",
+					},
 				},
 			};
 
@@ -51,13 +60,22 @@ describe("ConfigUtilsTest", function() {
 			);
 		});
 	});
-	describe("filterMatchedReplacers: (happy path)", function() {
-		it("Should filter out replacers for given modules config", function() {
+	describe("filterMatchedReplacers: (happy path)", () => {
+		it("Should filter out replacers for given modules config", () => {
 			const oModules = {
 				"Module Root": {
-					"Module A": {functionName: "functionA", version: "^1.58.0"},
-					"Module B": {functionName: "functionB", version: "^1.44.0"},
-					"Module C": {functionName: "functionC", version: "^1.40.0"},
+					"Module A": {
+						functionName: "functionA",
+						version: "^1.58.0",
+					},
+					"Module B": {
+						functionName: "functionB",
+						version: "^1.44.0",
+					},
+					"Module C": {
+						functionName: "functionC",
+						version: "^1.40.0",
+					},
 				},
 			};
 
@@ -69,8 +87,8 @@ describe("ConfigUtilsTest", function() {
 			);
 		});
 	});
-	describe("adjustConfigForTargetVersion: (happy path)", function() {
-		it("Should filter out replacers for given modules config", function() {
+	describe("adjustConfigForTargetVersion: (happy path)", () => {
+		it("Should filter out replacers for given modules config", () => {
 			const oInitialConfig = {
 				modules: {
 					"Module Root": {
@@ -121,15 +139,15 @@ describe("ConfigUtilsTest", function() {
 		});
 	});
 
-	describe("matchesVersion (sad path)", function() {
-		it("Should retrieve false if target version is lower then the given version", function() {
+	describe("matchesVersion (sad path)", () => {
+		it("Should retrieve false if target version is lower then the given version", () => {
 			assert(
 				!matchesVersion("1.3.0", "^1.3.1"),
 				"Target version and given version don't match"
 			);
 		});
 
-		it("Should retrieve false if target or version to match are invalid", function() {
+		it("Should retrieve false if target or version to match are invalid", () => {
 			assert(
 				!matchesVersion("invalid", "^1.1.1"),
 				"Target version is invalid"
@@ -140,8 +158,8 @@ describe("ConfigUtilsTest", function() {
 			);
 		});
 	});
-	describe("adjustConfigForTargetVersion: (sad path)", function() {
-		it("Should filter out modules and its group for given modules config", function() {
+	describe("adjustConfigForTargetVersion: (sad path)", () => {
+		it("Should filter out modules and its group for given modules config", () => {
 			const oInitialConfig = {
 				modules: {
 					"Module Root": {
@@ -184,7 +202,7 @@ describe("ConfigUtilsTest", function() {
 			);
 		});
 
-		it("Should filter out modules and its group for given modules config with multiple groups", function() {
+		it("Should filter out modules and its group for given modules config with multiple groups", () => {
 			const oInitialConfig = {
 				modules: {
 					"Module Root": {

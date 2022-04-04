@@ -4,7 +4,7 @@ import * as path from "path";
 
 import {NamespaceConfig} from "./index";
 import * as Mod from "./Migration";
-import {FileFinder, Reporter} from "./Migration";
+import {FileFinder} from "./Migration";
 import {MetaConsoleReporter} from "./reporter/MetaConsoleReporter";
 import {ASTVisitor} from "./util/ASTVisitor";
 import * as FileUtils from "./util/FileUtils";
@@ -40,7 +40,7 @@ export async function getSupportedTasks(): Promise<MigrationTask[]> {
 	}
 
 	// sort modules such that amd cleanup is the first one in the list
-	aModules.sort(function(a, b) {
+	aModules.sort((a, b) => {
 		if (a.priority === b.priority) {
 			return 0;
 		}
@@ -122,7 +122,7 @@ export async function processModules(
 					config: oConfig,
 					targetVersion: sVersion,
 				})
-				.catch(function(err) {
+				.catch(err => {
 					taskReporter.report(
 						Mod.ReportLevel.ERROR,
 						`Analysis failed. Error: ${err.message}`
@@ -145,7 +145,7 @@ export async function processModules(
 						targetVersion: sVersion,
 						analyseResult: oAnalyseResult,
 					})
-					.catch(function(err) {
+					.catch(err => {
 						taskReporter.report(
 							Mod.ReportLevel.ERROR,
 							`${

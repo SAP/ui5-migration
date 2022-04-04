@@ -2,7 +2,6 @@
 
 import {Syntax} from "esprima";
 import * as ESTree from "estree";
-import {Literal} from "estree";
 import * as recast from "recast";
 import {TNodePath} from "ui5-migration";
 
@@ -134,7 +133,7 @@ export class SapUiDefineCall {
 		if (args[i] && args[i].type === Syntax.FunctionExpression) {
 			this.factory = args[i++] as ESTree.FunctionExpression;
 			const params = this.factory.params;
-			this.paramNames = params.map(function(param) {
+			this.paramNames = params.map(param => {
 				if (param.type !== Syntax.Identifier) {
 					throw new Error();
 				}
@@ -291,7 +290,7 @@ export class SapUiDefineCall {
 		}
 
 		const aAlreadyMatchingElements = this.dependencyArray.elements.filter(
-			function(oElement) {
+			oElement => {
 				if (oElement.type !== "Literal") {
 					throw new Error(
 						"Dependency is not a literal in " + this.name
@@ -384,9 +383,8 @@ export class SapUiDefineCall {
 			return undefined;
 		}
 
-		const iIndexToRemove = this.dependencyArray.elements.indexOf(
-			oMatchingElement
-		);
+		const iIndexToRemove =
+			this.dependencyArray.elements.indexOf(oMatchingElement);
 
 		if (iIndexToRemove === -1) {
 			return undefined;
@@ -399,12 +397,11 @@ export class SapUiDefineCall {
 		if (!this.dependencyArray) {
 			return undefined;
 		}
-		const that = this;
 		const aAlreadyMatchingElements = this.dependencyArray.elements.filter(
-			function(oElement) {
+			oElement => {
 				if (oElement.type !== "Literal") {
 					throw new Error(
-						"Dependency is not a literal in " + that.name
+						"Dependency is not a literal in " + this.name
 					);
 				}
 				return oElement.value === sModule;
@@ -450,10 +447,11 @@ export class SapUiDefineCall {
 			if (stmt.type === Syntax.VariableDeclaration) {
 				stmt.declarations.forEach(decl => {
 					if (decl.id.type === Syntax.Identifier) {
-						const shortcut = SapUiDefineCallUtils.checkForShortcutExpression(
-							this,
-							decl.init
-						);
+						const shortcut =
+							SapUiDefineCallUtils.checkForShortcutExpression(
+								this,
+								decl.init
+							);
 						if (shortcut) {
 							const globalName =
 								shortcut.module

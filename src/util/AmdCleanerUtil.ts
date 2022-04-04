@@ -124,8 +124,9 @@ function getDeclareCallNameAndPath(ast, that, reporter) {
 					path.value.arguments.length === 1 &&
 					path.value.arguments[0].type === Syntax.Literal
 				) {
-					result.sDeclareName = (path.value
-						.arguments[0] as ESTree.Literal).value.toString();
+					result.sDeclareName = (
+						path.value.arguments[0] as ESTree.Literal
+					).value.toString();
 				}
 				result.path = path;
 			}
@@ -205,7 +206,8 @@ function replaceSelfCalls(
 			bFileWasModified = true;
 			// restore comments of declare (add them to the define call)
 			if (declareResult.path.parentPath.value.comments) {
-				that.defineCall.node.comments = declareResult.path.parentPath.value.comments.slice();
+				that.defineCall.node.comments =
+					declareResult.path.parentPath.value.comments.slice();
 			}
 			declareResult.path.prune();
 		} else {
@@ -239,10 +241,11 @@ function replaceSelfCalls(
 						)
 					) {
 						if (ModuleNameComparator.compare(name, sDeclareName)) {
-							const sVariableName = VariableNameCreator.getUniqueVariableName(
-								aUsedVariables,
-								sDeclareName
-							);
+							const sVariableName =
+								VariableNameCreator.getUniqueVariableName(
+									aUsedVariables,
+									sDeclareName
+								);
 
 							// store comments
 							let aComments =
@@ -250,20 +253,17 @@ function replaceSelfCalls(
 									path.parentPath.parentPath.parent.name
 								][path.parentPath.parentPath.name].comments;
 							aComments = aComments ? aComments.slice() : [];
-							const newVariableDeclaration = builders.variableDeclaration(
-								"var",
-								[
+							const newVariableDeclaration =
+								builders.variableDeclaration("var", [
 									builders.variableDeclarator(
 										builders.identifier(sVariableName),
 										path.parent.node.right
 									),
-								]
-							);
+								]);
 							path.parentPath.parentPath.parent.node[
 								path.parentPath.parentPath.parent.name
-							][
-								path.parentPath.parentPath.name
-							] = newVariableDeclaration;
+							][path.parentPath.parentPath.name] =
+								newVariableDeclaration;
 
 							// add comments to replacement
 							if (aComments.length > 0) {
@@ -300,18 +300,18 @@ function replaceSelfCalls(
 						path.value.arguments[0].value.toString() ===
 							sDeclareName
 					) {
-						const sVariableName = VariableNameCreator.getUniqueVariableName(
-							aUsedVariables,
-							sDeclareName
-						);
-						path.parentPath.parentPath.value[
-							path.parentPath.name
-						] = builders.variableDeclaration("var", [
-							builders.variableDeclarator(
-								builders.identifier(sVariableName),
-								path.value
-							),
-						]);
+						const sVariableName =
+							VariableNameCreator.getUniqueVariableName(
+								aUsedVariables,
+								sDeclareName
+							);
+						path.parentPath.parentPath.value[path.parentPath.name] =
+							builders.variableDeclaration("var", [
+								builders.variableDeclarator(
+									builders.identifier(sVariableName),
+									path.value
+								),
+							]);
 						bWasDefined = true;
 						bFileWasModified = true;
 
@@ -336,13 +336,13 @@ function replaceSelfCalls(
 						const name = that.getObjectName(path.value);
 
 						if (ModuleNameComparator.compare(name, sDeclareName)) {
-							const sVariableName = VariableNameCreator.getUniqueVariableName(
-								aUsedVariables,
-								sDeclareName
-							);
-							path.parent.node[path.name] = builders.identifier(
-								sVariableName
-							);
+							const sVariableName =
+								VariableNameCreator.getUniqueVariableName(
+									aUsedVariables,
+									sDeclareName
+								);
+							path.parent.node[path.name] =
+								builders.identifier(sVariableName);
 							bFileWasModified = true;
 
 							reporter.report(
@@ -540,7 +540,7 @@ function visitCode(
 						}
 						// if an export is known, replace global access path
 						// with local shortcut + export path
-						if (localRef == null) {
+						if (!localRef) {
 							reporter.report(
 								ReportLevel.TRACE,
 								"keep global access to '" +
@@ -566,12 +566,13 @@ function visitCode(
 								// builders.identifier(resolve.export) ))
 								let shortcut = null;
 								if (modify) {
-									const oAddShortCutResult = that.defineCall.addShortcut(
-										localRef,
-										oSymbol.module,
-										oSymbol.export,
-										oSymbol.symbol.name
-									);
+									const oAddShortCutResult =
+										that.defineCall.addShortcut(
+											localRef,
+											oSymbol.module,
+											oSymbol.export,
+											oSymbol.symbol.name
+										);
 									bFileWasModified =
 										bFileWasModified ||
 										oAddShortCutResult.modified;
@@ -920,18 +921,20 @@ module.exports = {
 			const topLevelStmts = (ast as ESTree.Program).body;
 			let topLevelComments;
 
-			const relevantTopLevelStatements = this.getRelevantNodes(
-				topLevelStmts
-			);
+			const relevantTopLevelStatements =
+				this.getRelevantNodes(topLevelStmts);
 			if (
 				relevantTopLevelStatements.length === 1 &&
 				this.isIIFEWithoutArguments(relevantTopLevelStatements[0])
 			) {
 				// unwrap an IIFE if it doesn't have arguments
-				block = (((relevantTopLevelStatements[0] as ESTree.ExpressionStatement)
-					.expression as ESTree.CallExpression)
-					.callee as ESTree.FunctionExpression)
-					.body as ESTree.BlockStatement;
+				block = (
+					(
+						(
+							relevantTopLevelStatements[0] as ESTree.ExpressionStatement
+						).expression as ESTree.CallExpression
+					).callee as ESTree.FunctionExpression
+				).body as ESTree.BlockStatement;
 				if (topLevelStmts.length > 1) {
 					const iifeUnwrapped = block.body.filter(node => {
 						return !this.containsUseStrict(node);
@@ -949,8 +952,9 @@ module.exports = {
 					block = builders.blockStatement(topLevelStatementsClone);
 				}
 
-				topLevelComments = (topLevelStmts[0] as ESTree.ExpressionStatement)
-					.leadingComments;
+				topLevelComments = (
+					topLevelStmts[0] as ESTree.ExpressionStatement
+				).leadingComments;
 				if (!topLevelComments) {
 					topLevelComments = topLevelStmts[0]["comments"];
 				}
@@ -1030,6 +1034,7 @@ module.exports = {
 				oAnalysisResult: modify ? undefined : oAnalysisResult,
 			};
 		}
+		// eslint-disable-next-line @typescript-eslint/no-this-alias
 		const that = this;
 
 		const aUsedVariables = findVariableDeclarationNames(ast);
@@ -1073,9 +1078,9 @@ module.exports = {
 
 		// TODO should only visit content of factory function
 
-		const encapsulate = function(aPromiseResults) {
-			return function(name: string) {
-				const aRes = aPromiseResults.filter(function(oResult) {
+		const encapsulate = function (aPromiseResults) {
+			return function (name: string) {
+				const aRes = aPromiseResults.filter(oResult => {
 					return (
 						oResult &&
 						oResult.symbol &&
@@ -1091,7 +1096,7 @@ module.exports = {
 
 		// Store modifications
 		return fillApiInfo(ast, that, reporter, config, apiInfo)
-			.then(function(aPromiseResults) {
+			.then(aPromiseResults => {
 				const aModificationsPromise: Array<Promise<{}>> = [];
 				const oResult = replaceSelfCalls(
 					ast,
@@ -1107,7 +1112,7 @@ module.exports = {
 
 				return {oResult, aPromiseResults};
 			})
-			.then(function(oObject) {
+			.then(oObject => {
 				bFileWasModified =
 					bFileWasModified || oObject.oResult.fileWasModified;
 				const aModificationsPromise: Array<Promise<{}>> = [];
@@ -1129,7 +1134,7 @@ module.exports = {
 					? identifyUnusedImports(that)
 					: [];
 
-				return Promise.all(aModificationsPromise).then(function() {
+				return Promise.all(aModificationsPromise).then(() => {
 					// remove unused dependencies
 					if (config.removeUnusedDependencies) {
 						bFileWasModified =
@@ -1148,7 +1153,7 @@ module.exports = {
 					if (
 						that.defineCall &&
 						!that.defineCall.globalExportRequired &&
-						that.defineCall.bExportsNode != null
+						that.defineCall.bExportsNode
 					) {
 						const args = that.defineCall.node.arguments;
 						args.splice(args.length - 1, 1);
@@ -1164,10 +1169,11 @@ module.exports = {
 							oLastStatement &&
 							oLastStatement.type !== Syntax.ReturnStatement
 						) {
-							const sVariableName = VariableNameCreator.getUniqueVariableName(
-								aUsedVariables,
-								oObject.oResult.declareName
-							);
+							const sVariableName =
+								VariableNameCreator.getUniqueVariableName(
+									aUsedVariables,
+									oObject.oResult.declareName
+								);
 							if (modify) {
 								aBody.push(
 									builders.returnStatement(
@@ -1225,19 +1231,21 @@ module.exports = {
 						oObject.oResult.bWasDeclared &&
 						oObject.oResult.declareName.split(".").length > 1
 					) {
-						const sNamespace = oObject.oResult.declareName.substring(
-							0,
-							oObject.oResult.declareName.lastIndexOf(".")
-						);
+						const sNamespace =
+							oObject.oResult.declareName.substring(
+								0,
+								oObject.oResult.declareName.lastIndexOf(".")
+							);
 						const bNamespaces = NamespaceUtils.findNamespaceUsage(
 							ast,
 							sNamespace
 						);
 						if (bNamespaces) {
-							const objectCreateCall = NamespaceUtils.introduceObjectPathCreate(
-								that.defineCall,
-								sNamespace
-							);
+							const objectCreateCall =
+								NamespaceUtils.introduceObjectPathCreate(
+									that.defineCall,
+									sNamespace
+								);
 							const aBody = that.defineCall.factory.body.body;
 							aBody.splice(1, 0, objectCreateCall);
 						}
@@ -1282,7 +1290,7 @@ module.exports = {
 				if (
 					dep.type === Syntax.Literal &&
 					typeof (dep as ESTree.Literal).value === "string" &&
-					(dep as ESTree.Literal).raw != null
+					(dep as ESTree.Literal).raw
 				) {
 					if ((dep as ESTree.Literal).raw.charAt(0) === '"') {
 						iCountDoubleQuotes++;
@@ -1297,31 +1305,40 @@ module.exports = {
 					defineCall.dependencyArray.elements.length
 			) {
 				const quote = iCountDoubleQuotes < 0 ? "'" : '"';
-				const elements: Expression[] = defineCall.dependencyArray.elements.map(
-					(dep: ESTree.Expression) => {
-						if (
-							dep.type === Syntax.Literal &&
-							typeof (dep as ESTree.Literal).value === "string" &&
-							((dep as ESTree.Literal).raw == null ||
-								(dep as ESTree.Literal).raw.charAt(0) !== quote)
-						) {
-							bModified = true;
-							// TODO in theory requires quoting of value, but
-							// shouldn't be necessary for AMD dependencies
-							(dep as ESTree.Literal).raw =
-								quote + (dep as ESTree.Literal).value + quote;
+				const elements: Expression[] =
+					defineCall.dependencyArray.elements.map(
+						(dep: ESTree.Expression) => {
+							if (
+								dep.type === Syntax.Literal &&
+								typeof (dep as ESTree.Literal).value ===
+									"string" &&
+								(!(dep as ESTree.Literal).raw ||
+									(dep as ESTree.Literal).raw.charAt(0) !==
+										quote)
+							) {
+								bModified = true;
+								// TODO in theory requires quoting of value, but
+								// shouldn't be necessary for AMD dependencies
+								(dep as ESTree.Literal).raw =
+									quote +
+									(dep as ESTree.Literal).value +
+									quote;
 
-							// TODO this is a dirty hack here
-							const dir = builders.stringLiteral(
-								quote + (dep as ESTree.Literal).value + quote
-							);
-							dir.value =
-								quote + (dep as ESTree.Literal).value + quote;
-							return dir;
+								// TODO this is a dirty hack here
+								const dir = builders.stringLiteral(
+									quote +
+										(dep as ESTree.Literal).value +
+										quote
+								);
+								dir.value =
+									quote +
+									(dep as ESTree.Literal).value +
+									quote;
+								return dir;
+							}
+							return dep;
 						}
-						return dep;
-					}
-				);
+					);
 				if (bModified) {
 					defineCall.dependencyArray.elements = elements;
 				}
@@ -1349,6 +1366,7 @@ module.exports = {
 	) {
 		let mainClassName;
 		let mainClassNameShortcut = undefined;
+		// eslint-disable-next-line @typescript-eslint/no-this-alias
 		const that = this;
 
 		/*
@@ -1397,32 +1415,30 @@ module.exports = {
 						expression.type === Syntax.AssignmentExpression &&
 						isMainAssignment(expression)
 					) {
-						(node as ESTree.BlockStatement).body[
-							idx
-						] = builders.variableDeclaration("var", [
-							builders.variableDeclarator(
-								builders.identifier(mainClassNameShortcut), // TODO check
-								// that name is
-								// not used yet
-								(expression as ESTree.AssignmentExpression)
-									.right
-							),
-						]);
+						(node as ESTree.BlockStatement).body[idx] =
+							builders.variableDeclaration("var", [
+								builders.variableDeclarator(
+									builders.identifier(mainClassNameShortcut), // TODO check
+									// that name is
+									// not used yet
+									(expression as ESTree.AssignmentExpression)
+										.right
+								),
+							]);
 						bModified = true;
 						exportVar = mainClassNameShortcut;
 						globalNameConvertedToAMDExport = mainClassName;
 					} else if (isMainClassDefinition(expression)) {
 						handleExtendCall(expression);
-						(node as ESTree.BlockStatement).body[
-							idx
-						] = builders.variableDeclaration("var", [
-							builders.variableDeclarator(
-								builders.identifier(mainClassNameShortcut), // TODO check
-								// that name is
-								// not used yet
-								expression
-							),
-						]);
+						(node as ESTree.BlockStatement).body[idx] =
+							builders.variableDeclaration("var", [
+								builders.variableDeclarator(
+									builders.identifier(mainClassNameShortcut), // TODO check
+									// that name is
+									// not used yet
+									expression
+								),
+							]);
 						exportVar = mainClassNameShortcut;
 						globalNameConvertedToAMDExport = mainClassName;
 						bModified = true;
@@ -1434,9 +1450,8 @@ module.exports = {
 								(expression as ESTree.AssignmentExpression).left
 							)
 					) {
-						(expression as ESTree.AssignmentExpression).left = builders.identifier(
-							mainClassNameShortcut
-						);
+						(expression as ESTree.AssignmentExpression).left =
+							builders.identifier(mainClassNameShortcut);
 						reporter.report(
 							ReportLevel.DEBUG,
 							"  replace LHS qualified name " +
@@ -1548,7 +1563,7 @@ module.exports = {
 					" <= " +
 					moduleName +
 					"" +
-					(paramName == null ? " (hidden)" : "")
+					(paramName ? "" : " (hidden)")
 			);
 			bWasModified = defineCall.addDependency(moduleName, paramName);
 		} else {
@@ -1647,7 +1662,8 @@ module.exports = {
 		return ui5name.replace(/\./g, "/");
 	},
 	isSafeLocation(path) {
-		const oRegx = /^(?:AMD-factory|constructor|init|onInit|initCompositeSupport|onAfterRendering|onBeforeRendering)$/;
+		const oRegx =
+			/^(?:AMD-factory|constructor|init|onInit|initCompositeSupport|onAfterRendering|onBeforeRendering)$/;
 		return !path.scope || oRegx.test(path.scope.node.__classMethodName);
 	},
 	/**
@@ -1668,8 +1684,9 @@ module.exports = {
 		// path.scope.node.__classMethodName);
 		const safeLocation = this.isSafeLocation(path);
 		let count = requireCall.arguments.length;
+		// eslint-disable-next-line @typescript-eslint/no-this-alias
 		const that = this;
-		requireCall.arguments.forEach(function(arg) {
+		requireCall.arguments.forEach(arg => {
 			if (arg.type === Syntax.Literal && typeof arg.value === "string") {
 				const modName = that.makeModuleName(arg.value);
 				if (
@@ -1714,9 +1731,10 @@ module.exports = {
 		return result;
 	},
 	async resolveSymbol(name, apiInfo) {
+		// eslint-disable-next-line @typescript-eslint/no-this-alias
 		const that = this;
 		// look in the API summary for the symbol
-		return apiInfo.getSymbol(name).then(function(symbol) {
+		return apiInfo.getSymbol(name).then(symbol => {
 			// reporter.report(ReportLevel.DEBUG, "looking for "+name+":",
 			// symbol);
 			if (symbol) {
@@ -1873,9 +1891,12 @@ module.exports = {
 				Syntax.MemberExpression &&
 			((node as ESTree.CallExpression).callee as ESTree.MemberExpression)
 				.object.type === Syntax.MemberExpression &&
-			(((node as ESTree.CallExpression).callee as ESTree.MemberExpression)
-				.object as ESTree.MemberExpression).object.type ===
-				Syntax.Identifier;
+			(
+				(
+					(node as ESTree.CallExpression)
+						.callee as ESTree.MemberExpression
+				).object as ESTree.MemberExpression
+			).object.type === Syntax.Identifier;
 		if (bMemberCall) {
 			const member = (node as ESTree.CallExpression)
 				.callee as ESTree.MemberExpression;
@@ -1902,9 +1923,12 @@ module.exports = {
 				Syntax.MemberExpression &&
 			((node as ESTree.CallExpression).callee as ESTree.MemberExpression)
 				.object.type === Syntax.MemberExpression &&
-			(((node as ESTree.CallExpression).callee as ESTree.MemberExpression)
-				.object as ESTree.MemberExpression).object.type ===
-				Syntax.Identifier;
+			(
+				(
+					(node as ESTree.CallExpression)
+						.callee as ESTree.MemberExpression
+				).object as ESTree.MemberExpression
+			).object.type === Syntax.Identifier;
 		if (bMemberCall) {
 			const member = (node as ESTree.CallExpression)
 				.callee as ESTree.MemberExpression;
@@ -1932,13 +1956,18 @@ module.exports = {
 				Syntax.MemberExpression &&
 			((node as ESTree.CallExpression).callee as ESTree.MemberExpression)
 				.property.type === Syntax.Identifier &&
-			(((node as ESTree.CallExpression).callee as ESTree.MemberExpression)
-				.property as ESTree.Identifier).name === "extend" &&
+			(
+				(
+					(node as ESTree.CallExpression)
+						.callee as ESTree.MemberExpression
+				).property as ESTree.Identifier
+			).name === "extend" &&
 			(node as ESTree.CallExpression).arguments.length > 0 &&
 			(node as ESTree.CallExpression).arguments[0].type ===
 				Syntax.Literal &&
-			typeof ((node as ESTree.CallExpression)
-				.arguments[0] as ESTree.Literal).value === "string"
+			typeof (
+				(node as ESTree.CallExpression).arguments[0] as ESTree.Literal
+			).value === "string"
 		);
 	},
 	getObjectName(node: ESTree.Node): string {
@@ -1950,8 +1979,10 @@ module.exports = {
 			return (
 				this.getObjectName((node as ESTree.MemberExpression).object) +
 				"." +
-				((node as ESTree.MemberExpression)
-					.property as ESTree.Identifier).name
+				(
+					(node as ESTree.MemberExpression)
+						.property as ESTree.Identifier
+				).name
 			);
 		} else if (node.type === Syntax.Identifier) {
 			return (node as ESTree.Identifier).name;
@@ -1963,9 +1994,10 @@ module.exports = {
 			node.type === Syntax.ExpressionStatement &&
 			(node as ESTree.ExpressionStatement).expression.type ===
 				Syntax.CallExpression &&
-			((node as ESTree.ExpressionStatement)
-				.expression as ESTree.CallExpression).callee.type ===
-				Syntax.FunctionExpression
+			(
+				(node as ESTree.ExpressionStatement)
+					.expression as ESTree.CallExpression
+			).callee.type === Syntax.FunctionExpression
 		) {
 			const oCallExpression = (node as ESTree.ExpressionStatement)
 				.expression as ESTree.CallExpression;
@@ -2100,7 +2132,8 @@ function findVariableDeclarationNames(ast): string[] {
  * @param amdCleanerUtilInstance amdCleanerUtilInstance
  */
 function identifyUnusedImports(amdCleanerUtilInstance) {
-	const aImportParamNames = amdCleanerUtilInstance.defineCall.paramNames.slice();
+	const aImportParamNames =
+		amdCleanerUtilInstance.defineCall.paramNames.slice();
 	amdCleanerUtilInstance.removeUsedDependencies(aImportParamNames);
 
 	// find used variables and remove them from aImportParamNames
@@ -2164,9 +2197,10 @@ function removeUnusedDependencies(
 ) {
 	let bFileWasModified = false;
 	aUnusedParamNames.forEach((unusedParamName: string) => {
-		const importPath = amdCleanerUtilInstance.defineCall.getImportByParamName(
-			unusedParamName
-		); // e.g. "sap/ui/model/Filter"
+		const importPath =
+			amdCleanerUtilInstance.defineCall.getImportByParamName(
+				unusedParamName
+			); // e.g. "sap/ui/model/Filter"
 		// check that import exists and that we didn't just
 		// add it in this run Note: the tool might have
 		// found a hidden dependency like sap/ui/core/Core
@@ -2188,10 +2222,11 @@ function removeUnusedDependencies(
 					")"
 			);
 			if (modify) {
-				const bWasRemoved = amdCleanerUtilInstance.defineCall.removeDependency(
-					importPath,
-					unusedParamName
-				);
+				const bWasRemoved =
+					amdCleanerUtilInstance.defineCall.removeDependency(
+						importPath,
+						unusedParamName
+					);
 				bFileWasModified = bFileWasModified || bWasRemoved;
 				reporter.report(
 					Mod.ReportLevel.DEBUG,
@@ -2202,7 +2237,9 @@ function removeUnusedDependencies(
 				reporter.storeFinding("remove dependency", ast.loc);
 				oAnalysisResult["removeDependency"] =
 					oAnalysisResult["removeDependency"] || [];
-				oAnalysisResult["removeDependency"].push({module: importPath});
+				oAnalysisResult["removeDependency"].push({
+					module: importPath,
+				});
 			}
 		}
 	});

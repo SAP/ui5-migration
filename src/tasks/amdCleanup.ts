@@ -32,13 +32,13 @@ async function createApiInfo(
 
 	const aPromises: Array<Promise<void>> = [];
 	if (config.api) {
-		Object.keys(config.api).forEach(function(sKey) {
+		Object.keys(config.api).forEach(sKey => {
 			aPromises.push(
 				LoaderUtils.fetchResource(config.api[sKey])
-					.then(function(oResult) {
+					.then(oResult => {
 						oApi[sKey] = oResult;
 					})
-					.catch(function(e) {
+					.catch(e => {
 						reporter.report(
 							ReportLevel.ERROR,
 							"failed to load " + sKey + ", error: " + e
@@ -48,13 +48,13 @@ async function createApiInfo(
 		});
 	}
 	if (config.apiResources) {
-		Object.keys(config.apiResources).forEach(function(sKey) {
+		Object.keys(config.apiResources).forEach(sKey => {
 			aPromises.push(
 				LoaderUtils.fetchResource(config.apiResources[sKey])
-					.then(function(oResult) {
+					.then(oResult => {
 						oApiResources[sKey] = oResult;
 					})
-					.catch(function(e) {
+					.catch(e => {
 						reporter.report(
 							ReportLevel.ERROR,
 							"failed to load resources for " +
@@ -69,10 +69,10 @@ async function createApiInfo(
 	if (config.apiVersion) {
 		aPromises.push(
 			LoaderUtils.fetchResource(config.apiVersion)
-				.then(function(oResult) {
+				.then(oResult => {
 					apiVersion = oResult;
 				})
-				.catch(function(e) {
+				.catch(e => {
 					reporter.report(
 						ReportLevel.ERROR,
 						"failed to load " + config.apiVersion + ", error: " + e
@@ -166,7 +166,7 @@ async function migrate(args: Mod.MigrateArguments): Promise<boolean> {
 			true,
 			args.reporter
 		)
-		.then(function(oResult) {
+		.then(oResult => {
 			return oResult.modified;
 		});
 }

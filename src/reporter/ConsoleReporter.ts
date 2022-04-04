@@ -55,8 +55,7 @@ export class ConsoleReporter extends BaseReporter {
 		if (this.getContext().fileName) {
 			let sOutFileName = this.getContext().fileName;
 			if (loc) {
-				let oLocation: ESTree.SourceLocation;
-				oLocation = loc as ESTree.SourceLocation;
+				const oLocation = loc as ESTree.SourceLocation;
 
 				if (oLocation.start) {
 					sOutFileName +=
@@ -87,12 +86,15 @@ export class ConsoleReporter extends BaseReporter {
 	) {
 		switch (level) {
 			case ReportLevel.WARNING:
+				// eslint-disable-next-line no-console
 				console.warn(sMessage, ...aParams);
 				break;
 			case ReportLevel.ERROR:
+				// eslint-disable-next-line no-console
 				console.error(sMessage, ...aParams);
 				break;
 			default:
+				// eslint-disable-next-line no-console
 				console.log(sMessage, ...aParams);
 				break;
 		}
@@ -130,12 +132,11 @@ export class ConsoleReporter extends BaseReporter {
 		ConsoleReporter.log(level, "Report for \x1b[31m%s\x1b[0m:", [
 			sReporter,
 		]);
-		const that = this;
-		this.oMap.forEach(function(value, key, map) {
+		this.oMap.forEach((value, key) => {
 			if (typeof value === "number") {
-				that.report(level, key + ": " + value);
+				this.report(level, key + ": " + value);
 			} else {
-				that.report(
+				this.report(
 					level,
 					"value: " + key + ": entries: " + value.length
 				);

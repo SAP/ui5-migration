@@ -25,7 +25,7 @@ function analyseMigrateAndTest(
 ) {
 	const reporter = new CustomReporter([], level);
 	analyse({file: module, fileFinder, reporter, config})
-		.then(function(analyseResult) {
+		.then(analyseResult => {
 			if (analyseResult && migrate) {
 				return migrate({
 					file: module,
@@ -38,7 +38,7 @@ function analyseMigrateAndTest(
 				return false;
 			}
 		})
-		.then(function(didModify) {
+		.then(didModify => {
 			assert.strictEqual(
 				didModify,
 				expectedModification,
@@ -55,15 +55,15 @@ function analyseMigrateAndTest(
 				assert.deepStrictEqual(reporter.getReports(), expectedReports);
 			}
 		})
-		.then(function() {
+		.then(() => {
 			done();
 		})
-		.catch(function(e) {
+		.catch(e => {
 			done(e);
 		});
 }
 
-describe("FixTypeDependency", function() {
+describe("FixTypeDependency", () => {
 	[
 		{
 			title: "should modify library file",
@@ -127,11 +127,11 @@ describe("FixTypeDependency", function() {
 			},
 			executionMode: ProcessingMode.SEQUENTIAL,
 		},
-	].forEach(function(fixture) {
+	].forEach(fixture => {
 		const pathToApiVersionJSON =
 			rootDir + "fixTypeDependency/_apiVersion.version.json";
 
-		it(fixture.title, function(done) {
+		it(fixture.title, done => {
 			const codeToBeMigrated = rootDir + fixture.sourceCodeFileName;
 			const expectedContent =
 				fixture.modified === false

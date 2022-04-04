@@ -29,7 +29,7 @@ function analyseMigrateAndTest(
 		reporter,
 		config,
 	})
-		.then(function(analyseResult) {
+		.then(analyseResult => {
 			if (migrate && analyseResult) {
 				return migrate({
 					file: module,
@@ -42,7 +42,7 @@ function analyseMigrateAndTest(
 				return false;
 			}
 		})
-		.then(function(didModify) {
+		.then(didModify => {
 			assert.strictEqual(
 				didModify,
 				expectedModification,
@@ -60,17 +60,17 @@ function analyseMigrateAndTest(
 		return pAnalysisAndMigration;
 	}
 	return pAnalysisAndMigration
-		.then(function() {
+		.then(() => {
 			done();
 		})
-		.catch(function(e) {
+		.catch(e => {
 			done(e);
 		});
 }
 
-describe("addMissingDependencies", function() {
-	describe("#start()", function() {
-		it("should addMissingDependencies", function(done) {
+describe("addMissingDependencies", () => {
+	describe("#start()", () => {
+		it("should addMissingDependencies", done => {
 			const expectedContent = fs.readFileSync(
 				rootDir + "test.expected.js",
 				"utf8"
@@ -89,7 +89,7 @@ describe("addMissingDependencies", function() {
 			);
 		});
 
-		it("should addMissingDependencies for FunctionFinder", function(done) {
+		it("should addMissingDependencies for FunctionFinder", done => {
 			const expectedContent = fs.readFileSync(
 				rootDir + "test2.expected.js",
 				"utf8"
@@ -108,7 +108,7 @@ describe("addMissingDependencies", function() {
 			);
 		});
 
-		it("should addMissingDependencies only for jQuery calls", function(done) {
+		it("should addMissingDependencies only for jQuery calls", done => {
 			const expectedContent = fs.readFileSync(
 				rootDir + "control.expected.js",
 				"utf8"
@@ -127,7 +127,7 @@ describe("addMissingDependencies", function() {
 			);
 		});
 
-		it("should addMissingDependencies for jQuery.Event", function(done) {
+		it("should addMissingDependencies for jQuery.Event", done => {
 			const expectedContent = fs.readFileSync(
 				rootDir + "event.expected.js",
 				"utf8"
@@ -146,7 +146,7 @@ describe("addMissingDependencies", function() {
 			);
 		});
 
-		it("should addMissingDependencies for jQuery.Event.getPseudoTypes", function(done) {
+		it("should addMissingDependencies for jQuery.Event.getPseudoTypes", done => {
 			const expectedContent = fs.readFileSync(
 				rootDir + "pseudotypes.expected.js",
 				"utf8"
@@ -165,7 +165,7 @@ describe("addMissingDependencies", function() {
 			);
 		});
 
-		it("should addMissingDependencies for jQuery selectors", function(done) {
+		it("should addMissingDependencies for jQuery selectors", done => {
 			const expectedContent = fs.readFileSync(
 				rootDir + "selector.expected.js",
 				"utf8"
@@ -184,7 +184,7 @@ describe("addMissingDependencies", function() {
 			);
 		});
 
-		it("should addMissingDependencies for multiple with mixed addImport and addUnusedImport", function(done) {
+		it("should addMissingDependencies for multiple with mixed addImport and addUnusedImport", done => {
 			const expectedContent = fs.readFileSync(
 				rootDir + "multiple.expected.js",
 				"utf8"
@@ -203,7 +203,7 @@ describe("addMissingDependencies", function() {
 			);
 		});
 
-		it("add import with comment", function(done) {
+		it("add import with comment", done => {
 			const expectedContent = fs.readFileSync(
 				rootDir + "addCommentToImport.expected.js",
 				"utf8"
@@ -227,7 +227,7 @@ describe("addMissingDependencies", function() {
 			);
 		});
 
-		it("Renaming jQueryDOM", function(done) {
+		it("Renaming jQueryDOM", done => {
 			const expectedContent = fs.readFileSync(
 				rootDir + "renaming.expected.js",
 				"utf8"
@@ -246,7 +246,7 @@ describe("addMissingDependencies", function() {
 			);
 		});
 
-		it("Renaming jQueryDOM 2 variables", function(done) {
+		it("Renaming jQueryDOM 2 variables", done => {
 			const expectedContent = fs.readFileSync(
 				rootDir + "renamingVars.expected.js",
 				"utf8"
@@ -265,7 +265,7 @@ describe("addMissingDependencies", function() {
 			);
 		});
 
-		it("Find jQuery SAP calls", function(done) {
+		it("Find jQuery SAP calls", done => {
 			const expectedContent = fs.readFileSync(
 				rootDir + "findJQuerySapCalls.expected.js",
 				"utf8"
@@ -289,7 +289,7 @@ describe("addMissingDependencies", function() {
 			);
 		});
 
-		it("Identify zIndex calls", function(done) {
+		it("Identify zIndex calls", done => {
 			const expectedContent = fs.readFileSync(
 				rootDir + "zIndex.expected.js",
 				"utf8"
@@ -308,7 +308,7 @@ describe("addMissingDependencies", function() {
 			);
 		});
 
-		it("Non zIndex calls", function(done) {
+		it("Non zIndex calls", done => {
 			const expectedContent = fs.readFileSync(
 				rootDir + "zIndexNoReplacement.expected.js",
 				"utf8"
@@ -332,7 +332,7 @@ describe("addMissingDependencies", function() {
 			);
 		});
 
-		it("Invalid config, no finder found", function(done) {
+		it("Invalid config, no finder found", done => {
 			const expectedContent = fs.readFileSync(
 				rootDir + "findJQuerySapCalls.expected.js",
 				"utf8"
@@ -356,14 +356,14 @@ describe("addMissingDependencies", function() {
 				})
 				.catch(oErr => {
 					assert.equal(
-						`Failed to find Finder for "JQueryFunctionExtensionFinder"`,
+						'Failed to find Finder for "JQueryFunctionExtensionFinder"',
 						oErr.message
 					);
 					done();
 				});
 		});
 
-		it("find jQuery.sap.extend", function(done) {
+		it("find jQuery.sap.extend", done => {
 			const expectedContent = fs.readFileSync(
 				rootDir + "findJQuerySapExtendCalls.expected.js",
 				"utf8"
@@ -387,7 +387,7 @@ describe("addMissingDependencies", function() {
 			);
 		});
 
-		it("find jQuery.sap functions", function(done) {
+		it("find jQuery.sap functions", done => {
 			const expectedContent = fs.readFileSync(
 				rootDir + "findJQuerySapFunctionCalls.expected.js",
 				"utf8"
@@ -411,7 +411,7 @@ describe("addMissingDependencies", function() {
 			);
 		});
 
-		it("invalid define (should not get modified)", function(done) {
+		it("invalid define (should not get modified)", done => {
 			const expectedContent = fs.readFileSync(
 				rootDir + "invalidDefine.expected.js",
 				"utf8"
@@ -432,7 +432,7 @@ describe("addMissingDependencies", function() {
 			);
 		});
 
-		it("uriParamsInterim", function(done) {
+		it("uriParamsInterim", done => {
 			const expectedContent = fs.readFileSync(
 				rootDir + "uriParamsInterim.expected.js",
 				"utf8"
