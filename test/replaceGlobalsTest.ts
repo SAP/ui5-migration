@@ -617,7 +617,7 @@ describe("replaceGlobals", () => {
 			]);
 		});
 
-		it("should replaceGlobals removeUrlWhitelist", done => {
+		it("should replaceGlobals removeUrlW-list", done => {
 			const expectedContent = fs.readFileSync(
 				rootDir + "removeUrlWhitelist.expected.js",
 				"utf8"
@@ -701,7 +701,7 @@ describe("replaceGlobals", () => {
 			]);
 		});
 
-		it("should replaceGlobals inclusive version 1.58.0: jQuery.sap.*Whitelist -> URLWhitelist", done => {
+		it("should replaceGlobals inclusive version 1.58.0: jQuery.sap.*W-list -> URLW-list", done => {
 			const expectedContent = fs.readFileSync(
 				rootDir + "inclusive158.expected.js",
 				"utf8"
@@ -740,7 +740,7 @@ describe("replaceGlobals", () => {
 			);
 		});
 
-		it("should replaceGlobals inclusive version to 1.85.0: jQuery.sap.*Whitelist -> URLListValidator", done => {
+		it("should replaceGlobals inclusive version to 1.85.0: jQuery.sap.*W-list -> URLListValidator", done => {
 			const expectedContent = fs.readFileSync(
 				rootDir + "inclusive185.expected.js",
 				"utf8"
@@ -779,7 +779,7 @@ describe("replaceGlobals", () => {
 			);
 		});
 
-		it("should replaceGlobals inclusive version to 1.90.0: URLWhitelist -> URLListValidator", done => {
+		it("should replaceGlobals inclusive version to 1.90.0: URLW-list -> URLListValidator", done => {
 			const expectedContent = fs.readFileSync(
 				rootDir + "inclusive190.expected.js",
 				"utf8"
