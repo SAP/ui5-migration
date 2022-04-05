@@ -143,6 +143,22 @@ export class FileInfo implements Mod.FileInfo {
 		const prevSourceCode = this.sSourceCode;
 		this.sSourceCode = recast.print(this.oAST, oOutputFormat).code;
 
+		// restore last whitespace characters
+		if (/\s+$/.test(prevSourceCode)) {
+			const lastWhiteSpacesRegExp = /(\s*)$/;
+			const prevSpaces = lastWhiteSpacesRegExp.exec(prevSourceCode)[0];
+			const currentSpaces = lastWhiteSpacesRegExp.exec(
+				this.sSourceCode
+			)[0];
+
+			if (prevSpaces !== currentSpaces) {
+				this.sSourceCode = this.sSourceCode.replace(
+					lastWhiteSpacesRegExp,
+					prevSpaces
+				);
+			}
+		}
+
 		const sStrategy = oOutputFormat["auto.diffOptimization"];
 		if (sStrategy) {
 			if (oReporter) {
