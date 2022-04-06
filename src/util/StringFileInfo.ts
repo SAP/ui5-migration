@@ -126,7 +126,7 @@ export class StringFileInfo implements Mod.FileInfo {
 				const modulePath = path.join(
 					__dirname,
 					"whitespace",
-					sStrategy + ".js"
+					sStrategy
 				);
 				const oCachedStrategy = mStrategiesCache.get(modulePath);
 				const oStrategy = oCachedStrategy || require(modulePath);

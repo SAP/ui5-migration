@@ -2,7 +2,6 @@
 
 import * as Mod from "../Migration";
 import * as LoaderUtils from "../util/LoaderUtils";
-import * as fs from "graceful-fs";
 import * as path from "path";
 import {Reporter} from "../Migration";
 import {ReportLevel} from "../Migration";
@@ -144,15 +143,10 @@ const fixTypeDependency: Mod.Task = {
 	priority: 5,
 	defaultConfig() {
 		return Promise.resolve(
-			JSON.parse(
-				fs.readFileSync(
-					path.join(
-						__dirname,
-						"../../../defaultConfig/fixTypeDependency.config.json"
-					),
-					"utf8"
-				)
-			)
+			require(path.join(
+				__dirname,
+				"../../defaultConfig/fixTypeDependency.config.json"
+			))
 		);
 	},
 	analyse,

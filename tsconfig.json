@@ -5,7 +5,6 @@
     "allowUnreachableCode": false,
     "outDir": "js",
     "sourceMap": true,
-    "mapRoot": "js",
     "target": "es2017",
     "newLine": "lf",
     "strict": false,
@@ -16,7 +15,11 @@
       "node_modules/@types"
     ]
   },
+  "ts-node": {
+    "files": true
+  },
   "include": [
+    "defaultConfig/*.json",
     "typings/*.ts",
     "src/*.ts",
     "src/**/*.ts",

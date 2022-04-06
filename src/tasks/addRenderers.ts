@@ -10,7 +10,6 @@
 
 import {Syntax} from "esprima";
 import * as ESTree from "estree";
-import * as fs from "graceful-fs";
 import * as path from "path";
 import * as recast from "recast";
 import {FileInfo} from "ui5-migration";
@@ -289,15 +288,10 @@ const migration: Mod.Task = {
 	priority: 5,
 	defaultConfig() {
 		return Promise.resolve(
-			JSON.parse(
-				fs.readFileSync(
-					path.join(
-						__dirname,
-						"../../../defaultConfig/addRenderers.config.json"
-					),
-					"utf8"
-				)
-			)
+			require(path.join(
+				__dirname,
+				"../../defaultConfig/addRenderers.config.json"
+			))
 		);
 	},
 	analyse,

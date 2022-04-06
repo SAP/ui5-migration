@@ -3,7 +3,6 @@
 import * as Mod from "../Migration";
 import {Reporter, ReportLevel} from "../Migration";
 import * as LoaderUtils from "../util/LoaderUtils";
-import * as fs from "graceful-fs";
 import * as path from "path";
 
 const amdCleanerUtil = require("../util/AmdCleanerUtil");
@@ -179,15 +178,10 @@ const migration: Mod.Task = {
 		"Remove global module invocations and add required dependencies.",
 	defaultConfig() {
 		return Promise.resolve(
-			JSON.parse(
-				fs.readFileSync(
-					path.join(
-						__dirname,
-						"../../../defaultConfig/AmdCleaner.config.json"
-					),
-					"utf8"
-				)
-			)
+			require(path.join(
+				__dirname,
+				"../../defaultConfig/AmdCleaner.config.json"
+			))
 		);
 	},
 	keywords: ["all", "apply-amd-syntax"],
