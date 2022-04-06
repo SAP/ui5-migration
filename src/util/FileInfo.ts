@@ -15,7 +15,7 @@ const mStrategiesCache = new Map();
 
 /**
  * Represents a module for a file.
- * It doesn't load the contents without being asked to explicitly.
+ * It doesn't load the contents without being asked for explicitly.
  *
  * @class FileInfo
  * @implements {Mod.FileInfo}
@@ -142,6 +142,22 @@ export class FileInfo implements Mod.FileInfo {
 
 		const prevSourceCode = this.sSourceCode;
 		this.sSourceCode = recast.print(this.oAST, oOutputFormat).code;
+
+		// restore whitespace characters at the end of the file
+		if (/\s+$/.test(prevSourceCode)) {
+			const lastWhiteSpacesRegExp = /(\s*)$/;
+			const prevSpaces = lastWhiteSpacesRegExp.exec(prevSourceCode)[0];
+			const currentSpaces = lastWhiteSpacesRegExp.exec(
+				this.sSourceCode
+			)[0];
+
+			if (prevSpaces !== currentSpaces) {
+				this.sSourceCode = this.sSourceCode.replace(
+					lastWhiteSpacesRegExp,
+					prevSpaces
+				);
+			}
+		}
 
 		const sStrategy = oOutputFormat["auto.diffOptimization"];
 		if (sStrategy) {
