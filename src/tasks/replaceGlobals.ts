@@ -39,7 +39,6 @@
  */
 import {Syntax} from "esprima";
 import * as ESTree from "estree";
-import * as fs from "graceful-fs";
 import * as path from "path";
 import {ASTReplaceable} from "ui5-migration";
 
@@ -748,7 +747,10 @@ async function migrate(args: Mod.MigrateArguments): Promise<boolean> {
 				"..",
 				args.config.replacers[replacerName]
 			);
-			mReplacerFuncs[replacerName] = require(modulePath);
+			mReplacerFuncs[replacerName] = require(modulePath.replace(
+				/.js$/,
+				""
+			));
 		}
 	}
 
@@ -930,15 +932,10 @@ const replaceGlobals: Mod.Task = {
 	priority: 5,
 	defaultConfig() {
 		return Promise.resolve(
-			JSON.parse(
-				fs.readFileSync(
-					path.join(
-						__dirname,
-						"../../../defaultConfig/replaceGlobals.config.json"
-					),
-					"utf8"
-				)
-			)
+			require(path.join(
+				__dirname,
+				"../../defaultConfig/replaceGlobals.config.json"
+			))
 		);
 	},
 	postTasks: ["variable-name-prettifier"],

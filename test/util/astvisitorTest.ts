@@ -1,8 +1,8 @@
-import {ASTVisitor} from "../src/util/ASTVisitor";
+import {ASTVisitor} from "../../src/util/ASTVisitor";
 
 const assert = require("assert");
 const recast = require("recast");
-const genRandomJS = require("../../test/genRandomJS");
+import {genRandomJS} from "./ASTVisitor/genRandomJS";
 
 /**
  * Provides an ES6 Proxy handler object which counts every function call

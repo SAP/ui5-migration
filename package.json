@@ -23,7 +23,7 @@
     "test-azure": "npm run lint && npm run unit && npm run coverage-junit",
     "coverage": "nyc npm run unit",
     "coverage-junit": "nyc --reporter=text --reporter=text-summary --reporter=cobertura npm run unit-junit",
-    "unit": "mocha ./js/test/*Test.js ./js/test/**/*Test.js ./js/test/**/*/**Test.js --timeout 6000",
+    "unit": "mocha -r ts-node/register -r source-map-support/register ./test/**/*Test.ts ./test/**/*/**Test.ts ./test/*Test.ts",
     "unit-junit": "npm run unit -- --reporter mocha-junit-reporter",
     "unit-watch": "npm run unit -- -w",
     "clean": "gts clean",
@@ -53,6 +53,7 @@
     ],
     "exclude": [
       "js/**/*.d.ts",
+      "typings/*.d.ts",
       "docs/**",
       "jsdocs/**",
       "coverage/**",
@@ -62,7 +63,8 @@
       "util/**",
       "src/cli.ts",
       "index.js",
-      "js/src/cli.js"
+      "js/src/cli.js",
+      ".prettierrc.js"
     ],
     "check-coverage": true,
     "lines": 50,

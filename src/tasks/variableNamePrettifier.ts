@@ -1,7 +1,6 @@
 "use strict";
 
 import * as Mod from "../Migration";
-import * as fs from "graceful-fs";
 import * as path from "path";
 
 const addMissingDependencies = require("./addMissingDependencies");
@@ -16,15 +15,10 @@ const variableNamePrettifier: Mod.Task = {
 	priority: 2,
 	defaultConfig() {
 		return Promise.resolve(
-			JSON.parse(
-				fs.readFileSync(
-					path.join(
-						__dirname,
-						"../../../defaultConfig/variableNamePrettifier.config.json"
-					),
-					"utf8"
-				)
-			)
+			require(path.join(
+				__dirname,
+				"../../defaultConfig/variableNamePrettifier.config.json"
+			))
 		);
 	},
 	analyse: addMissingDependencies.analyse,

@@ -24,12 +24,11 @@ export async function getSupportedTasks(): Promise<MigrationTask[]> {
 	const aModules: MigrationTask[] = [];
 
 	for (const sFileName of aFileNames) {
-		if (sFileName.endsWith("js")) {
-			const module = require(path.join(
-				sTaskPath,
-				sFileName
-			)) as MigrationTask;
-			module.name = path.basename(sFileName, ".js");
+		if (sFileName.endsWith("js") || sFileName.endsWith("ts")) {
+			const module = require(path
+				.join(sTaskPath, sFileName)
+				.replace(/(.js|.ts)$/, "")) as MigrationTask;
+			module.name = path.basename(sFileName, path.extname(sFileName));
 			if (module.defaultConfig) {
 				module.config = await module.defaultConfig();
 			} else {

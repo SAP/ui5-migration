@@ -2,6 +2,7 @@ import * as taskRunner from "../src/taskRunner";
 import {MigrationTask} from "../src/taskRunner";
 import * as replaceGlobals from "../src/tasks/replaceGlobals";
 const fs = require("graceful-fs");
+const sinon = require("sinon");
 
 import {
 	CustomFileFinder,
@@ -9,6 +10,7 @@ import {
 	CustomMetaReporter,
 	CustomMigrationTask,
 } from "./util/testUtils";
+import {clearCache} from "../src/util/FlattenTaskArray";
 
 const rootDir = "./test/taskRunner/";
 
@@ -131,7 +133,11 @@ describe("taskRunner", () => {
 		const config = JSON.parse(
 			fs.readFileSync(rootDir + "jquery0.config.json", "utf8")
 		);
-		replaceGlobalsTask.config = config;
+
+		clearCache();
+		const oStub = sinon
+			.stub(replaceGlobalsTask, "defaultConfig")
+			.returns(Promise.resolve(config));
 
 		const aTasks: MigrationTask[] = [];
 		aTasks.push(replaceGlobalsTask);
@@ -161,6 +167,7 @@ describe("taskRunner", () => {
 			.then(aResult => {
 				assert.equal(aResult.length, 1, "The file is modified");
 				assert.equal(aResult[0].modifiedCode, expectedContent);
+				oStub.restore();
 			});
 	});
 });
