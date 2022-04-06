@@ -486,10 +486,13 @@
       }
     },
     "@istanbuljs/nyc-config-typescript": {
-      "version": "0.1.3",
-      "resolved": "https://registry.npmjs.org/@istanbuljs/nyc-config-typescript/-/nyc-config-typescript-0.1.3.tgz",
-      "integrity": "sha512-EzRFg92bRSD1W/zeuNkeGwph0nkWf+pP2l/lYW4/5hav7RjKKBN5kV1Ix7Tvi0CMu3pC4Wi/U7rNisiJMR3ORg==",
-      "dev": true
+      "version": "1.0.2",
+      "resolved": "https://registry.npmjs.org/@istanbuljs/nyc-config-typescript/-/nyc-config-typescript-1.0.2.tgz",
+      "integrity": "sha512-iKGIyMoyJuFnJRSVTZ78POIRvNnwZaWIf8vG4ZS3rQq58MMDrqEX2nnzx0R28V2X8JvmKYiqY9FP2hlJsm8A0w==",
+      "dev": true,
+      "requires": {
+        "@istanbuljs/schema": "^0.1.2"
+      }
     },
     "@istanbuljs/schema": {
       "version": "0.1.3",
