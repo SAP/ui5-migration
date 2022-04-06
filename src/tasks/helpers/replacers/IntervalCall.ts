@@ -1,5 +1,6 @@
 import {Syntax} from "esprima";
 import * as recast from "recast";
+import * as ESTree from "estree";
 import {ASTReplaceable, NodePath} from "ui5-migration";
 
 import {ASTVisitor} from "../../../util/ASTVisitor";
@@ -16,6 +17,15 @@ function containsThis(ast) {
 	});
 	return bContainsThis;
 }
+
+function getInnerExpression(program: ESTree.Program): ESTree.CallExpression {
+	const expr = program.body["0"] as ESTree.ExpressionStatement;
+	const funcExp = expr.expression as ESTree.FunctionExpression;
+	const body = funcExp.body as ESTree.BlockStatement;
+	const body0 = body.body["0"] as ESTree.ExpressionStatement;
+	return body0.expression as ESTree.CallExpression;
+}
+
 /**
  *
  *
@@ -76,9 +86,12 @@ const replaceable: ASTReplaceable = {
 					"})";
 				const oAst = recast.parse(sText);
 
-				const oNodeSetInterval =
-					oAst.program.body["0"].expression.body.body["0"].expression;
+				const oNodeSetInterval = getInnerExpression(oAst.program);
 				oNodeSetInterval.arguments[1] = aArgs[0]; // iInterval
+
+				let oNodeArguments = oNodeSetInterval.arguments[
+					"0"
+				] as ESTree.CallExpression;
 
 				if (
 					aArgs[1] &&
@@ -87,33 +100,29 @@ const replaceable: ASTReplaceable = {
 				) {
 					const bContainsThis = containsThis(aArgs[2]);
 					if (bContainsThis) {
-						oNodeSetInterval.arguments["0"].arguments = []; // oObject
-						oNodeSetInterval.arguments["0"].arguments = [].concat(
-							aArgs[1]
-						);
+						oNodeArguments.arguments = []; // oObject
+						oNodeArguments.arguments = [].concat(aArgs[1]);
 					} else {
-						oNodeSetInterval.arguments["0"].arguments = []; // leave empty as this is not contained
+						oNodeArguments.arguments = []; // leave empty as this is not contained
 					}
 				} else {
-					oNodeSetInterval.arguments["0"].arguments = []; // oObject
-					oNodeSetInterval.arguments["0"].arguments = [].concat(
-						aArgs[1]
-					);
+					oNodeArguments.arguments = []; // oObject
+					oNodeArguments.arguments = [].concat(aArgs[1]);
 				}
 
 				if (bHasParams) {
-					oNodeSetInterval.arguments["0"].arguments =
-						oNodeSetInterval.arguments["0"].arguments.concat(
-							aArrayToAdd
-						); // oObject
+					oNodeArguments.arguments =
+						oNodeArguments.arguments.concat(aArrayToAdd); // oObject
 				}
 
-				if (oNodeSetInterval.arguments["0"].arguments.length > 0) {
-					oNodeSetInterval.arguments["0"].callee.object = aArgs[2]; // fnMethod
+				if (oNodeArguments.arguments.length > 0) {
+					(oNodeArguments.callee as ESTree.MemberExpression).object =
+						aArgs[2]; // fnMethod
 				} else {
 					// if bind has no arguments, leave it out
-					oNodeSetInterval.arguments["0"] = aArgs[2]; // fnMethod
+					oNodeArguments = aArgs[2]; // fnMethod
 				}
+				oNodeSetInterval.arguments["0"] = oNodeArguments;
 				oInsertionPoint[node.parentPath.name] = oNodeSetInterval;
 			} else if (
 				!bUnknownCase &&
@@ -136,15 +145,19 @@ const replaceable: ASTReplaceable = {
 					"})";
 
 				const oAst = recast.parse(sText);
-				const oNodeSetInterval =
-					oAst.program.body["0"].expression.body.body["0"].expression;
+				const oNodeSetInterval = getInnerExpression(oAst.program);
+
+				const oNodeArguments = oNodeSetInterval.arguments[
+					"0"
+				] as ESTree.CallExpression;
 
 				// iInterval -> args 0
 
 				oNodeSetInterval.arguments["1"] = aArgs[0];
 
-				const oObjectCall =
-					oNodeSetInterval.arguments["0"].callee.object;
+				const oObjectCall = (
+					oNodeArguments.callee as ESTree.MemberExpression
+				).object as ESTree.MemberExpression;
 
 				// this -> args 1
 				oObjectCall.object = aArgs[1];
@@ -153,13 +166,11 @@ const replaceable: ASTReplaceable = {
 				oObjectCall.property = aArgs[2];
 
 				// this -> args 1
-				oNodeSetInterval.arguments["0"].arguments = []; // oObject
-				oNodeSetInterval.arguments["0"].arguments = [].concat(aArgs[1]); // oObject
+				oNodeArguments.arguments = []; // oObject
+				oNodeArguments.arguments = [].concat(aArgs[1]); // oObject
 				if (bHasParams) {
-					oNodeSetInterval.arguments["0"].arguments =
-						oNodeSetInterval.arguments["0"].arguments.concat(
-							aArrayToAdd
-						); // oObject
+					oNodeArguments.arguments =
+						oNodeArguments.arguments.concat(aArrayToAdd); // oObject
 				}
 				oInsertionPoint[node.parentPath.name] = oNodeSetInterval;
 			} else if (aArgs[2]) {
@@ -182,22 +193,51 @@ const replaceable: ASTReplaceable = {
 					"})";
 
 				const oAst = recast.parse(sText);
-				const oNodeSetInterval =
-					oAst.program.body["0"].expression.body.body["0"].expression;
-				const oNodeSetIntervalBody =
-					oNodeSetInterval.arguments["0"].callee.object.body.body;
+				const oNodeSetInterval = getInnerExpression(oAst.program);
+				const oNodeArguments = oNodeSetInterval.arguments[
+					"0"
+				] as ESTree.CallExpression;
+
+				const oNodeSetIntervalBody = (
+					(oNodeArguments.callee as ESTree.MemberExpression)
+						.object as ESTree.FunctionExpression
+				).body.body;
 
 				oNodeSetInterval.arguments[1] = aArgs[0]; // iInterval
 
 				// aArgs[1] // oObject
 				// aArgs[2] // fnMethod
-				oNodeSetIntervalBody["0"].declarations["0"].init = aArgs[2];
-				oNodeSetIntervalBody["1"].consequent.body[
-					"0"
-				].expression.right.object = aArgs[1];
-				const oNodeMethodCall = oNodeSetIntervalBody["2"];
-				oNodeMethodCall.expression.callee.object.property = aArgs[2];
-				oNodeMethodCall.expression.callee.object.object = aArgs[1];
+				(
+					oNodeSetIntervalBody["0"] as ESTree.VariableDeclaration
+				).declarations["0"].init = aArgs[2];
+				(
+					(
+						(
+							(
+								(
+									oNodeSetIntervalBody[
+										"1"
+									] as ESTree.IfStatement
+								).consequent as ESTree.BlockStatement
+							).body["0"] as ESTree.ExpressionStatement
+						).expression as ESTree.AssignmentExpression
+					).right as ESTree.MemberExpression
+				).object = aArgs[1];
+				const oNodeMethodCall = oNodeSetIntervalBody[
+					"2"
+				] as ESTree.ExpressionStatement;
+				const oNodeMethodCallExpression =
+					oNodeMethodCall.expression as ESTree.CallExpression;
+				(
+					(
+						oNodeMethodCallExpression.callee as ESTree.MemberExpression
+					).object as ESTree.MemberExpression
+				).property = aArgs[2];
+				(
+					(
+						oNodeMethodCallExpression.callee as ESTree.MemberExpression
+					).object as ESTree.MemberExpression
+				).object = aArgs[1];
 
 				// check that bind argument is used (e.g. this arg)
 				const bContainsThis =
@@ -206,14 +246,13 @@ const replaceable: ASTReplaceable = {
 					containsThis(aArgs[3]);
 
 				if (bContainsThis) {
-					oNodeSetInterval.arguments["0"].arguments["0"] =
-						builders.identifier("this");
+					oNodeArguments.arguments["0"] = builders.identifier("this");
 				} else {
-					oNodeSetInterval.arguments["0"].arguments["0"] = aArgs[1];
+					oNodeArguments.arguments["0"] = aArgs[1];
 				}
 
-				oNodeMethodCall.expression.arguments = [];
-				oNodeMethodCall.expression.arguments.push(aArgs[1]);
+				oNodeMethodCallExpression.arguments = [];
+				oNodeMethodCallExpression.arguments.push(aArgs[1]);
 				if (aArgs.length > 3) {
 					const argument = builders.logicalExpression(
 						"||",
@@ -221,9 +260,9 @@ const replaceable: ASTReplaceable = {
 						builders.arrayExpression([])
 					);
 
-					oNodeMethodCall.expression.arguments.push(argument);
+					oNodeMethodCallExpression.arguments.push(argument);
 				} else {
-					oNodeMethodCall.expression.arguments.push(
+					oNodeMethodCallExpression.arguments.push(
 						builders.arrayExpression([])
 					);
 				}

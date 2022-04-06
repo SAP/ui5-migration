@@ -72,9 +72,11 @@ const replaceable: ASTReplaceable = {
 			} else if (oldArgs.length === 1) {
 				oNodeModule = fromURL;
 				if (config.functionParameter) {
-					const args: ESTree.Expression = recast.parse(
-						config.functionParameter
-					).program.body["0"].expression;
+					const args: ESTree.Expression = (
+						recast.parse(config.functionParameter).program.body[
+							"0"
+						] as ESTree.ExpressionStatement
+					).expression;
 					const oFirstArg = oldArgs[0] as ESTree.Expression;
 					const oLogicalExpression = builders.logicalExpression(
 						"||",

@@ -3,6 +3,7 @@ import * as recast from "recast";
 import {ASTReplaceable, NodePath} from "ui5-migration";
 
 import * as CommentUtils from "../../../util/CommentUtils";
+import * as ESTree from "estree";
 
 /**
  * From:
@@ -37,10 +38,17 @@ const replaceable: ASTReplaceable = {
 					"	URLWhitelist.delete(URLWhitelist.entries()[iIndexToReplace]);\n" +
 					"})";
 				const oAst = recast.parse(sText);
-				const oNodeUrlWhitelistDelete =
-					oAst.program.body["0"].expression.body.body["0"].expression;
+				const oNodeUrlWhitelistDelete = (
+					(
+						(oAst.program.body["0"] as ESTree.ExpressionStatement)
+							.expression as ESTree.FunctionExpression
+					).body.body["0"] as ESTree.ExpressionStatement
+				).expression as ESTree.CallExpression;
 
-				oNodeUrlWhitelistDelete.arguments[0].property = aArgs[0]; // iIndexToReplace
+				(
+					oNodeUrlWhitelistDelete
+						.arguments[0] as ESTree.MemberExpression
+				).property = aArgs[0] as ESTree.Literal; // iIndexToReplace
 
 				oInsertionPoint[node.parentPath.name] = oNodeUrlWhitelistDelete;
 			} else {
