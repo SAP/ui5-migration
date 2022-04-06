@@ -38,7 +38,7 @@ const replaceable: ASTReplaceable = {
 					"	URLWhitelist.delete(URLWhitelist.entries()[iIndexToReplace]);\n" +
 					"})";
 				const oAst = recast.parse(sText);
-				const oNodeUrlWhitelistDelete = (
+				const oNodeUrlWlistDelete = (
 					(
 						(oAst.program.body["0"] as ESTree.ExpressionStatement)
 							.expression as ESTree.FunctionExpression
@@ -46,11 +46,10 @@ const replaceable: ASTReplaceable = {
 				).expression as ESTree.CallExpression;
 
 				(
-					oNodeUrlWhitelistDelete
-						.arguments[0] as ESTree.MemberExpression
+					oNodeUrlWlistDelete.arguments[0] as ESTree.MemberExpression
 				).property = aArgs[0] as ESTree.Literal; // iIndexToReplace
 
-				oInsertionPoint[node.parentPath.name] = oNodeUrlWhitelistDelete;
+				oInsertionPoint[node.parentPath.name] = oNodeUrlWlistDelete;
 			} else {
 				CommentUtils.addComment(
 					node,
