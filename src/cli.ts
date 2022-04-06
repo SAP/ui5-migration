@@ -1,4 +1,5 @@
 import * as yargs from "yargs";
+import {hideBin} from "yargs/helpers";
 
 import * as TaskRunner from "./index";
 import {ReportLevel} from "./reporter/Reporter";
@@ -8,7 +9,7 @@ const path = require("path");
 
 export async function start(): Promise<void> {
 	// Basic options
-	const argsBuilder = yargs
+	const argv = await yargs
 		.group(["help"], "Basics:")
 		.usage("Usage: $0 <command> [options]")
 		.command("migrate", "Migrates all js files in the current folder")
@@ -108,9 +109,8 @@ export async function start(): Promise<void> {
 				);
 			}
 			return true;
-		}, true);
-
-	const argv = argsBuilder.argv;
+		}, true)
+		.parse(hideBin(process.argv));
 
 	// const bMigrate = argv._[0] === "migrate";
 	const bAnalyze = argv._[0] === "analyze";
