@@ -3,7 +3,7 @@
  */
 
 // A module
-sap.ui.define(["sap/ui/thirdparty/jquery", // jQuery Plugin "zIndex"
+sap.ui.define(["sap/ui/thirdparty/jquery", /* jQuery Plugin "zIndex"*/
 "sap/ui/dom/jquery/zIndex"],
 	function(jQuery) {
 		"use strict";
