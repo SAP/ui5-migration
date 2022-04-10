@@ -101,14 +101,14 @@
     "diff": "^5.0.0",
     "esprima": "^4.0.1",
     "globals": "^13.13.0",
-    "graceful-fs": "^4.2.9",
+    "graceful-fs": "^4.2.10",
     "ignore": "^5.2.0",
     "json5": "^2.2.1",
     "minimatch": "^5.0.1",
     "recast": "^0.20.5",
     "request": "^2.88.2",
-    "semver": "^7.3.5",
-    "yargs": "^17.4.0"
+    "semver": "^7.3.6",
+    "yargs": "^17.4.1"
   },
   "bin": {
     "ui5-migration": "./bin/cli.js"
