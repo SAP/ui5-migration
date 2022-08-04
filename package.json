@@ -105,7 +105,7 @@
     "ignore": "^5.2.0",
     "json5": "^2.2.1",
     "minimatch": "^5.1.0",
-    "recast": "^0.20.5",
+    "recast": "^0.21.1",
     "request": "^2.88.2",
     "semver": "^7.3.7",
     "yargs": "^17.5.1"
@@ -116,7 +116,7 @@
   "devDependencies": {
     "@istanbuljs/nyc-config-typescript": "^1.0.2",
     "@types/esprima": "^4.0.3",
-    "@types/estree": "0.0.51",
+    "@types/estree": "1.0.0",
     "@types/graceful-fs": "^4.1.5",
     "@types/json5": "^2.2.0",
     "@types/minimatch": "^3.0.5",
@@ -128,7 +128,7 @@
     "mocha-junit-reporter": "^2.0.2",
     "nyc": "^15.1.0",
     "rimraf": "^3.0.2",
-    "sinon": "^13.0.2",
+    "sinon": "^14.0.0",
     "source-map-support": "^0.5.21",
     "ts-node": "^10.9.1",
     "typescript": "^3.9.10"
