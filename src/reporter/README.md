@@ -3,7 +3,7 @@
 This package contains the reporting mechanism.
 The reporting mechanism is used to:
 * collect Information about migration entries (findings)
-* create a report at the end of a migration/analysis, e.g. to dump it to the console
+* create a report at the end of a migration (analysis), e.g. as console dump
 
 # Contents
 

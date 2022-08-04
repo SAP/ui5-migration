@@ -9,6 +9,6 @@ It aims to abstract and simplify file handling.
 
 ## Naming convention
 
+Filter - are used to reduce the elements in a given array. In this package the filters are used to
+reduce a set of filesystem files.
 
-
-## SubFolders
