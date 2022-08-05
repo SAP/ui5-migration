@@ -1,5 +1,6 @@
 import * as recast from "recast";
 import {ASTReplaceable, NodePath} from "ui5-migration";
+import * as ESTree from "estree";
 
 /**
  * Generates a noop function
@@ -18,8 +19,11 @@ const replaceable: ASTReplaceable = {
 		oldModuleCall: string
 	): void {
 		const sText = "(function() {})";
-		node.parentPath.value[node.name] =
-			recast.parse(sText).program.body["0"].expression;
+		const expressionStatement = recast.parse(sText).program.body[
+			"0"
+		] as ESTree.ExpressionStatement;
+
+		node.parentPath.value[node.name] = expressionStatement.expression;
 	},
 };
 

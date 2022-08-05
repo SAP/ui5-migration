@@ -1,6 +1,7 @@
 import {Syntax} from "esprima";
 import * as recast from "recast";
 import {ASTReplaceable, NodePath} from "ui5-migration";
+import * as ESTree from "estree";
 
 import {ASTVisitor} from "../../../util/ASTVisitor";
 
@@ -76,9 +77,19 @@ const replaceable: ASTReplaceable = {
 					"})";
 				const oAst = recast.parse(sText);
 
-				const oNodeSetInterval =
-					oAst.program.body["0"].expression.body.body["0"].expression;
+				const oFunctionExpression = (
+					oAst.program.body["0"] as ESTree.ExpressionStatement
+				).expression as ESTree.FunctionExpression;
+				const oNodeSetInterval = (
+					oFunctionExpression.body.body[
+						"0"
+					] as ESTree.ExpressionStatement
+				).expression as ESTree.CallExpression;
 				oNodeSetInterval.arguments[1] = aArgs[0]; // iInterval
+
+				const oInnerCallExpression = oNodeSetInterval.arguments[
+					"0"
+				] as ESTree.CallExpression;
 
 				if (
 					aArgs[1] &&
@@ -87,29 +98,25 @@ const replaceable: ASTReplaceable = {
 				) {
 					const bContainsThis = containsThis(aArgs[2]);
 					if (bContainsThis) {
-						oNodeSetInterval.arguments["0"].arguments = []; // oObject
-						oNodeSetInterval.arguments["0"].arguments = [].concat(
-							aArgs[1]
-						);
+						oInnerCallExpression.arguments = []; // oObject
+						oInnerCallExpression.arguments = [].concat(aArgs[1]);
 					} else {
-						oNodeSetInterval.arguments["0"].arguments = []; // leave empty as this is not contained
+						oInnerCallExpression.arguments = []; // leave empty as this is not contained
 					}
 				} else {
-					oNodeSetInterval.arguments["0"].arguments = []; // oObject
-					oNodeSetInterval.arguments["0"].arguments = [].concat(
-						aArgs[1]
-					);
+					oInnerCallExpression.arguments = []; // oObject
+					oInnerCallExpression.arguments = [].concat(aArgs[1]);
 				}
 
 				if (bHasParams) {
-					oNodeSetInterval.arguments["0"].arguments =
-						oNodeSetInterval.arguments["0"].arguments.concat(
-							aArrayToAdd
-						); // oObject
+					oInnerCallExpression.arguments =
+						oInnerCallExpression.arguments.concat(aArrayToAdd); // oObject
 				}
 
-				if (oNodeSetInterval.arguments["0"].arguments.length > 0) {
-					oNodeSetInterval.arguments["0"].callee.object = aArgs[2]; // fnMethod
+				if (oInnerCallExpression.arguments.length > 0) {
+					(
+						oInnerCallExpression.callee as ESTree.MemberExpression
+					).object = aArgs[2]; // fnMethod
 				} else {
 					// if bind has no arguments, leave it out
 					oNodeSetInterval.arguments["0"] = aArgs[2]; // fnMethod
@@ -136,15 +143,25 @@ const replaceable: ASTReplaceable = {
 					"})";
 
 				const oAst = recast.parse(sText);
-				const oNodeSetInterval =
-					oAst.program.body["0"].expression.body.body["0"].expression;
+				const oFunctionExpression = (
+					oAst.program.body["0"] as ESTree.ExpressionStatement
+				).expression as ESTree.FunctionExpression;
+				const oNodeSetInterval = (
+					oFunctionExpression.body.body[
+						"0"
+					] as ESTree.ExpressionStatement
+				).expression as ESTree.CallExpression;
 
 				// iInterval -> args 0
 
 				oNodeSetInterval.arguments["1"] = aArgs[0];
 
-				const oObjectCall =
-					oNodeSetInterval.arguments["0"].callee.object;
+				const oCallExpression = oNodeSetInterval.arguments[
+					"0"
+				] as ESTree.CallExpression;
+				const oObjectCall = (
+					oCallExpression.callee as ESTree.MemberExpression
+				).object as ESTree.MemberExpression;
 
 				// this -> args 1
 				oObjectCall.object = aArgs[1];
@@ -153,13 +170,11 @@ const replaceable: ASTReplaceable = {
 				oObjectCall.property = aArgs[2];
 
 				// this -> args 1
-				oNodeSetInterval.arguments["0"].arguments = []; // oObject
-				oNodeSetInterval.arguments["0"].arguments = [].concat(aArgs[1]); // oObject
+				oCallExpression.arguments = []; // oObject
+				oCallExpression.arguments = [].concat(aArgs[1]); // oObject
 				if (bHasParams) {
-					oNodeSetInterval.arguments["0"].arguments =
-						oNodeSetInterval.arguments["0"].arguments.concat(
-							aArrayToAdd
-						); // oObject
+					oCallExpression.arguments =
+						oCallExpression.arguments.concat(aArrayToAdd); // oObject
 				}
 				oInsertionPoint[node.parentPath.name] = oNodeSetInterval;
 			} else if (aArgs[2]) {
@@ -182,22 +197,53 @@ const replaceable: ASTReplaceable = {
 					"})";
 
 				const oAst = recast.parse(sText);
+				const oIntervalExpressionStatement = oAst.program.body[
+					"0"
+				] as ESTree.ExpressionStatement;
+				const oFnExpression =
+					oIntervalExpressionStatement.expression as ESTree.FunctionExpression;
+				const oInnerExpressionStatement = oFnExpression.body.body[
+					"0"
+				] as ESTree.ExpressionStatement;
 				const oNodeSetInterval =
-					oAst.program.body["0"].expression.body.body["0"].expression;
+					oInnerExpressionStatement.expression as ESTree.CallExpression;
+				const oFirstArgument = oNodeSetInterval.arguments[
+					"0"
+				] as ESTree.CallExpression;
+				const oFirstArgumentCallee =
+					oFirstArgument.callee as ESTree.MemberExpression;
+				const oFirstArgumentCalleeFunctionExpression =
+					oFirstArgumentCallee.object as ESTree.FunctionExpression;
 				const oNodeSetIntervalBody =
-					oNodeSetInterval.arguments["0"].callee.object.body.body;
+					oFirstArgumentCalleeFunctionExpression.body.body;
 
 				oNodeSetInterval.arguments[1] = aArgs[0]; // iInterval
 
 				// aArgs[1] // oObject
 				// aArgs[2] // fnMethod
-				oNodeSetIntervalBody["0"].declarations["0"].init = aArgs[2];
-				oNodeSetIntervalBody["1"].consequent.body[
-					"0"
-				].expression.right.object = aArgs[1];
-				const oNodeMethodCall = oNodeSetIntervalBody["2"];
-				oNodeMethodCall.expression.callee.object.property = aArgs[2];
-				oNodeMethodCall.expression.callee.object.object = aArgs[1];
+				(
+					oNodeSetIntervalBody["0"] as ESTree.VariableDeclaration
+				).declarations["0"].init = aArgs[2];
+				const blockStatement = (
+					oNodeSetIntervalBody["1"] as ESTree.IfStatement
+				).consequent as ESTree.BlockStatement;
+				const assignment = (
+					(blockStatement.body["0"] as ESTree.ExpressionStatement)
+						.expression as ESTree.AssignmentExpression
+				).right as ESTree.MemberExpression;
+				assignment.object = aArgs[1];
+				const oNodeMethodCall = oNodeSetIntervalBody[
+					"2"
+				] as ESTree.ExpressionStatement;
+				const oCallExpression =
+					oNodeMethodCall.expression as ESTree.CallExpression;
+				const oMemberExpression =
+					oCallExpression.callee as ESTree.MemberExpression;
+
+				(oMemberExpression.object as ESTree.MemberExpression).property =
+					aArgs[2];
+				(oMemberExpression.object as ESTree.MemberExpression).object =
+					aArgs[1];
 
 				// check that bind argument is used (e.g. this arg)
 				const bContainsThis =
@@ -206,14 +252,13 @@ const replaceable: ASTReplaceable = {
 					containsThis(aArgs[3]);
 
 				if (bContainsThis) {
-					oNodeSetInterval.arguments["0"].arguments["0"] =
-						builders.identifier("this");
+					oFirstArgument.arguments["0"] = builders.identifier("this");
 				} else {
-					oNodeSetInterval.arguments["0"].arguments["0"] = aArgs[1];
+					oFirstArgument.arguments["0"] = aArgs[1];
 				}
 
-				oNodeMethodCall.expression.arguments = [];
-				oNodeMethodCall.expression.arguments.push(aArgs[1]);
+				oCallExpression.arguments = [];
+				oCallExpression.arguments.push(aArgs[1]);
 				if (aArgs.length > 3) {
 					const argument = builders.logicalExpression(
 						"||",
@@ -221,16 +266,16 @@ const replaceable: ASTReplaceable = {
 						builders.arrayExpression([])
 					);
 
-					oNodeMethodCall.expression.arguments.push(argument);
+					oCallExpression.arguments.push(argument);
 				} else {
-					oNodeMethodCall.expression.arguments.push(
+					oCallExpression.arguments.push(
 						builders.arrayExpression([])
 					);
 				}
 				oInsertionPoint[node.parentPath.name] = oNodeSetInterval;
 			} else {
 				throw new Error(
-					"Failed to replace unknown IntervaledCall. Cannot determine 3rd argument (neither string nor function)"
+					"Failed to replace unknown IntervalCall. Cannot determine 3rd argument (neither string nor function)"
 				);
 			}
 		} else {

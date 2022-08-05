@@ -1,6 +1,7 @@
 import {Syntax} from "esprima";
 import * as recast from "recast";
 import {ASTReplaceable, NodePath} from "ui5-migration";
+import * as ESTree from "estree";
 
 import * as CommentUtils from "../../../util/CommentUtils";
 
@@ -37,10 +38,20 @@ const replaceable: ASTReplaceable = {
 					"	URLWhitelist.delete(URLWhitelist.entries()[iIndexToReplace]);\n" +
 					"})";
 				const oAst = recast.parse(sText);
+				const oBody = oAst.program.body[
+					"0"
+				] as ESTree.ExpressionStatement;
+				const oFnExpression =
+					oBody.expression as ESTree.FunctionExpression;
+				const oInnerExpressionStatement = oFnExpression.body.body[
+					"0"
+				] as ESTree.ExpressionStatement;
 				const oNodeUrlWhitelistDelete =
-					oAst.program.body["0"].expression.body.body["0"].expression;
+					oInnerExpressionStatement.expression as ESTree.CallExpression;
 
-				oNodeUrlWhitelistDelete.arguments[0].property = aArgs[0]; // iIndexToReplace
+				const firstArg = oNodeUrlWhitelistDelete
+					.arguments[0] as ESTree.MemberExpression;
+				firstArg.property = aArgs[0] as ESTree.Literal; // iIndexToReplace
 
 				oInsertionPoint[node.parentPath.name] = oNodeUrlWhitelistDelete;
 			} else {
