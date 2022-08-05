@@ -84,7 +84,10 @@ class NewExpressionFinder implements Finder {
 }
 
 function evaluateExpressions(parameter) {
-	return recast.parse(parameter).program.body["0"].expression;
+	const expressionStatement = recast.parse(parameter).program.body[
+		"0"
+	] as ESTree.ExpressionStatement;
+	return expressionStatement.expression;
 }
 
 function compareAsts(ast1, ast2) {

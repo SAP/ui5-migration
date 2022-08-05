@@ -79,6 +79,10 @@ const replaceable: ASTReplaceable = {
 				const oNodeSetTimeout = getInnerExpression(oAst.program);
 				oNodeSetTimeout.arguments[1] = aArgs[0]; // iDelay
 
+				const oInnerCallExpression = oNodeSetTimeout.arguments[
+					"0"
+				] as ESTree.CallExpression;
+
 				if (
 					aArgs[1] &&
 					aArgs[1].type === Syntax.ThisExpression &&
@@ -86,29 +90,25 @@ const replaceable: ASTReplaceable = {
 				) {
 					const bContainsThis = containsThis(aArgs[2]);
 					if (bContainsThis) {
-						oNodeSetTimeout.arguments["0"].arguments = []; // oObject
-						oNodeSetTimeout.arguments["0"].arguments = [].concat(
-							aArgs[1]
-						);
+						oInnerCallExpression.arguments = []; // oObject
+						oInnerCallExpression.arguments = [].concat(aArgs[1]);
 					} else {
-						oNodeSetTimeout.arguments["0"].arguments = []; // leave empty as this is not contained
+						oInnerCallExpression.arguments = []; // leave empty as this is not contained
 					}
 				} else {
-					oNodeSetTimeout.arguments["0"].arguments = []; // oObject
-					oNodeSetTimeout.arguments["0"].arguments = [].concat(
-						aArgs[1]
-					);
+					oInnerCallExpression.arguments = []; // oObject
+					oInnerCallExpression.arguments = [].concat(aArgs[1]);
 				}
 
 				if (bHasParams) {
-					oNodeSetTimeout.arguments["0"].arguments =
-						oNodeSetTimeout.arguments["0"].arguments.concat(
-							aArrayToAdd
-						); // oObject
+					oInnerCallExpression.arguments =
+						oInnerCallExpression.arguments.concat(aArrayToAdd); // oObject
 				}
 
-				if (oNodeSetTimeout.arguments["0"].arguments.length > 0) {
-					oNodeSetTimeout.arguments["0"].callee.object = aArgs[2]; // fnMethod
+				if (oInnerCallExpression.arguments.length > 0) {
+					(
+						oInnerCallExpression.callee as ESTree.MemberExpression
+					).object = aArgs[2]; // fnMethod
 				} else {
 					// if bind has no arguments, leave it out
 					oNodeSetTimeout.arguments["0"] = aArgs[2]; // fnMethod
@@ -141,9 +141,11 @@ const replaceable: ASTReplaceable = {
 
 				oNodeSetTimeout.arguments["1"] = aArgs[0];
 
+				const oInnerCallExpression = oNodeSetTimeout.arguments[
+					"0"
+				] as ESTree.CallExpression;
 				const oObjectCall = (
-					(oNodeSetTimeout.arguments["0"] as ESTree.CallExpression)
-						.callee as ESTree.MemberExpression
+					oInnerCallExpression.callee as ESTree.MemberExpression
 				).object as ESTree.MemberExpression;
 
 				// this -> args 1
@@ -153,13 +155,11 @@ const replaceable: ASTReplaceable = {
 				oObjectCall.property = aArgs[2];
 
 				// this -> args 1
-				oNodeSetTimeout.arguments["0"].arguments = []; // oObject
-				oNodeSetTimeout.arguments["0"].arguments = [].concat(aArgs[1]); // oObject
+				oInnerCallExpression.arguments = []; // oObject
+				oInnerCallExpression.arguments = [].concat(aArgs[1]); // oObject
 				if (bHasParams) {
-					oNodeSetTimeout.arguments["0"].arguments =
-						oNodeSetTimeout.arguments["0"].arguments.concat(
-							aArrayToAdd
-						); // oObject
+					oInnerCallExpression.arguments =
+						oInnerCallExpression.arguments.concat(aArrayToAdd); // oObject
 				}
 				oInsertionPoint[node.parentPath.name] = oNodeSetTimeout;
 			} else if (aArgs[2]) {
@@ -183,20 +183,46 @@ const replaceable: ASTReplaceable = {
 
 				const oAst = recast.parse(sText);
 				const oNodeSetTimeout = getInnerExpression(oAst.program);
-				const oNodeSetTimeoutBody =
-					oNodeSetTimeout.arguments["0"].callee.object.body.body;
+				const oInnerCallExpression = oNodeSetTimeout.arguments[
+					"0"
+				] as ESTree.CallExpression;
+				const oObjectCall = (
+					oInnerCallExpression.callee as ESTree.MemberExpression
+				).object as ESTree.FunctionExpression;
+				const oNodeSetTimeoutBody = oObjectCall.body.body;
 
 				oNodeSetTimeout.arguments[1] = aArgs[0]; // iDelay
 
 				// aArgs[1] // oObject
 				// aArgs[2] // fnMethod
-				oNodeSetTimeoutBody["0"].declarations["0"].init = aArgs[2];
-				oNodeSetTimeoutBody["1"].consequent.body[
+				const oVariableDeclarations = oNodeSetTimeoutBody[
 					"0"
-				].expression.right.object = aArgs[1];
-				const oNodeMethodCall = oNodeSetTimeoutBody["2"];
-				oNodeMethodCall.expression.callee.object.property = aArgs[2];
-				oNodeMethodCall.expression.callee.object.object = aArgs[1];
+				] as ESTree.VariableDeclaration;
+				oVariableDeclarations.declarations["0"].init = aArgs[2];
+				const oIfStatement = oNodeSetTimeoutBody[
+					"1"
+				] as ESTree.IfStatement;
+				const oIfExpressionStatement = (
+					(oIfStatement.consequent as ESTree.BlockStatement).body[
+						"0"
+					] as ESTree.ExpressionStatement
+				).expression as ESTree.AssignmentExpression;
+				(
+					oIfExpressionStatement.right as ESTree.MemberExpression
+				).object = aArgs[1];
+				const oNodeMethodCall = oNodeSetTimeoutBody[
+					"2"
+				] as ESTree.ExpressionStatement;
+				const oNodeMethodCallExpression =
+					oNodeMethodCall.expression as ESTree.CallExpression;
+				const oNodeMethodCallExpressionInner =
+					oNodeMethodCallExpression.callee as ESTree.MemberExpression;
+				(
+					oNodeMethodCallExpressionInner.object as ESTree.MemberExpression
+				).property = aArgs[2];
+				(
+					oNodeMethodCallExpressionInner.object as ESTree.MemberExpression
+				).object = aArgs[1];
 
 				// check that bind argument is used (e.g. this arg)
 				const bContainsThis =
@@ -205,14 +231,14 @@ const replaceable: ASTReplaceable = {
 					containsThis(aArgs[3]);
 
 				if (bContainsThis) {
-					oNodeSetTimeout.arguments["0"].arguments["0"] =
+					oInnerCallExpression.arguments["0"] =
 						builders.identifier("this");
 				} else {
-					oNodeSetTimeout.arguments["0"].arguments["0"] = aArgs[1];
+					oInnerCallExpression.arguments["0"] = aArgs[1];
 				}
 
-				oNodeMethodCall.expression.arguments = [];
-				oNodeMethodCall.expression.arguments.push(aArgs[1]);
+				oNodeMethodCallExpression.arguments = [];
+				oNodeMethodCallExpression.arguments.push(aArgs[1]);
 				if (aArgs.length > 3) {
 					const argument = builders.logicalExpression(
 						"||",
@@ -220,9 +246,9 @@ const replaceable: ASTReplaceable = {
 						builders.arrayExpression([])
 					);
 
-					oNodeMethodCall.expression.arguments.push(argument);
+					oNodeMethodCallExpression.arguments.push(argument);
 				} else {
-					oNodeMethodCall.expression.arguments.push(
+					oNodeMethodCallExpression.arguments.push(
 						builders.arrayExpression([])
 					);
 				}

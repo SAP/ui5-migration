@@ -195,7 +195,7 @@ export class CustomLocalFileInfo extends FileInfo {
 				reject("Unloaded before save was called!");
 				return;
 			}
-			resolve();
+			resolve(null);
 		});
 		// save operation should be async
 		await new Promise((resolve, reject) => {
@@ -206,7 +206,7 @@ export class CustomLocalFileInfo extends FileInfo {
 			this.aFnSave.forEach(fnSave => {
 				fnSave(this.bWasModified, this.sSourceCode);
 			});
-			resolve();
+			resolve(null);
 		});
 		return this.sSourceCode;
 	}
