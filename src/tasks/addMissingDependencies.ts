@@ -418,9 +418,17 @@ async function migrate(args: Mod.MigrateArguments): Promise<boolean> {
 
 		// Try to replace the call
 		try {
+			// retrieve variable name from existing import and use it as name argument of replace call
+			let variableNameToUse = oReplace.config.newVariableName;
+			if (oReplace.config.newModulePath) {
+				variableNameToUse =
+					analyseResult.defineCall.getParamNameByImport(
+						oReplace.config.newModulePath
+					) || variableNameToUse;
+			}
 			mReplacerFuncs[oReplace.importObj.replacerName].replace(
 				oNodePath,
-				oReplace.config.newVariableName,
+				variableNameToUse,
 				oReplace.config.functionName,
 				oReplace.module,
 				oReplace.config

@@ -453,5 +453,24 @@ describe("addMissingDependencies", () => {
 				[]
 			);
 		});
+
+		it("variableReuse", done => {
+			const expectedContent = fs.readFileSync(
+				rootDir + "variableReuse.expected.js",
+				"utf8"
+			);
+			const config = JSON.parse(
+				fs.readFileSync(rootDir + "variableReuse.config.json", "utf8")
+			);
+			const module = new CustomFileInfo(rootDir + "variableReuse.js");
+			analyseMigrateAndTest(
+				module,
+				true,
+				expectedContent,
+				config,
+				done,
+				[]
+			);
+		});
 	});
 });
