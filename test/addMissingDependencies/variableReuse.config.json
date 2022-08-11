@@ -1,0 +1,28 @@
+{
+	"modules": {
+		"test findings": {
+			"test": {
+				"newModulePath": "x/y/z",
+				"newVariableName": "mymod",
+				"replacer": "ModuleFunction",
+				"finder": "CallWithArgumentFinder",
+				"finderIncludesName": "superparam",
+				"extender": "AddImport",
+				"version": "^1.58.0"
+			}
+		}
+	},
+	"finders": {
+		"CallWithArgumentFinder": "tasks/helpers/finders/CallWithArgumentFinder.js"
+	},
+	"extenders": {
+		"AddImport": "tasks/helpers/extenders/AddImport.js"
+	},
+	"replacers": {
+		"ModuleFunction": "tasks/helpers/replacers/ModuleFunction.js"
+	},
+	"comments": {
+		"unhandledReplacementComment": "TODO unhandled replacement"
+	},
+	"excludes": []
+}

@@ -404,7 +404,13 @@ export class SapUiDefineCall {
 						"Dependency is not a literal in " + this.name
 					);
 				}
-				return oElement.value === sModule;
+				return (
+					oElement.value === sModule ||
+					SapUiDefineCall._resolveRelativeImports(
+						oElement.value,
+						this.name
+					) === sModule
+				);
 			}
 		);
 		if (aAlreadyMatchingElements.length === 0) {
