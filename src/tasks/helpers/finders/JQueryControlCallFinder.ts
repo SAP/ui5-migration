@@ -10,12 +10,11 @@ const includesJQuery = (node: ESTree.Identifier) => {
 	);
 };
 const isControlCall = (node: ESTree.Node) => {
-	const sFunctionName = "control";
 	return (
 		node.type === Syntax.CallExpression &&
 		node.callee.type === Syntax.MemberExpression &&
 		node.callee.property.type === Syntax.Identifier &&
-		node.callee.property.name === sFunctionName
+		node.callee.property.name === "control"
 	);
 };
 
@@ -46,17 +45,29 @@ const hasVarArgWithJQuery = (node: ESTree.Node) => {
 };
 
 class FunctionExtensionFinder implements Finder {
+	/**
+	 * Finds expression that matches one of the following conditions
+	 * <ul>
+	 * <li>EXPRESSION.control(INT, ...)</li>
+	 * <li>EXPRESSION.control()[INT]</li>
+	 * <li>jQuery(...).control(VAR)</li>
+	 * <li>VAR(...).control(VAR1) where VAR contains "$"</li>
+	 * </ul>
+	 */
 	find(
 		node: ESTree.Node,
 		config: {},
 		sConfigName: string,
 		defineCall: SapUiDefineCall
 	): FinderResult {
+		// checks
+		// EXPRESSION.control(INT, ...)
+		// jQuery(...).control(VAR) and VAR(...).control(VAR1) where VAR contains "$"
 		const bControlCallWithIntegerParam =
 			isControlCall(node) &&
 			(hasIntArg(node) || hasVarArgWithJQuery(node));
 
-		// checks jQuery(oDOM).control()[0]
+		// checks EXPRESSION.control()[INT]
 		const bMemberWithIndexContainsControlCall =
 			node.type === Syntax.MemberExpression &&
 			isControlCall(node.object) &&
@@ -78,13 +89,4 @@ class FunctionExtensionFinder implements Finder {
 	}
 }
 
-/**
- *
- *
- * @param {recast.NodePath} node The top node of the module reference
- * @param {string} name The name of the new module
- * @param {string} fnName The name of the function inside the new module
- * @param {string} oldModuleCall The old import name
- * @returns {void}
- */
 module.exports = new FunctionExtensionFinder();

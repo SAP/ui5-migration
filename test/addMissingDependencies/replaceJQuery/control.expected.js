@@ -3,8 +3,8 @@
  */
 
 // A module
-sap.ui.define([],
-	function() {
+sap.ui.define(["sap/ui/core/Element"],
+	function(UI5Element) {
 		"use strict";
 
 		/**
@@ -20,16 +20,17 @@ sap.ui.define([],
 		 */
 		A.x = function (oParam, iIndex) {
 
-			if (oParam.control(0)) {
+			if (UI5Element.closestTo(oParam[0])) {
 				var sKey = "Test." + iconName + oParam.control;
 				if (iconInfo.resourceBundle.hasText(sKey)) {
-					$(sKey).control()[0];
+					UI5Element.closestTo(sKey);
 				}
 				var x$ = sKey();
-				var oTestControl = x$.find(".abc").children().eq(0).control(2, true);
+				var oTestControl = UI5Element.closestTo(x$.find(".abc").children().eq(0)[2], true);
 				A.controls = x$.control();
-				A.controlAtPlace = x$.control(iIndex);
-				A.defaultControl = x$.find(".abc").children().eq(0).control()[0];
+				A.control = UI5Element.closestTo(oTestControl.$()[0]);
+				A.controlAtPlace = UI5Element.closestTo(x$[iIndex]);
+				A.defaultControl = UI5Element.closestTo(x$.find(".abc").children().eq(0)[0]);
 
 				var oActionControl = oParam.getAction().control(this.oView);
 				oActionControl.pause();

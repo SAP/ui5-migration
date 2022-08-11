@@ -19,7 +19,7 @@
 			},
 			"*.control@1.106.0": {
 				"newModulePath": "sap/ui/core/Element",
-				"newVariableName": "UI5Element2",
+				"newVariableName": "UI5Element",
 				"replacer": "UI5ElementClosestTo",
 				"finder": "JQueryControlCallFinder",
 				"extender": "AddImport",
