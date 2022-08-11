@@ -9,13 +9,21 @@
 				"extender": "AddUnusedImportWithComment",
 				"version": "^1.58.0"
 			},
-			"*.control": {
+			"*.control@1.58.0": {
 				"newModulePath": "sap/ui/dom/jquery/control",
 				"replacer": "AddComment",
 				"commentText": " jQuery Plugin \"control\"",
 				"finder": "JQueryFunctionExtensionFinderWithDependencyCheck",
 				"extender": "AddUnusedImportWithComment",
 				"version": "^1.58.0"
+			},
+			"*.control@1.106.0": {
+				"newModulePath": "sap/ui/core/Element",
+				"newVariableName": "UI5Element",
+				"replacer": "UI5ElementClosestTo",
+				"finder": "JQueryControlCallFinder",
+				"extender": "AddImport",
+				"version": "^1.106.0"
 			},
 			"*.firstFocusableDomRef": {
 				"newModulePath": "sap/ui/dom/jquery/Focusable",
@@ -238,6 +246,7 @@
 	"finders": {
 		"FunctionExtensionFinder": "tasks/helpers/finders/FunctionExtensionFinder.js",
 		"FunctionExtensionFinderWithDependencyCheck": "tasks/helpers/finders/FunctionExtensionFinderWithDependencyCheck.js",
+		"JQueryControlCallFinder": "tasks/helpers/finders/JQueryControlCallFinder.js",
 		"JQueryFunctionExtensionFinder": "tasks/helpers/finders/JQueryFunctionExtensionFinder.js",
 		"JQueryFunctionExtensionFinderWithDependencyCheck": "tasks/helpers/finders/JQueryFunctionExtensionFinderWithDependencyCheck.js",
 		"CallWithArgumentFinder": "tasks/helpers/finders/CallWithArgumentFinder.js",
@@ -256,7 +265,8 @@
 		"ModuleFunction": "tasks/helpers/replacers/ModuleFunction.js",
 		"NOOP": "tasks/helpers/replacers/NOOP.js",
 		"AddComment": "tasks/helpers/replacers/AddComment.js",
-		"Call": "tasks/helpers/replacers/Call.js"
+		"Call": "tasks/helpers/replacers/Call.js",
+		"UI5ElementClosestTo": "tasks/helpers/replacers/UI5ElementClosestTo.js"
 	},
 	"comments": {
 		"unhandledReplacementComment": "TODO unhandled replacement"

@@ -472,5 +472,25 @@ describe("addMissingDependencies", () => {
 				[]
 			);
 		});
+
+		it("should replace jQuery.fn.control with UI5Element.closestTo", done => {
+			const subDir = rootDir + "replaceJQuery/";
+			const expectedContent = fs.readFileSync(
+				subDir + "control.expected.js",
+				"utf8"
+			);
+			const config = JSON.parse(
+				fs.readFileSync(subDir + "control.config.json", "utf8")
+			);
+			const module = new CustomFileInfo(subDir + "control.js");
+			analyseMigrateAndTest(
+				module,
+				true,
+				expectedContent,
+				config,
+				done,
+				[]
+			);
+		});
 	});
 });
