@@ -289,6 +289,30 @@ describe("addMissingDependencies", () => {
 			);
 		});
 
+		it("JQuery Plugin addAriaLabelledBy", done => {
+			const expectedContent = fs.readFileSync(
+				rootDir + "jquery-plugin-addAriaLabelledBy.expected.js",
+				"utf8"
+			);
+			const config = JSON.parse(
+				fs.readFileSync(
+					rootDir + "jquery-plugin-addAriaLabelledBy.config.json",
+					"utf8"
+				)
+			);
+			const module = new CustomFileInfo(
+				rootDir + "jquery-plugin-addAriaLabelledBy.js"
+			);
+			analyseMigrateAndTest(
+				module,
+				true,
+				expectedContent,
+				config,
+				done,
+				[]
+			);
+		});
+
 		it("Identify zIndex calls", done => {
 			const expectedContent = fs.readFileSync(
 				rootDir + "zIndex.expected.js",

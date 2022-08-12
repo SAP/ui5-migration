@@ -3,7 +3,7 @@
  */
 
 // A module
-sap.ui.define([// My Test comment
+sap.ui.define([/* My Test comment*/
 "sap/ui/dom/jquery/control"],
 	function() {
 		"use strict";

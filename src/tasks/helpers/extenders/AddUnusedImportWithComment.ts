@@ -22,7 +22,7 @@ class AddUnusedImportWithComment implements Extender {
 				config.newModulePath
 			) as NodeWithComments;
 			if (!node.comments) {
-				node.comments = [builders.commentLine(config.commentText)];
+				node.comments = [builders.commentBlock(config.commentText)];
 			}
 			return true;
 		}

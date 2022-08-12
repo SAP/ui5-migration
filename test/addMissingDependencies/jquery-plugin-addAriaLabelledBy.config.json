@@ -1,0 +1,27 @@
+{
+	"modules": {
+		"jQuery Function Extensions": {
+			"*.addAriaLabelledBy": {
+				"newModulePath": "sap/ui/dom/jquery/Aria",
+				"replacer": "AddComment",
+				"commentText": " jQuery Plugin \"addAriaLabelledBy\"",
+				"finder": "JQueryFunctionExtensionFinderWithDependencyCheck",
+				"extender": "AddUnusedImportWithComment",
+				"version": "^1.58.0"
+			}
+		}
+	},
+	"finders": {
+		"JQueryFunctionExtensionFinderWithDependencyCheck": "tasks/helpers/finders/JQueryFunctionExtensionFinderWithDependencyCheck.js"
+	},
+	"extenders": {
+		"AddUnusedImportWithComment": "tasks/helpers/extenders/AddUnusedImportWithComment.js"
+	},
+	"replacers": {
+		"AddComment": "tasks/helpers/replacers/AddComment.js"
+	},
+	"comments": {
+		"unhandledReplacementComment": "TODO unhandled replacement"
+	},
+	"excludes": []
+}
