@@ -516,5 +516,25 @@ describe("addMissingDependencies", () => {
 				[]
 			);
 		});
+
+		it("should replace sap.ui.getCore().getConfiguration() with Configuration module", done => {
+			const subDir = rootDir + "coreConfiguration/";
+			const expectedContent = fs.readFileSync(
+				subDir + "configuration.expected.js",
+				"utf8"
+			);
+			const config = JSON.parse(
+				fs.readFileSync(subDir + "configuration.config.json", "utf8")
+			);
+			const module = new CustomFileInfo(subDir + "configuration.js");
+			analyseMigrateAndTest(
+				module,
+				true,
+				expectedContent,
+				config,
+				done,
+				[]
+			);
+		});
 	});
 });
