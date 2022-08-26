@@ -191,16 +191,6 @@
 				"version": "^1.58.0"
 			}
 		},
-		"Singletons": {
-			"sap.ui.getCore().getConfiguration()@1.106": {
-				"newModulePath": "sap/ui/core/Configuration",
-				"newVariableName": "Configuration",
-				"replacer": "Module",
-				"finder": "GlobalCoreConfigurationFinder",
-				"extender": "AddImport",
-				"version": "^1.106.0"
-			}
-		},
 		"Replacement interim solution fix": {
 			"UriParameters with url param (fromQuery search)": {
 				"newExpressionArgsLength": 1,
