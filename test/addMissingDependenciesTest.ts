@@ -516,5 +516,25 @@ describe("addMissingDependencies", () => {
 				[]
 			);
 		});
+
+		it.only("should add new import without name clash", done => {
+			const subDir = rootDir + "extenders/";
+			const expectedContent = fs.readFileSync(
+				subDir + "nameClash.expected.js",
+				"utf8"
+			);
+			const config = JSON.parse(
+				fs.readFileSync(subDir + "nameClash.config.json", "utf8")
+			);
+			const module = new CustomFileInfo(subDir + "nameClash.js");
+			analyseMigrateAndTest(
+				module,
+				true,
+				expectedContent,
+				config,
+				done,
+				[]
+			);
+		});
 	});
 });

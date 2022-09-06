@@ -1,0 +1,26 @@
+{
+	"modules": {
+		"GLOBALS": {
+			"*.control": {
+				"newModulePath": "sap/ui/core/Element",
+				"newVariableName": "Element",
+				"replacer": "Module",
+				"finder": "JQueryControlCallFinder",
+				"extender": "AddImport"
+			}
+		}
+	},
+	"finders": {
+		"JQueryControlCallFinder": "tasks/helpers/finders/JQueryControlCallFinder.js"
+	},
+	"extenders": {
+		"AddImport": "tasks/helpers/extenders/AddImport.js"
+	},
+	"replacers": {
+		"Module": "tasks/helpers/replacers/Module.js"
+	},
+	"comments": {
+		"unhandledReplacementComment": "TODO unhandled replacement"
+	},
+	"excludes": []
+}

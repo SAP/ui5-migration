@@ -375,6 +375,17 @@ async function migrate(args: Mod.MigrateArguments): Promise<boolean> {
 	if (!args.config.replacers) {
 		throw new Error("No replacers configured");
 	}
+
+	// 1. newVariable is unique
+	//    -> OK, we just add a new import and use the variable name
+	// 2. newVariableName is already in use - same import path
+	//    -> OK, we just use the existing import and use the variable name
+	// 3. newVariableName is already in use - different import path
+	//    -> NotOK, we need to make the newVariableName unique and add the import
+
+
+
+	// REPLACER - code modification
 	for (const replacerName in args.config.replacers) {
 		if (args.config.replacers.hasOwnProperty(replacerName)) {
 			const modulePath = path.join(
@@ -392,6 +403,8 @@ async function migrate(args: Mod.MigrateArguments): Promise<boolean> {
 	if (!args.config.extenders) {
 		throw new Error("No extenders configured");
 	}
+
+	// EXTENDER - modify sap.ui.define dependencies
 	for (const extenderName in args.config.extenders) {
 		if (args.config.extenders.hasOwnProperty(extenderName)) {
 			const modulePath = path.join(
