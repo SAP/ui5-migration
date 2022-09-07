@@ -11,7 +11,15 @@ const getPropertyValue = (node: ESTree.Node) => {
 	return "";
 };
 
-class FunctionExtensionFinder implements Finder {
+const isNamedFunctionCall = (node, name) => {
+	return (
+		node.type === Syntax.CallExpression &&
+		node.arguments.length === 0 &&
+		getPropertyValue(node.callee.property) === name
+	);
+};
+
+class GlobalCoreConfigurationFinder implements Finder {
 	/**
 	 * Finds expression that matches one of the following conditions
 	 * <ul>
@@ -24,27 +32,17 @@ class FunctionExtensionFinder implements Finder {
 		sConfigName: string,
 		defineCall: SapUiDefineCall
 	): FinderResult {
-		const oInterestingNode = node;
 		const bGetCoreGetConfigurationCall =
-			oInterestingNode.type === Syntax.CallExpression &&
-			oInterestingNode.callee.type === Syntax.MemberExpression &&
-			oInterestingNode.arguments.length === 0 &&
-			getPropertyValue(oInterestingNode.callee.property) ===
-				"getConfiguration" &&
-			oInterestingNode.callee.object.type === Syntax.CallExpression &&
-			oInterestingNode.callee.object.arguments.length === 0 &&
-			oInterestingNode.callee.object.callee.type ===
-				Syntax.MemberExpression &&
-			getPropertyValue(oInterestingNode.callee.object.callee.property) ===
-				"getCore" &&
-			oInterestingNode.callee.object.callee.object.type ===
-				Syntax.MemberExpression &&
-			getPropertyValue(
-				oInterestingNode.callee.object.callee.object.property
-			) === "ui" &&
-			getPropertyValue(
-				oInterestingNode.callee.object.callee.object.object
-			) === "sap";
+			node.type === Syntax.CallExpression &&
+			isNamedFunctionCall(node, "getConfiguration") &&
+			node.callee.type === Syntax.MemberExpression &&
+			node.callee.object.type === Syntax.CallExpression &&
+			isNamedFunctionCall(node.callee.object, "getCore") &&
+			node.callee.object.callee.type === Syntax.MemberExpression &&
+			node.callee.object.callee.object.type === Syntax.MemberExpression &&
+			getPropertyValue(node.callee.object.callee.object.property) ===
+				"ui" &&
+			getPropertyValue(node.callee.object.callee.object.object) === "sap";
 
 		if (bGetCoreGetConfigurationCall) {
 			return {configName: sConfigName};
@@ -54,4 +52,4 @@ class FunctionExtensionFinder implements Finder {
 	}
 }
 
-module.exports = new FunctionExtensionFinder();
+module.exports = new GlobalCoreConfigurationFinder();

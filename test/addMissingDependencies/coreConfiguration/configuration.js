@@ -29,6 +29,11 @@ sap.ui.define([],
 
 				x$.doit(sKey);
 
+				// should not be replaced because there must be no call arguments
+				sap.ui.getCore().getConfiguration("test");
+
+				sap.ui.getCore("test").getConfiguration();
+
 				alert(sap.ui.getCore().getConfiguration().getFormatSettings().getFormatLocale())
 
 				return sap.ui.getCore().getConfiguration().getFormatSettings().getLocale();
