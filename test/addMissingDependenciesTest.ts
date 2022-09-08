@@ -517,7 +517,7 @@ describe("addMissingDependencies", () => {
 			);
 		});
 
-		it.only("should add new import without name clash", done => {
+		it("should add new import without name clash", done => {
 			const subDir = rootDir + "extenders/";
 			const expectedContent = fs.readFileSync(
 				subDir + "nameClash.expected.js",

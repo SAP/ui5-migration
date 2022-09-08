@@ -20,10 +20,10 @@ sap.ui.define(["sap/me/Element", "sap/ui/core/Element"],
 		 */
 		A.x = function (oParam, iIndex) {
 			Element.foo();
-			if (oParam.control(0)) {
+			if (CoreElement) {
 				var sKey = "Test." + iconName + oParam.control;
 				if (iconInfo.resourceBundle.hasText(sKey)) {
-					$(sKey).control()[0];
+					CoreElement;
 				}
 				var x$ = sKey();
 				var oTestControl = CoreElement;
