@@ -58,6 +58,7 @@ function mapToFound(oPath: NodePath, oFound: FoundReplacement): FoundCall {
 			replacerName: oFound.oModuleInner.replacer,
 			extenderName: oFound.oModuleInner.extender,
 			newModulePath: oFound.oModuleInner.newModulePath,
+			newVariableName: oFound.uniqueVariableName,
 		},
 	};
 }
@@ -191,7 +192,11 @@ function isFoundInConfig(
 	oNodePath: NodePath,
 	oModuleTree: {
 		[index: string]: {
-			[index: string]: {finder: string; newModulePath: string};
+			[index: string]: {
+				finder: string;
+				newModulePath: string;
+				newVariableName?: string;
+			};
 		};
 	},
 	finder: {[name: string]: Finder},
@@ -204,6 +209,66 @@ function isFoundInConfig(
 			for (const sModuleInner in oModule) {
 				if (oModule.hasOwnProperty(sModuleInner)) {
 					const oModuleInner = oModule[sModuleInner];
+
+					// 1. newVariable is unique
+					//    -> OK, we just add a new import and use the variable name
+					// 2. newVariableName is already in use - same import path
+					//    -> OK, we just use the existing import and use the variable name
+					// 3. newVariableName is already in use - different import path
+					//    -> NotOK, we need to make the newVariableName unique and add the import
+					let candidateName = oModuleInner.newVariableName;
+					if (
+						oModuleInner.newVariableName &&
+						oModuleInner.newModulePath
+					) {
+						let existingModulePath =
+							defineCall.getImportByParamName(
+								oModuleInner.newVariableName
+							);
+
+						if (
+							existingModulePath &&
+							existingModulePath !== oModuleInner.newModulePath
+						) {
+							const pathParts =
+								oModuleInner.newModulePath.split("/");
+							if (pathParts.length >= 2) {
+								// concatenate name suffix from the module path e.g., sap/ui/core/Element, When variable name "Element"
+								// is already in use, try with name "CoreElement"
+								candidateName =
+									pathParts[pathParts.length - 2] +
+									pathParts[pathParts.length - 1];
+								candidateName =
+									candidateName
+										.substring(0, 1)
+										.toUpperCase() +
+									candidateName.substring(1);
+								existingModulePath =
+									defineCall.getImportByParamName(
+										candidateName
+									);
+							}
+
+							// if there's still a naming conflict, a digit is added to the end of the candidate name till a non-conflict
+							// name is found
+							let suffix = 0;
+							while (
+								existingModulePath &&
+								existingModulePath !==
+									oModuleInner.newModulePath
+							) {
+								existingModulePath =
+									defineCall.getImportByParamName(
+										candidateName + suffix++
+									);
+							}
+
+							if (suffix !== 0) {
+								candidateName = candidateName + suffix;
+							}
+						}
+					}
+
 					const oFinder: Finder = finder[oModuleInner.finder];
 					const oResult: FinderResult = oFinder.find(
 						oNode,
@@ -217,6 +282,7 @@ function isFoundInConfig(
 							configName: oResult.configName,
 							oModuleInner,
 							newModulePath: oModuleInner.newModulePath,
+							uniqueVariableName: candidateName,
 						});
 					}
 				}
@@ -236,6 +302,7 @@ interface FoundReplacement {
 		newModulePath?: string;
 	};
 	newModulePath: string;
+	uniqueVariableName?: string;
 }
 
 interface ConfigObject {
@@ -375,6 +442,8 @@ async function migrate(args: Mod.MigrateArguments): Promise<boolean> {
 	if (!args.config.replacers) {
 		throw new Error("No replacers configured");
 	}
+
+	// REPLACER - code modification
 	for (const replacerName in args.config.replacers) {
 		if (args.config.replacers.hasOwnProperty(replacerName)) {
 			const modulePath = path.join(
@@ -392,6 +461,8 @@ async function migrate(args: Mod.MigrateArguments): Promise<boolean> {
 	if (!args.config.extenders) {
 		throw new Error("No extenders configured");
 	}
+
+	// EXTENDER - modify sap.ui.define dependencies
 	for (const extenderName in args.config.extenders) {
 		if (args.config.extenders.hasOwnProperty(extenderName)) {
 			const modulePath = path.join(
@@ -419,7 +490,9 @@ async function migrate(args: Mod.MigrateArguments): Promise<boolean> {
 		// Try to replace the call
 		try {
 			// retrieve variable name from existing import and use it as name argument of replace call
-			let variableNameToUse = oReplace.config.newVariableName;
+			let variableNameToUse =
+				oReplace.importObj.newVariableName ||
+				oReplace.config.newVariableName;
 			if (oReplace.config.newModulePath) {
 				variableNameToUse =
 					analyseResult.defineCall.getParamNameByImport(
@@ -437,7 +510,11 @@ async function migrate(args: Mod.MigrateArguments): Promise<boolean> {
 			// modify define call
 			const oExtender: Extender =
 				mExtenderFuncs[oReplace.importObj.extenderName];
-			oExtender.extend(analyseResult.defineCall, oReplace.config);
+			oExtender.extend(
+				analyseResult.defineCall,
+				oReplace.config,
+				oReplace.importObj.newVariableName
+			);
 
 			args.reporter.collect("replacementsPerformed", 1);
 			if (

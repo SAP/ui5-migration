@@ -50,7 +50,8 @@ export interface Extender {
 	 *
 	 * @param {SapUiDefineCall} defineCall the module's define call
 	 * @param {object} config is passed along from finder and replacer
+	 * @param {string} [name] is the unique variable name when naming conflict is found
 	 * @returns {boolean} whether or not the defineCall was modified
 	 */
-	extend(defineCall: SapUiDefineCall, config: {}): boolean;
+	extend(defineCall: SapUiDefineCall, config: {}, name?: string): boolean;
 }

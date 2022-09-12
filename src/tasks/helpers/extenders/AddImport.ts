@@ -10,11 +10,12 @@ class AddImport implements Extender {
 		config: {
 			newModulePath: string;
 			newVariableName: string;
-		}
+		},
+		name: string
 	): boolean {
 		return defineCall.addDependency(
 			config.newModulePath,
-			config.newVariableName
+			name || config.newVariableName
 		);
 	}
 }
