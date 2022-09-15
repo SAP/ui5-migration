@@ -244,6 +244,7 @@
 		}
 	},
 	"finders": {
+		"GlobalCoreConfigurationFinder": "tasks/helpers/finders/GlobalCoreConfigurationFinder.js",
 		"FunctionExtensionFinder": "tasks/helpers/finders/FunctionExtensionFinder.js",
 		"FunctionExtensionFinderWithDependencyCheck": "tasks/helpers/finders/FunctionExtensionFinderWithDependencyCheck.js",
 		"JQueryControlCallFinder": "tasks/helpers/finders/JQueryControlCallFinder.js",

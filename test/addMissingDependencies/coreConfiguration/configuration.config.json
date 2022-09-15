@@ -1,0 +1,26 @@
+{
+	"modules": {
+		"GLOBALS": {
+			"sap.ui.getCore().getConfiguration()": {
+				"newModulePath": "sap/ui/core/Configuration",
+				"newVariableName": "Configuration",
+				"replacer": "Module",
+				"finder": "GlobalCoreConfigurationFinder",
+				"extender": "AddImport"
+			}
+		}
+	},
+	"finders": {
+		"GlobalCoreConfigurationFinder": "tasks/helpers/finders/GlobalCoreConfigurationFinder.js"
+	},
+	"extenders": {
+		"AddImport": "tasks/helpers/extenders/AddImport.js"
+	},
+	"replacers": {
+		"Module": "tasks/helpers/replacers/Module.js"
+	},
+	"comments": {
+		"unhandledReplacementComment": "TODO unhandled replacement"
+	},
+	"excludes": []
+}
