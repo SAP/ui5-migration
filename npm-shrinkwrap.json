@@ -673,9 +673,9 @@
       "dev": true
     },
     "@types/node": {
-      "version": "18.7.18",
-      "resolved": "https://registry.npmjs.org/@types/node/-/node-18.7.18.tgz",
-      "integrity": "sha512-m+6nTEOadJZuTPkKR/SYK3A2d7FZrgElol9UP1Kae90VVU4a6mxnPuLiIW1m4Cq4gZ/nWb9GrdVXJCoCazDAbg==",
+      "version": "18.7.20",
+      "resolved": "https://registry.npmjs.org/@types/node/-/node-18.7.20.tgz",
+      "integrity": "sha512-adzY4vLLr5Uivmx8+zfSJ5fbdgKxX8UMtjtl+17n0B1q1Nz8JEmE151vefMdpD+1gyh+77weN4qEhej/O7budQ==",
       "dev": true
     },
     "@types/normalize-package-data": {
@@ -685,9 +685,9 @@
       "dev": true
     },
     "@types/yargs": {
-      "version": "17.0.12",
-      "resolved": "https://registry.npmjs.org/@types/yargs/-/yargs-17.0.12.tgz",
-      "integrity": "sha512-Nz4MPhecOFArtm81gFQvQqdV7XYCrWKx5uUt6GNHredFHn1i2mtWqXTON7EPXMtNi1qjtjEM/VCHDhcHsAMLXQ==",
+      "version": "17.0.13",
+      "resolved": "https://registry.npmjs.org/@types/yargs/-/yargs-17.0.13.tgz",
+      "integrity": "sha512-9sWaruZk2JGxIQU+IhI1fhPYRcQ0UuTNuKuCW9bR5fp7qi2Llf7WDzNa17Cy7TKnh3cdxDOiyTu6gaLS0eDatg==",
       "dev": true,
       "requires": {
         "@types/yargs-parser": "*"
@@ -1053,9 +1053,9 @@
       }
     },
     "caniuse-lite": {
-      "version": "1.0.30001402",
-      "resolved": "https://registry.npmjs.org/caniuse-lite/-/caniuse-lite-1.0.30001402.tgz",
-      "integrity": "sha512-Mx4MlhXO5NwuvXGgVb+hg65HZ+bhUYsz8QtDGDo2QmaJS2GBX47Xfi2koL86lc8K+l+htXeTEB/Aeqvezoo6Ew==",
+      "version": "1.0.30001412",
+      "resolved": "https://registry.npmjs.org/caniuse-lite/-/caniuse-lite-1.0.30001412.tgz",
+      "integrity": "sha512-+TeEIee1gS5bYOiuf+PS/kp2mrXic37Hl66VY6EAfxasIk5fELTktK2oOezYed12H8w7jt3s512PpulQidPjwA==",
       "dev": true
     },
     "caseless": {
@@ -1304,9 +1304,9 @@
       }
     },
     "electron-to-chromium": {
-      "version": "1.4.254",
-      "resolved": "https://registry.npmjs.org/electron-to-chromium/-/electron-to-chromium-1.4.254.tgz",
-      "integrity": "sha512-Sh/7YsHqQYkA6ZHuHMy24e6TE4eX6KZVsZb9E/DvU1nQRIrH4BflO/4k+83tfdYvDl+MObvlqHPRICzEdC9c6Q==",
+      "version": "1.4.261",
+      "resolved": "https://registry.npmjs.org/electron-to-chromium/-/electron-to-chromium-1.4.261.tgz",
+      "integrity": "sha512-fVXliNUGJ7XUVJSAasPseBbVgJIeyw5M1xIkgXdTSRjlmCqBbiSTsEdLOCJS31Fc8B7CaloQ/BFAg8By3ODLdg==",
       "dev": true
     },
     "emoji-regex": {
