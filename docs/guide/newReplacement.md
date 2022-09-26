@@ -6,13 +6,15 @@ kind of task the code modification matches.
 
 ## Find the right task
 
-| Feasable |            Name             |      Config (./defaultConfig)      | Description                                                  |
+Ideally a new replacement should be done by enhancing the configuration of a task.
+
+| Feasible |            Name             |      Config (./defaultConfig)      | Description                                                  |
 |:--------:|:---------------------------:|:----------------------------------:|--------------------------------------------------------------|
-|    ✅    | `fix-jquery-plugin-imports` | addMissingDependencies.config.json | Complex replacements, very dynamic                           |
-|    ❌    | `add-renderer-dependencies` |    addRenderers.config.json        | Cannot be enhanced via configuration                         |
-|    ❌    |     `apply-amd-syntax`      |       AmdCleaner.config.json       | Cannot be enhanced via configuration                         |
-|    ❌    |   `fix-type-dependencies`   |   fixTypeDependency.config.json    | Cannot be enhanced via configuration                         |
-|    ✅    |      `replace-globals`      |     replaceGlobals.config.json     | Simple replacements of existing api calls with new api calls |
+|    ✅     | `fix-jquery-plugin-imports` | addMissingDependencies.config.json | Complex replacements, very dynamic                           |
+|    ❌     | `add-renderer-dependencies` |    addRenderers.config.json        | Cannot be enhanced via configuration                         |
+|    ❌     |     `apply-amd-syntax`      |       AmdCleaner.config.json       | Cannot be enhanced via configuration                         |
+|    ❌     |   `fix-type-dependencies`   |   fixTypeDependency.config.json    | Cannot be enhanced via configuration                         |
+|    ✅     |      `replace-globals`      |     replaceGlobals.config.json     | Simple replacements of existing api calls with new api calls |
 
 
 ### Simple replacements via replaceGlobals
@@ -50,6 +52,9 @@ The config for this replacement is:
 }
 ```
 
+**Note**: the variable name "each" is automatically derived from the `modulePath`, alternatively parameter
+`newVariableName` could be provided, if the variable name should differ.
+
 You also realize that you cannot configure much.
 You can only influence the
 * import via the top level string, e.g. `"jquery.sap.script"`
@@ -84,9 +89,10 @@ The config is consists of 2 parts, Modules and Definitions
 
 ##### Modules
 The `modules` section represents the code modifications which should be performed.
-top level it contains a custom grouping id, it can be freely chosen, e.g. `jQuery Function Extensions`
-the second level contains a unique id for the replacement, it can also be freely chosen, e.g. `*.cursorPos`
- Keep in mind that the configName is passed, e.g. to the `Finder` and used there, so it could play rule
+Top level it contains a custom grouping id, which can be freely chosen, e.g. `jQuery Function Extensions`
+The second level contains a unique id for the replacement, it can also be freely chosen, e.g. `*.cursorPos`,
+unless a `Finder` uses it for determining a name. e.g. 
+ Keep in mind that the second level id (configName) is passed, e.g. to the `Finder` and used there, so it could play a role
 Inside this object there are 3 mandatory keys: `finder`, `extender` and `replacer`, their values are an
 alias which can be defined and the respective top level sections `finders`, `extenders` and `replacers`
 
@@ -94,7 +100,7 @@ All other key-values can be accessed inside the finder/extender/replacer code.
 
 
 ##### Definitions
-The definitions' area contains sections for `finders`, `extenders` and `replacers`
+The definition's area contains sections for `finders`, `extenders` and `replacers`
 These consist have a mapping of alias to file name, the alias can then be used in the `modules` sections code replacements
 
 
@@ -132,7 +138,7 @@ Sections `comments` and `excludes` we ignore for now.
 
 
 ##### Finder
-* **What**: Alls calls of a "doCalculateIt" function should be replaced which have as argument a positive integer number
+* **What**: All calls of a "doCalculateIt" function should be replaced which have as argument a positive integer number
 ```ts
 import {Syntax} from "esprima";
 import * as ESTree from "estree";
@@ -197,7 +203,7 @@ class MyCustomReplacer implements ASTReplaceable {
   // find calls e.g. to `myObject.doCalculateIt(7)`
   if (
           // is a call with positive integer number as argument
-          node.value.type === Syntax.CallExpression && node.value.arguments.length === 1
+          node.value.type === Syntax.CallExpression
           && node.value.arguments[0].type === Syntax.Literal
           && typeof node.value.arguments[0].value === "number"
           && node.value.callee.type === Syntax.MemberExpression
@@ -285,11 +291,11 @@ Use `it.only(...)` in test files, such that only a [single test](https://mochajs
 ## Different replacements depending on version
 If a code modification depends on the UI5 version being used the following approach should be taken:
 
-The call to replace (second level) should have an `@version` attached and the object should have the property
+The name of the config (second level) should have an `@version` attached and the object should have the property
 `version` in the [semver](https://semver.org/) format.
 
 Note: the version property is used for the version comparison, without this property it is treated as `latest`.
-The call to replace (second level) must have the `@` with another string to make sure that there are variants for the replacement call.
+The name of the config (second level) must have the `@` with another string to make sure that there are variants for the replacement call.
 
 ### example in `addMissingDependencies.config.json`
 
