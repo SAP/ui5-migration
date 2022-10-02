@@ -105,10 +105,10 @@
     "ignore": "^5.2.0",
     "json5": "^2.2.1",
     "minimatch": "^5.1.0",
-    "recast": "^0.21.2",
+    "recast": "^0.21.5",
     "request": "^2.88.2",
     "semver": "^7.3.7",
-    "yargs": "^17.5.1"
+    "yargs": "^17.6.0"
   },
   "bin": {
     "ui5-migration": "./bin/cli.js"
@@ -121,16 +121,16 @@
     "@types/json5": "^2.2.0",
     "@types/minimatch": "^3.0.5",
     "@types/mocha": "^9.1.1",
-    "@types/node": "^18.7.20",
+    "@types/node": "^18.7.23",
     "@types/yargs": "^17.0.13",
     "gts": "^3.1.1",
     "mocha": "^10.0.0",
-    "mocha-junit-reporter": "^2.0.2",
+    "mocha-junit-reporter": "^2.1.0",
     "nyc": "^15.1.0",
     "rimraf": "^3.0.2",
     "sinon": "^14.0.0",
     "source-map-support": "^0.5.21",
     "ts-node": "^10.9.1",
-    "typescript": "^4.8.3"
+    "typescript": "^4.8.4"
   }
 }
