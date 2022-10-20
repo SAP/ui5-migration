@@ -90,8 +90,9 @@ The config is consists of 2 parts, Modules and Definitions
 ##### Modules
 The `modules` section represents the code modifications which should be performed.
 Top level it contains a custom grouping id, which can be freely chosen, e.g. `jQuery Function Extensions`
-The second level contains a unique id for the replacement, it can also be freely chosen, e.g. `*.cursorPos`,
-unless a `Finder` uses it for determining a name. e.g. 
+The second level contains a unique id for the replacement, it can also be freely chosen,
+unless a `Finder` uses it for determining a name, e.g. with id `*.cursorPos` the finder
+`FunctionExtensionFinder.ts` will look for functions named `cursorPos`.
  Keep in mind that the second level id (configName) is passed, e.g. to the `Finder` and used there, so it could play a role
 Inside this object there are 3 mandatory keys: `finder`, `extender` and `replacer`, their values are an
 alias which can be defined and the respective top level sections `finders`, `extenders` and `replacers`
