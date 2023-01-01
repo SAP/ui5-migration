@@ -33,7 +33,7 @@
         "@types/minimatch": "^3.0.5",
         "@types/mocha": "^9.1.1",
         "@types/node": "^18.11.9",
-        "@types/yargs": "^17.0.13",
+        "@types/yargs": "^17.0.18",
         "gts": "^3.1.1",
         "mocha": "^10.1.0",
         "mocha-junit-reporter": "^2.2.0",
@@ -931,9 +931,9 @@
       "dev": true
     },
     "node_modules/@types/yargs": {
-      "version": "17.0.13",
-      "resolved": "https://registry.npmjs.org/@types/yargs/-/yargs-17.0.13.tgz",
-      "integrity": "sha512-9sWaruZk2JGxIQU+IhI1fhPYRcQ0UuTNuKuCW9bR5fp7qi2Llf7WDzNa17Cy7TKnh3cdxDOiyTu6gaLS0eDatg==",
+      "version": "17.0.18",
+      "resolved": "https://registry.npmjs.org/@types/yargs/-/yargs-17.0.18.tgz",
+      "integrity": "sha512-eIJR1UER6ur3EpKM3d+2Pgd+ET+k6Kn9B4ZItX0oPjjVI5PrfaRjKyLT5UYendDpLuoiJMNJvovLQbEXqhsPaw==",
       "dev": true,
       "dependencies": {
         "@types/yargs-parser": "*"
@@ -6412,9 +6412,9 @@
       "dev": true
     },
     "@types/yargs": {
-      "version": "17.0.13",
-      "resolved": "https://registry.npmjs.org/@types/yargs/-/yargs-17.0.13.tgz",
-      "integrity": "sha512-9sWaruZk2JGxIQU+IhI1fhPYRcQ0UuTNuKuCW9bR5fp7qi2Llf7WDzNa17Cy7TKnh3cdxDOiyTu6gaLS0eDatg==",
+      "version": "17.0.18",
+      "resolved": "https://registry.npmjs.org/@types/yargs/-/yargs-17.0.18.tgz",
+      "integrity": "sha512-eIJR1UER6ur3EpKM3d+2Pgd+ET+k6Kn9B4ZItX0oPjjVI5PrfaRjKyLT5UYendDpLuoiJMNJvovLQbEXqhsPaw==",
       "dev": true,
       "requires": {
         "@types/yargs-parser": "*"
