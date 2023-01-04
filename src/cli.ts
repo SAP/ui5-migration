@@ -27,6 +27,7 @@ export async function start(): Promise<void> {
 		.option("exclude-path", {
 			alias: ["e"],
 			array: true,
+			type: "string",
 			describe: "Glob patterns to paths which should be excluded.",
 			default: ["node_modules/**/*", "node_modules/**/.*", ".*"],
 		})
@@ -73,6 +74,7 @@ export async function start(): Promise<void> {
 		.option("namespaces", {
 			alias: ["n"],
 			array: true,
+			type: "string",
 			describe: "Specifies one or more namespaces.",
 			default: [],
 		})
