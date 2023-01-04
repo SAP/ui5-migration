@@ -119,7 +119,7 @@
     "@types/estree": "1.0.0",
     "@types/graceful-fs": "^4.1.5",
     "@types/json5": "^2.2.0",
-    "@types/minimatch": "^3.0.5",
+    "@types/minimatch": "^5.1.2",
     "@types/mocha": "^9.1.1",
     "@types/node": "^18.11.18",
     "@types/yargs": "^17.0.19",
