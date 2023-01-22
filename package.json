@@ -127,7 +127,7 @@
     "mocha": "^10.2.0",
     "mocha-junit-reporter": "^2.2.0",
     "nyc": "^15.1.0",
-    "rimraf": "^3.0.2",
+    "rimraf": "^4.1.1",
     "sinon": "^14.0.2",
     "source-map-support": "^0.5.21",
     "ts-node": "^10.9.1",
