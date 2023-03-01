@@ -32,7 +32,7 @@
         "@types/json5": "^2.2.0",
         "@types/minimatch": "^3.0.5",
         "@types/mocha": "^9.1.1",
-        "@types/node": "^18.14.1",
+        "@types/node": "^18.14.2",
         "@types/yargs": "^17.0.22",
         "gts": "^3.1.1",
         "mocha": "^10.2.0",
@@ -936,9 +936,9 @@
       "dev": true
     },
     "node_modules/@types/node": {
-      "version": "18.14.1",
-      "resolved": "https://registry.npmjs.org/@types/node/-/node-18.14.1.tgz",
-      "integrity": "sha512-QH+37Qds3E0eDlReeboBxfHbX9omAcBCXEzswCu6jySP642jiM3cYSIkU/REqwhCUqXdonHFuBfJDiAJxMNhaQ==",
+      "version": "18.14.2",
+      "resolved": "https://registry.npmjs.org/@types/node/-/node-18.14.2.tgz",
+      "integrity": "sha512-1uEQxww3DaghA0RxqHx0O0ppVlo43pJhepY51OxuQIKHpjbnYLA7vcdwioNPzIqmC2u3I/dmylcqjlh0e7AyUA==",
       "dev": true
     },
     "node_modules/@types/normalize-package-data": {
@@ -1819,9 +1819,9 @@
       }
     },
     "node_modules/electron-to-chromium": {
-      "version": "1.4.311",
-      "resolved": "https://registry.npmjs.org/electron-to-chromium/-/electron-to-chromium-1.4.311.tgz",
-      "integrity": "sha512-RoDlZufvrtr2Nx3Yx5MB8jX3aHIxm8nRWPJm3yVvyHmyKaRvn90RjzB6hNnt0AkhS3IInJdyRfQb4mWhPvUjVw==",
+      "version": "1.4.314",
+      "resolved": "https://registry.npmjs.org/electron-to-chromium/-/electron-to-chromium-1.4.314.tgz",
+      "integrity": "sha512-+3RmNVx9hZLlc0gW//4yep0K5SYKmIvB5DXg1Yg6varsuAHlHwTeqeygfS8DWwLCsNOWrgj+p9qgM5WYjw1lXQ==",
       "dev": true
     },
     "node_modules/emoji-regex": {
@@ -6425,9 +6425,9 @@
       "dev": true
     },
     "@types/node": {
-      "version": "18.14.1",
-      "resolved": "https://registry.npmjs.org/@types/node/-/node-18.14.1.tgz",
-      "integrity": "sha512-QH+37Qds3E0eDlReeboBxfHbX9omAcBCXEzswCu6jySP642jiM3cYSIkU/REqwhCUqXdonHFuBfJDiAJxMNhaQ==",
+      "version": "18.14.2",
+      "resolved": "https://registry.npmjs.org/@types/node/-/node-18.14.2.tgz",
+      "integrity": "sha512-1uEQxww3DaghA0RxqHx0O0ppVlo43pJhepY51OxuQIKHpjbnYLA7vcdwioNPzIqmC2u3I/dmylcqjlh0e7AyUA==",
       "dev": true
     },
     "@types/normalize-package-data": {
@@ -7040,9 +7040,9 @@
       }
     },
     "electron-to-chromium": {
-      "version": "1.4.311",
-      "resolved": "https://registry.npmjs.org/electron-to-chromium/-/electron-to-chromium-1.4.311.tgz",
-      "integrity": "sha512-RoDlZufvrtr2Nx3Yx5MB8jX3aHIxm8nRWPJm3yVvyHmyKaRvn90RjzB6hNnt0AkhS3IInJdyRfQb4mWhPvUjVw==",
+      "version": "1.4.314",
+      "resolved": "https://registry.npmjs.org/electron-to-chromium/-/electron-to-chromium-1.4.314.tgz",
+      "integrity": "sha512-+3RmNVx9hZLlc0gW//4yep0K5SYKmIvB5DXg1Yg6varsuAHlHwTeqeygfS8DWwLCsNOWrgj+p9qgM5WYjw1lXQ==",
       "dev": true
     },
     "emoji-regex": {
