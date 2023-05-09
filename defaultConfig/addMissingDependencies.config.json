@@ -191,6 +191,80 @@
 				"version": "^1.58.0"
 			}
 		},
+		"CoreX API Replacements": {
+			"core.getLibraryResourceBundle": {
+				"newModulePath": "sap/ui/core/Lib",
+				"newVariableName": "Library",
+				"replacer": "LibGetResourceBundle",
+				"finder": "CoreFunctionCallFinder",
+				"functionName": "getLibraryResourceBundle",
+				"extender": "AddImport",
+				"version": "^1.58.0"
+			},
+			"core.getCurrentFocusedControlId": {
+				"newModulePath": "sap/ui/core/FocusHandler",
+				"newVariableName": "FocusHandler",
+				"replacer": "FocusHandlerGetCurrentFocus",
+				"finder": "CoreFunctionCallFinder",
+				"functionName": "getCurrentFocusedControlId",
+				"extender": "AddImport",
+				"version": "^1.58.0"
+			},
+			"core.isThemeApplied": {
+				"newModulePath": "sap/ui/core/theming/ThemeManager",
+				"newVariableName": "ThemeManager",
+				"replacer": "ThemeManagerThemeLoaded",
+				"finder": "CoreFunctionCallFinder",
+				"functionName": "isThemeApplied",
+				"extender": "AddImport",
+				"version": "^1.58.0"
+			},
+			"core.attachThemeChanged": {
+				"newModulePath": "sap/ui/core/theming/ThemeManager",
+				"newVariableName": "ThemeManager",
+				"replacer": "ThemeManagerAttachEvent",
+				"finder": "CoreFunctionCallFinder",
+				"functionName": "attachThemeChanged",
+				"extender": "AddImport",
+				"version": "^1.58.0"
+			},
+			"core.detachThemeChanged": {
+				"newModulePath": "sap/ui/core/theming/ThemeManager",
+				"newVariableName": "ThemeManager",
+				"replacer": "ThemeManagerDetachEvent",
+				"finder": "CoreFunctionCallFinder",
+				"functionName": "detachThemeChanged",
+				"extender": "AddImport",
+				"version": "^1.58.0"
+			},
+			"core.createRenderManager": {
+				"newModulePath": "sap/ui/core/RenderManager",
+				"newVariableName": "RenderManager",
+				"replacer": "NewRenderManager",
+				"finder": "CoreFunctionCallFinder",
+				"functionName": "createRenderManager",
+				"extender": "AddImport",
+				"version": "^1.58.0"
+			},
+			"core.byId": {
+				"newModulePath": "sap/ui/core/Element",
+				"newVariableName": "UI5Element",
+				"replacer": "ElementRegistryGet",
+				"finder": "CoreFunctionCallFinder",
+				"functionName": "byId",
+				"extender": "AddImport",
+				"version": "^1.58.0"
+			},
+			"core.getStaticAreaRef": {
+				"newModulePath": "sap/ui/core/UIArea",
+				"newVariableName": "UIArea",
+				"replacer": "UIAreaGetStaticAreaRef",
+				"finder": "CoreFunctionCallFinder",
+				"functionName": "getStaticAreaRef",
+				"extender": "AddImport",
+				"version": "^1.58.0"
+			}
+		},
 		"Replacement interim solution fix": {
 			"UriParameters with url param (fromQuery search)": {
 				"newExpressionArgsLength": 1,
@@ -253,7 +327,8 @@
 		"CallWithArgumentFinder": "tasks/helpers/finders/CallWithArgumentFinder.js",
 		"CallWithArgumentFinderWithDependencyCheck": "tasks/helpers/finders/CallWithArgumentFinderWithDependencyCheck.js",
 		"NewExpressionFinder": "tasks/helpers/finders/NewExpressionFinder.js",
-		"UriParametersWithURLFinder": "tasks/helpers/finders/UriParametersWithURLFinder.js"
+		"UriParametersWithURLFinder": "tasks/helpers/finders/UriParametersWithURLFinder.js",
+		"CoreFunctionCallFinder": "tasks/helpers/finders/CoreFunctionCallFinder.js"
 	},
 	"extenders": {
 		"AddUnusedImport": "tasks/helpers/extenders/AddUnusedImport.js",
@@ -267,7 +342,15 @@
 		"NOOP": "tasks/helpers/replacers/NOOP.js",
 		"AddComment": "tasks/helpers/replacers/AddComment.js",
 		"Call": "tasks/helpers/replacers/Call.js",
-		"UI5ElementClosestTo": "tasks/helpers/replacers/UI5ElementClosestTo.js"
+		"UI5ElementClosestTo": "tasks/helpers/replacers/UI5ElementClosestTo.js",
+		"LibGetResourceBundle": "tasks/helpers/replacers/LibGetResourceBundle.js",
+		"FocusHandlerGetCurrentFocus": "tasks/helpers/replacers/FocusHandlerGetCurrentFocus.js",
+		"ThemeManagerThemeLoaded": "tasks/helpers/replacers/ThemeManagerThemeLoaded.js",
+		"ThemeManagerAttachEvent": "tasks/helpers/replacers/ThemeManagerAttachEvent.js",
+		"ThemeManagerDetachEvent": "tasks/helpers/replacers/ThemeManagerDetachEvent.js",
+		"NewRenderManager": "tasks/helpers/replacers/NewRenderManager.js",
+		"ElementRegistryGet": "tasks/helpers/replacers/ElementRegistryGet.js",
+		"UIAreaGetStaticAreaRef": "tasks/helpers/replacers/UIAreaGetStaticAreaRef.js"
 	},
 	"comments": {
 		"unhandledReplacementComment": "TODO unhandled replacement"

@@ -1,0 +1,27 @@
+{
+	"modules": {
+		"GLOBALS": {
+			"core.byId": {
+				"newModulePath": "sap/ui/core/Element",
+				"newVariableName": "UI5Element",
+				"replacer": "ElementRegistryGet",
+				"finder": "CoreFunctionCallFinder",
+				"functionName": "byId",
+				"extender": "AddImport"
+			}
+		}
+	},
+	"finders": {
+		"CoreFunctionCallFinder": "tasks/helpers/finders/CoreFunctionCallFinder.js"
+	},
+	"extenders": {
+		"AddImport": "tasks/helpers/extenders/AddImport.js"
+	},
+	"replacers": {
+		"ElementRegistryGet": "tasks/helpers/replacers/ElementRegistryGet.js"
+	},
+	"comments": {
+		"unhandledReplacementComment": "TODO unhandled replacement"
+	},
+	"excludes": []
+}

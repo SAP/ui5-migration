@@ -1,0 +1,27 @@
+{
+	"modules": {
+		"GLOBALS": {
+			"core.getCurrentFocusedControlId": {
+				"newModulePath": "sap/ui/core/FocusHandler",
+				"newVariableName": "FocusHandler",
+				"replacer": "FocusHandlerGetCurrentFocus",
+				"finder": "CoreFunctionCallFinder",
+				"functionName": "getCurrentFocusedControlId",
+				"extender": "AddImport"
+			}
+		}
+	},
+	"finders": {
+		"CoreFunctionCallFinder": "tasks/helpers/finders/CoreFunctionCallFinder.js"
+	},
+	"extenders": {
+		"AddImport": "tasks/helpers/extenders/AddImport.js"
+	},
+	"replacers": {
+		"FocusHandlerGetCurrentFocus": "tasks/helpers/replacers/FocusHandlerGetCurrentFocus.js"
+	},
+	"comments": {
+		"unhandledReplacementComment": "TODO unhandled replacement"
+	},
+	"excludes": []
+}
