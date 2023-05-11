@@ -3,8 +3,8 @@
  */
 
 // A module
-sap.ui.define(["sap/ui/core/Core", "sap/ui/core/RenderManager"],
-	function(Core, RenderManager) {
+sap.ui.define(["sap/ui/core/RenderManager"],
+	function(RenderManager) {
 		"use strict";
 
 		/**

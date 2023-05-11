@@ -3,8 +3,8 @@
  */
 
 // A module
-sap.ui.define(["sap/ui/core/Core", "sap/ui/core/Element"],
-	function(Core, UI5Element) {
+sap.ui.define(["sap/ui/core/Element"],
+	function(UI5Element) {
 		"use strict";
 
 		/**

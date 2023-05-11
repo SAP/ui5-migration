@@ -24,6 +24,7 @@
     "coverage": "nyc npm run unit",
     "coverage-junit": "nyc --reporter=text --reporter=text-summary --reporter=cobertura npm run unit-junit",
     "unit": "mocha -r ts-node/register -r source-map-support/register ./test/**/*Test.ts ./test/**/*/**Test.ts ./test/*Test.ts",
+    "unit-debug": "mocha --inspect-brk -r ts-node/register -r source-map-support/register ./test/**/*Test.ts ./test/**/*/**Test.ts ./test/*Test.ts",
     "unit-junit": "npm run unit -- --reporter mocha-junit-reporter",
     "unit-watch": "npm run unit -- -w",
     "clean": "gts clean",

@@ -7,7 +7,7 @@
 				"replacer": "LibGetResourceBundle",
 				"finder": "CoreFunctionCallFinder",
 				"functionToFind": "getLibraryResourceBundle",
-				"extender": "AddImport"
+				"extender": "AddImportAndRemoveUnused"
 			}
 		}
 	},
@@ -15,7 +15,7 @@
 		"CoreFunctionCallFinder": "tasks/helpers/finders/CoreFunctionCallFinder.js"
 	},
 	"extenders": {
-		"AddImport": "tasks/helpers/extenders/AddImport.js"
+		"AddImportAndRemoveUnused": "tasks/helpers/extenders/AddImportAndRemoveUnused.js"
 	},
 	"replacers": {
 		"LibGetResourceBundle": "tasks/helpers/replacers/LibGetResourceBundle.js"

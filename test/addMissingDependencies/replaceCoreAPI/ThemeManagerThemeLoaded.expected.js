@@ -3,8 +3,8 @@
  */
 
 // A module
-sap.ui.define(["sap/ui/core/Core", "sap/ui/core/theming/ThemeManager"],
-	function(Core, ThemeManager) {
+sap.ui.define(["sap/ui/core/theming/ThemeManager"],
+	function(ThemeManager) {
 		"use strict";
 
 		/**

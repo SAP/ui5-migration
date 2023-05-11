@@ -5,8 +5,6 @@ import {ASTReplaceable, NodePath} from "ui5-migration";
 
 const builders = recast.types.builders;
 
-
-
 /**
  * Replace
  * - sap.ui.getCore().attachThemeChanged(...)

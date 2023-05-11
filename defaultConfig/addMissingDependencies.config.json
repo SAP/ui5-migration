@@ -7,7 +7,7 @@
 				"replacer": "LibGetResourceBundle",
 				"finder": "CoreFunctionCallFinder",
 				"functionToFind": "getLibraryResourceBundle",
-				"extender": "AddImport",
+				"extender": "AddImportAndRemoveUnused",
 				"version": "^1.58.0"
 			},
 			"core.getCurrentFocusedControlId": {
@@ -16,7 +16,7 @@
 				"replacer": "FocusHandlerGetCurrentFocus",
 				"finder": "CoreFunctionCallFinder",
 				"functionToFind": "getCurrentFocusedControlId",
-				"extender": "AddImport",
+				"extender": "AddImportAndRemoveUnused",
 				"version": "^1.58.0"
 			},
 			"core.isThemeApplied": {
@@ -25,7 +25,7 @@
 				"replacer": "ThemeManagerThemeLoaded",
 				"finder": "CoreFunctionCallFinder",
 				"functionToFind": "isThemeApplied",
-				"extender": "AddImport",
+				"extender": "AddImportAndRemoveUnused",
 				"version": "^1.58.0"
 			},
 			"core.attachThemeChanged": {
@@ -34,7 +34,7 @@
 				"replacer": "ThemeManagerAttachEvent",
 				"finder": "CoreFunctionCallFinder",
 				"functionToFind": "attachThemeChanged",
-				"extender": "AddImport",
+				"extender": "AddImportAndRemoveUnused",
 				"version": "^1.58.0"
 			},
 			"core.detachThemeChanged": {
@@ -43,7 +43,7 @@
 				"replacer": "ThemeManagerDetachEvent",
 				"finder": "CoreFunctionCallFinder",
 				"functionToFind": "detachThemeChanged",
-				"extender": "AddImport",
+				"extender": "AddImportAndRemoveUnused",
 				"version": "^1.58.0"
 			},
 			"core.createRenderManager": {
@@ -52,7 +52,7 @@
 				"replacer": "NewRenderManager",
 				"finder": "CoreFunctionCallFinder",
 				"functionToFind": "createRenderManager",
-				"extender": "AddImport",
+				"extender": "AddImportAndRemoveUnused",
 				"version": "^1.58.0"
 			},
 			"core.byId": {
@@ -61,7 +61,7 @@
 				"replacer": "ElementRegistryGet",
 				"finder": "CoreFunctionCallFinder",
 				"functionToFind": "byId",
-				"extender": "AddImport",
+				"extender": "AddImportAndRemoveUnused",
 				"version": "^1.58.0"
 			},
 			"core.getStaticAreaRef": {
@@ -70,7 +70,7 @@
 				"replacer": "UIAreaGetStaticAreaRef",
 				"finder": "CoreFunctionCallFinder",
 				"functionToFind": "getStaticAreaRef",
-				"extender": "AddImport",
+				"extender": "AddImportAndRemoveUnused",
 				"version": "^1.58.0"
 			},
 			"core.getConfiguration": {
@@ -79,7 +79,7 @@
 				"replacer": "Module",
 				"finder": "CoreFunctionCallFinder",
 				"functionToFind": "getConfiguration",
-				"extender": "AddImport",
+				"extender": "AddImportAndRemoveUnused",
 				"version": "^1.58.0"
 			}
 		}
@@ -101,6 +101,7 @@
 		"AddUnusedImport": "tasks/helpers/extenders/AddUnusedImport.js",
 		"AddUnusedImportWithComment": "tasks/helpers/extenders/AddUnusedImportWithComment.js",
 		"AddImport": "tasks/helpers/extenders/AddImport.js",
+		"AddImportAndRemoveUnused": "tasks/helpers/extenders/AddImportAndRemoveUnused.js",
 		"LeaveImport": "tasks/helpers/extenders/LeaveImport.js"
 	},
 	"replacers": {

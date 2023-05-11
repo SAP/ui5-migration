@@ -3,8 +3,8 @@
  */
 
 // A module
-sap.ui.define(["sap/ui/core/Core", "sap/ui/core/Lib"],
-	function(Core, Library) {
+sap.ui.define(["sap/ui/core/Lib"],
+	function(Library) {
 		"use strict";
 
 		/**

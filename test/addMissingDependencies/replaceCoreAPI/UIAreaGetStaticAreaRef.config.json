@@ -7,7 +7,7 @@
 				"replacer": "UIAreaGetStaticAreaRef",
 				"finder": "CoreFunctionCallFinder",
 				"functionToFind": "getStaticAreaRef",
-				"extender": "AddImport"
+				"extender": "AddImportAndRemoveUnused"
 			}
 		}
 	},
@@ -15,7 +15,7 @@
 		"CoreFunctionCallFinder": "tasks/helpers/finders/CoreFunctionCallFinder.js"
 	},
 	"extenders": {
-		"AddImport": "tasks/helpers/extenders/AddImport.js"
+		"AddImportAndRemoveUnused": "tasks/helpers/extenders/AddImportAndRemoveUnused.js"
 	},
 	"replacers": {
 		"UIAreaGetStaticAreaRef": "tasks/helpers/replacers/UIAreaGetStaticAreaRef.js"

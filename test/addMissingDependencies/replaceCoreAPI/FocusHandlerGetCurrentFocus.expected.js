@@ -3,8 +3,8 @@
  */
 
 // A module
-sap.ui.define(["sap/ui/core/Core", "sap/ui/core/FocusHandler"],
-	function(Core, FocusHandler) {
+sap.ui.define(["sap/ui/core/FocusHandler"],
+	function(FocusHandler) {
 		"use strict";
 
 		/**
