@@ -6,7 +6,7 @@
 				"newVariableName": "FocusHandler",
 				"replacer": "FocusHandlerGetCurrentFocus",
 				"finder": "CoreFunctionCallFinder",
-				"functionName": "getCurrentFocusedControlId",
+				"functionToFind": "getCurrentFocusedControlId",
 				"extender": "AddImport"
 			}
 		}

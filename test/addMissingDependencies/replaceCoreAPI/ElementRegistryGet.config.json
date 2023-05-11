@@ -6,7 +6,7 @@
 				"newVariableName": "UI5Element",
 				"replacer": "ElementRegistryGet",
 				"finder": "CoreFunctionCallFinder",
-				"functionName": "byId",
+				"functionToFind": "byId",
 				"extender": "AddImport"
 			}
 		}

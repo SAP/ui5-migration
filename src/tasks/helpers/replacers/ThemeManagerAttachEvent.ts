@@ -5,6 +5,8 @@ import {ASTReplaceable, NodePath} from "ui5-migration";
 
 const builders = recast.types.builders;
 
+
+
 /**
  * Replace
  * - sap.ui.getCore().attachThemeChanged(...)
@@ -85,6 +87,12 @@ const replaceable: ASTReplaceable = {
 				oInsertionPoint[node.name] = oNodeModule;
 				break;
 			case Syntax.IfStatement:
+				oInsertionPoint[node.name] = oNodeModule;
+				break;
+			case Syntax.ConditionalExpression:
+				oInsertionPoint[node.name] = oNodeModule;
+				break;
+			case Syntax.Property:
 				oInsertionPoint[node.name] = oNodeModule;
 				break;
 			default:

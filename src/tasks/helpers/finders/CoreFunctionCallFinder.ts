@@ -15,17 +15,17 @@ class CoreFunctionCallFinder implements Finder {
 	 */
 	find(
 		node: ESTree.Node,
-		config: {functionName: string},
+		config: {functionToFind: string},
 		sConfigName: string,
 		defineCall: SapUiDefineCall
 	): FinderResult {
-		if (!config.functionName) {
+		if (!config.functionToFind) {
 			throw new Error(
-				"CoreFunctionCallFinder needs config 'functionName'"
+				"CoreFunctionCallFinder needs config 'functionToFind'"
 			);
 		}
 
-		if (isFunctionCallOnCore(node, config.functionName)) {
+		if (isFunctionCallOnCore(node, config.functionToFind)) {
 			return {configName: sConfigName};
 		} else {
 			return EMPTY_FINDER_RESULT;

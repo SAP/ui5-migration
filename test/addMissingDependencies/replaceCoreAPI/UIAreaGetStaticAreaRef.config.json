@@ -6,7 +6,7 @@
 				"newVariableName": "UIArea",
 				"replacer": "UIAreaGetStaticAreaRef",
 				"finder": "CoreFunctionCallFinder",
-				"functionName": "getStaticAreaRef",
+				"functionToFind": "getStaticAreaRef",
 				"extender": "AddImport"
 			}
 		}

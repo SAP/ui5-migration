@@ -1,203 +1,12 @@
 {
 	"modules": {
-		"jQuery Function Extensions": {
-			"*.cursorPos": {
-				"newModulePath": "sap/ui/dom/jquery/cursorPos",
-				"replacer": "AddComment",
-				"commentText": " jQuery Plugin \"cursorPos\"",
-				"finder": "FunctionExtensionFinderWithDependencyCheck",
-				"extender": "AddUnusedImportWithComment",
-				"version": "^1.58.0"
-			},
-			"*.control@1.58.0": {
-				"newModulePath": "sap/ui/dom/jquery/control",
-				"replacer": "AddComment",
-				"commentText": " jQuery Plugin \"control\"",
-				"finder": "JQueryFunctionExtensionFinderWithDependencyCheck",
-				"extender": "AddUnusedImportWithComment",
-				"version": "^1.58.0"
-			},
-			"*.control@1.106.0": {
-				"newModulePath": "sap/ui/core/Element",
-				"newVariableName": "UI5Element",
-				"replacer": "UI5ElementClosestTo",
-				"finder": "JQueryControlCallFinder",
-				"extender": "AddImport",
-				"version": "^1.106.0"
-			},
-			"*.firstFocusableDomRef": {
-				"newModulePath": "sap/ui/dom/jquery/Focusable",
-				"replacer": "AddComment",
-				"commentText": " jQuery Plugin \"firstFocusableDomRef\"",
-				"finder": "FunctionExtensionFinderWithDependencyCheck",
-				"extender": "AddUnusedImportWithComment",
-				"version": "^1.58.0"
-			},
-			"*.lastFocusableDomRef": {
-				"newModulePath": "sap/ui/dom/jquery/Focusable",
-				"replacer": "AddComment",
-				"commentText": " jQuery Plugin \"lastFocusableDomRef\"",
-				"finder": "FunctionExtensionFinderWithDependencyCheck",
-				"extender": "AddUnusedImportWithComment",
-				"version": "^1.58.0"
-			},
-			"*.getSelectedText": {
-				"newModulePath": "sap/ui/dom/jquery/getSelectedText",
-				"replacer": "AddComment",
-				"commentText": " jQuery Plugin \"getSelectedText\"",
-				"finder": "JQueryFunctionExtensionFinderWithDependencyCheck",
-				"extender": "AddUnusedImportWithComment",
-				"version": "^1.58.0"
-			},
-			"*.hasTabIndex": {
-				"newModulePath": "sap/ui/dom/jquery/hasTabIndex",
-				"replacer": "AddComment",
-				"commentText": " jQuery Plugin \"hasTabIndex\"",
-				"finder": "FunctionExtensionFinderWithDependencyCheck",
-				"extender": "AddUnusedImportWithComment",
-				"version": "^1.58.0"
-			},
-			"*.parentByAttribute": {
-				"newModulePath": "sap/ui/dom/jquery/parentByAttribute",
-				"replacer": "AddComment",
-				"commentText": " jQuery Plugin \"parentByAttribute\"",
-				"finder": "FunctionExtensionFinderWithDependencyCheck",
-				"extender": "AddUnusedImportWithComment",
-				"version": "^1.58.0"
-			},
-			"*.rect": {
-				"newModulePath": "sap/ui/dom/jquery/rect",
-				"replacer": "AddComment",
-				"commentText": " jQuery Plugin \"rect\"",
-				"finder": "FunctionExtensionFinderWithDependencyCheck",
-				"extender": "AddUnusedImportWithComment",
-				"version": "^1.58.0"
-			},
-			"*.rectContains": {
-				"newModulePath": "sap/ui/dom/jquery/rectContains",
-				"replacer": "AddComment",
-				"commentText": " jQuery Plugin \"rectContains\"",
-				"finder": "FunctionExtensionFinderWithDependencyCheck",
-				"extender": "AddUnusedImportWithComment",
-				"version": "^1.58.0"
-			},
-			"*.scrollLeftRTL": {
-				"newModulePath": "sap/ui/dom/jquery/scrollLeftRTL",
-				"replacer": "AddComment",
-				"commentText": " jQuery Plugin \"scrollLeftRTL\"",
-				"finder": "FunctionExtensionFinderWithDependencyCheck",
-				"extender": "AddUnusedImportWithComment",
-				"version": "^1.58.0"
-			},
-			"*.scrollRightRTL": {
-				"newModulePath": "sap/ui/dom/jquery/scrollRightRTL",
-				"replacer": "AddComment",
-				"commentText": " jQuery Plugin \"scrollRightRTL\"",
-				"finder": "FunctionExtensionFinderWithDependencyCheck",
-				"extender": "AddUnusedImportWithComment",
-				"version": "^1.58.0"
-			},
-			"*.disableSelection": {
-				"newModulePath": "sap/ui/dom/jquery/Selection",
-				"replacer": "AddComment",
-				"commentText": " jQuery Plugin \"disableSelection\"",
-				"finder": "FunctionExtensionFinderWithDependencyCheck",
-				"extender": "AddUnusedImportWithComment",
-				"version": "^1.58.0"
-			},
-			"*.enableSelection": {
-				"newModulePath": "sap/ui/dom/jquery/Selection",
-				"replacer": "AddComment",
-				"commentText": " jQuery Plugin \"enableSelection\"",
-				"finder": "FunctionExtensionFinderWithDependencyCheck",
-				"extender": "AddUnusedImportWithComment",
-				"version": "^1.58.0"
-			},
-			"*.selectText": {
-				"newModulePath": "sap/ui/dom/jquery/selectText",
-				"replacer": "AddComment",
-				"commentText": " jQuery Plugin \"selectText\"",
-				"finder": "JQueryFunctionExtensionFinderWithDependencyCheck",
-				"extender": "AddUnusedImportWithComment",
-				"version": "^1.58.0"
-			},
-			"*.zIndex": {
-				"newModulePath": "sap/ui/dom/jquery/zIndex",
-				"replacer": "AddComment",
-				"commentText": " jQuery Plugin \"zIndex\"",
-				"finder": "JQueryFunctionExtensionFinderWithDependencyCheck",
-				"extender": "AddUnusedImportWithComment",
-				"version": "^1.58.0"
-			},
-			"*.addAriaLabelledBy": {
-				"newModulePath": "sap/ui/dom/jquery/Aria",
-				"replacer": "AddComment",
-				"commentText": " jQuery Plugin \"addAriaLabelledBy\"",
-				"finder": "JQueryFunctionExtensionFinderWithDependencyCheck",
-				"extender": "AddUnusedImportWithComment",
-				"version": "^1.58.0"
-			},
-			"*.removeAriaLabelledBy": {
-				"newModulePath": "sap/ui/dom/jquery/Aria",
-				"replacer": "AddComment",
-				"commentText": " jQuery Plugin \"removeAriaLabelledBy\"",
-				"finder": "JQueryFunctionExtensionFinderWithDependencyCheck",
-				"extender": "AddUnusedImportWithComment",
-				"version": "^1.58.0"
-			},
-			"*.addAriaDescribedBy": {
-				"newModulePath": "sap/ui/dom/jquery/Aria",
-				"replacer": "AddComment",
-				"commentText": " jQuery Plugin \"addAriaDescribedBy\"",
-				"finder": "JQueryFunctionExtensionFinderWithDependencyCheck",
-				"extender": "AddUnusedImportWithComment",
-				"version": "^1.58.0"
-			},
-			"*.removeAriaDescribedBy": {
-				"newModulePath": "sap/ui/dom/jquery/Aria",
-				"replacer": "AddComment",
-				"commentText": " jQuery Plugin \"removeAriaDescribedBy\"",
-				"finder": "JQueryFunctionExtensionFinderWithDependencyCheck",
-				"extender": "AddUnusedImportWithComment",
-				"version": "^1.58.0"
-			}
-		},
-		"jQuery Selectors": {
-			":sapTabbable": {
-				"newModulePath": "sap/ui/dom/jquery/Selectors",
-				"replacer": "AddComment",
-				"commentText": " jQuery custom selectors \":sapTabbable\"",
-				"finder": "CallWithArgumentFinderWithDependencyCheck",
-				"finderIncludesName": ":sapTabbable",
-				"extender": "AddUnusedImportWithComment",
-				"version": "^1.58.0"
-			},
-			":focusable": {
-				"newModulePath": "sap/ui/dom/jquery/Selectors",
-				"replacer": "AddComment",
-				"commentText": " jQuery custom selectors \":focusable\"",
-				"finder": "CallWithArgumentFinderWithDependencyCheck",
-				"finderIncludesName": ":focusable",
-				"extender": "AddUnusedImportWithComment",
-				"version": "^1.58.0"
-			},
-			":sapFocusable": {
-				"newModulePath": "sap/ui/dom/jquery/Selectors",
-				"replacer": "AddComment",
-				"commentText": " jQuery custom selectors \":sapFocusable\"",
-				"finder": "CallWithArgumentFinderWithDependencyCheck",
-				"finderIncludesName": ":sapFocusable",
-				"extender": "AddUnusedImportWithComment",
-				"version": "^1.58.0"
-			}
-		},
 		"CoreX API Replacements": {
 			"core.getLibraryResourceBundle": {
 				"newModulePath": "sap/ui/core/Lib",
 				"newVariableName": "Library",
 				"replacer": "LibGetResourceBundle",
 				"finder": "CoreFunctionCallFinder",
-				"functionName": "getLibraryResourceBundle",
+				"functionToFind": "getLibraryResourceBundle",
 				"extender": "AddImport",
 				"version": "^1.58.0"
 			},
@@ -206,7 +15,7 @@
 				"newVariableName": "FocusHandler",
 				"replacer": "FocusHandlerGetCurrentFocus",
 				"finder": "CoreFunctionCallFinder",
-				"functionName": "getCurrentFocusedControlId",
+				"functionToFind": "getCurrentFocusedControlId",
 				"extender": "AddImport",
 				"version": "^1.58.0"
 			},
@@ -215,7 +24,7 @@
 				"newVariableName": "ThemeManager",
 				"replacer": "ThemeManagerThemeLoaded",
 				"finder": "CoreFunctionCallFinder",
-				"functionName": "isThemeApplied",
+				"functionToFind": "isThemeApplied",
 				"extender": "AddImport",
 				"version": "^1.58.0"
 			},
@@ -224,7 +33,7 @@
 				"newVariableName": "ThemeManager",
 				"replacer": "ThemeManagerAttachEvent",
 				"finder": "CoreFunctionCallFinder",
-				"functionName": "attachThemeChanged",
+				"functionToFind": "attachThemeChanged",
 				"extender": "AddImport",
 				"version": "^1.58.0"
 			},
@@ -233,7 +42,7 @@
 				"newVariableName": "ThemeManager",
 				"replacer": "ThemeManagerDetachEvent",
 				"finder": "CoreFunctionCallFinder",
-				"functionName": "detachThemeChanged",
+				"functionToFind": "detachThemeChanged",
 				"extender": "AddImport",
 				"version": "^1.58.0"
 			},
@@ -242,7 +51,7 @@
 				"newVariableName": "RenderManager",
 				"replacer": "NewRenderManager",
 				"finder": "CoreFunctionCallFinder",
-				"functionName": "createRenderManager",
+				"functionToFind": "createRenderManager",
 				"extender": "AddImport",
 				"version": "^1.58.0"
 			},
@@ -251,7 +60,7 @@
 				"newVariableName": "UI5Element",
 				"replacer": "ElementRegistryGet",
 				"finder": "CoreFunctionCallFinder",
-				"functionName": "byId",
+				"functionToFind": "byId",
 				"extender": "AddImport",
 				"version": "^1.58.0"
 			},
@@ -260,59 +69,17 @@
 				"newVariableName": "UIArea",
 				"replacer": "UIAreaGetStaticAreaRef",
 				"finder": "CoreFunctionCallFinder",
-				"functionName": "getStaticAreaRef",
+				"functionToFind": "getStaticAreaRef",
 				"extender": "AddImport",
 				"version": "^1.58.0"
-			}
-		},
-		"Replacement interim solution fix": {
-			"UriParameters with url param (fromQuery search)": {
-				"newExpressionArgsLength": 1,
-				"newExpressionArgs": ["window.location.href"],
-				"newExpressionCalleeName": "UriParameters",
-				"newVariableName": "UriParameters",
-				"functionName": "fromQuery",
-				"newArgs": ["window.location.search"],
-				"importPath": "sap/base/util/UriParameters",
-				"replacer": "Call",
-				"finder": "NewExpressionFinder",
-				"extender": "LeaveImport",
-				"version": "^1.58.0"
 			},
-			"UriParameters with url param (fromQuery href)": {
-				"newExpressionArgsLength": 1,
-				"newExpressionArgs": ["window.location.search"],
-				"newExpressionCalleeName": "UriParameters",
-				"newVariableName": "UriParameters",
-				"functionName": "fromQuery",
-				"newArgs": ["window.location.search"],
-				"importPath": "sap/base/util/UriParameters",
-				"replacer": "Call",
-				"finder": "NewExpressionFinder",
-				"extender": "LeaveImport",
-				"version": "^1.58.0"
-			},
-			"UriParameters with url param (fromQuery empty)": {
-				"newExpressionArgsLength": 0,
-				"newExpressionCalleeName": "UriParameters",
-				"newVariableName": "UriParameters",
-				"functionName": "fromQuery",
-				"newArgs": ["window.location.search"],
-				"importPath": "sap/base/util/UriParameters",
-				"replacer": "Call",
-				"finder": "NewExpressionFinder",
-				"extender": "LeaveImport",
-				"version": "^1.58.0"
-			},
-			"UriParameters with query param (fromURL)": {
-				"newExpressionArgsLength": 1,
-				"newExpressionCalleeName": "UriParameters",
-				"newVariableName": "UriParameters",
-				"functionName": "fromURL",
-				"importPath": "sap/base/util/UriParameters",
-				"replacer": "Call",
-				"finder": "UriParametersWithURLFinder",
-				"extender": "LeaveImport",
+			"core.getConfiguration": {
+				"newModulePath": "sap/ui/core/Configuration",
+				"newVariableName": "Configuration",
+				"replacer": "Module",
+				"finder": "CoreFunctionCallFinder",
+				"functionToFind": "getConfiguration",
+				"extender": "AddImport",
 				"version": "^1.58.0"
 			}
 		}

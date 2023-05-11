@@ -6,7 +6,7 @@
 				"newVariableName": "Library",
 				"replacer": "LibGetResourceBundle",
 				"finder": "CoreFunctionCallFinder",
-				"functionName": "getLibraryResourceBundle",
+				"functionToFind": "getLibraryResourceBundle",
 				"extender": "AddImport"
 			}
 		}

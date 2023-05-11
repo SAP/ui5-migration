@@ -6,7 +6,7 @@
 				"newVariableName": "ThemeManager",
 				"replacer": "ThemeManagerThemeLoaded",
 				"finder": "CoreFunctionCallFinder",
-				"functionName": "isThemeApplied",
+				"functionToFind": "isThemeApplied",
 				"extender": "AddImport"
 			}
 		}

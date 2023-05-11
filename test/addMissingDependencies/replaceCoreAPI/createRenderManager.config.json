@@ -6,7 +6,7 @@
 				"newVariableName": "RenderManager",
 				"replacer": "NewRenderManager",
 				"finder": "CoreFunctionCallFinder",
-				"functionName": "createRenderManager",
+				"functionToFind": "createRenderManager",
 				"extender": "AddImport"
 			}
 		}
