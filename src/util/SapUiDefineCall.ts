@@ -335,6 +335,11 @@ export class SapUiDefineCall {
 		this.factory.params.splice(iIndexToRemove, 1);
 		// sShortcut
 		this.paramNames.splice(iIndexToRemove, 1);
+
+		if (iIndexToRemove < this.dependencyInsertionIdx) {
+			this.dependencyInsertionIdx--;
+		}
+
 		return true;
 	}
 
