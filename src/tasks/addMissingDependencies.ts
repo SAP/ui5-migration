@@ -24,11 +24,19 @@ import {ASTVisitor, NodePath} from "../util/ASTVisitor";
 import * as CommentUtils from "../util/CommentUtils";
 import {removeModulesNotMatchingTargetVersion} from "../util/ConfigUtils";
 import {SapUiDefineCall} from "../util/SapUiDefineCall";
+import {FileInfo} from "../util/FileInfo";
+import * as dotenv from "dotenv";
+
+if (__filename.endsWith(".ts")) {
+	dotenv.config({path: path.join(__dirname, "../../.env")});
+} else {
+	dotenv.config({path: path.join(__dirname, "../../../.env")});
+}
 
 function getDefineCall(
 	oAst: ESTree.Node,
 	sModuleName: string,
-	reporter: Reporter
+	reporter?: Reporter
 ) {
 	const defineCalls = ASTUtils.findCalls(
 		oAst,
@@ -290,6 +298,64 @@ function checkFindersInConfig(
 	}
 }
 
+// map of module name in string to absolute path of itself and its dependencies
+const dependenciesMap: Map<string, Set<string>> = new Map();
+const ui5Home = process.env["OPENUI5_HOME"];
+const corePrefix = "src/sap.ui.core/src";
+
+async function getAbsoluteDepPathsOf(
+	module: string,
+	reporter: Reporter
+): Promise<Set<string>> {
+	const filePath = path.join(ui5Home, corePrefix, module);
+
+	if (dependenciesMap.has(filePath)) {
+		return dependenciesMap.get(filePath);
+	}
+
+	const dependencies = new Set<string>();
+
+	const queue: string[] = [filePath];
+
+	while (queue.length) {
+		let currentPath = queue.shift();
+		if (!path.isAbsolute(currentPath)) {
+			currentPath = path.join(ui5Home, corePrefix, currentPath);
+		}
+
+		if (!dependencies.has(currentPath)) {
+			dependencies.add(currentPath);
+			const file = new FileInfo("", currentPath + ".js", "", "");
+
+			const ast = await file.loadContent();
+			const defineCall = getDefineCall(ast, file.getFileName());
+
+			if (defineCall && defineCall.dependencyArray) {
+				defineCall.dependencyArray.elements.forEach(element => {
+					let moduleName = (
+						element as ESTree.Literal
+					).value.toString();
+
+					if (moduleName.startsWith(".")) {
+						moduleName = path.resolve(
+							currentPath.substring(
+								0,
+								currentPath.lastIndexOf("/")
+							),
+							moduleName
+						);
+					}
+
+					queue.push(moduleName);
+				});
+			}
+		}
+	}
+
+	dependenciesMap.set(filePath, dependencies);
+	return dependencies;
+}
+
 async function analyse(args: Mod.AnalyseArguments): Promise<{} | undefined> {
 	if (!args.config) {
 		throw new Error("No configuration given");
@@ -354,6 +420,41 @@ async function analyse(args: Mod.AnalyseArguments): Promise<{} | undefined> {
 		visitor,
 		args.reporter
 	);
+
+	if (oAnalysis.replaceCalls.length > 0) {
+		for (let i = oAnalysis.replaceCalls.length - 1; i >= 0; i--) {
+			const oReplaceCall = oAnalysis.replaceCalls[i];
+			let circularDependency = false;
+			const sNewModule = oReplaceCall.config.newModulePath;
+			const oDependencies = await getAbsoluteDepPathsOf(
+				sNewModule,
+				args.reporter
+			);
+
+			for (const sPath of oDependencies) {
+				if (sPath.endsWith(args.file.getFileName())) {
+					circularDependency = true;
+					break;
+				}
+			}
+
+			if (circularDependency) {
+				// delete this replace call
+				oAnalysis.replaceCalls.splice(i, 1);
+
+				const defineCalls = ASTUtils.findCalls(
+					ast,
+					SapUiDefineCall.isValidRootPath
+				);
+
+				oAnalysis.addComments.push({
+					nodePath: defineCalls[0],
+					comment: `${oReplaceCall.configName}: circular dependency to ${sNewModule}`,
+				});
+			}
+		}
+	}
+
 	args.reporter.collect("replacementsFound", oAnalysis.replaceCalls.length);
 	return oAnalysis;
 }
@@ -421,10 +522,15 @@ async function migrate(args: Mod.MigrateArguments): Promise<boolean> {
 			// retrieve variable name from existing import and use it as name argument of replace call
 			let variableNameToUse = oReplace.config.newVariableName;
 			if (oReplace.config.newModulePath) {
-				variableNameToUse =
-					analyseResult.defineCall.getParamNameByImport(
-						oReplace.config.newModulePath
-					) || variableNameToUse;
+				const absolutePaths =
+					analyseResult.defineCall.getAbsoluteDependencyPaths();
+				const importIndex = absolutePaths.findIndex(path =>
+					path.endsWith(oReplace.config.newModulePath)
+				);
+				if (importIndex >= 0) {
+					variableNameToUse =
+						analyseResult.defineCall.paramNames[importIndex];
+				}
 			}
 			mReplacerFuncs[oReplace.importObj.replacerName].replace(
 				oNodePath,

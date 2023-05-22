@@ -1,6 +1,14 @@
 {
 	"modules": {
 		"CoreX API Replacements": {
+			"sap.ui.getCore()": {
+				"replacer": "NOOP",
+				"finder": "GlobalGetCoreFinder",
+				"extender": "addImportWithResolvedPath",
+				"newModulePath": "sap/ui/core/Core",
+				"newVariableName": "Core",
+				"version": "1.58.0"
+			},
 			"core.getLibraryResourceBundle": {
 				"newModulePath": "sap/ui/core/Lib",
 				"newVariableName": "Library",
@@ -85,6 +93,7 @@
 		}
 	},
 	"finders": {
+		"GlobalGetCoreFinder": "tasks/helpers/finders/GlobalGetCoreFinder.js",
 		"GlobalCoreConfigurationFinder": "tasks/helpers/finders/GlobalCoreConfigurationFinder.js",
 		"FunctionExtensionFinder": "tasks/helpers/finders/FunctionExtensionFinder.js",
 		"FunctionExtensionFinderWithDependencyCheck": "tasks/helpers/finders/FunctionExtensionFinderWithDependencyCheck.js",
@@ -98,6 +107,7 @@
 		"CoreFunctionCallFinder": "tasks/helpers/finders/CoreFunctionCallFinder.js"
 	},
 	"extenders": {
+		"addImportWithResolvedPath": "tasks/helpers/extenders/addImportWithResolvedPath.js",
 		"AddUnusedImport": "tasks/helpers/extenders/AddUnusedImport.js",
 		"AddUnusedImportWithComment": "tasks/helpers/extenders/AddUnusedImportWithComment.js",
 		"AddImport": "tasks/helpers/extenders/AddImport.js",
