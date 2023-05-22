@@ -3,6 +3,7 @@
 import {Syntax} from "esprima";
 import * as ESTree from "estree";
 import * as recast from "recast";
+import * as path from "path";
 import {TNodePath} from "ui5-migration";
 
 import {ConsoleReporter} from "../Migration";
@@ -172,14 +173,21 @@ export class SapUiDefineCall {
 		}
 	}
 
-	static _resolveRelativeImports(relValue, currentModule) {
-		if (relValue.startsWith("./") && !currentModule.startsWith("./")) {
+	static _resolveRelativeImports(
+		relValue: string,
+		currentModule: string
+	): string {
+		if (
+			(relValue.startsWith("./") || relValue.startsWith("../")) &&
+			!currentModule.startsWith("./")
+		) {
 			if (currentModule.includes("/")) {
-				relValue =
-					currentModule.substring(0, currentModule.lastIndexOf("/")) +
-					relValue.substring(".".length);
+				relValue = path.join(
+					currentModule.substring(0, currentModule.lastIndexOf("/")),
+					relValue
+				);
 			} else {
-				relValue = relValue.substring("./".length);
+				relValue = path.join("", relValue);
 			}
 		}
 		return relValue;
@@ -191,6 +199,10 @@ export class SapUiDefineCall {
 	 * @returns {string[]} dependency array elements resolved absolutely, e.g. ["a/b/c", "g/f/j"]
 	 */
 	getAbsoluteDependencyPaths() {
+		if (!this.dependencyArray) {
+			return [];
+		}
+
 		return this.dependencyArray.elements.map(oElement => {
 			const value = (oElement as ESTree.Literal).value.toString();
 			return SapUiDefineCall._resolveRelativeImports(value, this.name);
@@ -412,7 +424,7 @@ export class SapUiDefineCall {
 				return (
 					oElement.value === sModule ||
 					SapUiDefineCall._resolveRelativeImports(
-						oElement.value,
+						oElement.value as string,
 						this.name
 					) === sModule
 				);

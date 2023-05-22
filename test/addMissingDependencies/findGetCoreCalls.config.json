@@ -1,0 +1,27 @@
+{
+	"modules": {
+		"Find getCore() calls": {
+			"sap.ui.getCore()": {
+				"replacer": "NOOP",
+				"finder": "GlobalGetCoreFinder",
+				"extender": "addImportWithResolvedPath",
+				"newModulePath": "sap/ui/core/Core",
+				"newVariableName": "Core",
+				"version": "1.58.0"
+			}
+		}
+	},
+	"finders": {
+		"GlobalGetCoreFinder": "tasks/helpers/finders/GlobalGetCoreFinder.js"
+	},
+	"extenders": {
+		"addImportWithResolvedPath": "tasks/helpers/extenders/addImportWithResolvedPath.js"
+	},
+	"replacers": {
+		"NOOP": "tasks/helpers/replacers/NOOP.js"
+	},
+	"comments": {
+		"unhandledReplacementComment": "TODO unhandled replacement"
+	},
+	"excludes": []
+}

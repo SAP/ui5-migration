@@ -2,6 +2,7 @@ import {Extender} from "../../../dependencies";
 import {SapUiDefineCall} from "../../../util/SapUiDefineCall";
 import {ASTVisitor} from "../../../util/ASTVisitor";
 import * as ESTree from "estree";
+import {Syntax} from "esprima";
 
 /**
  * Adds an import to the define statement
@@ -15,7 +16,7 @@ class AddImportAndRemoveUnused implements Extender {
 			removeModulePath?: string;
 		}
 	): boolean {
-		const importToRemove = config.removeModulePath || "sap/ui/core/Core";
+		const importToRemove = "sap/ui/core/Core";
 
 		const absoluteImports = defineCall.getAbsoluteDependencyPaths();
 
@@ -23,11 +24,14 @@ class AddImportAndRemoveUnused implements Extender {
 			importString.endsWith(importToRemove)
 		);
 
+		let dependencyRemoved: boolean;
+
 		if (coreImportIndex >= 0) {
 			const paramToRemove = defineCall.paramNames[coreImportIndex];
 
 			const variableNames = new Set<string>();
 			const visitor = new ASTVisitor();
+			let bGlobalGetCoreFound = false;
 
 			visitor.visit(defineCall.factory.body, {
 				visitIdentifier(identifierPath) {
@@ -48,10 +52,29 @@ class AddImportAndRemoveUnused implements Extender {
 					}
 					this.traverse(identifierPath);
 				},
+				visitCallExpression(callPath) {
+					const oCall = callPath.value;
+
+					if (
+						oCall.callee.type === Syntax.MemberExpression &&
+						oCall.callee.property.type === Syntax.Identifier &&
+						oCall.callee.property.name === "getCore" &&
+						oCall.callee.object.type === Syntax.MemberExpression &&
+						oCall.callee.object.property.type ===
+							Syntax.Identifier &&
+						oCall.callee.object.property.name === "ui" &&
+						oCall.callee.object.object.type === Syntax.Identifier &&
+						oCall.callee.object.object.name === "sap"
+					) {
+						bGlobalGetCoreFound = true;
+					} else {
+						this.traverse(callPath);
+					}
+				},
 			});
 
-			if (!variableNames.has(paramToRemove)) {
-				defineCall.removeDependency(
+			if (!bGlobalGetCoreFound && !variableNames.has(paramToRemove)) {
+				dependencyRemoved = defineCall.removeDependency(
 					(
 						defineCall.dependencyArray.elements[
 							coreImportIndex
@@ -62,10 +85,18 @@ class AddImportAndRemoveUnused implements Extender {
 			}
 		}
 
-		return defineCall.addDependency(
-			config.newModulePath,
-			config.newVariableName
+		const moduleExists = absoluteImports.some(path =>
+			path.endsWith(config.newModulePath)
 		);
+
+		if (moduleExists) {
+			return dependencyRemoved;
+		} else {
+			return defineCall.addDependency(
+				config.newModulePath,
+				config.newVariableName
+			);
+		}
 	}
 }
 

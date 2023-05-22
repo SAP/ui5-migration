@@ -704,5 +704,20 @@ describe("addMissingDependencies", () => {
 				[]
 			);
 		});
+
+		it.only("should add missing dependency sap/ui/core/Core when sap.ui.getCore() is found", () => {
+			const subDir = rootDir;
+
+			const expectedContent = fs.readFileSync(
+				subDir + "findGetCoreCalls.expected.js",
+				"utf8"
+			);
+
+			const config = JSON.parse(
+				fs.readFileSync(subDir + "findGetCoreCalls.config.json", "utf8")
+			);
+			const module = new CustomFileInfo(subDir + "findGetCoreCalls.js");
+			return analyseMigrateAndTest(module, true, expectedContent, config);
+		});
 	});
 });
