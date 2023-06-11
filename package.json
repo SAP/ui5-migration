@@ -121,7 +121,7 @@
     "@types/json5": "^2.2.0",
     "@types/minimatch": "^3.0.5",
     "@types/mocha": "^9.1.1",
-    "@types/node": "^18.16.16",
+    "@types/node": "^18.16.17",
     "@types/yargs": "^17.0.24",
     "gts": "^3.1.1",
     "mocha": "^10.2.0",
