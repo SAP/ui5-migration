@@ -15,7 +15,7 @@
         "graceful-fs": "^4.2.11",
         "ignore": "^5.2.4",
         "json5": "^2.2.3",
-        "minimatch": "^5.1.6",
+        "minimatch": "^9.0.1",
         "recast": "^0.21.5",
         "request": "^2.88.2",
         "semver": "^7.5.2",
@@ -3550,14 +3550,17 @@
       }
     },
     "node_modules/minimatch": {
-      "version": "5.1.6",
-      "resolved": "https://registry.npmjs.org/minimatch/-/minimatch-5.1.6.tgz",
-      "integrity": "sha512-lKwV/1brpG6mBUFHtb7NUmtABCb2WZZmm2wNiOA5hAb8VdCS4B3dtMWyvcoViccwAW/COERjXLt0zP1zXUN26g==",
+      "version": "9.0.1",
+      "resolved": "https://registry.npmjs.org/minimatch/-/minimatch-9.0.1.tgz",
+      "integrity": "sha512-0jWhJpD/MdhPXwPuiRkCbfYfSKp2qnn2eOc279qI7f+osl/l+prKSrvhg157zSYvx/1nmgn2NqdT6k2Z7zSH9w==",
       "dependencies": {
         "brace-expansion": "^2.0.1"
       },
       "engines": {
-        "node": ">=10"
+        "node": ">=16 || 14 >=14.17"
+      },
+      "funding": {
+        "url": "https://github.com/sponsors/isaacs"
       }
     },
     "node_modules/minimist-options": {
@@ -8339,9 +8342,9 @@
       "dev": true
     },
     "minimatch": {
-      "version": "5.1.6",
-      "resolved": "https://registry.npmjs.org/minimatch/-/minimatch-5.1.6.tgz",
-      "integrity": "sha512-lKwV/1brpG6mBUFHtb7NUmtABCb2WZZmm2wNiOA5hAb8VdCS4B3dtMWyvcoViccwAW/COERjXLt0zP1zXUN26g==",
+      "version": "9.0.1",
+      "resolved": "https://registry.npmjs.org/minimatch/-/minimatch-9.0.1.tgz",
+      "integrity": "sha512-0jWhJpD/MdhPXwPuiRkCbfYfSKp2qnn2eOc279qI7f+osl/l+prKSrvhg157zSYvx/1nmgn2NqdT6k2Z7zSH9w==",
       "requires": {
         "brace-expansion": "^2.0.1"
       }
