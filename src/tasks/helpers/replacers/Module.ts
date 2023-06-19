@@ -67,6 +67,18 @@ const replaceable: ASTReplaceable = {
 			case Syntax.ReturnStatement: // return MyModule.myField
 				oInsertionPoint[node.name] = oNodeModule;
 				break;
+			case Syntax.ExpressionStatement:
+				oInsertionPoint[node.name] = oNodeModule;
+				break;
+			case Syntax.IfStatement:
+				oInsertionPoint[node.name] = oNodeModule;
+				break;
+			case Syntax.ConditionalExpression:
+				oInsertionPoint[node.name] = oNodeModule;
+				break;
+			case Syntax.Property:
+				oInsertionPoint[node.name] = oNodeModule;
+				break;
 			default:
 				throw new Error(
 					"Module: insertion is of an unsupported type " +

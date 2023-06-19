@@ -48,16 +48,10 @@ const replaceable: ASTReplaceable = {
 
 		const oNodeModule: ESTree.Expression = builders.callExpression(
 			builders.memberExpression(
-				builders.callExpression(
-					builders.memberExpression(
-						libraryIdent,
-						builders.identifier("get")
-					),
-					[oArg]
-				),
-				builders.identifier("getResourceBundle")
+				libraryIdent,
+				builders.identifier("getResourceBundleFor")
 			),
-			[]
+			[oArg]
 		);
 
 		// arrays do not have a type

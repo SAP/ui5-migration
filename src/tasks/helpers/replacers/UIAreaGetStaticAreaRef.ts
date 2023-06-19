@@ -37,7 +37,7 @@ const replaceable: ASTReplaceable = {
 		const oNodeModule: ESTree.Expression = builders.callExpression(
 			builders.memberExpression(
 				oObjectIdent,
-				builders.identifier("getStaticAreaRef")
+				builders.identifier("getDomRef")
 			),
 			[]
 		);

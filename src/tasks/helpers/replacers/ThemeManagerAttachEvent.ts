@@ -11,7 +11,7 @@ const builders = recast.types.builders;
  * - oCore.attachThemeChanged(...)
  *
  * With
- *  ThemeManager.attachEvent("ThemeChanged", ...)
+ *  sap/ui/core/Theming.attachApplied(...)
  *
  *
  * @param {recast.NodePath} node The top node of the module reference
@@ -37,12 +37,11 @@ const replaceable: ASTReplaceable = {
 		const oCallExpression = node.value as ESTree.CallExpression;
 
 		const aArgs = oCallExpression.arguments.slice();
-		aArgs.unshift(builders.literal("ThemeChanged"));
 
 		const oNodeModule: ESTree.Expression = builders.callExpression(
 			builders.memberExpression(
 				oObjectIdent,
-				builders.identifier("attachEvent")
+				builders.identifier("attachApplied")
 			),
 			aArgs
 		);

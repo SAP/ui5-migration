@@ -34,9 +34,12 @@ const replaceable: ASTReplaceable = {
 
 		const oInsertionPoint = node.parentPath.value;
 
-		const oNodeModule: ESTree.Expression = builders.memberExpression(
-			oThemeManagerIdent,
-			builders.identifier("themeLoaded")
+		const oNodeModule: ESTree.Expression = builders.callExpression(
+			builders.memberExpression(
+				oThemeManagerIdent,
+				builders.identifier("isApplied")
+			),
+			[]
 		);
 
 		// arrays do not have a type

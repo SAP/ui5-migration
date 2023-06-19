@@ -11,7 +11,7 @@ const builders = recast.types.builders;
  * - oCore.detachThemeChanged(...)
  *
  * With
- *  ThemeManager.detachEvent("ThemeChanged", ...)
+ *  Theming.detachApplied(...)
  *
  *
  * @param {recast.NodePath} node The top node of the module reference
@@ -37,12 +37,11 @@ const replaceable: ASTReplaceable = {
 		const oCallExpression = node.value as ESTree.CallExpression;
 
 		const aArgs = oCallExpression.arguments.slice();
-		aArgs.unshift(builders.literal("ThemeChanged"));
 
 		const oNodeModule: ESTree.Expression = builders.callExpression(
 			builders.memberExpression(
 				oObjectIdent,
-				builders.identifier("detachEvent")
+				builders.identifier("detachApplied")
 			),
 			aArgs
 		);
