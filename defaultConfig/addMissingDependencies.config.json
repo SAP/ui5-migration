@@ -1,20 +1,32 @@
 {
 	"modules": {
 		"CoreX API Replacements": {
-			"sap.ui.getCore()": {
-				"replacer": "NOOP",
-				"finder": "GlobalGetCoreFinder",
-				"extender": "addImportWithResolvedPath",
-				"newModulePath": "sap/ui/core/Core",
-				"newVariableName": "Core",
-				"version": "1.58.0"
-			},
 			"core.getLibraryResourceBundle": {
 				"newModulePath": "sap/ui/core/Lib",
-				"newVariableName": "Library",
+				"newVariableName": "Lib",
 				"replacer": "LibGetResourceBundle",
 				"finder": "CoreFunctionCallFinder",
 				"functionToFind": "getLibraryResourceBundle",
+				"extender": "AddImportAndRemoveUnused",
+				"version": "^1.58.0"
+			},
+			"core.initLibrary": {
+				"newModulePath": "sap/ui/core/Lib",
+				"newVariableName": "Lib",
+				"replacer": "Call",
+				"functionName": "init",
+				"finder": "CoreFunctionCallFinder",
+				"functionToFind": "initLibrary",
+				"extender": "AddImportAndRemoveUnused",
+				"version": "^1.58.0"
+			},
+			"core.attachLocalizationChanged": {
+				"newModulePath": "sap/base/i18n/Localization",
+				"newVariableName": "Localization",
+				"replacer": "Call",
+				"functionName": "attachChange",
+				"finder": "CoreFunctionCallFinder",
+				"functionToFind": "attachLocalizationChanged",
 				"extender": "AddImportAndRemoveUnused",
 				"version": "^1.58.0"
 			},
@@ -28,8 +40,8 @@
 				"version": "^1.58.0"
 			},
 			"core.isThemeApplied": {
-				"newModulePath": "sap/ui/core/theming/ThemeManager",
-				"newVariableName": "ThemeManager",
+				"newModulePath": "sap/ui/core/Theming",
+				"newVariableName": "Theming",
 				"replacer": "ThemeManagerThemeLoaded",
 				"finder": "CoreFunctionCallFinder",
 				"functionToFind": "isThemeApplied",
@@ -37,8 +49,8 @@
 				"version": "^1.58.0"
 			},
 			"core.attachThemeChanged": {
-				"newModulePath": "sap/ui/core/theming/ThemeManager",
-				"newVariableName": "ThemeManager",
+				"newModulePath": "sap/ui/core/Theming",
+				"newVariableName": "Theming",
 				"replacer": "ThemeManagerAttachEvent",
 				"finder": "CoreFunctionCallFinder",
 				"functionToFind": "attachThemeChanged",
@@ -46,20 +58,11 @@
 				"version": "^1.58.0"
 			},
 			"core.detachThemeChanged": {
-				"newModulePath": "sap/ui/core/theming/ThemeManager",
-				"newVariableName": "ThemeManager",
+				"newModulePath": "sap/ui/core/Theming",
+				"newVariableName": "Theming",
 				"replacer": "ThemeManagerDetachEvent",
 				"finder": "CoreFunctionCallFinder",
 				"functionToFind": "detachThemeChanged",
-				"extender": "AddImportAndRemoveUnused",
-				"version": "^1.58.0"
-			},
-			"core.createRenderManager": {
-				"newModulePath": "sap/ui/core/RenderManager",
-				"newVariableName": "RenderManager",
-				"replacer": "NewRenderManager",
-				"finder": "CoreFunctionCallFinder",
-				"functionToFind": "createRenderManager",
 				"extender": "AddImportAndRemoveUnused",
 				"version": "^1.58.0"
 			},
@@ -72,12 +75,50 @@
 				"extender": "AddImportAndRemoveUnused",
 				"version": "^1.58.0"
 			},
+			"core.createRenderManager": {
+				"newModulePath": "sap/ui/core/RenderManager",
+				"newVariableName": "RenderManager",
+				"replacer": "NewRenderManager",
+				"finder": "CoreFunctionCallFinder",
+				"functionToFind": "createRenderManager",
+				"extender": "AddImportAndRemoveUnused"
+			},
 			"core.getStaticAreaRef": {
-				"newModulePath": "sap/ui/core/UIArea",
-				"newVariableName": "UIArea",
+				"newModulePath": "sap/ui/core/StaticArea",
+				"newVariableName": "StaticArea",
 				"replacer": "UIAreaGetStaticAreaRef",
 				"finder": "CoreFunctionCallFinder",
 				"functionToFind": "getStaticAreaRef",
+				"extender": "AddImportAndRemoveUnused",
+				"version": "^1.58.0"
+			},
+			"core.getConfiguration().getRTL": {
+				"newModulePath": "sap/base/i18n/Localization",
+				"newVariableName": "Localization",
+				"replacer": "Call",
+				"functionName": "getRTL",
+				"finder": "ConfigurationFunctionCallFinder",
+				"functionToFind": "getRTL",
+				"extender": "AddImportAndRemoveUnused",
+				"version": "^1.58.0"
+			},
+			"core.getConfiguration().getAccessibility": {
+				"newModulePath": "sap/ui/core/ControlBehavior",
+				"newVariableName": "ControlBehavior",
+				"replacer": "Call",
+				"functionName": "isAccessibilityEnabled",
+				"finder": "ConfigurationFunctionCallFinder",
+				"functionToFind": "getAccessibility",
+				"extender": "AddImportAndRemoveUnused",
+				"version": "^1.58.0"
+			},
+			"core.getConfiguration().getAnimationMode": {
+				"newModulePath": "sap/ui/core/ControlBehavior",
+				"newVariableName": "ControlBehavior",
+				"replacer": "Call",
+				"functionName": "getAnimationMode",
+				"finder": "ConfigurationFunctionCallFinder",
+				"functionToFind": "getAnimationMode",
 				"extender": "AddImportAndRemoveUnused",
 				"version": "^1.58.0"
 			},
@@ -104,7 +145,8 @@
 		"CallWithArgumentFinderWithDependencyCheck": "tasks/helpers/finders/CallWithArgumentFinderWithDependencyCheck.js",
 		"NewExpressionFinder": "tasks/helpers/finders/NewExpressionFinder.js",
 		"UriParametersWithURLFinder": "tasks/helpers/finders/UriParametersWithURLFinder.js",
-		"CoreFunctionCallFinder": "tasks/helpers/finders/CoreFunctionCallFinder.js"
+		"CoreFunctionCallFinder": "tasks/helpers/finders/CoreFunctionCallFinder.js",
+		"ConfigurationFunctionCallFinder": "tasks/helpers/finders/ConfigurationFunctionCallFinder.js"
 	},
 	"extenders": {
 		"addImportWithResolvedPath": "tasks/helpers/extenders/addImportWithResolvedPath.js",
