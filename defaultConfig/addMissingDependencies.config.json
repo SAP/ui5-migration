@@ -1,6 +1,14 @@
 {
 	"modules": {
 		"CoreX API Replacements": {
+			"sap.ui.getCore()": {
+				"newModulePath": "sap/ui/core/Core",
+				"newVariableName": "Core",
+				"replacer": "Module",
+				"finder": "GlobalGetCoreFinder",
+				"extender": "AddImport",
+				"version": "^1.58.0"
+			},
 			"core.getLibraryResourceBundle": {
 				"newModulePath": "sap/ui/core/Lib",
 				"newVariableName": "Lib",
@@ -30,45 +38,9 @@
 				"extender": "AddImportAndRemoveUnused",
 				"version": "^1.58.0"
 			},
-			"core.getCurrentFocusedControlId": {
-				"newModulePath": "sap/ui/core/FocusHandler",
-				"newVariableName": "FocusHandler",
-				"replacer": "FocusHandlerGetCurrentFocus",
-				"finder": "CoreFunctionCallFinder",
-				"functionToFind": "getCurrentFocusedControlId",
-				"extender": "AddImportAndRemoveUnused",
-				"version": "^1.58.0"
-			},
-			"core.isThemeApplied": {
-				"newModulePath": "sap/ui/core/Theming",
-				"newVariableName": "Theming",
-				"replacer": "ThemeManagerThemeLoaded",
-				"finder": "CoreFunctionCallFinder",
-				"functionToFind": "isThemeApplied",
-				"extender": "AddImportAndRemoveUnused",
-				"version": "^1.58.0"
-			},
-			"core.attachThemeChanged": {
-				"newModulePath": "sap/ui/core/Theming",
-				"newVariableName": "Theming",
-				"replacer": "ThemeManagerAttachEvent",
-				"finder": "CoreFunctionCallFinder",
-				"functionToFind": "attachThemeChanged",
-				"extender": "AddImportAndRemoveUnused",
-				"version": "^1.58.0"
-			},
-			"core.detachThemeChanged": {
-				"newModulePath": "sap/ui/core/Theming",
-				"newVariableName": "Theming",
-				"replacer": "ThemeManagerDetachEvent",
-				"finder": "CoreFunctionCallFinder",
-				"functionToFind": "detachThemeChanged",
-				"extender": "AddImportAndRemoveUnused",
-				"version": "^1.58.0"
-			},
 			"core.byId": {
 				"newModulePath": "sap/ui/core/Element",
-				"newVariableName": "UI5Element",
+				"newVariableName": "Element",
 				"replacer": "ElementRegistryGet",
 				"finder": "CoreFunctionCallFinder",
 				"functionToFind": "byId",
@@ -89,6 +61,25 @@
 				"replacer": "UIAreaGetStaticAreaRef",
 				"finder": "CoreFunctionCallFinder",
 				"functionToFind": "getStaticAreaRef",
+				"extender": "AddImportAndRemoveUnused",
+				"version": "^1.58.0"
+			},
+			"core.getConfiguration().getFormatSettings().getFormatLocale()": {
+				"newModulePath": "sap/base/i18n/Formatting",
+				"newVariableName": "Formatting",
+				"replacer": "LanguageTagToString",
+				"finder": "FormatSettingsFunctionCallFinder",
+				"functionToFind": "getFormatLocale",
+				"extender": "AddImportAndRemoveUnused",
+				"version": "^1.58.0"
+			},
+			"core.getConfiguration().getTimezone": {
+				"newModulePath": "sap/base/i18n/Localization",
+				"newVariableName": "Localization",
+				"replacer": "Call",
+				"functionName": "getTimezone",
+				"finder": "ConfigurationFunctionCallFinder",
+				"functionToFind": "getTimezone",
 				"extender": "AddImportAndRemoveUnused",
 				"version": "^1.58.0"
 			},
@@ -146,7 +137,8 @@
 		"NewExpressionFinder": "tasks/helpers/finders/NewExpressionFinder.js",
 		"UriParametersWithURLFinder": "tasks/helpers/finders/UriParametersWithURLFinder.js",
 		"CoreFunctionCallFinder": "tasks/helpers/finders/CoreFunctionCallFinder.js",
-		"ConfigurationFunctionCallFinder": "tasks/helpers/finders/ConfigurationFunctionCallFinder.js"
+		"ConfigurationFunctionCallFinder": "tasks/helpers/finders/ConfigurationFunctionCallFinder.js",
+		"FormatSettingsFunctionCallFinder": "tasks/helpers/finders/FormatSettingsFunctionCallFinder.js"
 	},
 	"extenders": {
 		"addImportWithResolvedPath": "tasks/helpers/extenders/addImportWithResolvedPath.js",
@@ -170,7 +162,8 @@
 		"ThemeManagerDetachEvent": "tasks/helpers/replacers/ThemeManagerDetachEvent.js",
 		"NewRenderManager": "tasks/helpers/replacers/NewRenderManager.js",
 		"ElementRegistryGet": "tasks/helpers/replacers/ElementRegistryGet.js",
-		"UIAreaGetStaticAreaRef": "tasks/helpers/replacers/UIAreaGetStaticAreaRef.js"
+		"UIAreaGetStaticAreaRef": "tasks/helpers/replacers/UIAreaGetStaticAreaRef.js",
+		"LanguageTagToString": "tasks/helpers/replacers/LanguageTagToString.js"
 	},
 	"comments": {
 		"unhandledReplacementComment": "TODO unhandled replacement"

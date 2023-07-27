@@ -252,6 +252,7 @@ interface ConfigObject {
 	newModulePath?: string;
 	newVariableName?: string;
 	functionName?: string;
+	modulePath?: string;
 }
 
 interface FoundCall {
@@ -576,6 +577,13 @@ async function migrate(args: Mod.MigrateArguments): Promise<boolean> {
 				bFileModified = true;
 			}
 		}
+	}
+
+	if (analyseResult.defineCall.getNodeOfImport("sap/ui/core/Core")) {
+		args.reporter.collect(
+			"moduleStillHasCoreDependency",
+			args.file.getFileName()
+		);
 	}
 
 	// add comments
