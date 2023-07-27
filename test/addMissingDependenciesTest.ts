@@ -705,7 +705,7 @@ describe("addMissingDependencies", () => {
 			);
 		});
 
-		it.only("should add missing dependency sap/ui/core/Core when sap.ui.getCore() is found", () => {
+		it("should add missing dependency sap/ui/core/Core when sap.ui.getCore() is found", () => {
 			const subDir = rootDir;
 
 			const expectedContent = fs.readFileSync(

@@ -138,7 +138,12 @@ export class ConsoleReporter extends BaseReporter {
 			} else {
 				this.report(
 					level,
-					"value: " + key + ": entries: " + value.length
+					"value: " +
+						key +
+						", size: " +
+						value.length +
+						", entries: " +
+						value.join(", ")
 				);
 			}
 		});
