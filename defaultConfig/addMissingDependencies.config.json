@@ -64,11 +64,21 @@
 				"extender": "AddImportAndRemoveUnused",
 				"version": "^1.58.0"
 			},
-			"core.getConfiguration().getFormatSettings().getFormatLocale()": {
+			"core.getConfiguration().getFormatSettings().getFormatLocale": {
+				"newModulePath": "sap/base/i18n/Formatting",
+				"newVariableName": "Formatting",
+				"replacer": "Call",
+				"functionName": "getFormatLocale",
+				"finder": "FormatSettingsFunctionCallFinder",
+				"functionToFind": "getFormatLocale",
+				"extender": "AddImportAndRemoveUnused",
+				"version": "^1.58.0"
+			},
+			"core.getConfiguration().getFormatLocale": {
 				"newModulePath": "sap/base/i18n/Formatting",
 				"newVariableName": "Formatting",
 				"replacer": "LanguageTagToString",
-				"finder": "FormatSettingsFunctionCallFinder",
+				"finder": "ConfigurationFunctionCallFinder",
 				"functionToFind": "getFormatLocale",
 				"extender": "AddImportAndRemoveUnused",
 				"version": "^1.58.0"
