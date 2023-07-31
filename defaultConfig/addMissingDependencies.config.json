@@ -121,6 +121,15 @@
 				"functionToFind": "getConfiguration",
 				"extender": "AddImportAndRemoveUnused",
 				"version": "^1.58.0"
+			},
+			"core.getMessageManager": {
+				"newModulePath": "sap/ui/core/message/MessageManager",
+				"newVariableName": "MessageManager",
+				"replacer": "Module",
+				"finder": "CoreFunctionCallFinder",
+				"functionToFind": "getMessageManager",
+				"extender": "AddImportAndRemoveUnused",
+				"version": "^1.58.0"
 			}
 		}
 	},

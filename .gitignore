@@ -49,3 +49,7 @@ jspm_packages
 
 # VS Code
 .vscode
+
+.env
+
+npm-shrinkwrap.json
