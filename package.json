@@ -100,7 +100,7 @@
   "dependencies": {
     "diff": "^5.1.0",
     "esprima": "^4.0.1",
-    "globals": "^13.20.0",
+    "globals": "^13.21.0",
     "graceful-fs": "^4.2.11",
     "ignore": "^5.2.4",
     "json5": "^2.2.3",
@@ -121,7 +121,7 @@
     "@types/json5": "^2.2.0",
     "@types/minimatch": "^3.0.5",
     "@types/mocha": "^9.1.1",
-    "@types/node": "^18.17.3",
+    "@types/node": "^18.17.5",
     "@types/yargs": "^17.0.24",
     "gts": "^3.1.1",
     "mocha": "^10.2.0",
