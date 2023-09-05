@@ -130,6 +130,16 @@
 				"functionToFind": "getMessageManager",
 				"extender": "AddImportAndRemoveUnused",
 				"version": "^1.58.0"
+			},
+			"core.byFieldGroupId": {
+				"newModulePath": "sap/ui/core/Control",
+				"newVariableName": "Control",
+				"replacer": "Call",
+				"functionName": "getControlsByFieldGroupId",
+				"finder": "CoreFunctionCallFinder",
+				"functionToFind": "byFieldGroupId",
+				"extender": "AddImportAndRemoveUnused",
+				"version": "^1.58.0"
 			}
 		}
 	},
