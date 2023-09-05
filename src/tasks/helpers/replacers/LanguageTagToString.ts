@@ -1,5 +1,4 @@
 import {Syntax} from "esprima";
-import * as ESTree from "estree";
 import * as recast from "recast";
 import {ASTReplaceable, NodePath} from "ui5-migration";
 
@@ -7,11 +6,8 @@ const builders = recast.types.builders;
 
 /**
  * Creates a call expression as replacement
- * Module: log
- * Functions: info
- * Old Arguments: [1, 2]
  *
- * --> will create call: Log.info(1, 2)
+ * Formatting.getLanguageTag().toString()
  *
  * @param {recast.NodePath} node The top node of the module reference
  * @param {string} name The name of the new module
@@ -25,33 +21,25 @@ const replaceable: ASTReplaceable = {
 		name: string,
 		fnName: string,
 		oldModuleCall: string,
-		config: {newArgs: string[]}
+		config: {}
 	): void {
 		const oInsertionPoint = node.parentPath.value;
-		let oNewCall: ESTree.Expression = builders.identifier(name);
-		if (fnName) {
-			oNewCall = builders.memberExpression(
-				oNewCall,
-				builders.identifier(fnName),
+		const oNewCall = builders.callExpression(
+			builders.memberExpression(
+				builders.callExpression(
+					builders.memberExpression(
+						builders.identifier(name),
+						builders.identifier("getLanguageTag"),
+						false
+					),
+					[]
+				),
+				builders.identifier("toString"),
 				false
-			);
-		}
+			),
+			[]
+		);
 
-		let args = [];
-		if (config.newArgs) {
-			args = config.newArgs.map(oEle => {
-				return evaluateExpressions(oEle);
-			});
-		} else if (
-			node.value.type === Syntax.NewExpression ||
-			node.value.type === Syntax.CallExpression
-		) {
-			args = node.value.arguments;
-		}
-
-		oNewCall = builders.callExpression(oNewCall, args);
-
-		// arrays do not have a type
 		if (Array.isArray(oInsertionPoint)) {
 			oInsertionPoint[node.name] = oNewCall;
 			return;
@@ -105,12 +93,5 @@ const replaceable: ASTReplaceable = {
 		}
 	},
 };
-
-function evaluateExpressions(parameter) {
-	const expressionStatement = recast.parse(parameter).program.body[
-		"0"
-	] as ESTree.ExpressionStatement;
-	return expressionStatement.expression;
-}
 
 module.exports = replaceable;

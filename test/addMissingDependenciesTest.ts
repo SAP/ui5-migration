@@ -536,5 +536,188 @@ describe("addMissingDependencies", () => {
 				[]
 			);
 		});
+
+		it("should replace Core.getLibraryResourceBundle() with Lib.get(...).getResourceBundle()", done => {
+			const fileName = "getResourceBundle";
+			const subDir = rootDir + "replaceCoreAPI/";
+			const expectedContent = fs.readFileSync(
+				`${subDir}${fileName}.expected.js`,
+				"utf8"
+			);
+			const config = JSON.parse(
+				fs.readFileSync(`${subDir}${fileName}.config.json`, "utf8")
+			);
+			const module = new CustomFileInfo(`${subDir}${fileName}.js`);
+			analyseMigrateAndTest(
+				module,
+				true,
+				expectedContent,
+				config,
+				done,
+				[]
+			);
+		});
+
+		it("should replace Core.createRenderManager() with 'new RenderManager()'", done => {
+			const fileName = "createRenderManager";
+			const subDir = rootDir + "replaceCoreAPI/";
+			const expectedContent = fs.readFileSync(
+				`${subDir}${fileName}.expected.js`,
+				"utf8"
+			);
+			const config = JSON.parse(
+				fs.readFileSync(`${subDir}${fileName}.config.json`, "utf8")
+			);
+			const module = new CustomFileInfo(`${subDir}${fileName}.js`);
+			analyseMigrateAndTest(
+				module,
+				true,
+				expectedContent,
+				config,
+				done,
+				[]
+			);
+		});
+
+		it("should replace Core.getCurrentFocusedControlId() with 'FocusHandler.getCurrentFocusedControlId()'", done => {
+			const fileName = "FocusHandlerGetCurrentFocus";
+			const subDir = rootDir + "replaceCoreAPI/";
+			const expectedContent = fs.readFileSync(
+				`${subDir}${fileName}.expected.js`,
+				"utf8"
+			);
+			const config = JSON.parse(
+				fs.readFileSync(`${subDir}${fileName}.config.json`, "utf8")
+			);
+			const module = new CustomFileInfo(`${subDir}${fileName}.js`);
+			analyseMigrateAndTest(
+				module,
+				true,
+				expectedContent,
+				config,
+				done,
+				[]
+			);
+		});
+
+		it("should replace Core.isThemeApplied() with 'ThemeManager.themeLoaded'", done => {
+			const fileName = "ThemeManagerThemeLoaded";
+			const subDir = rootDir + "replaceCoreAPI/";
+			const expectedContent = fs.readFileSync(
+				`${subDir}${fileName}.expected.js`,
+				"utf8"
+			);
+			const config = JSON.parse(
+				fs.readFileSync(`${subDir}${fileName}.config.json`, "utf8")
+			);
+			const module = new CustomFileInfo(`${subDir}${fileName}.js`);
+			analyseMigrateAndTest(
+				module,
+				true,
+				expectedContent,
+				config,
+				done,
+				[]
+			);
+		});
+
+		it("should replace Core.attachThemeChanged(...) with 'ThemeManager.attachEvent(\"ThemeChanged\", ...)'", done => {
+			const fileName = "ThemeManagerAttachEvent";
+			const subDir = rootDir + "replaceCoreAPI/";
+			const expectedContent = fs.readFileSync(
+				`${subDir}${fileName}.expected.js`,
+				"utf8"
+			);
+			const config = JSON.parse(
+				fs.readFileSync(`${subDir}${fileName}.config.json`, "utf8")
+			);
+			const module = new CustomFileInfo(`${subDir}${fileName}.js`);
+			analyseMigrateAndTest(
+				module,
+				true,
+				expectedContent,
+				config,
+				done,
+				[]
+			);
+		});
+
+		it("should replace Core.detachThemeChanged(...) with 'ThemeManager.detachEvent(\"ThemeChanged\", ...)'", done => {
+			const fileName = "ThemeManagerDetachEvent";
+			const subDir = rootDir + "replaceCoreAPI/";
+			const expectedContent = fs.readFileSync(
+				`${subDir}${fileName}.expected.js`,
+				"utf8"
+			);
+			const config = JSON.parse(
+				fs.readFileSync(`${subDir}${fileName}.config.json`, "utf8")
+			);
+			const module = new CustomFileInfo(`${subDir}${fileName}.js`);
+			analyseMigrateAndTest(
+				module,
+				true,
+				expectedContent,
+				config,
+				done,
+				[]
+			);
+		});
+
+		it("should replace Core.byId(...) with 'UI5Element.registry.get(...)'", done => {
+			const fileName = "ElementRegistryGet";
+			const subDir = rootDir + "replaceCoreAPI/";
+			const expectedContent = fs.readFileSync(
+				`${subDir}${fileName}.expected.js`,
+				"utf8"
+			);
+			const config = JSON.parse(
+				fs.readFileSync(`${subDir}${fileName}.config.json`, "utf8")
+			);
+			const module = new CustomFileInfo(`${subDir}${fileName}.js`);
+			analyseMigrateAndTest(
+				module,
+				true,
+				expectedContent,
+				config,
+				done,
+				[]
+			);
+		});
+
+		it("should replace Core.getStaticAreaRef(...) with 'UIArea.getStaticAreaRef(...)'", done => {
+			const fileName = "UIAreaGetStaticAreaRef";
+			const subDir = rootDir + "replaceCoreAPI/";
+			const expectedContent = fs.readFileSync(
+				`${subDir}${fileName}.expected.js`,
+				"utf8"
+			);
+			const config = JSON.parse(
+				fs.readFileSync(`${subDir}${fileName}.config.json`, "utf8")
+			);
+			const module = new CustomFileInfo(`${subDir}${fileName}.js`);
+			analyseMigrateAndTest(
+				module,
+				true,
+				expectedContent,
+				config,
+				done,
+				[]
+			);
+		});
+
+		it("should add missing dependency sap/ui/core/Core when sap.ui.getCore() is found", () => {
+			const subDir = rootDir;
+
+			const expectedContent = fs.readFileSync(
+				subDir + "findGetCoreCalls.expected.js",
+				"utf8"
+			);
+
+			const config = JSON.parse(
+				fs.readFileSync(subDir + "findGetCoreCalls.config.json", "utf8")
+			);
+			const module = new CustomFileInfo(subDir + "findGetCoreCalls.js");
+			return analyseMigrateAndTest(module, true, expectedContent, config);
+		});
 	});
 });

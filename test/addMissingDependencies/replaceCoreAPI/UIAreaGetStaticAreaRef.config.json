@@ -1,0 +1,27 @@
+{
+	"modules": {
+		"GLOBALS": {
+			"core.getStaticAreaRef": {
+				"newModulePath": "sap/ui/core/UIArea",
+				"newVariableName": "UIArea",
+				"replacer": "UIAreaGetStaticAreaRef",
+				"finder": "CoreFunctionCallFinder",
+				"functionToFind": "getStaticAreaRef",
+				"extender": "AddImportAndRemoveUnused"
+			}
+		}
+	},
+	"finders": {
+		"CoreFunctionCallFinder": "tasks/helpers/finders/CoreFunctionCallFinder.js"
+	},
+	"extenders": {
+		"AddImportAndRemoveUnused": "tasks/helpers/extenders/AddImportAndRemoveUnused.js"
+	},
+	"replacers": {
+		"UIAreaGetStaticAreaRef": "tasks/helpers/replacers/UIAreaGetStaticAreaRef.js"
+	},
+	"comments": {
+		"unhandledReplacementComment": "TODO unhandled replacement"
+	},
+	"excludes": []
+}

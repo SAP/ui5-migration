@@ -1,0 +1,27 @@
+{
+	"modules": {
+		"GLOBALS": {
+			"core.getLibraryResourceBundle": {
+				"newModulePath": "sap/ui/core/Lib",
+				"newVariableName": "Library",
+				"replacer": "LibGetResourceBundle",
+				"finder": "CoreFunctionCallFinder",
+				"functionToFind": "getLibraryResourceBundle",
+				"extender": "AddImportAndRemoveUnused"
+			}
+		}
+	},
+	"finders": {
+		"CoreFunctionCallFinder": "tasks/helpers/finders/CoreFunctionCallFinder.js"
+	},
+	"extenders": {
+		"AddImportAndRemoveUnused": "tasks/helpers/extenders/AddImportAndRemoveUnused.js"
+	},
+	"replacers": {
+		"LibGetResourceBundle": "tasks/helpers/replacers/LibGetResourceBundle.js"
+	},
+	"comments": {
+		"unhandledReplacementComment": "TODO unhandled replacement"
+	},
+	"excludes": []
+}

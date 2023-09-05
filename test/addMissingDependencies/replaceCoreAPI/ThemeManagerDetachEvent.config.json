@@ -1,0 +1,27 @@
+{
+	"modules": {
+		"GLOBALS": {
+			"core.detachThemeChanged": {
+				"newModulePath": "sap/ui/core/theming/ThemeManager",
+				"newVariableName": "ThemeManager",
+				"replacer": "ThemeManagerDetachEvent",
+				"finder": "CoreFunctionCallFinder",
+				"functionToFind": "detachThemeChanged",
+				"extender": "AddImportAndRemoveUnused"
+			}
+		}
+	},
+	"finders": {
+		"CoreFunctionCallFinder": "tasks/helpers/finders/CoreFunctionCallFinder.js"
+	},
+	"extenders": {
+		"AddImportAndRemoveUnused": "tasks/helpers/extenders/AddImportAndRemoveUnused.js"
+	},
+	"replacers": {
+		"ThemeManagerDetachEvent": "tasks/helpers/replacers/ThemeManagerDetachEvent.js"
+	},
+	"comments": {
+		"unhandledReplacementComment": "TODO unhandled replacement"
+	},
+	"excludes": []
+}

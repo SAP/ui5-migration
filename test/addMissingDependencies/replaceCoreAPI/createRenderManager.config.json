@@ -1,0 +1,27 @@
+{
+	"modules": {
+		"GLOBALS": {
+			"core.createRenderManager": {
+				"newModulePath": "sap/ui/core/RenderManager",
+				"newVariableName": "RenderManager",
+				"replacer": "NewRenderManager",
+				"finder": "CoreFunctionCallFinder",
+				"functionToFind": "createRenderManager",
+				"extender": "AddImportAndRemoveUnused"
+			}
+		}
+	},
+	"finders": {
+		"CoreFunctionCallFinder": "tasks/helpers/finders/CoreFunctionCallFinder.js"
+	},
+	"extenders": {
+		"AddImportAndRemoveUnused": "tasks/helpers/extenders/AddImportAndRemoveUnused.js"
+	},
+	"replacers": {
+		"NewRenderManager": "tasks/helpers/replacers/NewRenderManager.js"
+	},
+	"comments": {
+		"unhandledReplacementComment": "TODO unhandled replacement"
+	},
+	"excludes": []
+}
