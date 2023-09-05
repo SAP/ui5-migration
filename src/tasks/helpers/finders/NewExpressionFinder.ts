@@ -1,9 +1,10 @@
-import {Syntax} from "esprima";
+import {Syntax} from "../../../Migration";
 import * as ESTree from "estree";
 import * as recast from "recast";
 
 import {EMPTY_FINDER_RESULT, Finder, FinderResult} from "../../../dependencies";
 import {SapUiDefineCall} from "../../../util/SapUiDefineCall";
+import {parse} from "../../../util/ParseUtils";
 
 /**
  * Finds new expressions if the number of arguments match and the callee name.
@@ -84,7 +85,7 @@ class NewExpressionFinder implements Finder {
 }
 
 function evaluateExpressions(parameter) {
-	const expressionStatement = recast.parse(parameter).program.body[
+	const expressionStatement = parse(parameter).program.body[
 		"0"
 	] as ESTree.ExpressionStatement;
 	return expressionStatement.expression;

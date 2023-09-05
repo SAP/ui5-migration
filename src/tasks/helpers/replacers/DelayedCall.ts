@@ -1,9 +1,10 @@
-import {Syntax} from "esprima";
+import {Syntax} from "../../../Migration";
 import * as ESTree from "estree";
 import * as recast from "recast";
 import {ASTReplaceable, NodePath} from "ui5-migration";
 
 import {ASTVisitor} from "../../../util/ASTVisitor";
+import {parse} from "../../../util/ParseUtils";
 
 const builders = recast.types.builders;
 
@@ -74,7 +75,7 @@ const replaceable: ASTReplaceable = {
 					"(function(){\n" +
 					"	setTimeout(fnMethod.bind(oObject), 0);\n" +
 					"})";
-				const oAst = recast.parse(sText);
+				const oAst = parse(sText);
 
 				const oNodeSetTimeout = getInnerExpression(oAst.program);
 				oNodeSetTimeout.arguments[1] = aArgs[0]; // iDelay
@@ -134,7 +135,7 @@ const replaceable: ASTReplaceable = {
 					"	setTimeout(oObject[fnMethod].bind(oObject), 0);\n" +
 					"})";
 
-				const oAst = recast.parse(sText);
+				const oAst = parse(sText);
 				const oNodeSetTimeout = getInnerExpression(oAst.program);
 
 				// iDelay -> args 0
@@ -181,7 +182,7 @@ const replaceable: ASTReplaceable = {
 					"	}.bind(oObject), 0);\n" +
 					"})";
 
-				const oAst = recast.parse(sText);
+				const oAst = parse(sText);
 				const oNodeSetTimeout = getInnerExpression(oAst.program);
 				const oInnerCallExpression = oNodeSetTimeout.arguments[
 					"0"

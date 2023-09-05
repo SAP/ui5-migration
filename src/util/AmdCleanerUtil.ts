@@ -1,5 +1,6 @@
 "use strict";
 
+import {Syntax} from "../Migration";
 import {ConsoleReporter, Reporter, ReportLevel} from "../Migration";
 import {SapUiDefineCall} from "./SapUiDefineCall";
 import * as ASTUtils from "./ASTUtils";
@@ -12,7 +13,6 @@ import * as ModuleNameComparator from "./ModuleNameComparator";
 import * as VariableNameCreator from "./VariableNameCreator";
 
 const recast = require("recast");
-const Syntax = require("esprima").Syntax;
 
 const builders = recast.types.builders;
 
@@ -1443,7 +1443,7 @@ module.exports = {
 						globalNameConvertedToAMDExport = mainClassName;
 						bModified = true;
 					} else if (
-						expression.type === Syntax.AssigmnentExpression &&
+						expression.type === Syntax.AssignmentExpression &&
 						mainClassName &&
 						mainClassName ===
 							that.getObjectName(

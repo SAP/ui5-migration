@@ -5,7 +5,7 @@
 import {SapUiDefineCall} from "./SapUiDefineCall";
 import * as ESTree from "estree";
 
-const Syntax = require("esprima").Syntax;
+import {Syntax} from "../Migration";
 
 /*
  * resolves relative AMD module identifiers relative to a given base name
@@ -92,7 +92,7 @@ export function checkForShortcutExpression(
 		return undefined;
 	}
 
-	let leftmost = node;
+	let leftmost: ESTree.Node = node;
 	const propertyPath = [];
 	while (
 		leftmost.type === Syntax.MemberExpression &&

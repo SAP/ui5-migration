@@ -7,9 +7,9 @@ import * as ASTUtils from "./ASTUtils";
 import {ASTVisitor} from "./ASTVisitor";
 import * as Mod from "../Migration";
 import {APIInfo} from "./APIInfo";
+import {Syntax} from "../Migration";
 
 const recast = require("recast");
-const Syntax = require("esprima").Syntax;
 
 const builders = recast.types.builders;
 

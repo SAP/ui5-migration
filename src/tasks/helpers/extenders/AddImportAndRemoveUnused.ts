@@ -2,7 +2,7 @@ import {Extender} from "../../../dependencies";
 import {SapUiDefineCall} from "../../../util/SapUiDefineCall";
 import {ASTVisitor} from "../../../util/ASTVisitor";
 import * as ESTree from "estree";
-import {Syntax} from "esprima";
+import {Syntax} from "../../../Migration";
 
 /**
  * Adds an import to the define statement

@@ -8,6 +8,7 @@ import {ReportLevel} from "../Migration";
 
 import {AnalyzeCharacter, CodeStyleAnalyzer} from "./CodeStyleAnalyzer";
 import * as DiffOptimizer from "./whitespace/DiffOptimizer";
+import {parse} from "./ParseUtils";
 
 const mStrategiesCache = new Map();
 
@@ -44,7 +45,7 @@ export class StringFileInfo implements Mod.FileInfo {
 	}
 
 	async loadContent(): Promise<Node> {
-		this.oAST = recast.parse(this.input).program;
+		this.oAST = parse(this.input).program;
 		return this.oAST;
 	}
 

@@ -1,9 +1,9 @@
-import {Syntax} from "esprima";
-import * as recast from "recast";
+import {Syntax} from "../../../Migration";
 import {ASTReplaceable, NodePath} from "ui5-migration";
 import * as ESTree from "estree";
 
 import * as CommentUtils from "../../../util/CommentUtils";
+import {parse} from "../../../util/ParseUtils";
 
 /**
  * From:
@@ -37,7 +37,7 @@ const replaceable: ASTReplaceable = {
 					"(function () {\n" +
 					"	URLWhitelist.delete(URLWhitelist.entries()[iIndexToReplace]);\n" +
 					"})";
-				const oAst = recast.parse(sText);
+				const oAst = parse(sText);
 				const oBody = oAst.program.body[
 					"0"
 				] as ESTree.ExpressionStatement;

@@ -1,9 +1,10 @@
-import {Syntax} from "esprima";
+import {Syntax} from "../../../Migration";
 import * as ESTree from "estree";
 import * as recast from "recast";
 import {ASTReplaceable, NodePath} from "ui5-migration";
 
 const builders = recast.types.builders;
+import {parse} from "../../../util/ParseUtils";
 
 /**
  * Creates a call expression as replacement
@@ -107,7 +108,7 @@ const replaceable: ASTReplaceable = {
 };
 
 function evaluateExpressions(parameter) {
-	const expressionStatement = recast.parse(parameter).program.body[
+	const expressionStatement = parse(parameter).program.body[
 		"0"
 	] as ESTree.ExpressionStatement;
 	return expressionStatement.expression;

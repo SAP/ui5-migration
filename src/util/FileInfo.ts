@@ -8,6 +8,7 @@ import {Reporter, ReportLevel} from "../Migration";
 import {AnalyzeCharacter, CodeStyleAnalyzer} from "./CodeStyleAnalyzer";
 import * as FileUtils from "./FileUtils";
 import * as DiffOptimizer from "./whitespace/DiffOptimizer";
+import {parse} from "./ParseUtils";
 
 // TODO rename to FileAccess
 
@@ -62,7 +63,7 @@ export class FileInfo implements Mod.FileInfo {
 				this.sFullPath,
 				"utf8"
 			);
-			this.oAST = recast.parse(this.sSourceCode).program;
+			this.oAST = parse(this.sSourceCode).program;
 		}
 		return this.oAST;
 	}

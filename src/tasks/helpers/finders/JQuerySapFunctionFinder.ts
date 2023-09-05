@@ -1,4 +1,4 @@
-import {Syntax} from "esprima";
+import {Syntax} from "../../../Migration";
 import * as ESTree from "estree";
 
 import {EMPTY_FINDER_RESULT, Finder, FinderResult} from "../../../dependencies";

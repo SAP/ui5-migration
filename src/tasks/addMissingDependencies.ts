@@ -6,7 +6,7 @@
  *  jQuery.sap.assert(true)
  *  require(["sap/base/assert"], function(assert){assert(true);})"
  */
-import {Syntax} from "esprima";
+import {Syntax} from "../Migration";
 import * as ESTree from "estree";
 import * as path from "path";
 import {ASTReplaceable} from "ui5-migration";

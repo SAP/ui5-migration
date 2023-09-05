@@ -14,3 +14,4 @@ export {ConsoleReporter} from "./reporter/ConsoleReporter";
 export {JSONReporter} from "./reporter/JSONReporter";
 export {Reporter, ReportLevel} from "./reporter/Reporter";
 export {ASTVisitor} from "./util/ASTVisitor";
+export {Syntax} from "esprima";

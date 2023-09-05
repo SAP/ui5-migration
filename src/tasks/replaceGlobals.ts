@@ -37,7 +37,7 @@
  * anymore e.g. such as jQuery.sap.each, jQuery.sap.forIn,...
  *
  */
-import {Syntax} from "esprima";
+import {Syntax} from "../Migration";
 import * as ESTree from "estree";
 import * as path from "path";
 import {ASTReplaceable} from "ui5-migration";

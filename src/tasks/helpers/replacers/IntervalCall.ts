@@ -1,9 +1,10 @@
-import {Syntax} from "esprima";
+import {Syntax} from "../../../Migration";
 import * as recast from "recast";
 import {ASTReplaceable, NodePath} from "ui5-migration";
 import * as ESTree from "estree";
 
 import {ASTVisitor} from "../../../util/ASTVisitor";
+import {parse} from "../../../util/ParseUtils";
 
 const builders = recast.types.builders;
 
@@ -75,7 +76,7 @@ const replaceable: ASTReplaceable = {
 					"(function(){\n" +
 					"	setInterval(fnMethod.bind(oObject), 0);\n" +
 					"})";
-				const oAst = recast.parse(sText);
+				const oAst = parse(sText);
 
 				const oFunctionExpression = (
 					oAst.program.body["0"] as ESTree.ExpressionStatement
@@ -142,7 +143,7 @@ const replaceable: ASTReplaceable = {
 					"	setInterval(oObject[fnMethod].bind(oObject), 0);\n" +
 					"})";
 
-				const oAst = recast.parse(sText);
+				const oAst = parse(sText);
 				const oFunctionExpression = (
 					oAst.program.body["0"] as ESTree.ExpressionStatement
 				).expression as ESTree.FunctionExpression;
@@ -196,7 +197,7 @@ const replaceable: ASTReplaceable = {
 					"	}.bind(oObject), 0);\n" +
 					"})";
 
-				const oAst = recast.parse(sText);
+				const oAst = parse(sText);
 				const oIntervalExpressionStatement = oAst.program.body[
 					"0"
 				] as ESTree.ExpressionStatement;

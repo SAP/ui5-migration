@@ -1,4 +1,4 @@
-import {Syntax} from "esprima";
+import {Syntax} from "../../../Migration";
 import {ASTReplaceable, NodePath} from "ui5-migration";
 
 /**

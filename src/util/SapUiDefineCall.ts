@@ -1,6 +1,6 @@
 /* tslint:disable:no-console */
 
-import {Syntax} from "esprima";
+import {Syntax} from "../Migration";
 import * as ESTree from "estree";
 import * as recast from "recast";
 import * as path from "path";

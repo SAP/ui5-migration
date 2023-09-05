@@ -1,6 +1,6 @@
-import * as recast from "recast";
 import {ASTReplaceable, NodePath} from "ui5-migration";
 import * as ESTree from "estree";
+import {parse} from "../../../util/ParseUtils";
 
 /**
  * Generates a noop function
@@ -19,7 +19,7 @@ const replaceable: ASTReplaceable = {
 		oldModuleCall: string
 	): void {
 		const sText = "(function() {})";
-		const expressionStatement = recast.parse(sText).program.body[
+		const expressionStatement = parse(sText).program.body[
 			"0"
 		] as ESTree.ExpressionStatement;
 

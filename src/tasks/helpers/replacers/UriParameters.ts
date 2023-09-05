@@ -1,7 +1,8 @@
-import {Syntax} from "esprima";
+import {Syntax} from "../../../Migration";
 import * as ESTree from "estree";
 import * as recast from "recast";
 import {ASTReplaceable, NodePath} from "ui5-migration";
+import {parse} from "../../../util/ParseUtils";
 
 const builders = recast.types.builders;
 
@@ -73,7 +74,7 @@ const replaceable: ASTReplaceable = {
 				oNodeModule = fromURL;
 				if (config.functionParameter) {
 					const args: ESTree.Expression = (
-						recast.parse(config.functionParameter).program.body[
+						parse(config.functionParameter).program.body[
 							"0"
 						] as ESTree.ExpressionStatement
 					).expression;

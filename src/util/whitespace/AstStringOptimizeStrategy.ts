@@ -2,8 +2,8 @@ import {Reporter, ReportLevel} from "../../reporter/Reporter";
 
 import * as StringWhitespaceUtils from "./StringWhitespaceUtils";
 import {StringOptimizeStrategy} from "./StringOptimizeStrategy";
-
-const esprima = require("esprima");
+import {ecmaVersion} from "../ParseUtils";
+import {parse} from "espree";
 
 /**
  * processing direction
@@ -15,6 +15,14 @@ enum PROCESS_DIRECTION {
 }
 
 const filterAstAttributes = ["type", "range", "loc"];
+const parseOptions = {
+	comment: false,
+	ecmaVersion,
+	range: true,
+	sourceType: "script",
+	loc: true,
+	tokens: false,
+};
 
 /**
  * Replacement function which performs a modification of the jsContent
@@ -354,7 +362,7 @@ export class AstStringOptimizeStrategy implements StringOptimizeStrategy {
 	 */
 	private static isStringValidJs(jsString) {
 		try {
-			esprima.parseScript(jsString);
+			parse(jsString, parseOptions);
 			return true;
 		} catch (e) {
 			return false;
@@ -561,9 +569,8 @@ export class AstStringOptimizeStrategy implements StringOptimizeStrategy {
 		original: string,
 		modified: string
 	): Promise<boolean> {
-		const oOptions = {range: true, loc: true};
-		const oParsedOriginal = esprima.parseScript(original, oOptions);
-		const oParsedModified = esprima.parseScript(modified, oOptions);
+		const oParsedOriginal = parse(original, parseOptions);
+		const oParsedModified = parse(modified, parseOptions);
 		let result = true;
 		this.iterateAstNode(
 			oParsedOriginal,
@@ -597,9 +604,8 @@ export class AstStringOptimizeStrategy implements StringOptimizeStrategy {
 			);
 		}
 
-		const oOptions = {range: true, loc: true};
-		const oParsedOriginal = esprima.parseScript(original, oOptions);
-		const oParsedModified = esprima.parseScript(modified, oOptions);
+		const oParsedOriginal = parse(original, parseOptions);
+		const oParsedModified = parse(modified, parseOptions);
 		const aOptimizedContent = modified.split("");
 
 		const oUseStrictModifiedNode =

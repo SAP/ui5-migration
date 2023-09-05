@@ -1,6 +1,6 @@
 const recast = require("recast");
-const Syntax = require("esprima").Syntax;
 const builders = recast.types.builders;
+import {Syntax} from "../Migration";
 import * as ESTree from "estree";
 import {SapUiDefineCall} from "./SapUiDefineCall";
 
