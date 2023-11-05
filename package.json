@@ -120,7 +120,7 @@
     "@types/graceful-fs": "^4.1.8",
     "@types/json5": "^2.2.0",
     "@types/minimatch": "^3.0.5",
-    "@types/mocha": "^9.1.1",
+    "@types/mocha": "^10.0.3",
     "@types/node": "^18.18.8",
     "@types/yargs": "^17.0.29",
     "gts": "^3.1.1",
