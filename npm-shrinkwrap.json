@@ -31,7 +31,7 @@
         "@types/graceful-fs": "^4.1.9",
         "@types/json5": "^2.2.0",
         "@types/minimatch": "^3.0.5",
-        "@types/mocha": "^9.1.1",
+        "@types/mocha": "^10.0.4",
         "@types/node": "^18.18.9",
         "@types/yargs": "^17.0.31",
         "gts": "^3.1.1",
@@ -1145,9 +1145,9 @@
       "dev": true
     },
     "node_modules/@types/mocha": {
-      "version": "9.1.1",
-      "resolved": "https://registry.npmjs.org/@types/mocha/-/mocha-9.1.1.tgz",
-      "integrity": "sha512-Z61JK7DKDtdKTWwLeElSEBcWGRLY8g95ic5FoQqI9CMx0ns/Ghep3B4DfcEimiKMvtamNVULVNKEsiwV3aQmXw==",
+      "version": "10.0.4",
+      "resolved": "https://registry.npmjs.org/@types/mocha/-/mocha-10.0.4.tgz",
+      "integrity": "sha512-xKU7bUjiFTIttpWaIZ9qvgg+22O1nmbA+HRxdlR+u6TWsGfmFdXrheJoK4fFxrHNVIOBDvDNKZG+LYBpMHpX3w==",
       "dev": true
     },
     "node_modules/@types/node": {
@@ -6862,9 +6862,9 @@
       "dev": true
     },
     "@types/mocha": {
-      "version": "9.1.1",
-      "resolved": "https://registry.npmjs.org/@types/mocha/-/mocha-9.1.1.tgz",
-      "integrity": "sha512-Z61JK7DKDtdKTWwLeElSEBcWGRLY8g95ic5FoQqI9CMx0ns/Ghep3B4DfcEimiKMvtamNVULVNKEsiwV3aQmXw==",
+      "version": "10.0.4",
+      "resolved": "https://registry.npmjs.org/@types/mocha/-/mocha-10.0.4.tgz",
+      "integrity": "sha512-xKU7bUjiFTIttpWaIZ9qvgg+22O1nmbA+HRxdlR+u6TWsGfmFdXrheJoK4fFxrHNVIOBDvDNKZG+LYBpMHpX3w==",
       "dev": true
     },
     "@types/node": {
