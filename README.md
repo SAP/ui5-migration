@@ -48,6 +48,9 @@ A list of currently available migration tasks can be found [here](./docs/guide/t
 ### Formatting options
 A list of options to configure the formatting of migration output can be found [here](./docs/guide/print.md)
 
+### Create a new code replacement
+A guide with sample for creating a new code replacement can be found [here](./docs/guide/newReplacement.md)
+
 ## Contributing
 Please check our [Contribution Guidelines](https://github.com/SAP/ui5-migration/blob/master/CONTRIBUTING.md). Your input and support is welcome!
 
