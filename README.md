@@ -4,7 +4,7 @@
 > Tooling to support the migration of UI5 projects by adapting code for new UI5 framework versions.
 
 [![REUSE status](https://api.reuse.software/badge/github.com/SAP/ui5-migration)](https://api.reuse.software/info/github.com/SAP/ui5-migration)
-[![Build Status](https://dev.azure.com/sap/opensource/_apis/build/status/SAP.ui5-migration?branchName=master)](https://dev.azure.com/sap/opensource/_build/latest?definitionId=41&branchName=master)
+[![Build Status](https://dev.azure.com/sap/opensource/_apis/build/status/SAP.ui5-migration?branchName=main)](https://dev.azure.com/sap/opensource/_build/latest?definitionId=41&branchName=main)
 [![npm version](https://badge.fury.io/js/%40ui5%2Fmigration.svg)](https://www.npmjs.com/package/@ui5/migration)
 
 _**Note:** This project is currently in beta. While there are ongoing improvements and round-offs being applied, we see the early release as a great opportunity to collect feedback from the community to further advance the UI5 migration tooling._
@@ -49,7 +49,7 @@ A list of currently available migration tasks can be found [here](./docs/guide/t
 A list of options to configure the formatting of migration output can be found [here](./docs/guide/print.md)
 
 ## Contributing
-Please check our [Contribution Guidelines](https://github.com/SAP/ui5-migration/blob/master/CONTRIBUTING.md). Your input and support is welcome!
+Please check our [Contribution Guidelines](https://github.com/SAP/ui5-migration/blob/main/CONTRIBUTING.md). Your input and support is welcome!
 
 ## Support
-Please follow our [Contribution Guidelines](https://github.com/SAP/ui5-migration/blob/master/CONTRIBUTING.md#report-an-issue) on how to report an issue.
+Please follow our [Contribution Guidelines](https://github.com/SAP/ui5-migration/blob/main/CONTRIBUTING.md#report-an-issue) on how to report an issue.
