@@ -9,16 +9,16 @@ trigger:
 strategy:
   matrix:
     linux_node_14:
-      imageName: 'ubuntu-20.04'
+      imageName: 'ubuntu-22.04'
       node_version: 14.x
     linux_node_latest:
-      imageName: 'ubuntu-20.04'
+      imageName: 'ubuntu-22.04'
       node_version: 16.x
     mac_node_latest:
-      imageName: 'macos-10.15'
+      imageName: 'macos-13'
       node_version: 16.x
     windows_node_latest:
-      imageName: 'windows-2019'
+      imageName: 'windows-2022'
       node_version: 16.x
 
 pool:
@@ -40,8 +40,7 @@ steps:
       testResultsFormat: 'JUnit'
       testResultsFiles: '$(System.DefaultWorkingDirectory)/test-results.xml'
 
-  - task: PublishCodeCoverageResults@1
+  - task: PublishCodeCoverageResults@2
     condition: succeededOrFailed()
     inputs:
-      codeCoverageTool: 'cobertura'
       summaryFileLocation: '$(System.DefaultWorkingDirectory)/coverage/cobertura-coverage.xml'
