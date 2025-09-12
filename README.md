@@ -1,5 +1,8 @@
 ![UI5 logo](./docs/images/UI5_logo_wide.png)
 
+# DEPRECATED
+**⚠️  This project has been deprecated in favor of [UI5 linter](https://github.com/UI5/linter).**
+
 # ui5-migration
 > Tooling to support the migration of UI5 projects by adapting code for new UI5 framework versions.
 
