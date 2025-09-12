@@ -1,7 +1,14 @@
+/**
+ * Represents a Range of numbers which are defined by a minimum and a maximum
+ */
 export class Range {
 	private beginning: number;
 	private end: number;
 
+	/**
+	 * @param {number} beginning
+	 * @param {number} end
+	 */
 	constructor(beginning, end) {
 		this.beginning = beginning;
 		this.end = end;
